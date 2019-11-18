@@ -1,0 +1,63 @@
+﻿@model IEnumerable<CasaGaillard.Models.detalle_accesorio>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.accesorio_id)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.cantidad)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.caracteristica_accesorio.caracteristica_accesorio1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.medida)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.unidad.unidad1)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.tipo)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.accesorio.tipo_accesorio.tipo_accesorio1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.cantidad)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.caracteristica_accesorio.caracteristica_accesorio1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.medida)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.unidad.unidad1)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.tipo)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+        </td>
+    </tr>
+}
+
+</table>

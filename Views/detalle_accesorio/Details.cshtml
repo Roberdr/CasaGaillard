@@ -1,0 +1,66 @@
+﻿@model CasaGaillard.Models.detalle_accesorio
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>detalle_accesorio</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.cantidad)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.cantidad)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.medida)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.medida)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tipo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tipo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.accesorio.id)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.accesorio.id)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.caracteristica_accesorio.caracteristica_accesorio1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.caracteristica_accesorio.caracteristica_accesorio1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.unidad.unidad1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.unidad.unidad1)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

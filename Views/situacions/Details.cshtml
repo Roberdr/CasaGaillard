@@ -1,0 +1,50 @@
+﻿@model CasaGaillard.Models.situacion
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>situacion</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.lado_cuba_numero)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.lado_cuba_numero)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.lado_cuba_nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.lado_cuba_nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.situacion_lado_numero)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.situacion_lado_numero)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.situacion_lado_letra)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.situacion_lado_letra)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

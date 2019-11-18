@@ -1,0 +1,58 @@
+﻿@model CasaGaillard.Models.compartimento
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>compartimento</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.numero)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.numero)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.capacidad)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.capacidad)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.cuba.cuba1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.cuba.cuba1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.material.material1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.material.material1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.producto.iupac)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.producto.iupac)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

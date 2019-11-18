@@ -1,0 +1,2208 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="GaillardModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="accesorio">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="tipo_accesorio_id" Type="int" />
+          <Property Name="material_id" Type="int" />
+        </EntityType>
+        <EntityType Name="accesorio_grupo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="grupo_id" Type="int" />
+          <Property Name="accesorio_id" Type="int" />
+          <Property Name="cantidad" Type="int" />
+        </EntityType>
+        <EntityType Name="auth_assignment">
+          <Key>
+            <PropertyRef Name="item_name" />
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="item_name" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="user_id" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="created_at" Type="int" />
+        </EntityType>
+        <EntityType Name="auth_item">
+          <Key>
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="type" Type="int" Nullable="false" />
+          <Property Name="description" Type="nvarchar(max)" />
+          <Property Name="rule_name" Type="nvarchar" MaxLength="64" />
+          <Property Name="data" Type="nvarchar(max)" />
+          <Property Name="created_at" Type="int" />
+          <Property Name="updated_at" Type="int" />
+        </EntityType>
+        <EntityType Name="auth_item_child">
+          <Key>
+            <PropertyRef Name="parent" />
+            <PropertyRef Name="child" />
+          </Key>
+          <Property Name="parent" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="child" Type="nvarchar" MaxLength="64" Nullable="false" />
+        </EntityType>
+        <EntityType Name="auth_rule">
+          <Key>
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="64" Nullable="false" />
+          <Property Name="data" Type="nvarchar(max)" />
+          <Property Name="created_at" Type="int" />
+          <Property Name="updated_at" Type="int" />
+        </EntityType>
+        <EntityType Name="caracteristica_accesorio">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="caracteristica_accesorio" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="compartimento">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="cuba_id" Type="int" />
+          <Property Name="numero" Type="int" />
+          <Property Name="capacidad" Type="int" />
+          <Property Name="producto_id" Type="int" />
+          <Property Name="material_interior_id" Type="int" />
+        </EntityType>
+        <EntityType Name="cuba">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="cuba" Type="nvarchar" MaxLength="10" />
+          <Property Name="num_cuadro" Type="int" />
+          <Property Name="codigo" Type="nvarchar" MaxLength="7" />
+          <Property Name="constructor" Type="nvarchar" MaxLength="100" />
+          <Property Name="num_fabricacion" Type="nvarchar" MaxLength="12" />
+          <Property Name="num_homologacion" Type="nvarchar" MaxLength="15" />
+          <Property Name="fecha_construccion" Type="date" />
+          <Property Name="pais_fabricacion" Type="nvarchar" MaxLength="15" />
+          <Property Name="num_tipo_imo" Type="nvarchar" MaxLength="6" />
+          <Property Name="pais_aprobacion" Type="nvarchar" MaxLength="15" />
+          <Property Name="autoridad" Type="nvarchar" MaxLength="45" />
+          <Property Name="codigo_diseno" Type="nvarchar" MaxLength="25" />
+          <Property Name="prueba_hidraulica" Type="date" />
+          <Property Name="presion_servicio_ADR" Type="decimal" Precision="4" Scale="2" />
+          <Property Name="presion_servicio_IMO" Type="decimal" Precision="4" Scale="2" />
+          <Property Name="presion_exterior" Type="decimal" Precision="4" Scale="2" />
+          <Property Name="presion_tarado_valvulas" Type="decimal" Precision="4" Scale="2" />
+          <Property Name="temperatura_calculo_referencia" Type="nvarchar" MaxLength="12" />
+          <Property Name="peso_bruto" Type="int" />
+          <Property Name="tara" Type="int" />
+          <Property Name="peso_max_producto" Type="int" />
+          <Property Name="material_exterior_id" Type="int" />
+          <Property Name="espesor_cuerpo" Type="decimal" Precision="4" Scale="2" />
+          <Property Name="espesor_fondo" Type="decimal" Precision="4" Scale="2" />
+          <Property Name="espesor_equivalente" Type="nvarchar" MaxLength="15" />
+          <Property Name="tipo_forro" Type="nvarchar" MaxLength="15" />
+          <Property Name="num_aprobacion_CSC" Type="nvarchar" MaxLength="15" />
+          <Property Name="modelo" Type="nvarchar" MaxLength="25" />
+          <Property Name="peso_max_apilamiento" Type="int" />
+          <Property Name="carga_rigidez" Type="int" />
+          <Property Name="presion_prueba" Type="decimal" Precision="4" Scale="2" />
+          <Property Name="temperatura_min_carga" Type="nvarchar" MaxLength="5" />
+          <Property Name="plataforma_id" Type="int" />
+          <Property Name="longitud" Type="int" />
+          <Property Name="ancho" Type="int" />
+          <Property Name="alto" Type="int" />
+          <Property Name="updated_at" Type="datetime2" Precision="0" />
+          <Property Name="created_at" Type="datetime2" Precision="0" />
+          <Property Name="updated_by" Type="int" />
+          <Property Name="created_by" Type="int" />
+          <Property Name="num_aprobacion_IMDG" Type="nvarchar" MaxLength="20" />
+          <Property Name="num_aprobacion_ADR/RID" Type="nvarchar" MaxLength="20" />
+          <Property Name="UN_portable_tank" Type="nvarchar" MaxLength="10" />
+          <Property Name="num_aprobacion" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="detalle_accesorio">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="accesorio_id" Type="int" />
+          <Property Name="cantidad" Type="int" />
+          <Property Name="caracteristica_accesorio_id" Type="int" />
+          <Property Name="medida" Type="decimal" Precision="7" Scale="2" />
+          <Property Name="unidad_id" Type="int" />
+          <Property Name="tipo" Type="nvarchar" MaxLength="15" />
+        </EntityType>
+        <EntityType Name="grupo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="tipo_grupo_id" Type="int" />
+          <Property Name="cuba_id" Type="int" />
+          <Property Name="compartimento_id" Type="int" />
+          <Property Name="situacion_id" Type="int" />
+        </EntityType>
+        <EntityType Name="mantenimiento_vehiculo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_vehiculo" Type="int" />
+          <Property Name="fecha_mantenimiento" Type="date" />
+          <Property Name="id_tipo_mantenimiento" Type="int" />
+          <Property Name="detalle_mantenimiento" Type="nvarchar" MaxLength="45" />
+          <Property Name="id_operario" Type="int" />
+          <Property Name="kilometros" Type="int" />
+        </EntityType>
+        <EntityType Name="material">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="material" Type="nvarchar" MaxLength="45" />
+          <Property Name="descripcion" Type="nvarchar" MaxLength="60" />
+        </EntityType>
+        <EntityType Name="migration">
+          <Key>
+            <PropertyRef Name="version" />
+          </Key>
+          <Property Name="version" Type="nvarchar" MaxLength="180" Nullable="false" />
+          <Property Name="apply_time" Type="int" />
+        </EntityType>
+        <EntityType Name="oper">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="nvarchar" MaxLength="64" Nullable="false" />
+        </EntityType>
+        <EntityType Name="operacion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="cuba_id" Type="int" />
+          <Property Name="operacion_id" Type="int" />
+          <Property Name="fecha_operacion" Type="date" />
+          <Property Name="descripcion" Type="nvarchar(max)" />
+          <Property Name="operario_id" Type="int" />
+          <Property Name="duracion" Type="time" Precision="7" />
+        </EntityType>
+        <EntityType Name="operario">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="nvarchar" MaxLength="20" />
+          <Property Name="apellidos" Type="nvarchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="plataforma">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="matricula" Type="nvarchar" MaxLength="45" />
+          <Property Name="propiedad" Type="nvarchar" MaxLength="45" />
+          <Property Name="pma" Type="int" />
+        </EntityType>
+        <EntityType Name="producto">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="iupac" Type="nvarchar" MaxLength="45" />
+          <Property Name="producto" Type="nvarchar" MaxLength="45" />
+          <Property Name="concentracion" Type="int" />
+          <Property Name="grupo" Type="int" />
+          <Property Name="num_UN" Type="nvarchar" MaxLength="4" />
+          <Property Name="formula" Type="nvarchar" MaxLength="45" />
+          <Property Name="densidad" Type="int" />
+          <Property Name="frases_R" Type="nvarchar" MaxLength="45" />
+          <Property Name="frases_S" Type="nvarchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="revision">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="cuba_id" Type="int" />
+          <Property Name="fecha_revision" Type="date" />
+          <Property Name="descripcion" Type="nvarchar(max)" />
+          <Property Name="valida_hasta" Type="date" />
+          <Property Name="descripcion_proxima" Type="nvarchar(max)" />
+          <Property Name="autorizado" Type="nvarchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="revision_vehiculo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="id_vehiculo" Type="int" />
+          <Property Name="id_tipo_revision" Type="int" />
+          <Property Name="fecha_revision" Type="date" />
+          <Property Name="detalles" Type="nvarchar(max)" />
+          <Property Name="ejecutor" Type="nvarchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="rol">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre" Type="nvarchar" MaxLength="32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="rol_oper">
+          <Key>
+            <PropertyRef Name="rol_id" />
+            <PropertyRef Name="oper_id" />
+          </Key>
+          <Property Name="rol_id" Type="int" Nullable="false" />
+          <Property Name="oper_id" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="situacion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="lado_cuba_numero" Type="int" />
+          <Property Name="lado_cuba_nombre" Type="nvarchar" MaxLength="15" />
+          <Property Name="situacion_lado_numero" Type="int" />
+          <Property Name="situacion_lado_letra" Type="nvarchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="tipo_accesorio">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="tipo_accesorio" Type="nvarchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="tipo_grupo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="nombre_grupo" Type="nvarchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="tipo_mantenimiento">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="tipo_mantenimiento" Type="nvarchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="tipo_operacion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" />
+          <Property Name="operacion" Type="nvarchar" MaxLength="15" />
+        </EntityType>
+        <EntityType Name="tipo_revision">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="tipo_revision" Type="nvarchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="tipo_vehiculo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="tipo_vehiculo" Type="nvarchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="unidad">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="unidad" Type="nvarchar" MaxLength="15" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="first_name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="last_name" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="username" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="auth_key" Type="nvarchar" MaxLength="32" Nullable="false" />
+          <Property Name="password_hash" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="password_reset_token" Type="nvarchar" MaxLength="255" />
+          <Property Name="email" Type="nvarchar" MaxLength="255" Nullable="false" />
+          <Property Name="status" Type="smallint" Nullable="false" />
+          <Property Name="rol_id" Type="smallint" Nullable="false" />
+          <Property Name="created_at" Type="int" Nullable="false" />
+          <Property Name="updated_at" Type="smallint" Nullable="false" />
+        </EntityType>
+        <EntityType Name="vehiculo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="marca" Type="nvarchar" MaxLength="45" />
+          <Property Name="modelo" Type="nvarchar" MaxLength="45" />
+          <Property Name="matricula_vehiculo" Type="nvarchar" MaxLength="12" />
+          <Property Name="id_tipo_vehiculo" Type="int" />
+          <Property Name="modelo_tacografo" Type="nvarchar" MaxLength="45" />
+          <Property Name="pma" Type="int" />
+          <Property Name="tara" Type="int" />
+          <Property Name="fecha_compra" Type="date" />
+          <Property Name="taller_habitual" Type="nvarchar" MaxLength="45" />
+        </EntityType>
+        <Association Name="accesorio$material_accesorio">
+          <End Role="material" Type="Self.material" Multiplicity="0..1" />
+          <End Role="accesorio" Type="Self.accesorio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="material">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="accesorio">
+              <PropertyRef Name="material_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="accesorio$tipo_accesorio">
+          <End Role="tipo_accesorio" Type="Self.tipo_accesorio" Multiplicity="0..1" />
+          <End Role="accesorio" Type="Self.accesorio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipo_accesorio">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="accesorio">
+              <PropertyRef Name="tipo_accesorio_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="accesorio_grupo$accesorio_grupo">
+          <End Role="accesorio" Type="Self.accesorio" Multiplicity="0..1" />
+          <End Role="accesorio_grupo" Type="Self.accesorio_grupo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="accesorio">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="accesorio_grupo">
+              <PropertyRef Name="accesorio_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="accesorio_grupo$grupo">
+          <End Role="grupo" Type="Self.grupo" Multiplicity="0..1" />
+          <End Role="accesorio_grupo" Type="Self.accesorio_grupo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="grupo">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="accesorio_grupo">
+              <PropertyRef Name="grupo_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="auth_assignment$auth_assignment_ibfk_1">
+          <End Role="auth_item" Type="Self.auth_item" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="auth_assignment" Type="Self.auth_assignment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="auth_item">
+              <PropertyRef Name="name" />
+            </Principal>
+            <Dependent Role="auth_assignment">
+              <PropertyRef Name="item_name" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="auth_item$auth_item_ibfk_1">
+          <End Role="auth_rule" Type="Self.auth_rule" Multiplicity="0..1" />
+          <End Role="auth_item" Type="Self.auth_item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="auth_rule">
+              <PropertyRef Name="name" />
+            </Principal>
+            <Dependent Role="auth_item">
+              <PropertyRef Name="rule_name" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="auth_item_child$auth_item_child_ibfk_1">
+          <End Role="auth_item" Type="Self.auth_item" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="auth_item_child" Type="Self.auth_item_child" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="auth_item">
+              <PropertyRef Name="name" />
+            </Principal>
+            <Dependent Role="auth_item_child">
+              <PropertyRef Name="parent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="compartimento$compartimento_cuba">
+          <End Role="cuba" Type="Self.cuba" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="compartimento" Type="Self.compartimento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cuba">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="compartimento">
+              <PropertyRef Name="cuba_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="compartimento$material_compartimento">
+          <End Role="material" Type="Self.material" Multiplicity="0..1" />
+          <End Role="compartimento" Type="Self.compartimento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="material">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="compartimento">
+              <PropertyRef Name="material_interior_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="compartimento$producto_compartimento">
+          <End Role="producto" Type="Self.producto" Multiplicity="0..1" />
+          <End Role="compartimento" Type="Self.compartimento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="producto">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="compartimento">
+              <PropertyRef Name="producto_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="cuba$material_ext_cuba">
+          <End Role="material" Type="Self.material" Multiplicity="0..1" />
+          <End Role="cuba" Type="Self.cuba" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="material">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="cuba">
+              <PropertyRef Name="material_exterior_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="cuba$plataforma_cuba">
+          <End Role="plataforma" Type="Self.plataforma" Multiplicity="0..1" />
+          <End Role="cuba" Type="Self.cuba" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="plataforma">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="cuba">
+              <PropertyRef Name="plataforma_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="detalle_accesorio$accesorio">
+          <End Role="accesorio" Type="Self.accesorio" Multiplicity="0..1" />
+          <End Role="detalle_accesorio" Type="Self.detalle_accesorio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="accesorio">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="detalle_accesorio">
+              <PropertyRef Name="accesorio_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="detalle_accesorio$caracteristica_accesorio">
+          <End Role="caracteristica_accesorio" Type="Self.caracteristica_accesorio" Multiplicity="0..1" />
+          <End Role="detalle_accesorio" Type="Self.detalle_accesorio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="caracteristica_accesorio">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="detalle_accesorio">
+              <PropertyRef Name="caracteristica_accesorio_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="detalle_accesorio$unidad_detalle">
+          <End Role="unidad" Type="Self.unidad" Multiplicity="0..1" />
+          <End Role="detalle_accesorio" Type="Self.detalle_accesorio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="unidad">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="detalle_accesorio">
+              <PropertyRef Name="unidad_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="grupo$grupo_compartimento">
+          <End Role="compartimento" Type="Self.compartimento" Multiplicity="0..1" />
+          <End Role="grupo" Type="Self.grupo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="compartimento">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="grupo">
+              <PropertyRef Name="compartimento_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="grupo$grupo_cuba">
+          <End Role="cuba" Type="Self.cuba" Multiplicity="0..1" />
+          <End Role="grupo" Type="Self.grupo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cuba">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="grupo">
+              <PropertyRef Name="cuba_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="grupo$grupo_situacion">
+          <End Role="situacion" Type="Self.situacion" Multiplicity="0..1" />
+          <End Role="grupo" Type="Self.grupo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="situacion">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="grupo">
+              <PropertyRef Name="situacion_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="grupo$nombre_grupo">
+          <End Role="tipo_grupo" Type="Self.tipo_grupo" Multiplicity="0..1" />
+          <End Role="grupo" Type="Self.grupo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipo_grupo">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="grupo">
+              <PropertyRef Name="tipo_grupo_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="mantenimiento_vehiculo$operario">
+          <End Role="operario" Type="Self.operario" Multiplicity="0..1" />
+          <End Role="mantenimiento_vehiculo" Type="Self.mantenimiento_vehiculo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="operario">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="mantenimiento_vehiculo">
+              <PropertyRef Name="id_operario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="mantenimiento_vehiculo$tipo_mantenimiento">
+          <End Role="tipo_mantenimiento" Type="Self.tipo_mantenimiento" Multiplicity="0..1" />
+          <End Role="mantenimiento_vehiculo" Type="Self.mantenimiento_vehiculo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipo_mantenimiento">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="mantenimiento_vehiculo">
+              <PropertyRef Name="id_tipo_mantenimiento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="mantenimiento_vehiculo$vehiculo">
+          <End Role="vehiculo" Type="Self.vehiculo" Multiplicity="0..1" />
+          <End Role="mantenimiento_vehiculo" Type="Self.mantenimiento_vehiculo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="vehiculo">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="mantenimiento_vehiculo">
+              <PropertyRef Name="id_vehiculo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="operacion$operaciones_cuba">
+          <End Role="cuba" Type="Self.cuba" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="operacion" Type="Self.operacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cuba">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="operacion">
+              <PropertyRef Name="cuba_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="operacion$operario_operacion">
+          <End Role="operario" Type="Self.operario" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="operacion" Type="Self.operacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="operario">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="operacion">
+              <PropertyRef Name="operario_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="operacion$tipo_operacion">
+          <End Role="tipo_operacion" Type="Self.tipo_operacion" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="operacion" Type="Self.operacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipo_operacion">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="operacion">
+              <PropertyRef Name="operacion_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="revision$revision_cuba">
+          <End Role="cuba" Type="Self.cuba" Multiplicity="0..1" />
+          <End Role="revision" Type="Self.revision" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cuba">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="revision">
+              <PropertyRef Name="cuba_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="revision_vehiculo$fk_revision_vehiculo_1">
+          <End Role="vehiculo" Type="Self.vehiculo" Multiplicity="0..1" />
+          <End Role="revision_vehiculo" Type="Self.revision_vehiculo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="vehiculo">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="revision_vehiculo">
+              <PropertyRef Name="id_vehiculo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="revision_vehiculo$tipo_revision">
+          <End Role="tipo_revision" Type="Self.tipo_revision" Multiplicity="0..1" />
+          <End Role="revision_vehiculo" Type="Self.revision_vehiculo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipo_revision">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="revision_vehiculo">
+              <PropertyRef Name="id_tipo_revision" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="vehiculo$tipo_vehiculo">
+          <End Role="tipo_vehiculo" Type="Self.tipo_vehiculo" Multiplicity="0..1" />
+          <End Role="vehiculo" Type="Self.vehiculo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipo_vehiculo">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="vehiculo">
+              <PropertyRef Name="id_tipo_vehiculo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GaillardModelStoreContainer">
+          <EntitySet Name="accesorio" EntityType="Self.accesorio" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="accesorio_grupo" EntityType="Self.accesorio_grupo" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="auth_assignment" EntityType="Self.auth_assignment" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="auth_item" EntityType="Self.auth_item" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="auth_item_child" EntityType="Self.auth_item_child" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="auth_rule" EntityType="Self.auth_rule" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="caracteristica_accesorio" EntityType="Self.caracteristica_accesorio" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="compartimento" EntityType="Self.compartimento" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="cuba" EntityType="Self.cuba" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="detalle_accesorio" EntityType="Self.detalle_accesorio" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="grupo" EntityType="Self.grupo" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="mantenimiento_vehiculo" EntityType="Self.mantenimiento_vehiculo" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="material" EntityType="Self.material" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="migration" EntityType="Self.migration" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="oper" EntityType="Self.oper" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="operacion" EntityType="Self.operacion" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="operario" EntityType="Self.operario" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="plataforma" EntityType="Self.plataforma" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="producto" EntityType="Self.producto" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="revision" EntityType="Self.revision" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="revision_vehiculo" EntityType="Self.revision_vehiculo" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="rol" EntityType="Self.rol" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="rol_oper" EntityType="Self.rol_oper" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="situacion" EntityType="Self.situacion" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="tipo_accesorio" EntityType="Self.tipo_accesorio" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="tipo_grupo" EntityType="Self.tipo_grupo" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="tipo_mantenimiento" EntityType="Self.tipo_mantenimiento" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="tipo_operacion" EntityType="Self.tipo_operacion" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="tipo_revision" EntityType="Self.tipo_revision" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="tipo_vehiculo" EntityType="Self.tipo_vehiculo" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="unidad" EntityType="Self.unidad" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="user" EntityType="Self.user" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="vehiculo" EntityType="Self.vehiculo" Schema="gaillard" store:Type="Tables" />
+          <AssociationSet Name="accesorio$material_accesorio" Association="Self.accesorio$material_accesorio">
+            <End Role="material" EntitySet="material" />
+            <End Role="accesorio" EntitySet="accesorio" />
+          </AssociationSet>
+          <AssociationSet Name="accesorio$tipo_accesorio" Association="Self.accesorio$tipo_accesorio">
+            <End Role="tipo_accesorio" EntitySet="tipo_accesorio" />
+            <End Role="accesorio" EntitySet="accesorio" />
+          </AssociationSet>
+          <AssociationSet Name="accesorio_grupo$accesorio_grupo" Association="Self.accesorio_grupo$accesorio_grupo">
+            <End Role="accesorio" EntitySet="accesorio" />
+            <End Role="accesorio_grupo" EntitySet="accesorio_grupo" />
+          </AssociationSet>
+          <AssociationSet Name="accesorio_grupo$grupo" Association="Self.accesorio_grupo$grupo">
+            <End Role="grupo" EntitySet="grupo" />
+            <End Role="accesorio_grupo" EntitySet="accesorio_grupo" />
+          </AssociationSet>
+          <AssociationSet Name="auth_assignment$auth_assignment_ibfk_1" Association="Self.auth_assignment$auth_assignment_ibfk_1">
+            <End Role="auth_item" EntitySet="auth_item" />
+            <End Role="auth_assignment" EntitySet="auth_assignment" />
+          </AssociationSet>
+          <AssociationSet Name="auth_item$auth_item_ibfk_1" Association="Self.auth_item$auth_item_ibfk_1">
+            <End Role="auth_rule" EntitySet="auth_rule" />
+            <End Role="auth_item" EntitySet="auth_item" />
+          </AssociationSet>
+          <AssociationSet Name="auth_item_child$auth_item_child_ibfk_1" Association="Self.auth_item_child$auth_item_child_ibfk_1">
+            <End Role="auth_item" EntitySet="auth_item" />
+            <End Role="auth_item_child" EntitySet="auth_item_child" />
+          </AssociationSet>
+          <AssociationSet Name="compartimento$compartimento_cuba" Association="Self.compartimento$compartimento_cuba">
+            <End Role="cuba" EntitySet="cuba" />
+            <End Role="compartimento" EntitySet="compartimento" />
+          </AssociationSet>
+          <AssociationSet Name="compartimento$material_compartimento" Association="Self.compartimento$material_compartimento">
+            <End Role="material" EntitySet="material" />
+            <End Role="compartimento" EntitySet="compartimento" />
+          </AssociationSet>
+          <AssociationSet Name="compartimento$producto_compartimento" Association="Self.compartimento$producto_compartimento">
+            <End Role="producto" EntitySet="producto" />
+            <End Role="compartimento" EntitySet="compartimento" />
+          </AssociationSet>
+          <AssociationSet Name="cuba$material_ext_cuba" Association="Self.cuba$material_ext_cuba">
+            <End Role="material" EntitySet="material" />
+            <End Role="cuba" EntitySet="cuba" />
+          </AssociationSet>
+          <AssociationSet Name="cuba$plataforma_cuba" Association="Self.cuba$plataforma_cuba">
+            <End Role="plataforma" EntitySet="plataforma" />
+            <End Role="cuba" EntitySet="cuba" />
+          </AssociationSet>
+          <AssociationSet Name="detalle_accesorio$accesorio" Association="Self.detalle_accesorio$accesorio">
+            <End Role="accesorio" EntitySet="accesorio" />
+            <End Role="detalle_accesorio" EntitySet="detalle_accesorio" />
+          </AssociationSet>
+          <AssociationSet Name="detalle_accesorio$caracteristica_accesorio" Association="Self.detalle_accesorio$caracteristica_accesorio">
+            <End Role="caracteristica_accesorio" EntitySet="caracteristica_accesorio" />
+            <End Role="detalle_accesorio" EntitySet="detalle_accesorio" />
+          </AssociationSet>
+          <AssociationSet Name="detalle_accesorio$unidad_detalle" Association="Self.detalle_accesorio$unidad_detalle">
+            <End Role="unidad" EntitySet="unidad" />
+            <End Role="detalle_accesorio" EntitySet="detalle_accesorio" />
+          </AssociationSet>
+          <AssociationSet Name="grupo$grupo_compartimento" Association="Self.grupo$grupo_compartimento">
+            <End Role="compartimento" EntitySet="compartimento" />
+            <End Role="grupo" EntitySet="grupo" />
+          </AssociationSet>
+          <AssociationSet Name="grupo$grupo_cuba" Association="Self.grupo$grupo_cuba">
+            <End Role="cuba" EntitySet="cuba" />
+            <End Role="grupo" EntitySet="grupo" />
+          </AssociationSet>
+          <AssociationSet Name="grupo$grupo_situacion" Association="Self.grupo$grupo_situacion">
+            <End Role="situacion" EntitySet="situacion" />
+            <End Role="grupo" EntitySet="grupo" />
+          </AssociationSet>
+          <AssociationSet Name="grupo$nombre_grupo" Association="Self.grupo$nombre_grupo">
+            <End Role="tipo_grupo" EntitySet="tipo_grupo" />
+            <End Role="grupo" EntitySet="grupo" />
+          </AssociationSet>
+          <AssociationSet Name="mantenimiento_vehiculo$operario" Association="Self.mantenimiento_vehiculo$operario">
+            <End Role="operario" EntitySet="operario" />
+            <End Role="mantenimiento_vehiculo" EntitySet="mantenimiento_vehiculo" />
+          </AssociationSet>
+          <AssociationSet Name="mantenimiento_vehiculo$tipo_mantenimiento" Association="Self.mantenimiento_vehiculo$tipo_mantenimiento">
+            <End Role="tipo_mantenimiento" EntitySet="tipo_mantenimiento" />
+            <End Role="mantenimiento_vehiculo" EntitySet="mantenimiento_vehiculo" />
+          </AssociationSet>
+          <AssociationSet Name="mantenimiento_vehiculo$vehiculo" Association="Self.mantenimiento_vehiculo$vehiculo">
+            <End Role="vehiculo" EntitySet="vehiculo" />
+            <End Role="mantenimiento_vehiculo" EntitySet="mantenimiento_vehiculo" />
+          </AssociationSet>
+          <AssociationSet Name="operacion$operaciones_cuba" Association="Self.operacion$operaciones_cuba">
+            <End Role="cuba" EntitySet="cuba" />
+            <End Role="operacion" EntitySet="operacion" />
+          </AssociationSet>
+          <AssociationSet Name="operacion$operario_operacion" Association="Self.operacion$operario_operacion">
+            <End Role="operario" EntitySet="operario" />
+            <End Role="operacion" EntitySet="operacion" />
+          </AssociationSet>
+          <AssociationSet Name="operacion$tipo_operacion" Association="Self.operacion$tipo_operacion">
+            <End Role="tipo_operacion" EntitySet="tipo_operacion" />
+            <End Role="operacion" EntitySet="operacion" />
+          </AssociationSet>
+          <AssociationSet Name="revision$revision_cuba" Association="Self.revision$revision_cuba">
+            <End Role="cuba" EntitySet="cuba" />
+            <End Role="revision" EntitySet="revision" />
+          </AssociationSet>
+          <AssociationSet Name="revision_vehiculo$fk_revision_vehiculo_1" Association="Self.revision_vehiculo$fk_revision_vehiculo_1">
+            <End Role="vehiculo" EntitySet="vehiculo" />
+            <End Role="revision_vehiculo" EntitySet="revision_vehiculo" />
+          </AssociationSet>
+          <AssociationSet Name="revision_vehiculo$tipo_revision" Association="Self.revision_vehiculo$tipo_revision">
+            <End Role="tipo_revision" EntitySet="tipo_revision" />
+            <End Role="revision_vehiculo" EntitySet="revision_vehiculo" />
+          </AssociationSet>
+          <AssociationSet Name="vehiculo$tipo_vehiculo" Association="Self.vehiculo$tipo_vehiculo">
+            <End Role="tipo_vehiculo" EntitySet="tipo_vehiculo" />
+            <End Role="vehiculo" EntitySet="vehiculo" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GaillardModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="accesorio">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="tipo_accesorio_id" Type="Int32" />
+          <Property Name="material_id" Type="Int32" />
+          <NavigationProperty Name="material" Relationship="Self.accesorio_material_accesorio" FromRole="accesorio" ToRole="material" />
+          <NavigationProperty Name="tipo_accesorio" Relationship="Self.accesorio_tipo_accesorio" FromRole="accesorio" ToRole="tipo_accesorio" />
+          <NavigationProperty Name="accesorio_grupo" Relationship="Self.accesorio_grupo_accesorio_grupo" FromRole="accesorio" ToRole="accesorio_grupo" />
+          <NavigationProperty Name="detalle_accesorio" Relationship="Self.detalle_accesorio_accesorio" FromRole="accesorio" ToRole="detalle_accesorio" />
+        </EntityType>
+        <EntityType Name="accesorio_grupo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="grupo_id" Type="Int32" />
+          <Property Name="accesorio_id" Type="Int32" />
+          <Property Name="cantidad" Type="Int32" />
+          <NavigationProperty Name="accesorio" Relationship="Self.accesorio_grupo_accesorio_grupo" FromRole="accesorio_grupo" ToRole="accesorio" />
+          <NavigationProperty Name="grupo" Relationship="Self.accesorio_grupo_grupo" FromRole="accesorio_grupo" ToRole="grupo" />
+        </EntityType>
+        <EntityType Name="auth_assignment">
+          <Key>
+            <PropertyRef Name="item_name" />
+            <PropertyRef Name="user_id" />
+          </Key>
+          <Property Name="item_name" Type="String" MaxLength="64" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="user_id" Type="String" MaxLength="64" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="created_at" Type="Int32" />
+          <NavigationProperty Name="auth_item" Relationship="Self.auth_assignment_auth_assignment_ibfk_1" FromRole="auth_assignment" ToRole="auth_item" />
+        </EntityType>
+        <EntityType Name="auth_item">
+          <Key>
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="64" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="type" Type="Int32" Nullable="false" />
+          <Property Name="description" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="rule_name" Type="String" MaxLength="64" FixedLength="false" Unicode="true" />
+          <Property Name="data" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="created_at" Type="Int32" />
+          <Property Name="updated_at" Type="Int32" />
+          <NavigationProperty Name="auth_assignment" Relationship="Self.auth_assignment_auth_assignment_ibfk_1" FromRole="auth_item" ToRole="auth_assignment" />
+          <NavigationProperty Name="auth_rule" Relationship="Self.auth_item_auth_item_ibfk_1" FromRole="auth_item" ToRole="auth_rule" />
+          <NavigationProperty Name="auth_item_child" Relationship="Self.auth_item_child_auth_item_child_ibfk_1" FromRole="auth_item" ToRole="auth_item_child" />
+        </EntityType>
+        <EntityType Name="auth_item_child">
+          <Key>
+            <PropertyRef Name="parent" />
+            <PropertyRef Name="child" />
+          </Key>
+          <Property Name="parent" Type="String" MaxLength="64" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="child" Type="String" MaxLength="64" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="auth_item" Relationship="Self.auth_item_child_auth_item_child_ibfk_1" FromRole="auth_item_child" ToRole="auth_item" />
+        </EntityType>
+        <EntityType Name="auth_rule">
+          <Key>
+            <PropertyRef Name="name" />
+          </Key>
+          <Property Name="name" Type="String" MaxLength="64" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="data" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="created_at" Type="Int32" />
+          <Property Name="updated_at" Type="Int32" />
+          <NavigationProperty Name="auth_item" Relationship="Self.auth_item_auth_item_ibfk_1" FromRole="auth_rule" ToRole="auth_item" />
+        </EntityType>
+        <EntityType Name="caracteristica_accesorio">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="caracteristica_accesorio1" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="detalle_accesorio" Relationship="Self.detalle_accesorio_caracteristica_accesorio" FromRole="caracteristica_accesorio" ToRole="detalle_accesorio" />
+        </EntityType>
+        <EntityType Name="compartimento">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="cuba_id" Type="Int32" />
+          <Property Name="numero" Type="Int32" />
+          <Property Name="capacidad" Type="Int32" />
+          <Property Name="producto_id" Type="Int32" />
+          <Property Name="material_interior_id" Type="Int32" />
+          <NavigationProperty Name="cuba" Relationship="Self.compartimento_compartimento_cuba" FromRole="compartimento" ToRole="cuba" />
+          <NavigationProperty Name="material" Relationship="Self.compartimento_material_compartimento" FromRole="compartimento" ToRole="material" />
+          <NavigationProperty Name="producto" Relationship="Self.compartimento_producto_compartimento" FromRole="compartimento" ToRole="producto" />
+          <NavigationProperty Name="grupoes" Relationship="Self.grupo_grupo_compartimento" FromRole="compartimento" ToRole="grupo" />
+        </EntityType>
+        <EntityType Name="cuba">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="cuba1" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="num_cuadro" Type="Int32" />
+          <Property Name="codigo" Type="String" MaxLength="7" FixedLength="false" Unicode="true" />
+          <Property Name="constructor" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="num_fabricacion" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="num_homologacion" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="fecha_construccion" Type="DateTime" Precision="0" />
+          <Property Name="pais_fabricacion" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="num_tipo_imo" Type="String" MaxLength="6" FixedLength="false" Unicode="true" />
+          <Property Name="pais_aprobacion" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="autoridad" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="codigo_diseno" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="prueba_hidraulica" Type="DateTime" Precision="0" />
+          <Property Name="presion_servicio_ADR" Type="Decimal" Precision="4" Scale="2" />
+          <Property Name="presion_servicio_IMO" Type="Decimal" Precision="4" Scale="2" />
+          <Property Name="presion_exterior" Type="Decimal" Precision="4" Scale="2" />
+          <Property Name="presion_tarado_valvulas" Type="Decimal" Precision="4" Scale="2" />
+          <Property Name="temperatura_calculo_referencia" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="peso_bruto" Type="Int32" />
+          <Property Name="tara" Type="Int32" />
+          <Property Name="peso_max_producto" Type="Int32" />
+          <Property Name="material_exterior_id" Type="Int32" />
+          <Property Name="espesor_cuerpo" Type="Decimal" Precision="4" Scale="2" />
+          <Property Name="espesor_fondo" Type="Decimal" Precision="4" Scale="2" />
+          <Property Name="espesor_equivalente" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="tipo_forro" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="num_aprobacion_CSC" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="modelo" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="peso_max_apilamiento" Type="Int32" />
+          <Property Name="carga_rigidez" Type="Int32" />
+          <Property Name="presion_prueba" Type="Decimal" Precision="4" Scale="2" />
+          <Property Name="temperatura_min_carga" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="plataforma_id" Type="Int32" />
+          <Property Name="longitud" Type="Int32" />
+          <Property Name="ancho" Type="Int32" />
+          <Property Name="alto" Type="Int32" />
+          <Property Name="updated_at" Type="DateTime" Precision="0" />
+          <Property Name="created_at" Type="DateTime" Precision="0" />
+          <Property Name="updated_by" Type="Int32" />
+          <Property Name="created_by" Type="Int32" />
+          <Property Name="num_aprobacion_IMDG" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="num_aprobacion_ADR_RID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UN_portable_tank" Type="String" MaxLength="10" FixedLength="false" Unicode="true" />
+          <Property Name="num_aprobacion" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="compartimentoes" Relationship="Self.compartimento_compartimento_cuba" FromRole="cuba" ToRole="compartimento" />
+          <NavigationProperty Name="material" Relationship="Self.cuba_material_ext_cuba" FromRole="cuba" ToRole="material" />
+          <NavigationProperty Name="plataforma" Relationship="Self.cuba_plataforma_cuba" FromRole="cuba" ToRole="plataforma" />
+          <NavigationProperty Name="grupoes" Relationship="Self.grupo_grupo_cuba" FromRole="cuba" ToRole="grupo" />
+          <NavigationProperty Name="operacions" Relationship="Self.operacion_operaciones_cuba" FromRole="cuba" ToRole="operacion" />
+          <NavigationProperty Name="revisions" Relationship="Self.revision_revision_cuba" FromRole="cuba" ToRole="revision" />
+        </EntityType>
+        <EntityType Name="detalle_accesorio">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="accesorio_id" Type="Int32" />
+          <Property Name="cantidad" Type="Int32" />
+          <Property Name="caracteristica_accesorio_id" Type="Int32" />
+          <Property Name="medida" Type="Decimal" Precision="7" Scale="2" />
+          <Property Name="unidad_id" Type="Int32" />
+          <Property Name="tipo" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="accesorio" Relationship="Self.detalle_accesorio_accesorio" FromRole="detalle_accesorio" ToRole="accesorio" />
+          <NavigationProperty Name="caracteristica_accesorio" Relationship="Self.detalle_accesorio_caracteristica_accesorio" FromRole="detalle_accesorio" ToRole="caracteristica_accesorio" />
+          <NavigationProperty Name="unidad" Relationship="Self.detalle_accesorio_unidad_detalle" FromRole="detalle_accesorio" ToRole="unidad" />
+        </EntityType>
+        <EntityType Name="grupo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="tipo_grupo_id" Type="Int32" />
+          <Property Name="cuba_id" Type="Int32" />
+          <Property Name="compartimento_id" Type="Int32" />
+          <Property Name="situacion_id" Type="Int32" />
+          <NavigationProperty Name="accesorio_grupo" Relationship="Self.accesorio_grupo_grupo" FromRole="grupo" ToRole="accesorio_grupo" />
+          <NavigationProperty Name="compartimento" Relationship="Self.grupo_grupo_compartimento" FromRole="grupo" ToRole="compartimento" />
+          <NavigationProperty Name="cuba" Relationship="Self.grupo_grupo_cuba" FromRole="grupo" ToRole="cuba" />
+          <NavigationProperty Name="situacion" Relationship="Self.grupo_grupo_situacion" FromRole="grupo" ToRole="situacion" />
+          <NavigationProperty Name="tipo_grupo" Relationship="Self.grupo_nombre_grupo" FromRole="grupo" ToRole="tipo_grupo" />
+        </EntityType>
+        <EntityType Name="mantenimiento_vehiculo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_vehiculo" Type="Int32" />
+          <Property Name="fecha_mantenimiento" Type="DateTime" Precision="0" />
+          <Property Name="id_tipo_mantenimiento" Type="Int32" />
+          <Property Name="detalle_mantenimiento" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="id_operario" Type="Int32" />
+          <Property Name="kilometros" Type="Int32" />
+          <NavigationProperty Name="operario" Relationship="Self.mantenimiento_vehiculo_operario" FromRole="mantenimiento_vehiculo" ToRole="operario" />
+          <NavigationProperty Name="tipo_mantenimiento" Relationship="Self.mantenimiento_vehiculo_tipo_mantenimiento" FromRole="mantenimiento_vehiculo" ToRole="tipo_mantenimiento" />
+          <NavigationProperty Name="vehiculo" Relationship="Self.mantenimiento_vehiculo_vehiculo" FromRole="mantenimiento_vehiculo" ToRole="vehiculo" />
+        </EntityType>
+        <EntityType Name="material">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="material1" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="descripcion" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="accesorios" Relationship="Self.accesorio_material_accesorio" FromRole="material" ToRole="accesorio" />
+          <NavigationProperty Name="compartimentoes" Relationship="Self.compartimento_material_compartimento" FromRole="material" ToRole="compartimento" />
+          <NavigationProperty Name="cubas" Relationship="Self.cuba_material_ext_cuba" FromRole="material" ToRole="cuba" />
+        </EntityType>
+        <EntityType Name="migration">
+          <Key>
+            <PropertyRef Name="version" />
+          </Key>
+          <Property Name="version" Type="String" MaxLength="180" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="apply_time" Type="Int32" />
+        </EntityType>
+        <EntityType Name="oper">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="64" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="operacion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="cuba_id" Type="Int32" />
+          <Property Name="operacion_id" Type="Int32" />
+          <Property Name="fecha_operacion" Type="DateTime" Precision="0" />
+          <Property Name="descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="operario_id" Type="Int32" />
+          <Property Name="duracion" Type="Time" Precision="7" />
+          <NavigationProperty Name="cuba" Relationship="Self.operacion_operaciones_cuba" FromRole="operacion" ToRole="cuba" />
+          <NavigationProperty Name="operario" Relationship="Self.operacion_operario_operacion" FromRole="operacion" ToRole="operario" />
+          <NavigationProperty Name="tipo_operacion" Relationship="Self.operacion_tipo_operacion" FromRole="operacion" ToRole="tipo_operacion" />
+        </EntityType>
+        <EntityType Name="operario">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="apellidos" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="mantenimiento_vehiculo" Relationship="Self.mantenimiento_vehiculo_operario" FromRole="operario" ToRole="mantenimiento_vehiculo" />
+          <NavigationProperty Name="operacions" Relationship="Self.operacion_operario_operacion" FromRole="operario" ToRole="operacion" />
+        </EntityType>
+        <EntityType Name="plataforma">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="matricula" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="propiedad" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="pma" Type="Int32" />
+          <NavigationProperty Name="cubas" Relationship="Self.cuba_plataforma_cuba" FromRole="plataforma" ToRole="cuba" />
+        </EntityType>
+        <EntityType Name="producto">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="iupac" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="producto1" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="concentracion" Type="Int32" />
+          <Property Name="grupo" Type="Int32" />
+          <Property Name="num_UN" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="formula" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="densidad" Type="Int32" />
+          <Property Name="frases_R" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="frases_S" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="compartimentoes" Relationship="Self.compartimento_producto_compartimento" FromRole="producto" ToRole="compartimento" />
+        </EntityType>
+        <EntityType Name="revision">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="cuba_id" Type="Int32" />
+          <Property Name="fecha_revision" Type="DateTime" Precision="0" />
+          <Property Name="descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="valida_hasta" Type="DateTime" Precision="0" />
+          <Property Name="descripcion_proxima" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="autorizado" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="cuba" Relationship="Self.revision_revision_cuba" FromRole="revision" ToRole="cuba" />
+        </EntityType>
+        <EntityType Name="revision_vehiculo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="id_vehiculo" Type="Int32" />
+          <Property Name="id_tipo_revision" Type="Int32" />
+          <Property Name="fecha_revision" Type="DateTime" Precision="0" />
+          <Property Name="detalles" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ejecutor" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="vehiculo" Relationship="Self.revision_vehiculo_fk_revision_vehiculo_1" FromRole="revision_vehiculo" ToRole="vehiculo" />
+          <NavigationProperty Name="tipo_revision" Relationship="Self.revision_vehiculo_tipo_revision" FromRole="revision_vehiculo" ToRole="tipo_revision" />
+        </EntityType>
+        <EntityType Name="rol">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+        </EntityType>
+        <EntityType Name="rol_oper">
+          <Key>
+            <PropertyRef Name="rol_id" />
+            <PropertyRef Name="oper_id" />
+          </Key>
+          <Property Name="rol_id" Type="Int32" Nullable="false" />
+          <Property Name="oper_id" Type="Int32" Nullable="false" />
+        </EntityType>
+        <EntityType Name="situacion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="lado_cuba_numero" Type="Int32" />
+          <Property Name="lado_cuba_nombre" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="situacion_lado_numero" Type="Int32" />
+          <Property Name="situacion_lado_letra" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="grupoes" Relationship="Self.grupo_grupo_situacion" FromRole="situacion" ToRole="grupo" />
+        </EntityType>
+        <EntityType Name="tipo_accesorio">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="tipo_accesorio1" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="accesorios" Relationship="Self.accesorio_tipo_accesorio" FromRole="tipo_accesorio" ToRole="accesorio" />
+        </EntityType>
+        <EntityType Name="tipo_grupo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="nombre_grupo" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="grupoes" Relationship="Self.grupo_nombre_grupo" FromRole="tipo_grupo" ToRole="grupo" />
+        </EntityType>
+        <EntityType Name="tipo_mantenimiento">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="tipo_mantenimiento1" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="mantenimiento_vehiculo" Relationship="Self.mantenimiento_vehiculo_tipo_mantenimiento" FromRole="tipo_mantenimiento" ToRole="mantenimiento_vehiculo" />
+        </EntityType>
+        <EntityType Name="tipo_operacion">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="operacion" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="operacions" Relationship="Self.operacion_tipo_operacion" FromRole="tipo_operacion" ToRole="operacion" />
+        </EntityType>
+        <EntityType Name="tipo_revision">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="tipo_revision1" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="revision_vehiculo" Relationship="Self.revision_vehiculo_tipo_revision" FromRole="tipo_revision" ToRole="revision_vehiculo" />
+        </EntityType>
+        <EntityType Name="tipo_vehiculo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="tipo_vehiculo1" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="vehiculoes" Relationship="Self.vehiculo_tipo_vehiculo" FromRole="tipo_vehiculo" ToRole="vehiculo" />
+        </EntityType>
+        <EntityType Name="unidad">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="unidad1" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="detalle_accesorio" Relationship="Self.detalle_accesorio_unidad_detalle" FromRole="unidad" ToRole="detalle_accesorio" />
+        </EntityType>
+        <EntityType Name="user">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="first_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="last_name" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="username" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="auth_key" Type="String" MaxLength="32" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="password_hash" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="password_reset_token" Type="String" MaxLength="255" FixedLength="false" Unicode="true" />
+          <Property Name="email" Type="String" MaxLength="255" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="status" Type="Int16" Nullable="false" />
+          <Property Name="rol_id" Type="Int16" Nullable="false" />
+          <Property Name="created_at" Type="Int32" Nullable="false" />
+          <Property Name="updated_at" Type="Int16" Nullable="false" />
+        </EntityType>
+        <EntityType Name="vehiculo">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="marca" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="modelo" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="matricula_vehiculo" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="id_tipo_vehiculo" Type="Int32" />
+          <Property Name="modelo_tacografo" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="pma" Type="Int32" />
+          <Property Name="tara" Type="Int32" />
+          <Property Name="fecha_compra" Type="DateTime" Precision="0" />
+          <Property Name="taller_habitual" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="mantenimiento_vehiculo" Relationship="Self.mantenimiento_vehiculo_vehiculo" FromRole="vehiculo" ToRole="mantenimiento_vehiculo" />
+          <NavigationProperty Name="revision_vehiculo" Relationship="Self.revision_vehiculo_fk_revision_vehiculo_1" FromRole="vehiculo" ToRole="revision_vehiculo" />
+          <NavigationProperty Name="tipo_vehiculo" Relationship="Self.vehiculo_tipo_vehiculo" FromRole="vehiculo" ToRole="tipo_vehiculo" />
+        </EntityType>
+        <Association Name="accesorio_material_accesorio">
+          <End Role="material" Type="Self.material" Multiplicity="0..1" />
+          <End Role="accesorio" Type="Self.accesorio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="material">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="accesorio">
+              <PropertyRef Name="material_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="accesorio_tipo_accesorio">
+          <End Role="tipo_accesorio" Type="Self.tipo_accesorio" Multiplicity="0..1" />
+          <End Role="accesorio" Type="Self.accesorio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipo_accesorio">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="accesorio">
+              <PropertyRef Name="tipo_accesorio_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="accesorio_grupo_accesorio_grupo">
+          <End Role="accesorio" Type="Self.accesorio" Multiplicity="0..1" />
+          <End Role="accesorio_grupo" Type="Self.accesorio_grupo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="accesorio">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="accesorio_grupo">
+              <PropertyRef Name="accesorio_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="detalle_accesorio_accesorio">
+          <End Role="accesorio" Type="Self.accesorio" Multiplicity="0..1" />
+          <End Role="detalle_accesorio" Type="Self.detalle_accesorio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="accesorio">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="detalle_accesorio">
+              <PropertyRef Name="accesorio_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="accesorio_grupo_grupo">
+          <End Role="grupo" Type="Self.grupo" Multiplicity="0..1" />
+          <End Role="accesorio_grupo" Type="Self.accesorio_grupo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="grupo">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="accesorio_grupo">
+              <PropertyRef Name="grupo_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="auth_assignment_auth_assignment_ibfk_1">
+          <End Role="auth_item" Type="Self.auth_item" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="auth_assignment" Type="Self.auth_assignment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="auth_item">
+              <PropertyRef Name="name" />
+            </Principal>
+            <Dependent Role="auth_assignment">
+              <PropertyRef Name="item_name" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="auth_item_auth_item_ibfk_1">
+          <End Role="auth_rule" Type="Self.auth_rule" Multiplicity="0..1" />
+          <End Role="auth_item" Type="Self.auth_item" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="auth_rule">
+              <PropertyRef Name="name" />
+            </Principal>
+            <Dependent Role="auth_item">
+              <PropertyRef Name="rule_name" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="auth_item_child_auth_item_child_ibfk_1">
+          <End Role="auth_item" Type="Self.auth_item" Multiplicity="1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="auth_item_child" Type="Self.auth_item_child" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="auth_item">
+              <PropertyRef Name="name" />
+            </Principal>
+            <Dependent Role="auth_item_child">
+              <PropertyRef Name="parent" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="detalle_accesorio_caracteristica_accesorio">
+          <End Role="caracteristica_accesorio" Type="Self.caracteristica_accesorio" Multiplicity="0..1" />
+          <End Role="detalle_accesorio" Type="Self.detalle_accesorio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="caracteristica_accesorio">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="detalle_accesorio">
+              <PropertyRef Name="caracteristica_accesorio_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="compartimento_compartimento_cuba">
+          <End Role="cuba" Type="Self.cuba" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="compartimento" Type="Self.compartimento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cuba">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="compartimento">
+              <PropertyRef Name="cuba_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="compartimento_material_compartimento">
+          <End Role="material" Type="Self.material" Multiplicity="0..1" />
+          <End Role="compartimento" Type="Self.compartimento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="material">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="compartimento">
+              <PropertyRef Name="material_interior_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="compartimento_producto_compartimento">
+          <End Role="producto" Type="Self.producto" Multiplicity="0..1" />
+          <End Role="compartimento" Type="Self.compartimento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="producto">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="compartimento">
+              <PropertyRef Name="producto_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="grupo_grupo_compartimento">
+          <End Role="compartimento" Type="Self.compartimento" Multiplicity="0..1" />
+          <End Role="grupo" Type="Self.grupo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="compartimento">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="grupo">
+              <PropertyRef Name="compartimento_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="cuba_material_ext_cuba">
+          <End Role="material" Type="Self.material" Multiplicity="0..1" />
+          <End Role="cuba" Type="Self.cuba" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="material">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="cuba">
+              <PropertyRef Name="material_exterior_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="cuba_plataforma_cuba">
+          <End Role="plataforma" Type="Self.plataforma" Multiplicity="0..1" />
+          <End Role="cuba" Type="Self.cuba" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="plataforma">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="cuba">
+              <PropertyRef Name="plataforma_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="grupo_grupo_cuba">
+          <End Role="cuba" Type="Self.cuba" Multiplicity="0..1" />
+          <End Role="grupo" Type="Self.grupo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cuba">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="grupo">
+              <PropertyRef Name="cuba_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="operacion_operaciones_cuba">
+          <End Role="cuba" Type="Self.cuba" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="operacion" Type="Self.operacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cuba">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="operacion">
+              <PropertyRef Name="cuba_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="revision_revision_cuba">
+          <End Role="cuba" Type="Self.cuba" Multiplicity="0..1" />
+          <End Role="revision" Type="Self.revision" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="cuba">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="revision">
+              <PropertyRef Name="cuba_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="detalle_accesorio_unidad_detalle">
+          <End Role="unidad" Type="Self.unidad" Multiplicity="0..1" />
+          <End Role="detalle_accesorio" Type="Self.detalle_accesorio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="unidad">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="detalle_accesorio">
+              <PropertyRef Name="unidad_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="grupo_grupo_situacion">
+          <End Role="situacion" Type="Self.situacion" Multiplicity="0..1" />
+          <End Role="grupo" Type="Self.grupo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="situacion">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="grupo">
+              <PropertyRef Name="situacion_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="grupo_nombre_grupo">
+          <End Role="tipo_grupo" Type="Self.tipo_grupo" Multiplicity="0..1" />
+          <End Role="grupo" Type="Self.grupo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipo_grupo">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="grupo">
+              <PropertyRef Name="tipo_grupo_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="mantenimiento_vehiculo_operario">
+          <End Role="operario" Type="Self.operario" Multiplicity="0..1" />
+          <End Role="mantenimiento_vehiculo" Type="Self.mantenimiento_vehiculo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="operario">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="mantenimiento_vehiculo">
+              <PropertyRef Name="id_operario" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="mantenimiento_vehiculo_tipo_mantenimiento">
+          <End Role="tipo_mantenimiento" Type="Self.tipo_mantenimiento" Multiplicity="0..1" />
+          <End Role="mantenimiento_vehiculo" Type="Self.mantenimiento_vehiculo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipo_mantenimiento">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="mantenimiento_vehiculo">
+              <PropertyRef Name="id_tipo_mantenimiento" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="mantenimiento_vehiculo_vehiculo">
+          <End Role="vehiculo" Type="Self.vehiculo" Multiplicity="0..1" />
+          <End Role="mantenimiento_vehiculo" Type="Self.mantenimiento_vehiculo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="vehiculo">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="mantenimiento_vehiculo">
+              <PropertyRef Name="id_vehiculo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="operacion_operario_operacion">
+          <End Role="operario" Type="Self.operario" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="operacion" Type="Self.operacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="operario">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="operacion">
+              <PropertyRef Name="operario_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="operacion_tipo_operacion">
+          <End Role="tipo_operacion" Type="Self.tipo_operacion" Multiplicity="0..1">
+            <OnDelete Action="Cascade" />
+          </End>
+          <End Role="operacion" Type="Self.operacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipo_operacion">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="operacion">
+              <PropertyRef Name="operacion_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="revision_vehiculo_fk_revision_vehiculo_1">
+          <End Role="vehiculo" Type="Self.vehiculo" Multiplicity="0..1" />
+          <End Role="revision_vehiculo" Type="Self.revision_vehiculo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="vehiculo">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="revision_vehiculo">
+              <PropertyRef Name="id_vehiculo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="revision_vehiculo_tipo_revision">
+          <End Role="tipo_revision" Type="Self.tipo_revision" Multiplicity="0..1" />
+          <End Role="revision_vehiculo" Type="Self.revision_vehiculo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipo_revision">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="revision_vehiculo">
+              <PropertyRef Name="id_tipo_revision" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="vehiculo_tipo_vehiculo">
+          <End Role="tipo_vehiculo" Type="Self.tipo_vehiculo" Multiplicity="0..1" />
+          <End Role="vehiculo" Type="Self.vehiculo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="tipo_vehiculo">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="vehiculo">
+              <PropertyRef Name="id_tipo_vehiculo" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GaillardEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="accesorios" EntityType="Self.accesorio" />
+          <EntitySet Name="accesorio_grupo" EntityType="Self.accesorio_grupo" />
+          <EntitySet Name="auth_assignment" EntityType="Self.auth_assignment" />
+          <EntitySet Name="auth_item" EntityType="Self.auth_item" />
+          <EntitySet Name="auth_item_child" EntityType="Self.auth_item_child" />
+          <EntitySet Name="auth_rule" EntityType="Self.auth_rule" />
+          <EntitySet Name="caracteristica_accesorio" EntityType="Self.caracteristica_accesorio" />
+          <EntitySet Name="compartimentoes" EntityType="Self.compartimento" />
+          <EntitySet Name="cubas" EntityType="Self.cuba" />
+          <EntitySet Name="detalle_accesorio" EntityType="Self.detalle_accesorio" />
+          <EntitySet Name="grupoes" EntityType="Self.grupo" />
+          <EntitySet Name="mantenimiento_vehiculo" EntityType="Self.mantenimiento_vehiculo" />
+          <EntitySet Name="materials" EntityType="Self.material" />
+          <EntitySet Name="migrations" EntityType="Self.migration" />
+          <EntitySet Name="opers" EntityType="Self.oper" />
+          <EntitySet Name="operacions" EntityType="Self.operacion" />
+          <EntitySet Name="operarios" EntityType="Self.operario" />
+          <EntitySet Name="plataformas" EntityType="Self.plataforma" />
+          <EntitySet Name="productoes" EntityType="Self.producto" />
+          <EntitySet Name="revisions" EntityType="Self.revision" />
+          <EntitySet Name="revision_vehiculo" EntityType="Self.revision_vehiculo" />
+          <EntitySet Name="rols" EntityType="Self.rol" />
+          <EntitySet Name="rol_oper" EntityType="Self.rol_oper" />
+          <EntitySet Name="situacions" EntityType="Self.situacion" />
+          <EntitySet Name="tipo_accesorio" EntityType="Self.tipo_accesorio" />
+          <EntitySet Name="tipo_grupo" EntityType="Self.tipo_grupo" />
+          <EntitySet Name="tipo_mantenimiento" EntityType="Self.tipo_mantenimiento" />
+          <EntitySet Name="tipo_operacion" EntityType="Self.tipo_operacion" />
+          <EntitySet Name="tipo_revision" EntityType="Self.tipo_revision" />
+          <EntitySet Name="tipo_vehiculo" EntityType="Self.tipo_vehiculo" />
+          <EntitySet Name="unidads" EntityType="Self.unidad" />
+          <EntitySet Name="users" EntityType="Self.user" />
+          <EntitySet Name="vehiculoes" EntityType="Self.vehiculo" />
+          <AssociationSet Name="accesorio_material_accesorio" Association="Self.accesorio_material_accesorio">
+            <End Role="material" EntitySet="materials" />
+            <End Role="accesorio" EntitySet="accesorios" />
+          </AssociationSet>
+          <AssociationSet Name="accesorio_tipo_accesorio" Association="Self.accesorio_tipo_accesorio">
+            <End Role="tipo_accesorio" EntitySet="tipo_accesorio" />
+            <End Role="accesorio" EntitySet="accesorios" />
+          </AssociationSet>
+          <AssociationSet Name="accesorio_grupo_accesorio_grupo" Association="Self.accesorio_grupo_accesorio_grupo">
+            <End Role="accesorio" EntitySet="accesorios" />
+            <End Role="accesorio_grupo" EntitySet="accesorio_grupo" />
+          </AssociationSet>
+          <AssociationSet Name="detalle_accesorio_accesorio" Association="Self.detalle_accesorio_accesorio">
+            <End Role="accesorio" EntitySet="accesorios" />
+            <End Role="detalle_accesorio" EntitySet="detalle_accesorio" />
+          </AssociationSet>
+          <AssociationSet Name="accesorio_grupo_grupo" Association="Self.accesorio_grupo_grupo">
+            <End Role="grupo" EntitySet="grupoes" />
+            <End Role="accesorio_grupo" EntitySet="accesorio_grupo" />
+          </AssociationSet>
+          <AssociationSet Name="auth_assignment_auth_assignment_ibfk_1" Association="Self.auth_assignment_auth_assignment_ibfk_1">
+            <End Role="auth_item" EntitySet="auth_item" />
+            <End Role="auth_assignment" EntitySet="auth_assignment" />
+          </AssociationSet>
+          <AssociationSet Name="auth_item_auth_item_ibfk_1" Association="Self.auth_item_auth_item_ibfk_1">
+            <End Role="auth_rule" EntitySet="auth_rule" />
+            <End Role="auth_item" EntitySet="auth_item" />
+          </AssociationSet>
+          <AssociationSet Name="auth_item_child_auth_item_child_ibfk_1" Association="Self.auth_item_child_auth_item_child_ibfk_1">
+            <End Role="auth_item" EntitySet="auth_item" />
+            <End Role="auth_item_child" EntitySet="auth_item_child" />
+          </AssociationSet>
+          <AssociationSet Name="detalle_accesorio_caracteristica_accesorio" Association="Self.detalle_accesorio_caracteristica_accesorio">
+            <End Role="caracteristica_accesorio" EntitySet="caracteristica_accesorio" />
+            <End Role="detalle_accesorio" EntitySet="detalle_accesorio" />
+          </AssociationSet>
+          <AssociationSet Name="compartimento_compartimento_cuba" Association="Self.compartimento_compartimento_cuba">
+            <End Role="cuba" EntitySet="cubas" />
+            <End Role="compartimento" EntitySet="compartimentoes" />
+          </AssociationSet>
+          <AssociationSet Name="compartimento_material_compartimento" Association="Self.compartimento_material_compartimento">
+            <End Role="material" EntitySet="materials" />
+            <End Role="compartimento" EntitySet="compartimentoes" />
+          </AssociationSet>
+          <AssociationSet Name="compartimento_producto_compartimento" Association="Self.compartimento_producto_compartimento">
+            <End Role="producto" EntitySet="productoes" />
+            <End Role="compartimento" EntitySet="compartimentoes" />
+          </AssociationSet>
+          <AssociationSet Name="grupo_grupo_compartimento" Association="Self.grupo_grupo_compartimento">
+            <End Role="compartimento" EntitySet="compartimentoes" />
+            <End Role="grupo" EntitySet="grupoes" />
+          </AssociationSet>
+          <AssociationSet Name="cuba_material_ext_cuba" Association="Self.cuba_material_ext_cuba">
+            <End Role="material" EntitySet="materials" />
+            <End Role="cuba" EntitySet="cubas" />
+          </AssociationSet>
+          <AssociationSet Name="cuba_plataforma_cuba" Association="Self.cuba_plataforma_cuba">
+            <End Role="plataforma" EntitySet="plataformas" />
+            <End Role="cuba" EntitySet="cubas" />
+          </AssociationSet>
+          <AssociationSet Name="grupo_grupo_cuba" Association="Self.grupo_grupo_cuba">
+            <End Role="cuba" EntitySet="cubas" />
+            <End Role="grupo" EntitySet="grupoes" />
+          </AssociationSet>
+          <AssociationSet Name="operacion_operaciones_cuba" Association="Self.operacion_operaciones_cuba">
+            <End Role="cuba" EntitySet="cubas" />
+            <End Role="operacion" EntitySet="operacions" />
+          </AssociationSet>
+          <AssociationSet Name="revision_revision_cuba" Association="Self.revision_revision_cuba">
+            <End Role="cuba" EntitySet="cubas" />
+            <End Role="revision" EntitySet="revisions" />
+          </AssociationSet>
+          <AssociationSet Name="detalle_accesorio_unidad_detalle" Association="Self.detalle_accesorio_unidad_detalle">
+            <End Role="unidad" EntitySet="unidads" />
+            <End Role="detalle_accesorio" EntitySet="detalle_accesorio" />
+          </AssociationSet>
+          <AssociationSet Name="grupo_grupo_situacion" Association="Self.grupo_grupo_situacion">
+            <End Role="situacion" EntitySet="situacions" />
+            <End Role="grupo" EntitySet="grupoes" />
+          </AssociationSet>
+          <AssociationSet Name="grupo_nombre_grupo" Association="Self.grupo_nombre_grupo">
+            <End Role="tipo_grupo" EntitySet="tipo_grupo" />
+            <End Role="grupo" EntitySet="grupoes" />
+          </AssociationSet>
+          <AssociationSet Name="mantenimiento_vehiculo_operario" Association="Self.mantenimiento_vehiculo_operario">
+            <End Role="operario" EntitySet="operarios" />
+            <End Role="mantenimiento_vehiculo" EntitySet="mantenimiento_vehiculo" />
+          </AssociationSet>
+          <AssociationSet Name="mantenimiento_vehiculo_tipo_mantenimiento" Association="Self.mantenimiento_vehiculo_tipo_mantenimiento">
+            <End Role="tipo_mantenimiento" EntitySet="tipo_mantenimiento" />
+            <End Role="mantenimiento_vehiculo" EntitySet="mantenimiento_vehiculo" />
+          </AssociationSet>
+          <AssociationSet Name="mantenimiento_vehiculo_vehiculo" Association="Self.mantenimiento_vehiculo_vehiculo">
+            <End Role="vehiculo" EntitySet="vehiculoes" />
+            <End Role="mantenimiento_vehiculo" EntitySet="mantenimiento_vehiculo" />
+          </AssociationSet>
+          <AssociationSet Name="operacion_operario_operacion" Association="Self.operacion_operario_operacion">
+            <End Role="operario" EntitySet="operarios" />
+            <End Role="operacion" EntitySet="operacions" />
+          </AssociationSet>
+          <AssociationSet Name="operacion_tipo_operacion" Association="Self.operacion_tipo_operacion">
+            <End Role="tipo_operacion" EntitySet="tipo_operacion" />
+            <End Role="operacion" EntitySet="operacions" />
+          </AssociationSet>
+          <AssociationSet Name="revision_vehiculo_fk_revision_vehiculo_1" Association="Self.revision_vehiculo_fk_revision_vehiculo_1">
+            <End Role="vehiculo" EntitySet="vehiculoes" />
+            <End Role="revision_vehiculo" EntitySet="revision_vehiculo" />
+          </AssociationSet>
+          <AssociationSet Name="revision_vehiculo_tipo_revision" Association="Self.revision_vehiculo_tipo_revision">
+            <End Role="tipo_revision" EntitySet="tipo_revision" />
+            <End Role="revision_vehiculo" EntitySet="revision_vehiculo" />
+          </AssociationSet>
+          <AssociationSet Name="vehiculo_tipo_vehiculo" Association="Self.vehiculo_tipo_vehiculo">
+            <End Role="tipo_vehiculo" EntitySet="tipo_vehiculo" />
+            <End Role="vehiculo" EntitySet="vehiculoes" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GaillardModelStoreContainer" CdmEntityContainer="GaillardEntities">
+          <EntitySetMapping Name="accesorios">
+            <EntityTypeMapping TypeName="GaillardModel.accesorio">
+              <MappingFragment StoreEntitySet="accesorio">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="tipo_accesorio_id" ColumnName="tipo_accesorio_id" />
+                <ScalarProperty Name="material_id" ColumnName="material_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="accesorio_grupo">
+            <EntityTypeMapping TypeName="GaillardModel.accesorio_grupo">
+              <MappingFragment StoreEntitySet="accesorio_grupo">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="grupo_id" ColumnName="grupo_id" />
+                <ScalarProperty Name="accesorio_id" ColumnName="accesorio_id" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="auth_assignment">
+            <EntityTypeMapping TypeName="GaillardModel.auth_assignment">
+              <MappingFragment StoreEntitySet="auth_assignment">
+                <ScalarProperty Name="item_name" ColumnName="item_name" />
+                <ScalarProperty Name="user_id" ColumnName="user_id" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="auth_item">
+            <EntityTypeMapping TypeName="GaillardModel.auth_item">
+              <MappingFragment StoreEntitySet="auth_item">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="type" ColumnName="type" />
+                <ScalarProperty Name="description" ColumnName="description" />
+                <ScalarProperty Name="rule_name" ColumnName="rule_name" />
+                <ScalarProperty Name="data" ColumnName="data" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="auth_item_child">
+            <EntityTypeMapping TypeName="GaillardModel.auth_item_child">
+              <MappingFragment StoreEntitySet="auth_item_child">
+                <ScalarProperty Name="parent" ColumnName="parent" />
+                <ScalarProperty Name="child" ColumnName="child" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="auth_rule">
+            <EntityTypeMapping TypeName="GaillardModel.auth_rule">
+              <MappingFragment StoreEntitySet="auth_rule">
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="data" ColumnName="data" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="caracteristica_accesorio">
+            <EntityTypeMapping TypeName="GaillardModel.caracteristica_accesorio">
+              <MappingFragment StoreEntitySet="caracteristica_accesorio">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="caracteristica_accesorio1" ColumnName="caracteristica_accesorio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="compartimentoes">
+            <EntityTypeMapping TypeName="GaillardModel.compartimento">
+              <MappingFragment StoreEntitySet="compartimento">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="cuba_id" ColumnName="cuba_id" />
+                <ScalarProperty Name="numero" ColumnName="numero" />
+                <ScalarProperty Name="capacidad" ColumnName="capacidad" />
+                <ScalarProperty Name="producto_id" ColumnName="producto_id" />
+                <ScalarProperty Name="material_interior_id" ColumnName="material_interior_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="cubas">
+            <EntityTypeMapping TypeName="GaillardModel.cuba">
+              <MappingFragment StoreEntitySet="cuba">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="cuba1" ColumnName="cuba" />
+                <ScalarProperty Name="num_cuadro" ColumnName="num_cuadro" />
+                <ScalarProperty Name="codigo" ColumnName="codigo" />
+                <ScalarProperty Name="constructor" ColumnName="constructor" />
+                <ScalarProperty Name="num_fabricacion" ColumnName="num_fabricacion" />
+                <ScalarProperty Name="num_homologacion" ColumnName="num_homologacion" />
+                <ScalarProperty Name="fecha_construccion" ColumnName="fecha_construccion" />
+                <ScalarProperty Name="pais_fabricacion" ColumnName="pais_fabricacion" />
+                <ScalarProperty Name="num_tipo_imo" ColumnName="num_tipo_imo" />
+                <ScalarProperty Name="pais_aprobacion" ColumnName="pais_aprobacion" />
+                <ScalarProperty Name="autoridad" ColumnName="autoridad" />
+                <ScalarProperty Name="codigo_diseno" ColumnName="codigo_diseno" />
+                <ScalarProperty Name="prueba_hidraulica" ColumnName="prueba_hidraulica" />
+                <ScalarProperty Name="presion_servicio_ADR" ColumnName="presion_servicio_ADR" />
+                <ScalarProperty Name="presion_servicio_IMO" ColumnName="presion_servicio_IMO" />
+                <ScalarProperty Name="presion_exterior" ColumnName="presion_exterior" />
+                <ScalarProperty Name="presion_tarado_valvulas" ColumnName="presion_tarado_valvulas" />
+                <ScalarProperty Name="temperatura_calculo_referencia" ColumnName="temperatura_calculo_referencia" />
+                <ScalarProperty Name="peso_bruto" ColumnName="peso_bruto" />
+                <ScalarProperty Name="tara" ColumnName="tara" />
+                <ScalarProperty Name="peso_max_producto" ColumnName="peso_max_producto" />
+                <ScalarProperty Name="material_exterior_id" ColumnName="material_exterior_id" />
+                <ScalarProperty Name="espesor_cuerpo" ColumnName="espesor_cuerpo" />
+                <ScalarProperty Name="espesor_fondo" ColumnName="espesor_fondo" />
+                <ScalarProperty Name="espesor_equivalente" ColumnName="espesor_equivalente" />
+                <ScalarProperty Name="tipo_forro" ColumnName="tipo_forro" />
+                <ScalarProperty Name="num_aprobacion_CSC" ColumnName="num_aprobacion_CSC" />
+                <ScalarProperty Name="modelo" ColumnName="modelo" />
+                <ScalarProperty Name="peso_max_apilamiento" ColumnName="peso_max_apilamiento" />
+                <ScalarProperty Name="carga_rigidez" ColumnName="carga_rigidez" />
+                <ScalarProperty Name="presion_prueba" ColumnName="presion_prueba" />
+                <ScalarProperty Name="temperatura_min_carga" ColumnName="temperatura_min_carga" />
+                <ScalarProperty Name="plataforma_id" ColumnName="plataforma_id" />
+                <ScalarProperty Name="longitud" ColumnName="longitud" />
+                <ScalarProperty Name="ancho" ColumnName="ancho" />
+                <ScalarProperty Name="alto" ColumnName="alto" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="updated_by" ColumnName="updated_by" />
+                <ScalarProperty Name="created_by" ColumnName="created_by" />
+                <ScalarProperty Name="num_aprobacion_IMDG" ColumnName="num_aprobacion_IMDG" />
+                <ScalarProperty Name="num_aprobacion_ADR_RID" ColumnName="num_aprobacion_ADR/RID" />
+                <ScalarProperty Name="UN_portable_tank" ColumnName="UN_portable_tank" />
+                <ScalarProperty Name="num_aprobacion" ColumnName="num_aprobacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="detalle_accesorio">
+            <EntityTypeMapping TypeName="GaillardModel.detalle_accesorio">
+              <MappingFragment StoreEntitySet="detalle_accesorio">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="accesorio_id" ColumnName="accesorio_id" />
+                <ScalarProperty Name="cantidad" ColumnName="cantidad" />
+                <ScalarProperty Name="caracteristica_accesorio_id" ColumnName="caracteristica_accesorio_id" />
+                <ScalarProperty Name="medida" ColumnName="medida" />
+                <ScalarProperty Name="unidad_id" ColumnName="unidad_id" />
+                <ScalarProperty Name="tipo" ColumnName="tipo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="grupoes">
+            <EntityTypeMapping TypeName="GaillardModel.grupo">
+              <MappingFragment StoreEntitySet="grupo">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="tipo_grupo_id" ColumnName="tipo_grupo_id" />
+                <ScalarProperty Name="cuba_id" ColumnName="cuba_id" />
+                <ScalarProperty Name="compartimento_id" ColumnName="compartimento_id" />
+                <ScalarProperty Name="situacion_id" ColumnName="situacion_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="mantenimiento_vehiculo">
+            <EntityTypeMapping TypeName="GaillardModel.mantenimiento_vehiculo">
+              <MappingFragment StoreEntitySet="mantenimiento_vehiculo">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_vehiculo" ColumnName="id_vehiculo" />
+                <ScalarProperty Name="fecha_mantenimiento" ColumnName="fecha_mantenimiento" />
+                <ScalarProperty Name="id_tipo_mantenimiento" ColumnName="id_tipo_mantenimiento" />
+                <ScalarProperty Name="detalle_mantenimiento" ColumnName="detalle_mantenimiento" />
+                <ScalarProperty Name="id_operario" ColumnName="id_operario" />
+                <ScalarProperty Name="kilometros" ColumnName="kilometros" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="materials">
+            <EntityTypeMapping TypeName="GaillardModel.material">
+              <MappingFragment StoreEntitySet="material">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="material1" ColumnName="material" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="migrations">
+            <EntityTypeMapping TypeName="GaillardModel.migration">
+              <MappingFragment StoreEntitySet="migration">
+                <ScalarProperty Name="version" ColumnName="version" />
+                <ScalarProperty Name="apply_time" ColumnName="apply_time" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="opers">
+            <EntityTypeMapping TypeName="GaillardModel.oper">
+              <MappingFragment StoreEntitySet="oper">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="operacions">
+            <EntityTypeMapping TypeName="GaillardModel.operacion">
+              <MappingFragment StoreEntitySet="operacion">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="cuba_id" ColumnName="cuba_id" />
+                <ScalarProperty Name="operacion_id" ColumnName="operacion_id" />
+                <ScalarProperty Name="fecha_operacion" ColumnName="fecha_operacion" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="operario_id" ColumnName="operario_id" />
+                <ScalarProperty Name="duracion" ColumnName="duracion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="operarios">
+            <EntityTypeMapping TypeName="GaillardModel.operario">
+              <MappingFragment StoreEntitySet="operario">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+                <ScalarProperty Name="apellidos" ColumnName="apellidos" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="plataformas">
+            <EntityTypeMapping TypeName="GaillardModel.plataforma">
+              <MappingFragment StoreEntitySet="plataforma">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="matricula" ColumnName="matricula" />
+                <ScalarProperty Name="propiedad" ColumnName="propiedad" />
+                <ScalarProperty Name="pma" ColumnName="pma" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="productoes">
+            <EntityTypeMapping TypeName="GaillardModel.producto">
+              <MappingFragment StoreEntitySet="producto">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="iupac" ColumnName="iupac" />
+                <ScalarProperty Name="producto1" ColumnName="producto" />
+                <ScalarProperty Name="concentracion" ColumnName="concentracion" />
+                <ScalarProperty Name="grupo" ColumnName="grupo" />
+                <ScalarProperty Name="num_UN" ColumnName="num_UN" />
+                <ScalarProperty Name="formula" ColumnName="formula" />
+                <ScalarProperty Name="densidad" ColumnName="densidad" />
+                <ScalarProperty Name="frases_R" ColumnName="frases_R" />
+                <ScalarProperty Name="frases_S" ColumnName="frases_S" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="revisions">
+            <EntityTypeMapping TypeName="GaillardModel.revision">
+              <MappingFragment StoreEntitySet="revision">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="cuba_id" ColumnName="cuba_id" />
+                <ScalarProperty Name="fecha_revision" ColumnName="fecha_revision" />
+                <ScalarProperty Name="descripcion" ColumnName="descripcion" />
+                <ScalarProperty Name="valida_hasta" ColumnName="valida_hasta" />
+                <ScalarProperty Name="descripcion_proxima" ColumnName="descripcion_proxima" />
+                <ScalarProperty Name="autorizado" ColumnName="autorizado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="revision_vehiculo">
+            <EntityTypeMapping TypeName="GaillardModel.revision_vehiculo">
+              <MappingFragment StoreEntitySet="revision_vehiculo">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="id_vehiculo" ColumnName="id_vehiculo" />
+                <ScalarProperty Name="id_tipo_revision" ColumnName="id_tipo_revision" />
+                <ScalarProperty Name="fecha_revision" ColumnName="fecha_revision" />
+                <ScalarProperty Name="detalles" ColumnName="detalles" />
+                <ScalarProperty Name="ejecutor" ColumnName="ejecutor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="rols">
+            <EntityTypeMapping TypeName="GaillardModel.rol">
+              <MappingFragment StoreEntitySet="rol">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nombre" ColumnName="nombre" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="rol_oper">
+            <EntityTypeMapping TypeName="GaillardModel.rol_oper">
+              <MappingFragment StoreEntitySet="rol_oper">
+                <ScalarProperty Name="rol_id" ColumnName="rol_id" />
+                <ScalarProperty Name="oper_id" ColumnName="oper_id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="situacions">
+            <EntityTypeMapping TypeName="GaillardModel.situacion">
+              <MappingFragment StoreEntitySet="situacion">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="lado_cuba_numero" ColumnName="lado_cuba_numero" />
+                <ScalarProperty Name="lado_cuba_nombre" ColumnName="lado_cuba_nombre" />
+                <ScalarProperty Name="situacion_lado_numero" ColumnName="situacion_lado_numero" />
+                <ScalarProperty Name="situacion_lado_letra" ColumnName="situacion_lado_letra" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tipo_accesorio">
+            <EntityTypeMapping TypeName="GaillardModel.tipo_accesorio">
+              <MappingFragment StoreEntitySet="tipo_accesorio">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="tipo_accesorio1" ColumnName="tipo_accesorio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tipo_grupo">
+            <EntityTypeMapping TypeName="GaillardModel.tipo_grupo">
+              <MappingFragment StoreEntitySet="tipo_grupo">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="nombre_grupo" ColumnName="nombre_grupo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tipo_mantenimiento">
+            <EntityTypeMapping TypeName="GaillardModel.tipo_mantenimiento">
+              <MappingFragment StoreEntitySet="tipo_mantenimiento">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="tipo_mantenimiento1" ColumnName="tipo_mantenimiento" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tipo_operacion">
+            <EntityTypeMapping TypeName="GaillardModel.tipo_operacion">
+              <MappingFragment StoreEntitySet="tipo_operacion">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="operacion" ColumnName="operacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tipo_revision">
+            <EntityTypeMapping TypeName="GaillardModel.tipo_revision">
+              <MappingFragment StoreEntitySet="tipo_revision">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="tipo_revision1" ColumnName="tipo_revision" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="tipo_vehiculo">
+            <EntityTypeMapping TypeName="GaillardModel.tipo_vehiculo">
+              <MappingFragment StoreEntitySet="tipo_vehiculo">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="tipo_vehiculo1" ColumnName="tipo_vehiculo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="unidads">
+            <EntityTypeMapping TypeName="GaillardModel.unidad">
+              <MappingFragment StoreEntitySet="unidad">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="unidad1" ColumnName="unidad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="users">
+            <EntityTypeMapping TypeName="GaillardModel.user">
+              <MappingFragment StoreEntitySet="user">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="first_name" ColumnName="first_name" />
+                <ScalarProperty Name="last_name" ColumnName="last_name" />
+                <ScalarProperty Name="username" ColumnName="username" />
+                <ScalarProperty Name="auth_key" ColumnName="auth_key" />
+                <ScalarProperty Name="password_hash" ColumnName="password_hash" />
+                <ScalarProperty Name="password_reset_token" ColumnName="password_reset_token" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="status" ColumnName="status" />
+                <ScalarProperty Name="rol_id" ColumnName="rol_id" />
+                <ScalarProperty Name="created_at" ColumnName="created_at" />
+                <ScalarProperty Name="updated_at" ColumnName="updated_at" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="vehiculoes">
+            <EntityTypeMapping TypeName="GaillardModel.vehiculo">
+              <MappingFragment StoreEntitySet="vehiculo">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="marca" ColumnName="marca" />
+                <ScalarProperty Name="modelo" ColumnName="modelo" />
+                <ScalarProperty Name="matricula_vehiculo" ColumnName="matricula_vehiculo" />
+                <ScalarProperty Name="id_tipo_vehiculo" ColumnName="id_tipo_vehiculo" />
+                <ScalarProperty Name="modelo_tacografo" ColumnName="modelo_tacografo" />
+                <ScalarProperty Name="pma" ColumnName="pma" />
+                <ScalarProperty Name="tara" ColumnName="tara" />
+                <ScalarProperty Name="fecha_compra" ColumnName="fecha_compra" />
+                <ScalarProperty Name="taller_habitual" ColumnName="taller_habitual" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="true" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

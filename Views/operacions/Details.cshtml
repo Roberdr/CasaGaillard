@@ -1,0 +1,66 @@
+﻿@model CasaGaillard.Models.operacion
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>operacion</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.fecha_operacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fecha_operacion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.duracion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.duracion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.cuba.cuba1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.cuba.cuba1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.operario.nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.operario.nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tipo_operacion.operacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tipo_operacion.operacion)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

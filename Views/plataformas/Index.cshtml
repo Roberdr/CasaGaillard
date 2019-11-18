@@ -1,0 +1,45 @@
+﻿@model IEnumerable<CasaGaillard.Models.plataforma>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.matricula)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.propiedad)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.pma)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.matricula)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.propiedad)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.pma)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
+            @Html.ActionLink("Details", "Details", new { id=item.id }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+        </td>
+    </tr>
+}
+
+</table>

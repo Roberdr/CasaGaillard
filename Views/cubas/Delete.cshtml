@@ -1,0 +1,376 @@
+﻿@model CasaGaillard.Models.cuba
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>cuba</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.cuba1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.cuba1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.num_cuadro)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.num_cuadro)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.codigo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.codigo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.constructor)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.constructor)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.num_fabricacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.num_fabricacion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.num_homologacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.num_homologacion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.fecha_construccion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.fecha_construccion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.pais_fabricacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.pais_fabricacion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.num_tipo_imo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.num_tipo_imo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.pais_aprobacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.pais_aprobacion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.autoridad)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.autoridad)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.codigo_diseno)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.codigo_diseno)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.prueba_hidraulica)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.prueba_hidraulica)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.presion_servicio_ADR)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.presion_servicio_ADR)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.presion_servicio_IMO)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.presion_servicio_IMO)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.presion_exterior)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.presion_exterior)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.presion_tarado_valvulas)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.presion_tarado_valvulas)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.temperatura_calculo_referencia)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.temperatura_calculo_referencia)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.peso_bruto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.peso_bruto)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tara)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tara)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.peso_max_producto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.peso_max_producto)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.espesor_cuerpo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.espesor_cuerpo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.espesor_fondo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.espesor_fondo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.espesor_equivalente)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.espesor_equivalente)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.tipo_forro)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.tipo_forro)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.num_aprobacion_CSC)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.num_aprobacion_CSC)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.modelo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.modelo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.peso_max_apilamiento)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.peso_max_apilamiento)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.carga_rigidez)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.carga_rigidez)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.presion_prueba)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.presion_prueba)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.temperatura_min_carga)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.temperatura_min_carga)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.longitud)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.longitud)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ancho)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ancho)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.alto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.alto)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.updated_at)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.updated_at)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.created_at)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.created_at)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.updated_by)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.updated_by)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.created_by)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.created_by)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.num_aprobacion_IMDG)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.num_aprobacion_IMDG)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.num_aprobacion_ADR_RID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.num_aprobacion_ADR_RID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UN_portable_tank)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UN_portable_tank)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.num_aprobacion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.num_aprobacion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.material.material1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.material.material1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.plataforma.matricula)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.plataforma.matricula)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>
