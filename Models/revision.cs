@@ -12,16 +12,14 @@ namespace CasaGaillard.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class revision
+    public partial class Revision
     {
-        public int id { get; set; }
-        public Nullable<int> cuba_id { get; set; }
-        public Nullable<System.DateTime> fecha_revision { get; set; }
-        public string descripcion { get; set; }
-        public Nullable<System.DateTime> valida_hasta { get; set; }
-        public string descripcion_proxima { get; set; }
-        public string autorizado { get; set; }
-    
-        public virtual cuba cuba { get; set; }
+        public int ID { get; set; }
+        public Nullable<int> CubaID { get; set; }
+        public Nullable<System.DateTime> FechaRevision { get; set; }
+        public string Descripcion { get; set; }
+        public Nullable<System.DateTime> ValidaHasta { get; set; }
+        public string DescripcionProxima { get; set; }
+        public string Autorizado { get; set; }
     }
 }

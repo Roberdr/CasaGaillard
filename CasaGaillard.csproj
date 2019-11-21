@@ -169,153 +169,103 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
-    <Compile Include="Controllers\accesoriosController.cs" />
-    <Compile Include="Controllers\accesorio_grupoController.cs" />
+    <Compile Include="Controllers\AccesoriosController.cs" />
     <Compile Include="Controllers\AccountController.cs" />
-    <Compile Include="Controllers\caracteristica_accesorioController.cs" />
-    <Compile Include="Controllers\compartimentoesController.cs" />
-    <Compile Include="Controllers\cubasController.cs" />
-    <Compile Include="Controllers\detalle_accesorioController.cs" />
-    <Compile Include="Controllers\grupoesController.cs" />
+    <Compile Include="Controllers\CubasController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="Controllers\mantenimiento_vehiculoController.cs" />
-    <Compile Include="Controllers\materialsController.cs" />
-    <Compile Include="Controllers\operacionsController.cs" />
-    <Compile Include="Controllers\operariosController.cs" />
-    <Compile Include="Controllers\opersController.cs" />
-    <Compile Include="Controllers\plataformasController.cs" />
-    <Compile Include="Controllers\productoesController.cs" />
-    <Compile Include="Controllers\revisionsController.cs" />
-    <Compile Include="Controllers\revision_vehiculoController.cs" />
-    <Compile Include="Controllers\situacionsController.cs" />
-    <Compile Include="Controllers\tipo_accesorioController.cs" />
-    <Compile Include="Controllers\tipo_grupoController.cs" />
-    <Compile Include="Controllers\tipo_mantenimientoController.cs" />
-    <Compile Include="Controllers\tipo_operacionController.cs" />
-    <Compile Include="Controllers\tipo_revisionController.cs" />
-    <Compile Include="Controllers\tipo_vehiculoController.cs" />
-    <Compile Include="Controllers\unidadsController.cs" />
-    <Compile Include="Controllers\vehiculoesController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\accesorio.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
+    <Compile Include="Models\Accesorio.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\accesorio_grupo.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
+    <Compile Include="Models\AccesorioGrupo.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\auth_assignment.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
+    <Compile Include="Models\CaracteristicaAccesorio.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\auth_item.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
+    <Compile Include="Models\Compartimento.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\auth_item_child.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
+    <Compile Include="Models\Cuba.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\auth_rule.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
+    <Compile Include="Models\DetalleAccesorio.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\caracteristica_accesorio.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\compartimento.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\cuba.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\detalle_accesorio.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\GaillardData.Context.cs">
+    <Compile Include="Models\GaillardModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>GaillardData.Context.tt</DependentUpon>
+      <DependentUpon>GaillardModel.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GaillardData.cs">
+    <Compile Include="Models\GaillardModel.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>GaillardData.tt</DependentUpon>
+      <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GaillardData.Designer.cs">
+    <Compile Include="Models\GaillardModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>GaillardData.edmx</DependentUpon>
+      <DependentUpon>GaillardModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\grupo.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
+    <Compile Include="Models\Grupo.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\mantenimiento_vehiculo.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
+    <Compile Include="Models\MantenimientoVehiculo.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\material.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
+    <Compile Include="Models\Material.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\migration.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
+    <Compile Include="Models\Operacion.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\oper.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
+    <Compile Include="Models\Operario.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\operacion.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
+    <Compile Include="Models\Plataforma.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\operario.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
+    <Compile Include="Models\Producto.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\plataforma.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
+    <Compile Include="Models\Revision.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\producto.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
+    <Compile Include="Models\RevisionVehiculo.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\revision.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
+    <Compile Include="Models\Situacion.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\revision_vehiculo.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
+    <Compile Include="Models\TipoAccesorio.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\rol.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
+    <Compile Include="Models\TipoGrupo.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\rol_oper.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
+    <Compile Include="Models\TipoMantenimiento.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\situacion.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
+    <Compile Include="Models\TipoOperacion.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\tipo_accesorio.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
+    <Compile Include="Models\TipoRevision.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\tipo_grupo.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
+    <Compile Include="Models\TipoVehiculo.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\tipo_mantenimiento.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
+    <Compile Include="Models\Unidad.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\tipo_operacion.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tipo_revision.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\tipo_vehiculo.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\unidad.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\user.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\vehiculo.cs">
-      <DependentUpon>GaillardData.tt</DependentUpon>
+    <Compile Include="Models\Vehiculo.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -329,24 +279,24 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Models\GaillardData.Context.tt">
+    <Content Include="Models\GaillardModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>GaillardData.edmx</DependentUpon>
-      <LastGenOutput>GaillardData.Context.cs</LastGenOutput>
+      <DependentUpon>GaillardModel.edmx</DependentUpon>
+      <LastGenOutput>GaillardModel.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\GaillardData.tt">
+    <Content Include="Models\GaillardModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>GaillardData.edmx</DependentUpon>
-      <LastGenOutput>GaillardData.cs</LastGenOutput>
+      <DependentUpon>GaillardModel.edmx</DependentUpon>
+      <LastGenOutput>GaillardModel.cs</LastGenOutput>
     </Content>
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <EntityDeploy Include="Models\GaillardData.edmx">
+    <EntityDeploy Include="Models\GaillardModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>GaillardData.Designer.cs</LastGenOutput>
+      <LastGenOutput>GaillardModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\GaillardData.edmx.diagram">
-      <DependentUpon>GaillardData.edmx</DependentUpon>
+    <Content Include="Models\GaillardModel.edmx.diagram">
+      <DependentUpon>GaillardModel.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -393,131 +343,16 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\cubas\Create.cshtml" />
-    <Content Include="Views\cubas\Delete.cshtml" />
-    <Content Include="Views\cubas\Details.cshtml" />
-    <Content Include="Views\cubas\Edit.cshtml" />
-    <Content Include="Views\cubas\Index.cshtml" />
-    <Content Include="Views\accesorios\Create.cshtml" />
-    <Content Include="Views\accesorios\Delete.cshtml" />
-    <Content Include="Views\accesorios\Details.cshtml" />
-    <Content Include="Views\accesorios\Edit.cshtml" />
-    <Content Include="Views\accesorios\Index.cshtml" />
-    <Content Include="Views\tipo_accesorio\Create.cshtml" />
-    <Content Include="Views\tipo_accesorio\Delete.cshtml" />
-    <Content Include="Views\tipo_accesorio\Details.cshtml" />
-    <Content Include="Views\tipo_accesorio\Edit.cshtml" />
-    <Content Include="Views\tipo_accesorio\Index.cshtml" />
-    <Content Include="Views\tipo_grupo\Create.cshtml" />
-    <Content Include="Views\tipo_grupo\Delete.cshtml" />
-    <Content Include="Views\tipo_grupo\Details.cshtml" />
-    <Content Include="Views\tipo_grupo\Edit.cshtml" />
-    <Content Include="Views\tipo_grupo\Index.cshtml" />
-    <Content Include="Views\tipo_vehiculo\Create.cshtml" />
-    <Content Include="Views\tipo_vehiculo\Delete.cshtml" />
-    <Content Include="Views\tipo_vehiculo\Details.cshtml" />
-    <Content Include="Views\tipo_vehiculo\Edit.cshtml" />
-    <Content Include="Views\tipo_vehiculo\Index.cshtml" />
-    <Content Include="Views\vehiculoes\Create.cshtml" />
-    <Content Include="Views\vehiculoes\Delete.cshtml" />
-    <Content Include="Views\vehiculoes\Details.cshtml" />
-    <Content Include="Views\vehiculoes\Edit.cshtml" />
-    <Content Include="Views\vehiculoes\Index.cshtml" />
-    <Content Include="Views\materials\Create.cshtml" />
-    <Content Include="Views\materials\Delete.cshtml" />
-    <Content Include="Views\materials\Details.cshtml" />
-    <Content Include="Views\materials\Edit.cshtml" />
-    <Content Include="Views\materials\Index.cshtml" />
-    <Content Include="Views\accesorio_grupo\Create.cshtml" />
-    <Content Include="Views\accesorio_grupo\Delete.cshtml" />
-    <Content Include="Views\accesorio_grupo\Details.cshtml" />
-    <Content Include="Views\accesorio_grupo\Edit.cshtml" />
-    <Content Include="Views\accesorio_grupo\Index.cshtml" />
-    <Content Include="Views\grupoes\Create.cshtml" />
-    <Content Include="Views\grupoes\Delete.cshtml" />
-    <Content Include="Views\grupoes\Details.cshtml" />
-    <Content Include="Views\grupoes\Edit.cshtml" />
-    <Content Include="Views\grupoes\Index.cshtml" />
-    <Content Include="Views\detalle_accesorio\Create.cshtml" />
-    <Content Include="Views\detalle_accesorio\Delete.cshtml" />
-    <Content Include="Views\detalle_accesorio\Details.cshtml" />
-    <Content Include="Views\detalle_accesorio\Edit.cshtml" />
-    <Content Include="Views\detalle_accesorio\Index.cshtml" />
-    <Content Include="Views\unidads\Create.cshtml" />
-    <Content Include="Views\unidads\Delete.cshtml" />
-    <Content Include="Views\unidads\Details.cshtml" />
-    <Content Include="Views\unidads\Edit.cshtml" />
-    <Content Include="Views\unidads\Index.cshtml" />
-    <Content Include="Views\caracteristica_accesorio\Create.cshtml" />
-    <Content Include="Views\caracteristica_accesorio\Delete.cshtml" />
-    <Content Include="Views\caracteristica_accesorio\Details.cshtml" />
-    <Content Include="Views\caracteristica_accesorio\Edit.cshtml" />
-    <Content Include="Views\caracteristica_accesorio\Index.cshtml" />
-    <Content Include="Views\compartimentoes\Create.cshtml" />
-    <Content Include="Views\compartimentoes\Delete.cshtml" />
-    <Content Include="Views\compartimentoes\Details.cshtml" />
-    <Content Include="Views\compartimentoes\Edit.cshtml" />
-    <Content Include="Views\compartimentoes\Index.cshtml" />
-    <Content Include="Views\mantenimiento_vehiculo\Create.cshtml" />
-    <Content Include="Views\mantenimiento_vehiculo\Delete.cshtml" />
-    <Content Include="Views\mantenimiento_vehiculo\Details.cshtml" />
-    <Content Include="Views\mantenimiento_vehiculo\Edit.cshtml" />
-    <Content Include="Views\mantenimiento_vehiculo\Index.cshtml" />
-    <Content Include="Views\opers\Create.cshtml" />
-    <Content Include="Views\opers\Delete.cshtml" />
-    <Content Include="Views\opers\Details.cshtml" />
-    <Content Include="Views\opers\Edit.cshtml" />
-    <Content Include="Views\opers\Index.cshtml" />
-    <Content Include="Views\operacions\Create.cshtml" />
-    <Content Include="Views\operacions\Delete.cshtml" />
-    <Content Include="Views\operacions\Details.cshtml" />
-    <Content Include="Views\operacions\Edit.cshtml" />
-    <Content Include="Views\operacions\Index.cshtml" />
-    <Content Include="Views\operarios\Create.cshtml" />
-    <Content Include="Views\operarios\Delete.cshtml" />
-    <Content Include="Views\operarios\Details.cshtml" />
-    <Content Include="Views\operarios\Edit.cshtml" />
-    <Content Include="Views\operarios\Index.cshtml" />
-    <Content Include="Views\plataformas\Create.cshtml" />
-    <Content Include="Views\plataformas\Delete.cshtml" />
-    <Content Include="Views\plataformas\Details.cshtml" />
-    <Content Include="Views\plataformas\Edit.cshtml" />
-    <Content Include="Views\plataformas\Index.cshtml" />
-    <Content Include="Views\productoes\Create.cshtml" />
-    <Content Include="Views\productoes\Delete.cshtml" />
-    <Content Include="Views\productoes\Details.cshtml" />
-    <Content Include="Views\productoes\Edit.cshtml" />
-    <Content Include="Views\productoes\Index.cshtml" />
-    <Content Include="Views\revisions\Create.cshtml" />
-    <Content Include="Views\revisions\Delete.cshtml" />
-    <Content Include="Views\revisions\Details.cshtml" />
-    <Content Include="Views\revisions\Edit.cshtml" />
-    <Content Include="Views\revisions\Index.cshtml" />
-    <Content Include="Views\revision_vehiculo\Create.cshtml" />
-    <Content Include="Views\revision_vehiculo\Delete.cshtml" />
-    <Content Include="Views\revision_vehiculo\Details.cshtml" />
-    <Content Include="Views\revision_vehiculo\Edit.cshtml" />
-    <Content Include="Views\revision_vehiculo\Index.cshtml" />
-    <Content Include="Views\situacions\Create.cshtml" />
-    <Content Include="Views\situacions\Delete.cshtml" />
-    <Content Include="Views\situacions\Details.cshtml" />
-    <Content Include="Views\situacions\Edit.cshtml" />
-    <Content Include="Views\situacions\Index.cshtml" />
-    <Content Include="Views\tipo_mantenimiento\Create.cshtml" />
-    <Content Include="Views\tipo_mantenimiento\Delete.cshtml" />
-    <Content Include="Views\tipo_mantenimiento\Details.cshtml" />
-    <Content Include="Views\tipo_mantenimiento\Edit.cshtml" />
-    <Content Include="Views\tipo_mantenimiento\Index.cshtml" />
-    <Content Include="Views\tipo_operacion\Create.cshtml" />
-    <Content Include="Views\tipo_operacion\Delete.cshtml" />
-    <Content Include="Views\tipo_operacion\Details.cshtml" />
-    <Content Include="Views\tipo_operacion\Edit.cshtml" />
-    <Content Include="Views\tipo_operacion\Index.cshtml" />
-    <Content Include="Views\tipo_revision\Create.cshtml" />
-    <Content Include="Views\tipo_revision\Delete.cshtml" />
-    <Content Include="Views\tipo_revision\Details.cshtml" />
-    <Content Include="Views\tipo_revision\Edit.cshtml" />
-    <Content Include="Views\tipo_revision\Index.cshtml" />
+    <Content Include="Views\Accesorios\Create.cshtml" />
+    <Content Include="Views\Accesorios\Delete.cshtml" />
+    <Content Include="Views\Accesorios\Details.cshtml" />
+    <Content Include="Views\Accesorios\Edit.cshtml" />
+    <Content Include="Views\Accesorios\Index.cshtml" />
+    <Content Include="Views\Cubas\Create.cshtml" />
+    <Content Include="Views\Cubas\Delete.cshtml" />
+    <Content Include="Views\Cubas\Details.cshtml" />
+    <Content Include="Views\Cubas\Edit.cshtml" />
+    <Content Include="Views\Cubas\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

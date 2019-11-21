@@ -11,25 +11,25 @@ using CasaGaillard.Models;
 
 namespace CasaGaillard.Controllers
 {
-    public class cubasController : Controller
+    public class CubasController : Controller
     {
         private GaillardEntities db = new GaillardEntities();
 
-        // GET: cubas
+        // GET: Cubas
         public async Task<ActionResult> Index()
         {
-            var cubas = db.cubas.Include(c => c.material).Include(c => c.plataforma);
+            var cubas = db.Cubas.Include(c => c.Material).Include(c => c.Plataforma);
             return View(await cubas.ToListAsync());
         }
 
-        // GET: cubas/Details/5
+        // GET: Cubas/Details/5
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            cuba cuba = await db.cubas.FindAsync(id);
+            Cuba cuba = await db.Cubas.FindAsync(id);
             if (cuba == null)
             {
                 return HttpNotFound();
@@ -37,56 +37,56 @@ namespace CasaGaillard.Controllers
             return View(cuba);
         }
 
-        // GET: cubas/Create
+        // GET: Cubas/Create
         public ActionResult Create()
         {
-            ViewBag.material_exterior_id = new SelectList(db.materials, "id", "material1");
-            ViewBag.plataforma_id = new SelectList(db.plataformas, "id", "matricula");
+            ViewBag.MaterialExteriorID = new SelectList(db.Materials, "ID", "Material1");
+            ViewBag.PlataformaID = new SelectList(db.Plataformas, "ID", "MatriculaPlataforma");
             return View();
         }
 
-        // POST: cubas/Create
+        // POST: Cubas/Create
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "id,cuba1,num_cuadro,codigo,constructor,num_fabricacion,num_homologacion,fecha_construccion,pais_fabricacion,num_tipo_imo,pais_aprobacion,autoridad,codigo_diseno,prueba_hidraulica,presion_servicio_ADR,presion_servicio_IMO,presion_exterior,presion_tarado_valvulas,temperatura_calculo_referencia,peso_bruto,tara,peso_max_producto,material_exterior_id,espesor_cuerpo,espesor_fondo,espesor_equivalente,tipo_forro,num_aprobacion_CSC,modelo,peso_max_apilamiento,carga_rigidez,presion_prueba,temperatura_min_carga,plataforma_id,longitud,ancho,alto,updated_at,created_at,updated_by,created_by,num_aprobacion_IMDG,num_aprobacion_ADR_RID,UN_portable_tank,num_aprobacion")] cuba cuba)
+        public async Task<ActionResult> Create([Bind(Include = "ID,MatriculaCuba,NumCuadro,Codigo,Constructor,NumFabricacion,NumHomologacion,FechaConstruccion,PaisFabricacion,NumTipoIMO,PaisAprobacion,Autoridad,CodigoDiseno,PruebaHidraulica,PresionServicioADR,PresionServicioIMO,PresionExterior,PresionTaradoValvulas,TemperaturaCalculoReferencia,PesoBruto,Tara,PesoMaxProducto,MaterialExteriorID,EspesorCuerpo,EspesorFondo,EspesorEquivalente,TipoForro,NumAprobacionCSC,Modelo,PesoMaxApilamiento,CargaRigidez,PresionPrueba,TemperaturaMinCarga,PlataformaID,Longitud,Ancho,Alto,UpdatedAt,CreatedAt,UpdatedBy,CreatedBy,NumAprobacionIMDG,NumAprobacionADR_RID,UNPortableTank,NumAprobacion")] Cuba cuba)
         {
             if (ModelState.IsValid)
             {
-                db.cubas.Add(cuba);
+                db.Cubas.Add(cuba);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.material_exterior_id = new SelectList(db.materials, "id", "material1", cuba.material_exterior_id);
-            ViewBag.plataforma_id = new SelectList(db.plataformas, "id", "matricula", cuba.plataforma_id);
+            ViewBag.MaterialExteriorID = new SelectList(db.Materials, "ID", "Material1", cuba.MaterialExteriorID);
+            ViewBag.PlataformaID = new SelectList(db.Plataformas, "ID", "MatriculaPlataforma", cuba.PlataformaID);
             return View(cuba);
         }
 
-        // GET: cubas/Edit/5
+        // GET: Cubas/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            cuba cuba = await db.cubas.FindAsync(id);
+            Cuba cuba = await db.Cubas.FindAsync(id);
             if (cuba == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.material_exterior_id = new SelectList(db.materials, "id", "material1", cuba.material_exterior_id);
-            ViewBag.plataforma_id = new SelectList(db.plataformas, "id", "matricula", cuba.plataforma_id);
+            ViewBag.MaterialExteriorID = new SelectList(db.Materials, "ID", "Material1", cuba.MaterialExteriorID);
+            ViewBag.PlataformaID = new SelectList(db.Plataformas, "ID", "MatriculaPlataforma", cuba.PlataformaID);
             return View(cuba);
         }
 
-        // POST: cubas/Edit/5
+        // POST: Cubas/Edit/5
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "id,cuba1,num_cuadro,codigo,constructor,num_fabricacion,num_homologacion,fecha_construccion,pais_fabricacion,num_tipo_imo,pais_aprobacion,autoridad,codigo_diseno,prueba_hidraulica,presion_servicio_ADR,presion_servicio_IMO,presion_exterior,presion_tarado_valvulas,temperatura_calculo_referencia,peso_bruto,tara,peso_max_producto,material_exterior_id,espesor_cuerpo,espesor_fondo,espesor_equivalente,tipo_forro,num_aprobacion_CSC,modelo,peso_max_apilamiento,carga_rigidez,presion_prueba,temperatura_min_carga,plataforma_id,longitud,ancho,alto,updated_at,created_at,updated_by,created_by,num_aprobacion_IMDG,num_aprobacion_ADR_RID,UN_portable_tank,num_aprobacion")] cuba cuba)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,MatriculaCuba,NumCuadro,Codigo,Constructor,NumFabricacion,NumHomologacion,FechaConstruccion,PaisFabricacion,NumTipoIMO,PaisAprobacion,Autoridad,CodigoDiseno,PruebaHidraulica,PresionServicioADR,PresionServicioIMO,PresionExterior,PresionTaradoValvulas,TemperaturaCalculoReferencia,PesoBruto,Tara,PesoMaxProducto,MaterialExteriorID,EspesorCuerpo,EspesorFondo,EspesorEquivalente,TipoForro,NumAprobacionCSC,Modelo,PesoMaxApilamiento,CargaRigidez,PresionPrueba,TemperaturaMinCarga,PlataformaID,Longitud,Ancho,Alto,UpdatedAt,CreatedAt,UpdatedBy,CreatedBy,NumAprobacionIMDG,NumAprobacionADR_RID,UNPortableTank,NumAprobacion")] Cuba cuba)
         {
             if (ModelState.IsValid)
             {
@@ -94,19 +94,19 @@ namespace CasaGaillard.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.material_exterior_id = new SelectList(db.materials, "id", "material1", cuba.material_exterior_id);
-            ViewBag.plataforma_id = new SelectList(db.plataformas, "id", "matricula", cuba.plataforma_id);
+            ViewBag.MaterialExteriorID = new SelectList(db.Materials, "ID", "Material1", cuba.MaterialExteriorID);
+            ViewBag.PlataformaID = new SelectList(db.Plataformas, "ID", "MatriculaPlataforma", cuba.PlataformaID);
             return View(cuba);
         }
 
-        // GET: cubas/Delete/5
+        // GET: Cubas/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            cuba cuba = await db.cubas.FindAsync(id);
+            Cuba cuba = await db.Cubas.FindAsync(id);
             if (cuba == null)
             {
                 return HttpNotFound();
@@ -114,13 +114,13 @@ namespace CasaGaillard.Controllers
             return View(cuba);
         }
 
-        // POST: cubas/Delete/5
+        // POST: Cubas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            cuba cuba = await db.cubas.FindAsync(id);
-            db.cubas.Remove(cuba);
+            Cuba cuba = await db.Cubas.FindAsync(id);
+            db.Cubas.Remove(cuba);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }

@@ -1,10 +1,10 @@
-﻿@model IEnumerable<CasaGaillard.Models.cuba>
+﻿@model IEnumerable<CasaGaillard.Models.Cuba>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Cubas";
 }
 
-<h2>Index</h2>
+<h2>Cubas</h2>
 
 <p>
     @Html.ActionLink("Create New", "Create")
@@ -12,136 +12,139 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.cuba1)
+            Matricula
+            @*@Html.DisplayNameFor(model => model.MatriculaCuba)*@
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.num_cuadro)
+            @Html.DisplayNameFor(model => model.NumCuadro)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.codigo)
+            @Html.DisplayNameFor(model => model.Codigo)
+        </th>
+        @*<th>
+            @Html.DisplayNameFor(model => model.Constructor)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.constructor)
+            @Html.DisplayNameFor(model => model.NumFabricacion)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.num_fabricacion)
+            @Html.DisplayNameFor(model => model.NumHomologacion)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.num_homologacion)
+            @Html.DisplayNameFor(model => model.FechaConstruccion)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.fecha_construccion)
+            @Html.DisplayNameFor(model => model.PaisFabricacion)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.pais_fabricacion)
+            @Html.DisplayNameFor(model => model.NumTipoIMO)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.num_tipo_imo)
+            @Html.DisplayNameFor(model => model.PaisAprobacion)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.pais_aprobacion)
+            @Html.DisplayNameFor(model => model.Autoridad)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.autoridad)
+            @Html.DisplayNameFor(model => model.CodigoDiseno)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.codigo_diseno)
+            @Html.DisplayNameFor(model => model.PruebaHidraulica)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.prueba_hidraulica)
+            @Html.DisplayNameFor(model => model.PresionServicioADR)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.presion_servicio_ADR)
+            @Html.DisplayNameFor(model => model.PresionServicioIMO)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.presion_servicio_IMO)
+            @Html.DisplayNameFor(model => model.PresionExterior)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.presion_exterior)
+            @Html.DisplayNameFor(model => model.PresionTaradoValvulas)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.presion_tarado_valvulas)
+            @Html.DisplayNameFor(model => model.TemperaturaCalculoReferencia)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.temperatura_calculo_referencia)
+            @Html.DisplayNameFor(model => model.PesoBruto)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.peso_bruto)
+            @Html.DisplayNameFor(model => model.Tara)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.tara)
+            @Html.DisplayNameFor(model => model.PesoMaxProducto)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.peso_max_producto)
+            @Html.DisplayNameFor(model => model.EspesorCuerpo)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.espesor_cuerpo)
+            @Html.DisplayNameFor(model => model.EspesorFondo)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.espesor_fondo)
+            @Html.DisplayNameFor(model => model.EspesorEquivalente)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.espesor_equivalente)
+            @Html.DisplayNameFor(model => model.TipoForro)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.tipo_forro)
+            @Html.DisplayNameFor(model => model.NumAprobacionCSC)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.num_aprobacion_CSC)
+            @Html.DisplayNameFor(model => model.Modelo)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.modelo)
+            @Html.DisplayNameFor(model => model.PesoMaxApilamiento)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.peso_max_apilamiento)
+            @Html.DisplayNameFor(model => model.CargaRigidez)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.carga_rigidez)
+            @Html.DisplayNameFor(model => model.PresionPrueba)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.presion_prueba)
+            @Html.DisplayNameFor(model => model.TemperaturaMinCarga)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.temperatura_min_carga)
+            @Html.DisplayNameFor(model => model.Longitud)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.longitud)
+            @Html.DisplayNameFor(model => model.Ancho)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.ancho)
+            @Html.DisplayNameFor(model => model.Alto)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.alto)
+            @Html.DisplayNameFor(model => model.UpdatedAt)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.updated_at)
+            @Html.DisplayNameFor(model => model.CreatedAt)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.created_at)
+            @Html.DisplayNameFor(model => model.UpdatedBy)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.updated_by)
+            @Html.DisplayNameFor(model => model.CreatedBy)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.created_by)
+            @Html.DisplayNameFor(model => model.NumAprobacionIMDG)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.num_aprobacion_IMDG)
+            @Html.DisplayNameFor(model => model.NumAprobacionADR_RID)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.num_aprobacion_ADR_RID)
+            @Html.DisplayNameFor(model => model.UNPortableTank)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.UN_portable_tank)
+            @Html.DisplayNameFor(model => model.NumAprobacion)
+        </th>*@
+        <th>
+            Material
+            @*@Html.DisplayNameFor(model => model.Material.Material1)*@
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.num_aprobacion)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.material.material1)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.plataforma.matricula)
+            Plataforma
+            @*@Html.DisplayNameFor(model => model.Plataforma.MatriculaPlataforma)*@
         </th>
         <th></th>
     </tr>
@@ -149,141 +152,141 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.cuba1)
+            @Html.DisplayFor(modelItem => item.MatriculaCuba)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.num_cuadro)
+            @Html.DisplayFor(modelItem => item.NumCuadro)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.codigo)
+            @Html.DisplayFor(modelItem => item.Codigo)
+        </td>
+        @*<td>
+            @Html.DisplayFor(modelItem => item.Constructor)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.constructor)
+            @Html.DisplayFor(modelItem => item.NumFabricacion)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.num_fabricacion)
+            @Html.DisplayFor(modelItem => item.NumHomologacion)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.num_homologacion)
+            @Html.DisplayFor(modelItem => item.FechaConstruccion)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.fecha_construccion)
+            @Html.DisplayFor(modelItem => item.PaisFabricacion)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.pais_fabricacion)
+            @Html.DisplayFor(modelItem => item.NumTipoIMO)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.num_tipo_imo)
+            @Html.DisplayFor(modelItem => item.PaisAprobacion)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.pais_aprobacion)
+            @Html.DisplayFor(modelItem => item.Autoridad)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.autoridad)
+            @Html.DisplayFor(modelItem => item.CodigoDiseno)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.codigo_diseno)
+            @Html.DisplayFor(modelItem => item.PruebaHidraulica)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.prueba_hidraulica)
+            @Html.DisplayFor(modelItem => item.PresionServicioADR)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.presion_servicio_ADR)
+            @Html.DisplayFor(modelItem => item.PresionServicioIMO)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.presion_servicio_IMO)
+            @Html.DisplayFor(modelItem => item.PresionExterior)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.presion_exterior)
+            @Html.DisplayFor(modelItem => item.PresionTaradoValvulas)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.presion_tarado_valvulas)
+            @Html.DisplayFor(modelItem => item.TemperaturaCalculoReferencia)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.temperatura_calculo_referencia)
+            @Html.DisplayFor(modelItem => item.PesoBruto)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.peso_bruto)
+            @Html.DisplayFor(modelItem => item.Tara)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.tara)
+            @Html.DisplayFor(modelItem => item.PesoMaxProducto)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.peso_max_producto)
+            @Html.DisplayFor(modelItem => item.EspesorCuerpo)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.espesor_cuerpo)
+            @Html.DisplayFor(modelItem => item.EspesorFondo)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.espesor_fondo)
+            @Html.DisplayFor(modelItem => item.EspesorEquivalente)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.espesor_equivalente)
+            @Html.DisplayFor(modelItem => item.TipoForro)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.tipo_forro)
+            @Html.DisplayFor(modelItem => item.NumAprobacionCSC)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.num_aprobacion_CSC)
+            @Html.DisplayFor(modelItem => item.Modelo)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.modelo)
+            @Html.DisplayFor(modelItem => item.PesoMaxApilamiento)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.peso_max_apilamiento)
+            @Html.DisplayFor(modelItem => item.CargaRigidez)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.carga_rigidez)
+            @Html.DisplayFor(modelItem => item.PresionPrueba)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.presion_prueba)
+            @Html.DisplayFor(modelItem => item.TemperaturaMinCarga)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.temperatura_min_carga)
+            @Html.DisplayFor(modelItem => item.Longitud)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.longitud)
+            @Html.DisplayFor(modelItem => item.Ancho)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.ancho)
+            @Html.DisplayFor(modelItem => item.Alto)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.alto)
+            @Html.DisplayFor(modelItem => item.UpdatedAt)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.updated_at)
+            @Html.DisplayFor(modelItem => item.CreatedAt)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.created_at)
+            @Html.DisplayFor(modelItem => item.UpdatedBy)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.updated_by)
+            @Html.DisplayFor(modelItem => item.CreatedBy)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.created_by)
+            @Html.DisplayFor(modelItem => item.NumAprobacionIMDG)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.num_aprobacion_IMDG)
+            @Html.DisplayFor(modelItem => item.NumAprobacionADR_RID)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.num_aprobacion_ADR_RID)
+            @Html.DisplayFor(modelItem => item.UNPortableTank)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.UN_portable_tank)
+            @Html.DisplayFor(modelItem => item.NumAprobacion)
+        </td>*@
+        <td>
+            @Html.DisplayFor(modelItem => item.Material.Material1)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.num_aprobacion)
+            @Html.DisplayFor(modelItem => item.Plataforma.MatriculaPlataforma)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.material.material1)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.plataforma.matricula)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.id }) |
-            @Html.ActionLink("Details", "Details", new { id=item.id }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.id })
+            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
+            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
         </td>
     </tr>
 }

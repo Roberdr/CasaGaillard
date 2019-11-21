@@ -12,21 +12,12 @@ namespace CasaGaillard.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class situacion
+    public partial class Situacion
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public situacion()
-        {
-            this.grupoes = new HashSet<grupo>();
-        }
-    
-        public int id { get; set; }
-        public Nullable<int> lado_cuba_numero { get; set; }
-        public string lado_cuba_nombre { get; set; }
-        public Nullable<int> situacion_lado_numero { get; set; }
-        public string situacion_lado_letra { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<grupo> grupoes { get; set; }
+        public int ID { get; set; }
+        public Nullable<int> LadoCubaNumero { get; set; }
+        public string LadoCubaNombre { get; set; }
+        public Nullable<int> SituacionLadoNumero { get; set; }
+        public string SituacionLadoLetra { get; set; }
     }
 }

@@ -11,25 +11,25 @@ using CasaGaillard.Models;
 
 namespace CasaGaillard.Controllers
 {
-    public class accesoriosController : Controller
+    public class AccesoriosController : Controller
     {
         private GaillardEntities db = new GaillardEntities();
 
-        // GET: accesorios
+        // GET: Accesorios
         public async Task<ActionResult> Index()
         {
-            var accesorios = db.accesorios.Include(a => a.material).Include(a => a.tipo_accesorio);
+            var accesorios = db.Accesorios.Include(a => a.Material).Include(a => a.TipoAccesorio);
             return View(await accesorios.ToListAsync());
         }
 
-        // GET: accesorios/Details/5
+        // GET: Accesorios/Details/5
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            accesorio accesorio = await db.accesorios.FindAsync(id);
+            Accesorio accesorio = await db.Accesorios.FindAsync(id);
             if (accesorio == null)
             {
                 return HttpNotFound();
@@ -37,56 +37,56 @@ namespace CasaGaillard.Controllers
             return View(accesorio);
         }
 
-        // GET: accesorios/Create
+        // GET: Accesorios/Create
         public ActionResult Create()
         {
-            ViewBag.material_id = new SelectList(db.materials, "id", "material1");
-            ViewBag.tipo_accesorio_id = new SelectList(db.tipo_accesorio, "id", "tipo_accesorio1");
+            ViewBag.MaterialID = new SelectList(db.Materials, "ID", "Material1");
+            ViewBag.TipoAccesorioID = new SelectList(db.TipoAccesorios, "ID", "TipoAccesorio1");
             return View();
         }
 
-        // POST: accesorios/Create
+        // POST: Accesorios/Create
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "id,tipo_accesorio_id,material_id")] accesorio accesorio)
+        public async Task<ActionResult> Create([Bind(Include = "ID,TipoAccesorioID,MaterialID")] Accesorio accesorio)
         {
             if (ModelState.IsValid)
             {
-                db.accesorios.Add(accesorio);
+                db.Accesorios.Add(accesorio);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.material_id = new SelectList(db.materials, "id", "material1", accesorio.material_id);
-            ViewBag.tipo_accesorio_id = new SelectList(db.tipo_accesorio, "id", "tipo_accesorio1", accesorio.tipo_accesorio_id);
+            ViewBag.MaterialID = new SelectList(db.Materials, "ID", "Material1", accesorio.MaterialID);
+            ViewBag.TipoAccesorioID = new SelectList(db.TipoAccesorios, "ID", "TipoAccesorio1", accesorio.TipoAccesorioID);
             return View(accesorio);
         }
 
-        // GET: accesorios/Edit/5
+        // GET: Accesorios/Edit/5
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            accesorio accesorio = await db.accesorios.FindAsync(id);
+            Accesorio accesorio = await db.Accesorios.FindAsync(id);
             if (accesorio == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.material_id = new SelectList(db.materials, "id", "material1", accesorio.material_id);
-            ViewBag.tipo_accesorio_id = new SelectList(db.tipo_accesorio, "id", "tipo_accesorio1", accesorio.tipo_accesorio_id);
+            ViewBag.MaterialID = new SelectList(db.Materials, "ID", "Material1", accesorio.MaterialID);
+            ViewBag.TipoAccesorioID = new SelectList(db.TipoAccesorios, "ID", "TipoAccesorio1", accesorio.TipoAccesorioID);
             return View(accesorio);
         }
 
-        // POST: accesorios/Edit/5
+        // POST: Accesorios/Edit/5
         // Para protegerse de ataques de publicación excesiva, habilite las propiedades específicas a las que desea enlazarse. Para obtener 
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "id,tipo_accesorio_id,material_id")] accesorio accesorio)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,TipoAccesorioID,MaterialID")] Accesorio accesorio)
         {
             if (ModelState.IsValid)
             {
@@ -94,19 +94,19 @@ namespace CasaGaillard.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.material_id = new SelectList(db.materials, "id", "material1", accesorio.material_id);
-            ViewBag.tipo_accesorio_id = new SelectList(db.tipo_accesorio, "id", "tipo_accesorio1", accesorio.tipo_accesorio_id);
+            ViewBag.MaterialID = new SelectList(db.Materials, "ID", "Material1", accesorio.MaterialID);
+            ViewBag.TipoAccesorioID = new SelectList(db.TipoAccesorios, "ID", "TipoAccesorio1", accesorio.TipoAccesorioID);
             return View(accesorio);
         }
 
-        // GET: accesorios/Delete/5
+        // GET: Accesorios/Delete/5
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            accesorio accesorio = await db.accesorios.FindAsync(id);
+            Accesorio accesorio = await db.Accesorios.FindAsync(id);
             if (accesorio == null)
             {
                 return HttpNotFound();
@@ -114,13 +114,13 @@ namespace CasaGaillard.Controllers
             return View(accesorio);
         }
 
-        // POST: accesorios/Delete/5
+        // POST: Accesorios/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            accesorio accesorio = await db.accesorios.FindAsync(id);
-            db.accesorios.Remove(accesorio);
+            Accesorio accesorio = await db.Accesorios.FindAsync(id);
+            db.Accesorios.Remove(accesorio);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }

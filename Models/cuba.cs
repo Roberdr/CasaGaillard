@@ -12,72 +12,55 @@ namespace CasaGaillard.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class cuba
+    public partial class Cuba
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public cuba()
-        {
-            this.compartimentoes = new HashSet<compartimento>();
-            this.grupoes = new HashSet<grupo>();
-            this.operacions = new HashSet<operacion>();
-            this.revisions = new HashSet<revision>();
-        }
+        public int ID { get; set; }
+        public string MatriculaCuba { get; set; }
+        public Nullable<int> NumCuadro { get; set; }
+        public string Codigo { get; set; }
+        public string Constructor { get; set; }
+        public string NumFabricacion { get; set; }
+        public string NumHomologacion { get; set; }
+        public Nullable<System.DateTime> FechaConstruccion { get; set; }
+        public string PaisFabricacion { get; set; }
+        public string NumTipoIMO { get; set; }
+        public string PaisAprobacion { get; set; }
+        public string Autoridad { get; set; }
+        public string CodigoDiseno { get; set; }
+        public Nullable<System.DateTime> PruebaHidraulica { get; set; }
+        public Nullable<decimal> PresionServicioADR { get; set; }
+        public Nullable<decimal> PresionServicioIMO { get; set; }
+        public Nullable<decimal> PresionExterior { get; set; }
+        public Nullable<decimal> PresionTaradoValvulas { get; set; }
+        public string TemperaturaCalculoReferencia { get; set; }
+        public Nullable<int> PesoBruto { get; set; }
+        public Nullable<int> Tara { get; set; }
+        public Nullable<int> PesoMaxProducto { get; set; }
+        public Nullable<int> MaterialExteriorID { get; set; }
+        public Nullable<decimal> EspesorCuerpo { get; set; }
+        public Nullable<decimal> EspesorFondo { get; set; }
+        public string EspesorEquivalente { get; set; }
+        public string TipoForro { get; set; }
+        public string NumAprobacionCSC { get; set; }
+        public string Modelo { get; set; }
+        public Nullable<int> PesoMaxApilamiento { get; set; }
+        public Nullable<int> CargaRigidez { get; set; }
+        public Nullable<decimal> PresionPrueba { get; set; }
+        public string TemperaturaMinCarga { get; set; }
+        public Nullable<int> PlataformaID { get; set; }
+        public Nullable<int> Longitud { get; set; }
+        public Nullable<int> Ancho { get; set; }
+        public Nullable<int> Alto { get; set; }
+        public Nullable<System.DateTime> UpdatedAt { get; set; }
+        public Nullable<System.DateTime> CreatedAt { get; set; }
+        public Nullable<int> UpdatedBy { get; set; }
+        public Nullable<int> CreatedBy { get; set; }
+        public string NumAprobacionIMDG { get; set; }
+        public string NumAprobacionADR_RID { get; set; }
+        public string UNPortableTank { get; set; }
+        public string NumAprobacion { get; set; }
     
-        public int id { get; set; }
-        public string cuba1 { get; set; }
-        public Nullable<int> num_cuadro { get; set; }
-        public string codigo { get; set; }
-        public string constructor { get; set; }
-        public string num_fabricacion { get; set; }
-        public string num_homologacion { get; set; }
-        public Nullable<System.DateTime> fecha_construccion { get; set; }
-        public string pais_fabricacion { get; set; }
-        public string num_tipo_imo { get; set; }
-        public string pais_aprobacion { get; set; }
-        public string autoridad { get; set; }
-        public string codigo_diseno { get; set; }
-        public Nullable<System.DateTime> prueba_hidraulica { get; set; }
-        public Nullable<decimal> presion_servicio_ADR { get; set; }
-        public Nullable<decimal> presion_servicio_IMO { get; set; }
-        public Nullable<decimal> presion_exterior { get; set; }
-        public Nullable<decimal> presion_tarado_valvulas { get; set; }
-        public string temperatura_calculo_referencia { get; set; }
-        public Nullable<int> peso_bruto { get; set; }
-        public Nullable<int> tara { get; set; }
-        public Nullable<int> peso_max_producto { get; set; }
-        public Nullable<int> material_exterior_id { get; set; }
-        public Nullable<decimal> espesor_cuerpo { get; set; }
-        public Nullable<decimal> espesor_fondo { get; set; }
-        public string espesor_equivalente { get; set; }
-        public string tipo_forro { get; set; }
-        public string num_aprobacion_CSC { get; set; }
-        public string modelo { get; set; }
-        public Nullable<int> peso_max_apilamiento { get; set; }
-        public Nullable<int> carga_rigidez { get; set; }
-        public Nullable<decimal> presion_prueba { get; set; }
-        public string temperatura_min_carga { get; set; }
-        public Nullable<int> plataforma_id { get; set; }
-        public Nullable<int> longitud { get; set; }
-        public Nullable<int> ancho { get; set; }
-        public Nullable<int> alto { get; set; }
-        public Nullable<System.DateTime> updated_at { get; set; }
-        public Nullable<System.DateTime> created_at { get; set; }
-        public Nullable<int> updated_by { get; set; }
-        public Nullable<int> created_by { get; set; }
-        public string num_aprobacion_IMDG { get; set; }
-        public string num_aprobacion_ADR_RID { get; set; }
-        public string UN_portable_tank { get; set; }
-        public string num_aprobacion { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<compartimento> compartimentoes { get; set; }
-        public virtual material material { get; set; }
-        public virtual plataforma plataforma { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<grupo> grupoes { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<operacion> operacions { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<revision> revisions { get; set; }
+        public virtual Material Material { get; set; }
+        public virtual Plataforma Plataforma { get; set; }
     }
 }

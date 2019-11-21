@@ -12,30 +12,17 @@ namespace CasaGaillard.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class vehiculo
+    public partial class Vehiculo
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public vehiculo()
-        {
-            this.mantenimiento_vehiculo = new HashSet<mantenimiento_vehiculo>();
-            this.revision_vehiculo = new HashSet<revision_vehiculo>();
-        }
-    
-        public int id { get; set; }
-        public string marca { get; set; }
-        public string modelo { get; set; }
-        public string matricula_vehiculo { get; set; }
-        public Nullable<int> id_tipo_vehiculo { get; set; }
-        public string modelo_tacografo { get; set; }
-        public Nullable<int> pma { get; set; }
-        public Nullable<int> tara { get; set; }
-        public Nullable<System.DateTime> fecha_compra { get; set; }
-        public string taller_habitual { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<mantenimiento_vehiculo> mantenimiento_vehiculo { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<revision_vehiculo> revision_vehiculo { get; set; }
-        public virtual tipo_vehiculo tipo_vehiculo { get; set; }
+        public int ID { get; set; }
+        public string Marca { get; set; }
+        public string Modelo { get; set; }
+        public string MatriculaVehiculo { get; set; }
+        public Nullable<int> TipoVehiculoID { get; set; }
+        public string ModeloTacografo { get; set; }
+        public Nullable<int> Pma { get; set; }
+        public Nullable<int> Tara { get; set; }
+        public Nullable<System.DateTime> FechaCompra { get; set; }
+        public string TallerHabitual { get; set; }
     }
 }

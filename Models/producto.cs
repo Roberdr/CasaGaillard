@@ -12,26 +12,17 @@ namespace CasaGaillard.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class producto
+    public partial class Producto
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public producto()
-        {
-            this.compartimentoes = new HashSet<compartimento>();
-        }
-    
-        public int id { get; set; }
-        public string iupac { get; set; }
-        public string producto1 { get; set; }
-        public Nullable<int> concentracion { get; set; }
-        public Nullable<int> grupo { get; set; }
-        public string num_UN { get; set; }
-        public string formula { get; set; }
-        public Nullable<int> densidad { get; set; }
-        public string frases_R { get; set; }
-        public string frases_S { get; set; }
-    
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<compartimento> compartimentoes { get; set; }
+        public int ID { get; set; }
+        public string Iupac { get; set; }
+        public string Producto1 { get; set; }
+        public Nullable<int> Concentracion { get; set; }
+        public Nullable<int> Grupo { get; set; }
+        public string NumUN { get; set; }
+        public string Formula { get; set; }
+        public Nullable<int> Densidad { get; set; }
+        public string FrasesR { get; set; }
+        public string FrasesS { get; set; }
     }
 }

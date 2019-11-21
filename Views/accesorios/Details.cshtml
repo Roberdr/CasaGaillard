@@ -1,4 +1,4 @@
-﻿@model CasaGaillard.Models.accesorio
+﻿@model CasaGaillard.Models.Accesorio
 
 @{
     ViewBag.Title = "Details";
@@ -7,28 +7,28 @@
 <h2>Details</h2>
 
 <div>
-    <h4>accesorio</h4>
+    <h4>Accesorio</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
-            @Html.DisplayNameFor(model => model.material.material1)
+            @Html.DisplayNameFor(model => model.Material.Material1)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.material.material1)
+            @Html.DisplayFor(model => model.Material.Material1)
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.tipo_accesorio.tipo_accesorio1)
+            @Html.DisplayNameFor(model => model.TipoAccesorio.TipoAccesorio1)
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.tipo_accesorio.tipo_accesorio1)
+            @Html.DisplayFor(model => model.TipoAccesorio.TipoAccesorio1)
         </dd>
 
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.id }) |
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
     @Html.ActionLink("Back to List", "Index")
 </p>

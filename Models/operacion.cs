@@ -12,18 +12,14 @@ namespace CasaGaillard.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class operacion
+    public partial class Operacion
     {
-        public int id { get; set; }
-        public Nullable<int> cuba_id { get; set; }
-        public Nullable<int> operacion_id { get; set; }
-        public Nullable<System.DateTime> fecha_operacion { get; set; }
-        public string descripcion { get; set; }
-        public Nullable<int> operario_id { get; set; }
-        public Nullable<System.TimeSpan> duracion { get; set; }
-    
-        public virtual cuba cuba { get; set; }
-        public virtual operario operario { get; set; }
-        public virtual tipo_operacion tipo_operacion { get; set; }
+        public int ID { get; set; }
+        public Nullable<int> CubaID { get; set; }
+        public Nullable<int> OperacionID { get; set; }
+        public Nullable<System.DateTime> FechaOperacion { get; set; }
+        public string Descripcion { get; set; }
+        public Nullable<int> OperarioID { get; set; }
+        public Nullable<System.TimeSpan> Duracion { get; set; }
     }
 }

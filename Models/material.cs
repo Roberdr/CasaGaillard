@@ -12,25 +12,22 @@ namespace CasaGaillard.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class material
+    public partial class Material
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public material()
+        public Material()
         {
-            this.accesorios = new HashSet<accesorio>();
-            this.compartimentoes = new HashSet<compartimento>();
-            this.cubas = new HashSet<cuba>();
+            this.Accesorios = new HashSet<Accesorio>();
+            this.Cubas = new HashSet<Cuba>();
         }
     
-        public int id { get; set; }
-        public string material1 { get; set; }
-        public string descripcion { get; set; }
+        public int ID { get; set; }
+        public string Material1 { get; set; }
+        public string Descripcion { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<accesorio> accesorios { get; set; }
+        public virtual ICollection<Accesorio> Accesorios { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<compartimento> compartimentoes { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<cuba> cubas { get; set; }
+        public virtual ICollection<Cuba> Cubas { get; set; }
     }
 }

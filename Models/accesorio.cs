@@ -12,24 +12,13 @@ namespace CasaGaillard.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class accesorio
+    public partial class Accesorio
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public accesorio()
-        {
-            this.accesorio_grupo = new HashSet<accesorio_grupo>();
-            this.detalle_accesorio = new HashSet<detalle_accesorio>();
-        }
+        public int ID { get; set; }
+        public int TipoAccesorioID { get; set; }
+        public int MaterialID { get; set; }
     
-        public int id { get; set; }
-        public Nullable<int> tipo_accesorio_id { get; set; }
-        public Nullable<int> material_id { get; set; }
-    
-        public virtual material material { get; set; }
-        public virtual tipo_accesorio tipo_accesorio { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<accesorio_grupo> accesorio_grupo { get; set; }
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<detalle_accesorio> detalle_accesorio { get; set; }
+        public virtual Material Material { get; set; }
+        public virtual TipoAccesorio TipoAccesorio { get; set; }
     }
 }
