@@ -14,10 +14,23 @@ namespace CasaGaillard.Models
     
     public partial class Grupo
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Grupo()
+        {
+            this.AccesoriosGrupo = new HashSet<AccesorioGrupo>();
+        }
+    
         public int ID { get; set; }
-        public Nullable<int> TipoGrupoID { get; set; }
-        public Nullable<int> CubaID { get; set; }
-        public Nullable<int> CompartimentoID { get; set; }
-        public Nullable<int> SituacionID { get; set; }
+        public int TipoGrupoID { get; set; }
+        public int CubaID { get; set; }
+        public int CompartimentoID { get; set; }
+        public int SituacionID { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AccesorioGrupo> AccesoriosGrupo { get; set; }
+        public virtual TipoGrupo TipoGrupo { get; set; }
+        public virtual Cuba Cuba { get; set; }
+        public virtual Situacion Situacion { get; set; }
+        public virtual Compartimento Compartimento { get; set; }
     }
 }

@@ -14,7 +14,16 @@ namespace CasaGaillard.Models
     
     public partial class TipoVehiculo
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public TipoVehiculo()
+        {
+            this.Vehiculos = new HashSet<Vehiculo>();
+        }
+    
         public int ID { get; set; }
-        public string TipoVehiculo1 { get; set; }
+        public string Vehiculo { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Vehiculo> Vehiculos { get; set; }
     }
 }

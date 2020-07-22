@@ -14,8 +14,20 @@ namespace CasaGaillard.Models
     
     public partial class Operario
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Operario()
+        {
+            this.Operaciones = new HashSet<Operacion>();
+            this.MantenimientosVehiculo = new HashSet<MantenimientoVehiculo>();
+        }
+    
         public int ID { get; set; }
         public string Nombre { get; set; }
         public string Apellidos { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Operacion> Operaciones { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MantenimientoVehiculo> MantenimientosVehiculo { get; set; }
     }
 }

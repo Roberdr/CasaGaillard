@@ -1,4 +1,5 @@
-﻿@{
+﻿@model IEnumerable<CasaGaillard.Controllers.HomeController.UltimasRevisiones>
+@{
     ViewBag.Title = "Home Page";
 }
 
@@ -9,15 +10,30 @@
 </div>
 
 <div class="row">
+   
     <div class="col-md-4">
-        <h2>Próximas revisiones de cubas</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
+        <h2>Próximas Revisiones de Cubas</h2>
+            <table class="table table-condensed">
+                <thead>
+                    <tr>
+                        <th class="col-md-6">Matrícula</th>
+                        <th class="col-md-6">Validez</th>
+                    </tr>
+
+                </thead>
+                @foreach (var c in ViewBag.Revis)
+                {
+                    <tr>
+                        <td class="col-md-6">@c.MatriculaCuba</td>
+                        <td class="col-md-6">@c.ValidaHasta</td>
+
+                    </tr>
+                }
+            </table>
+
         <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
     </div>
+  
     <div class="col-md-4">
         <h2>Próximas ITVs de vehículos</h2>
         <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>

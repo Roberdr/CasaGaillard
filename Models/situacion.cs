@@ -14,10 +14,19 @@ namespace CasaGaillard.Models
     
     public partial class Situacion
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Situacion()
+        {
+            this.Grupos = new HashSet<Grupo>();
+        }
+    
         public int ID { get; set; }
         public Nullable<int> LadoCubaNumero { get; set; }
         public string LadoCubaNombre { get; set; }
         public Nullable<int> SituacionLadoNumero { get; set; }
         public string SituacionLadoLetra { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Grupo> Grupos { get; set; }
     }
 }

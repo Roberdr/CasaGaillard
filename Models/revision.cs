@@ -21,5 +21,7 @@ namespace CasaGaillard.Models
         public Nullable<System.DateTime> ValidaHasta { get; set; }
         public string DescripcionProxima { get; set; }
         public string Autorizado { get; set; }
+    
+        public virtual Cuba Cuba { get; set; }
     }
 }

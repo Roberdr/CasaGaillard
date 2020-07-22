@@ -15,11 +15,15 @@ namespace CasaGaillard.Models
     public partial class Operacion
     {
         public int ID { get; set; }
-        public Nullable<int> CubaID { get; set; }
+        public int CubaID { get; set; }
         public Nullable<int> OperacionID { get; set; }
         public Nullable<System.DateTime> FechaOperacion { get; set; }
         public string Descripcion { get; set; }
-        public Nullable<int> OperarioID { get; set; }
+        public int OperarioID { get; set; }
         public Nullable<System.TimeSpan> Duracion { get; set; }
+    
+        public virtual Cuba Cuba { get; set; }
+        public virtual Operario Operario { get; set; }
+        public virtual TipoOperacion TipoOperacion { get; set; }
     }
 }

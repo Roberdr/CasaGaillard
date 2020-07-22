@@ -18,5 +18,8 @@ namespace CasaGaillard.Models
         public int GrupoID { get; set; }
         public int AccesorioID { get; set; }
         public int Cantidad { get; set; }
+    
+        public virtual Grupo Grupos { get; set; }
+        public virtual Accesorio Accesorio { get; set; }
     }
 }

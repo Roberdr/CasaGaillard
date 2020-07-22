@@ -14,7 +14,16 @@ namespace CasaGaillard.Models
     
     public partial class CaracteristicaAccesorio
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public CaracteristicaAccesorio()
+        {
+            this.DetalleAccesorios = new HashSet<DetalleAccesorio>();
+        }
+    
         public int ID { get; set; }
         public string CaracteristicaAccesorio1 { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<DetalleAccesorio> DetalleAccesorios { get; set; }
     }
 }

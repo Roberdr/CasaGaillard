@@ -14,7 +14,16 @@ namespace CasaGaillard.Models
     
     public partial class TipoRevision
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public TipoRevision()
+        {
+            this.RevisionVehiculoes = new HashSet<RevisionVehiculo>();
+        }
+    
         public int ID { get; set; }
-        public string tipo_revision { get; set; }
+        public string Revision { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RevisionVehiculo> RevisionVehiculoes { get; set; }
     }
 }

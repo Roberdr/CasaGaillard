@@ -1,0 +1,90 @@
+﻿@model CasaGaillard.Models.Vehiculo
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Vehiculo</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Marca)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Marca)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Modelo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Modelo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MatriculaVehiculo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MatriculaVehiculo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ModeloTacografo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModeloTacografo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Pma)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Pma)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Tara)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Tara)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaCompra)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaCompra)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TallerHabitual)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TallerHabitual)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TipoVehiculo.Vehiculo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TipoVehiculo.Vehiculo)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -26,28 +26,37 @@ namespace CasaGaillard.Models
         }
     
         public virtual DbSet<Accesorio> Accesorios { get; set; }
-        public virtual DbSet<AccesorioGrupo> AccesorioGrupoes { get; set; }
-        public virtual DbSet<CaracteristicaAccesorio> CaracteristicaAccesorios { get; set; }
-        public virtual DbSet<Compartimento> Compartimentoes { get; set; }
+        public virtual DbSet<AccesorioGrupo> AccesoriosGrupo { get; set; }
+        public virtual DbSet<CaracteristicaAccesorio> CaracteristicasAccesorio { get; set; }
+        public virtual DbSet<Compartimento> Compartimentos { get; set; }
         public virtual DbSet<Cuba> Cubas { get; set; }
-        public virtual DbSet<DetalleAccesorio> DetalleAccesorios { get; set; }
-        public virtual DbSet<Grupo> Grupoes { get; set; }
-        public virtual DbSet<MantenimientoVehiculo> MantenimientoVehiculoes { get; set; }
-        public virtual DbSet<Material> Materials { get; set; }
-        public virtual DbSet<Operacion> Operacions { get; set; }
+        public virtual DbSet<DetalleAccesorio> DetallesAccesorio { get; set; }
+        public virtual DbSet<Grupo> Grupos { get; set; }
+        public virtual DbSet<MantenimientoVehiculo> MantenimientosVehiculo { get; set; }
+        public virtual DbSet<Material> Materiales { get; set; }
+        public virtual DbSet<Operacion> Operaciones { get; set; }
         public virtual DbSet<Operario> Operarios { get; set; }
         public virtual DbSet<Plataforma> Plataformas { get; set; }
-        public virtual DbSet<Producto> Productoes { get; set; }
-        public virtual DbSet<Revision> Revisions { get; set; }
-        public virtual DbSet<RevisionVehiculo> RevisionVehiculoes { get; set; }
-        public virtual DbSet<Situacion> Situacions { get; set; }
-        public virtual DbSet<TipoAccesorio> TipoAccesorios { get; set; }
-        public virtual DbSet<TipoGrupo> TipoGrupoes { get; set; }
-        public virtual DbSet<TipoMantenimiento> TipoMantenimientoes { get; set; }
-        public virtual DbSet<TipoOperacion> TipoOperacions { get; set; }
-        public virtual DbSet<TipoRevision> TipoRevisions { get; set; }
-        public virtual DbSet<TipoVehiculo> TipoVehiculoes { get; set; }
-        public virtual DbSet<Unidad> Unidads { get; set; }
-        public virtual DbSet<Vehiculo> Vehiculoes { get; set; }
+        public virtual DbSet<Producto> Productos { get; set; }
+        public virtual DbSet<Revision> Revisiones { get; set; }
+        public virtual DbSet<RevisionVehiculo> RevisionesVehiculo { get; set; }
+        public virtual DbSet<Situacion> Situaciones { get; set; }
+        public virtual DbSet<TipoAccesorio> TiposAccesorio { get; set; }
+        public virtual DbSet<TipoGrupo> TiposGrupo { get; set; }
+        public virtual DbSet<TipoMantenimiento> TiposMantenimiento { get; set; }
+        public virtual DbSet<TipoOperacion> TiposOperacion { get; set; }
+        public virtual DbSet<TipoRevision> TiposRevision { get; set; }
+        public virtual DbSet<TipoVehiculo> TiposVehiculo { get; set; }
+        public virtual DbSet<Unidad> Unidades { get; set; }
+        public virtual DbSet<Vehiculo> Vehiculos { get; set; }
+        public virtual DbSet<Cargo> Cargoes { get; set; }
+        public virtual DbSet<Direccion> Direccions { get; set; }
+        public virtual DbSet<Entidad> Entidads { get; set; }
+        public virtual DbSet<Persona> Personas { get; set; }
+        public virtual DbSet<PersonasEntidad> PersonasEntidads { get; set; }
+        public virtual DbSet<Poblacion> Poblacions { get; set; }
+        public virtual DbSet<TelefonoEntidad> TelefonoEntidads { get; set; }
+        public virtual DbSet<TelefonoPersona> TelefonoPersonas { get; set; }
+        public virtual DbSet<TipoVia> TipoVias { get; set; }
     }
 }

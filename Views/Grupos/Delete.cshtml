@@ -1,0 +1,56 @@
+﻿@model CasaGaillard.Models.Grupo
+
+@{
+    ViewBag.Title = "Delete";
+}
+
+<h2>Delete</h2>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>Grupo</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.CompartimentoID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CompartimentoID)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TipoGrupo.NombreGrupo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TipoGrupo.NombreGrupo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cuba.MatriculaCuba)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cuba.MatriculaCuba)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Situacion.LadoCubaNombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Situacion.LadoCubaNombre)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Delete" class="btn btn-default" /> |
+            @Html.ActionLink("Back to List", "Index")
+        </div>
+    }
+</div>

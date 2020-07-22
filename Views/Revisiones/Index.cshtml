@@ -1,0 +1,49 @@
+﻿@model List<IGrouping<string, CasaGaillard.Models.Revision>>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<div class="container">
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Matrícula</th>
+                <th>Fecha de Revisión</th>
+                <th>Descripción</th>
+                <th>Autorizado</th>
+                <th>Opciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var g in Model)
+            {
+                <tr>
+                    <td colspan="5"><h4>@Html.DisplayFor(modelItem => g.Key)</h4></td>
+                </tr>
+                    foreach (var item in g.OrderByDescending(m => m.FechaRevision))
+                    {
+                        <tr>
+                            <td></td>
+                            <td>@Html.DisplayFor(modelItem => item.FechaRevision)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Descripcion)</td>
+                            <td>@Html.DisplayFor(modelItem => item.Autorizado)</td>
+                            <td>
+                                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                            </td>
+                        </tr>
+                    }
+
+                        
+            }
+                
+        </tbody>
+    </table>
+</div>
+    

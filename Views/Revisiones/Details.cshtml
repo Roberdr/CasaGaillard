@@ -1,0 +1,66 @@
+﻿@model CasaGaillard.Models.Revision
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Revision</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FechaRevision)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FechaRevision)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ValidaHasta)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ValidaHasta)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DescripcionProxima)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DescripcionProxima)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Autorizado)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Autorizado)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Cuba.MatriculaCuba)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Cuba.MatriculaCuba)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

@@ -14,7 +14,16 @@ namespace CasaGaillard.Models
     
     public partial class TipoMantenimiento
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public TipoMantenimiento()
+        {
+            this.MantenimientosVehiculo = new HashSet<MantenimientoVehiculo>();
+        }
+    
         public int ID { get; set; }
-        public string TipoMantenimiento1 { get; set; }
+        public string Operacion { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MantenimientoVehiculo> MantenimientosVehiculo { get; set; }
     }
 }

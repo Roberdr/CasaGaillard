@@ -40,8 +40,8 @@ namespace CasaGaillard.Controllers
         // GET: Accesorios/Create
         public ActionResult Create()
         {
-            ViewBag.MaterialID = new SelectList(db.Materials, "ID", "Material1");
-            ViewBag.TipoAccesorioID = new SelectList(db.TipoAccesorios, "ID", "TipoAccesorio1");
+            ViewBag.MaterialID = new SelectList(db.Materiales, "ID", "Material1");
+            ViewBag.TipoAccesorioID = new SelectList(db.TiposAccesorio, "ID", "TipoAccesorio1");
             return View();
         }
 
@@ -59,8 +59,8 @@ namespace CasaGaillard.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.MaterialID = new SelectList(db.Materials, "ID", "Material1", accesorio.MaterialID);
-            ViewBag.TipoAccesorioID = new SelectList(db.TipoAccesorios, "ID", "TipoAccesorio1", accesorio.TipoAccesorioID);
+            ViewBag.MaterialID = new SelectList(db.Materiales, "ID", "Material1", accesorio.MaterialID);
+            ViewBag.TipoAccesorioID = new SelectList(db.TiposAccesorio, "ID", "TipoAccesorio1", accesorio.TipoAccesorioID);
             return View(accesorio);
         }
 
@@ -76,8 +76,8 @@ namespace CasaGaillard.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.MaterialID = new SelectList(db.Materials, "ID", "Material1", accesorio.MaterialID);
-            ViewBag.TipoAccesorioID = new SelectList(db.TipoAccesorios, "ID", "TipoAccesorio1", accesorio.TipoAccesorioID);
+            ViewBag.MaterialID = new SelectList(db.Materiales, "ID", "Material1", accesorio.MaterialID);
+            ViewBag.TipoAccesorioID = new SelectList(db.TiposAccesorio, "ID", "TipoAccesorio1", accesorio.TipoAccesorioID);
             return View(accesorio);
         }
 
@@ -94,8 +94,8 @@ namespace CasaGaillard.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.MaterialID = new SelectList(db.Materials, "ID", "Material1", accesorio.MaterialID);
-            ViewBag.TipoAccesorioID = new SelectList(db.TipoAccesorios, "ID", "TipoAccesorio1", accesorio.TipoAccesorioID);
+            ViewBag.MaterialID = new SelectList(db.Materiales, "ID", "Material1", accesorio.MaterialID);
+            ViewBag.TipoAccesorioID = new SelectList(db.TiposAccesorio, "ID", "TipoAccesorio1", accesorio.TipoAccesorioID);
             return View(accesorio);
         }
 

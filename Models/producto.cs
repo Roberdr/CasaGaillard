@@ -14,6 +14,12 @@ namespace CasaGaillard.Models
     
     public partial class Producto
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Producto()
+        {
+            this.Compartimentos = new HashSet<Compartimento>();
+        }
+    
         public int ID { get; set; }
         public string Iupac { get; set; }
         public string Producto1 { get; set; }
@@ -24,5 +30,8 @@ namespace CasaGaillard.Models
         public Nullable<int> Densidad { get; set; }
         public string FrasesR { get; set; }
         public string FrasesS { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Compartimento> Compartimentos { get; set; }
     }
 }

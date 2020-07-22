@@ -21,5 +21,9 @@ namespace CasaGaillard.Models
         public Nullable<decimal> Medida { get; set; }
         public Nullable<int> UnidadID { get; set; }
         public string Tipo { get; set; }
+    
+        public virtual Accesorio Accesorio { get; set; }
+        public virtual Unidad Unidad { get; set; }
+        public virtual CaracteristicaAccesorio CaracteristicaAccesorio { get; set; }
     }
 }

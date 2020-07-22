@@ -14,7 +14,16 @@ namespace CasaGaillard.Models
     
     public partial class TipoOperacion
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public TipoOperacion()
+        {
+            this.Operaciones = new HashSet<Operacion>();
+        }
+    
         public int ID { get; set; }
         public string Operacion { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Operacion> Operaciones { get; set; }
     }
 }

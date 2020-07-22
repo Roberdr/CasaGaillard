@@ -12,28 +12,41 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Material.Material1)
+            @Html.DisplayNameFor(model => model.TipoAccesorio.TipoAccesorio1)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TipoAccesorio.TipoAccesorio1)
+            @Html.DisplayNameFor(model => model.Material.Material1)
         </th>
         <th></th>
     </tr>
 
 @foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Material.Material1)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.TipoAccesorio.TipoAccesorio1)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ID }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ID })
-        </td>
-    </tr>
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.TipoAccesorio.TipoAccesorio1)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Material.Material1)
+    </td>
+    <td>
+        @foreach (var d in item.DetallesAccesorio)
+        {
+            @Html.DisplayFor(modelItem => d.CaracteristicaAccesorio.CaracteristicaAccesorio1)
+            <span>&nbsp;</span>
+            @Html.DisplayFor(modelItem => d.Cantidad)
+            <span>&nbsp;</span>
+            @Html.DisplayFor(modelItem => d.Medida)
+            <span>&nbsp;</span>
+            @Html.DisplayFor(modelItem => d.Unidad.Unidad1)
+            <br />
+        }
+    </td>
+    <td>
+        @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+        @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+        @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+    </td>
+</tr>
 }
 
 </table>

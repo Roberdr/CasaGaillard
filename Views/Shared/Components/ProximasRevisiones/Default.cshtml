@@ -1,0 +1,15 @@
+﻿@model IEnumerable<CasaGaillard.Models.Revision>
+
+
+<h3>Próximas Revisiones Cubas</h3>
+<table>
+    @foreach (var rev in Model)
+    {
+        <tr>
+            <td>
+                @rev.Cuba.MatriculaCuba
+            </td>
+            <td>@rev.FechaRevision</td>
+        </tr>
+    }
+</table>

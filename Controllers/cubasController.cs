@@ -13,12 +13,12 @@ namespace CasaGaillard.Controllers
 {
     public class CubasController : Controller
     {
-        private GaillardEntities db = new GaillardEntities();
+        private readonly GaillardEntities db = new GaillardEntities();
 
         // GET: Cubas
         public async Task<ActionResult> Index()
         {
-            var cubas = db.Cubas.Include(c => c.Material).Include(c => c.Plataforma);
+            var cubas = db.Cubas.Include(c => c.Material).Include(c => c.Plataforma).OrderBy(c => c.MatriculaCuba);
             return View(await cubas.ToListAsync());
         }
 
@@ -40,7 +40,7 @@ namespace CasaGaillard.Controllers
         // GET: Cubas/Create
         public ActionResult Create()
         {
-            ViewBag.MaterialExteriorID = new SelectList(db.Materials, "ID", "Material1");
+            ViewBag.MaterialExteriorID = new SelectList(db.Materiales, "ID", "Material1");
             ViewBag.PlataformaID = new SelectList(db.Plataformas, "ID", "MatriculaPlataforma");
             return View();
         }
@@ -54,12 +54,13 @@ namespace CasaGaillard.Controllers
         {
             if (ModelState.IsValid)
             {
+                cuba.CreatedAt = DateTime.Now;
                 db.Cubas.Add(cuba);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.MaterialExteriorID = new SelectList(db.Materials, "ID", "Material1", cuba.MaterialExteriorID);
+            ViewBag.MaterialExteriorID = new SelectList(db.Materiales, "ID", "Material1", cuba.MaterialExteriorID);
             ViewBag.PlataformaID = new SelectList(db.Plataformas, "ID", "MatriculaPlataforma", cuba.PlataformaID);
             return View(cuba);
         }
@@ -76,7 +77,7 @@ namespace CasaGaillard.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.MaterialExteriorID = new SelectList(db.Materials, "ID", "Material1", cuba.MaterialExteriorID);
+            ViewBag.MaterialExteriorID = new SelectList(db.Materiales, "ID", "Material1", cuba.MaterialExteriorID);
             ViewBag.PlataformaID = new SelectList(db.Plataformas, "ID", "MatriculaPlataforma", cuba.PlataformaID);
             return View(cuba);
         }
@@ -90,11 +91,12 @@ namespace CasaGaillard.Controllers
         {
             if (ModelState.IsValid)
             {
+                cuba.UpdatedAt = DateTime.Now;
                 db.Entry(cuba).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.MaterialExteriorID = new SelectList(db.Materials, "ID", "Material1", cuba.MaterialExteriorID);
+            ViewBag.MaterialExteriorID = new SelectList(db.Materiales, "ID", "Material1", cuba.MaterialExteriorID);
             ViewBag.PlataformaID = new SelectList(db.Plataformas, "ID", "MatriculaPlataforma", cuba.PlataformaID);
             return View(cuba);
         }

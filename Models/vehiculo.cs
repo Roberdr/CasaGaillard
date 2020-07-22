@@ -14,15 +14,28 @@ namespace CasaGaillard.Models
     
     public partial class Vehiculo
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Vehiculo()
+        {
+            this.RevisionesVehiculo = new HashSet<RevisionVehiculo>();
+            this.MantenimientosVehiculo = new HashSet<MantenimientoVehiculo>();
+        }
+    
         public int ID { get; set; }
         public string Marca { get; set; }
         public string Modelo { get; set; }
         public string MatriculaVehiculo { get; set; }
-        public Nullable<int> TipoVehiculoID { get; set; }
+        public int TipoVehiculoID { get; set; }
         public string ModeloTacografo { get; set; }
         public Nullable<int> Pma { get; set; }
         public Nullable<int> Tara { get; set; }
         public Nullable<System.DateTime> FechaCompra { get; set; }
         public string TallerHabitual { get; set; }
+    
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<RevisionVehiculo> RevisionesVehiculo { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<MantenimientoVehiculo> MantenimientosVehiculo { get; set; }
+        public virtual TipoVehiculo TipoVehiculo { get; set; }
     }
 }

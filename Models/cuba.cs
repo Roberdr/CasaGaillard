@@ -14,6 +14,15 @@ namespace CasaGaillard.Models
     
     public partial class Cuba
     {
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
+        public Cuba()
+        {
+            this.Compartimentos = new HashSet<Compartimento>();
+            this.Grupos = new HashSet<Grupo>();
+            this.Revisions = new HashSet<Revision>();
+            this.Operaciones = new HashSet<Operacion>();
+        }
+    
         public int ID { get; set; }
         public string MatriculaCuba { get; set; }
         public Nullable<int> NumCuadro { get; set; }
@@ -62,5 +71,13 @@ namespace CasaGaillard.Models
     
         public virtual Material Material { get; set; }
         public virtual Plataforma Plataforma { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Compartimento> Compartimentos { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Grupo> Grupos { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Revision> Revisions { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Operacion> Operaciones { get; set; }
     }
 }

@@ -15,11 +15,15 @@ namespace CasaGaillard.Models
     public partial class MantenimientoVehiculo
     {
         public int ID { get; set; }
-        public Nullable<int> VehiculoID { get; set; }
+        public int VehiculoID { get; set; }
         public Nullable<System.DateTime> FechaMantenimiento { get; set; }
-        public Nullable<int> TipoMantenimientoID { get; set; }
+        public int TipoMantenimientoID { get; set; }
         public string DetalleMantenimiento { get; set; }
-        public Nullable<int> OperarioID { get; set; }
+        public int OperarioID { get; set; }
         public Nullable<int> Kilometros { get; set; }
+    
+        public virtual Vehiculo Vehiculo { get; set; }
+        public virtual Operario Operario { get; set; }
+        public virtual TipoMantenimiento TipoMantenimiento { get; set; }
     }
 }

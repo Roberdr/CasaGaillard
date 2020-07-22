@@ -19,6 +19,7 @@ namespace CasaGaillard.Models
         {
             this.Accesorios = new HashSet<Accesorio>();
             this.Cubas = new HashSet<Cuba>();
+            this.Compartimentos = new HashSet<Compartimento>();
         }
     
         public int ID { get; set; }
@@ -29,5 +30,7 @@ namespace CasaGaillard.Models
         public virtual ICollection<Accesorio> Accesorios { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Cuba> Cubas { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Compartimento> Compartimentos { get; set; }
     }
 }
