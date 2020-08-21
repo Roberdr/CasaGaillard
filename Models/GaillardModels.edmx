@@ -1,0 +1,2100 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="GaillardModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Accesorio">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TipoAccesorioID" Type="int" Nullable="false" />
+          <Property Name="MaterialID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="AccesorioGrupo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="GrupoID" Type="int" Nullable="false" />
+          <Property Name="AccesorioID" Type="int" Nullable="false" />
+          <Property Name="Cantidad" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CaracteristicaAccesorio">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CaracteristicaAccesorio" Type="nvarchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Cargo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Cargo" Type="nchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Compartimento">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CubaID" Type="int" />
+          <Property Name="Numero" Type="int" />
+          <Property Name="Capacidad" Type="int" />
+          <Property Name="ProductoID" Type="int" />
+          <Property Name="MaterialInteriorID" Type="int" />
+        </EntityType>
+        <EntityType Name="Cuba">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MatriculaCuba" Type="nvarchar" MaxLength="10" Nullable="false" />
+          <Property Name="NumCuadro" Type="int" />
+          <Property Name="Codigo" Type="nvarchar" MaxLength="7" />
+          <Property Name="Constructor" Type="nvarchar" MaxLength="100" />
+          <Property Name="NumFabricacion" Type="nvarchar" MaxLength="12" />
+          <Property Name="NumHomologacion" Type="nvarchar" MaxLength="15" />
+          <Property Name="FechaConstruccion" Type="date" />
+          <Property Name="PaisFabricacion" Type="nvarchar" MaxLength="15" />
+          <Property Name="NumTipoIMO" Type="nvarchar" MaxLength="6" />
+          <Property Name="PaisAprobacion" Type="nvarchar" MaxLength="15" />
+          <Property Name="Autoridad" Type="nvarchar" MaxLength="45" />
+          <Property Name="CodigoDiseno" Type="nvarchar" MaxLength="25" />
+          <Property Name="PruebaHidraulica" Type="date" />
+          <Property Name="PresionServicioADR" Type="decimal" Precision="4" Scale="2" />
+          <Property Name="PresionServicioIMO" Type="decimal" Precision="4" Scale="2" />
+          <Property Name="PresionExterior" Type="decimal" Precision="4" Scale="2" />
+          <Property Name="PresionTaradoValvulas" Type="decimal" Precision="4" Scale="2" />
+          <Property Name="TemperaturaCalculoReferencia" Type="nvarchar" MaxLength="12" />
+          <Property Name="PesoBruto" Type="int" />
+          <Property Name="Tara" Type="int" />
+          <Property Name="PesoMaxProducto" Type="int" />
+          <Property Name="MaterialExteriorID" Type="int" />
+          <Property Name="EspesorCuerpo" Type="decimal" Precision="4" Scale="2" />
+          <Property Name="EspesorFondo" Type="decimal" Precision="4" Scale="2" />
+          <Property Name="EspesorEquivalente" Type="nvarchar" MaxLength="15" />
+          <Property Name="TipoForro" Type="nvarchar" MaxLength="15" />
+          <Property Name="NumAprobacionCSC" Type="nvarchar" MaxLength="15" />
+          <Property Name="Modelo" Type="nvarchar" MaxLength="25" />
+          <Property Name="PesoMaxApilamiento" Type="int" />
+          <Property Name="CargaRigidez" Type="int" />
+          <Property Name="PresionPrueba" Type="decimal" Precision="4" Scale="2" />
+          <Property Name="TemperaturaMinCarga" Type="nvarchar" MaxLength="5" />
+          <Property Name="PlataformaID" Type="int" />
+          <Property Name="Longitud" Type="int" />
+          <Property Name="Ancho" Type="int" />
+          <Property Name="Alto" Type="int" />
+          <Property Name="UpdatedAt" Type="datetime2" Precision="0" />
+          <Property Name="CreatedAt" Type="datetime2" Precision="0" />
+          <Property Name="UpdatedBy" Type="int" />
+          <Property Name="CreatedBy" Type="int" />
+          <Property Name="NumAprobacionIMDG" Type="nvarchar" MaxLength="20" />
+          <Property Name="NumAprobacionADR/RID" Type="nvarchar" MaxLength="20" />
+          <Property Name="UNPortableTank" Type="nvarchar" MaxLength="15" />
+          <Property Name="NumAprobacion" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="DetalleAccesorio">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccesorioID" Type="int" />
+          <Property Name="Cantidad" Type="int" />
+          <Property Name="CaracteristicaAccesorioID" Type="int" />
+          <Property Name="Medida" Type="decimal" Precision="7" Scale="2" />
+          <Property Name="UnidadID" Type="int" />
+          <Property Name="Tipo" Type="nvarchar" MaxLength="15" />
+        </EntityType>
+        <EntityType Name="Direccion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TipoViaID" Type="int" Nullable="false" />
+          <Property Name="NombreVia" Type="nchar" MaxLength="30" />
+          <Property Name="Distrito" Type="nchar" MaxLength="20" />
+          <Property Name="Numero" Type="int" />
+          <Property Name="Km" Type="decimal" Precision="5" Scale="1" />
+          <Property Name="Escalera" Type="nchar" MaxLength="10" />
+          <Property Name="Piso" Type="nchar" MaxLength="10" />
+          <Property Name="Puerta" Type="nchar" MaxLength="10" />
+          <Property Name="PoblacionID" Type="int" Nullable="false" />
+          <Property Name="CP" Type="nchar" MaxLength="10" />
+          <Property Name="Pais" Type="nchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="Entidad">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="NombreEntidad" Type="nchar" MaxLength="60" Nullable="false" />
+          <Property Name="CIF" Type="nchar" MaxLength="10" />
+          <Property Name="DireccionID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Grupo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TipoGrupoID" Type="int" Nullable="false" />
+          <Property Name="CubaID" Type="int" Nullable="false" />
+          <Property Name="CompartimentoID" Type="int" Nullable="false" />
+          <Property Name="SituacionID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="MantenimientoVehiculo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VehiculoID" Type="int" Nullable="false" />
+          <Property Name="FechaMantenimiento" Type="date" />
+          <Property Name="TipoMantenimientoID" Type="int" Nullable="false" />
+          <Property Name="DetalleMantenimiento" Type="nvarchar" MaxLength="45" />
+          <Property Name="OperarioID" Type="int" Nullable="false" />
+          <Property Name="Kilometros" Type="int" />
+        </EntityType>
+        <EntityType Name="Material">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Material" Type="nvarchar" MaxLength="45" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="60" />
+        </EntityType>
+        <EntityType Name="Operacion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CubaID" Type="int" Nullable="false" />
+          <Property Name="OperacionID" Type="int" />
+          <Property Name="FechaOperacion" Type="date" />
+          <Property Name="Descripcion" Type="nvarchar(max)" />
+          <Property Name="OperarioID" Type="int" Nullable="false" />
+          <Property Name="Duracion" Type="time" Precision="7" />
+        </EntityType>
+        <EntityType Name="Operario">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="20" />
+          <Property Name="Apellidos" Type="nvarchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="Persona">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="NombrePersona" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Apellido1" Type="nchar" MaxLength="50" Nullable="false" />
+          <Property Name="Apellido2" Type="nchar" MaxLength="50" />
+          <Property Name="NIF" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="DireccionID" Type="int" />
+        </EntityType>
+        <EntityType Name="PersonasEntidad">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="EntidadID" Type="int" Nullable="false" />
+          <Property Name="PersonaID" Type="int" Nullable="false" />
+          <Property Name="CargoID" Type="int" />
+          <Property Name="FechaAlta" Type="date" />
+          <Property Name="FechaBaja" Type="date" />
+        </EntityType>
+        <EntityType Name="Plataforma">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="MatriculaPlataforma" Type="nvarchar" MaxLength="45" />
+          <Property Name="Propiedad" Type="nvarchar" MaxLength="45" />
+          <Property Name="Pma" Type="int" />
+        </EntityType>
+        <EntityType Name="Poblacion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="NombrePoblacion" Type="nchar" MaxLength="30" Nullable="false" />
+          <Property Name="Provincia" Type="nchar" MaxLength="30" />
+          <Property Name="Autonomia" Type="nchar" MaxLength="30" />
+          <Property Name="Comarca" Type="nchar" MaxLength="30" />
+          <Property Name="Estado" Type="nchar" MaxLength="30" />
+          <Property Name="Pais" Type="nchar" MaxLength="30" />
+        </EntityType>
+        <EntityType Name="Producto">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Iupac" Type="nvarchar" MaxLength="45" />
+          <Property Name="Producto" Type="nvarchar" MaxLength="45" />
+          <Property Name="Concentracion" Type="int" />
+          <Property Name="Grupo" Type="int" />
+          <Property Name="NumUN" Type="nvarchar" MaxLength="4" />
+          <Property Name="Formula" Type="nvarchar" MaxLength="45" />
+          <Property Name="Densidad" Type="int" />
+          <Property Name="FrasesR" Type="nvarchar" MaxLength="45" />
+          <Property Name="FrasesS" Type="nvarchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="Revision">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="CubaID" Type="int" Nullable="false" />
+          <Property Name="FechaRevision" Type="date" Nullable="false" />
+          <Property Name="Descripcion" Type="nvarchar(max)" />
+          <Property Name="ValidaHasta" Type="date" />
+          <Property Name="DescripcionProxima" Type="nvarchar(max)" />
+          <Property Name="Autorizado" Type="nvarchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="RevisionVehiculo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="VehiculoID" Type="int" />
+          <Property Name="TipoRevisionID" Type="int" />
+          <Property Name="FechaRevision" Type="date" />
+          <Property Name="Detalles" Type="nvarchar(max)" />
+          <Property Name="Ejecutor" Type="nvarchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="Situacion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="LadoCubaNumero" Type="int" />
+          <Property Name="LadoCubaNombre" Type="nvarchar" MaxLength="15" />
+          <Property Name="SituacionLadoNumero" Type="int" />
+          <Property Name="SituacionLadoLetra" Type="nvarchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="TelefonoEntidad">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Telefono" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="EntidadID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TelefonoPersona">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="TelefonoPersona" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="PersonaID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TipoAccesorio">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TipoAccesorio" Type="nvarchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="TipoGrupo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="NombreGrupo" Type="nvarchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="TipoMantenimiento">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TipoMantenimiento" Type="nvarchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="TipoOperacion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Operacion" Type="nvarchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="TipoRevision">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Revision" Type="nvarchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="TipoVehiculo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Vehiculo" Type="nvarchar" MaxLength="45" />
+        </EntityType>
+        <EntityType Name="TipoVia">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="TipoVia" Type="nchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Unidad">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Unidad" Type="nvarchar" MaxLength="15" />
+        </EntityType>
+        <EntityType Name="Vehiculo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Marca" Type="nvarchar" MaxLength="45" />
+          <Property Name="Modelo" Type="nvarchar" MaxLength="45" />
+          <Property Name="MatriculaVehiculo" Type="nvarchar" MaxLength="12" />
+          <Property Name="TipoVehiculoID" Type="int" Nullable="false" />
+          <Property Name="ModeloTacografo" Type="nvarchar" MaxLength="45" />
+          <Property Name="Pma" Type="int" />
+          <Property Name="Tara" Type="int" />
+          <Property Name="CargaUtil" Type="int" StoreGeneratedPattern="Computed" />
+          <Property Name="FechaCompra" Type="date" />
+          <Property Name="KilometrajeCompra" Type="int" />
+          <Property Name="TallerHabitualID" Type="int" />
+          <Property Name="NumBastidor" Type="nchar" MaxLength="20" />
+          <Property Name="TipoCombustible" Type="int" />
+          <Property Name="NumEjes" Type="int" />
+          <Property Name="PotenciaCV" Type="int" />
+          <Property Name="Longitud" Type="int" />
+          <Property Name="Anchura" Type="int" />
+          <Property Name="Altura" Type="int" />
+          <Property Name="SeguroID" Type="int" />
+        </EntityType>
+        <Association Name="FK_Compartimento_Cuba">
+          <End Role="Cuba" Type="Self.Cuba" Multiplicity="0..1" />
+          <End Role="Compartimento" Type="Self.Compartimento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cuba">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Compartimento">
+              <PropertyRef Name="CubaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Compartimento_Material">
+          <End Role="Material" Type="Self.Material" Multiplicity="0..1" />
+          <End Role="Compartimento" Type="Self.Compartimento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Material">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Compartimento">
+              <PropertyRef Name="MaterialInteriorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Compartimento_Producto">
+          <End Role="Producto" Type="Self.Producto" Multiplicity="0..1" />
+          <End Role="Compartimento" Type="Self.Compartimento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Compartimento">
+              <PropertyRef Name="ProductoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cuba_Material">
+          <End Role="Material" Type="Self.Material" Multiplicity="0..1" />
+          <End Role="Cuba" Type="Self.Cuba" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Material">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Cuba">
+              <PropertyRef Name="MaterialExteriorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Cuba_Plataforma">
+          <End Role="Plataforma" Type="Self.Plataforma" Multiplicity="0..1" />
+          <End Role="Cuba" Type="Self.Cuba" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Plataforma">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Cuba">
+              <PropertyRef Name="PlataformaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Direccion_Poblacion">
+          <End Role="Poblacion" Type="Self.Poblacion" Multiplicity="1" />
+          <End Role="Direccion" Type="Self.Direccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Poblacion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Direccion">
+              <PropertyRef Name="PoblacionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Direccion_TipoVia">
+          <End Role="TipoVia" Type="Self.TipoVia" Multiplicity="1" />
+          <End Role="Direccion" Type="Self.Direccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoVia">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Direccion">
+              <PropertyRef Name="TipoViaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Entidad_Direccion">
+          <End Role="Direccion" Type="Self.Direccion" Multiplicity="1" />
+          <End Role="Entidad" Type="Self.Entidad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Direccion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Entidad">
+              <PropertyRef Name="DireccionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Operacion_Operario">
+          <End Role="Operario" Type="Self.Operario" Multiplicity="1" />
+          <End Role="Operacion" Type="Self.Operacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Operario">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Operacion">
+              <PropertyRef Name="OperarioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Operacion_TipoOperacion">
+          <End Role="TipoOperacion" Type="Self.TipoOperacion" Multiplicity="0..1" />
+          <End Role="Operacion" Type="Self.Operacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoOperacion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Operacion">
+              <PropertyRef Name="OperacionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Persona_Direccion">
+          <End Role="Direccion" Type="Self.Direccion" Multiplicity="0..1" />
+          <End Role="Persona" Type="Self.Persona" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Direccion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Persona">
+              <PropertyRef Name="DireccionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonasEntidad_Cargo">
+          <End Role="Cargo" Type="Self.Cargo" Multiplicity="0..1" />
+          <End Role="PersonasEntidad" Type="Self.PersonasEntidad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cargo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PersonasEntidad">
+              <PropertyRef Name="CargoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonasEntidad_Entidad">
+          <End Role="Entidad" Type="Self.Entidad" Multiplicity="1" />
+          <End Role="PersonasEntidad" Type="Self.PersonasEntidad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Entidad">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PersonasEntidad">
+              <PropertyRef Name="EntidadID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TelefonoEntidad_Entidad">
+          <End Role="Entidad" Type="Self.Entidad" Multiplicity="1" />
+          <End Role="TelefonoEntidad" Type="Self.TelefonoEntidad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Entidad">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TelefonoEntidad">
+              <PropertyRef Name="EntidadID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TelefonoPersona_Persona">
+          <End Role="Persona" Type="Self.Persona" Multiplicity="1" />
+          <End Role="TelefonoPersona" Type="Self.TelefonoPersona" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persona">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TelefonoPersona">
+              <PropertyRef Name="PersonaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="GaillardModelStoreContainer">
+          <EntitySet Name="Accesorio" EntityType="Self.Accesorio" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="AccesorioGrupo" EntityType="Self.AccesorioGrupo" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="CaracteristicaAccesorio" EntityType="Self.CaracteristicaAccesorio" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="Cargo" EntityType="Self.Cargo" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="Compartimento" EntityType="Self.Compartimento" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="Cuba" EntityType="Self.Cuba" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="DetalleAccesorio" EntityType="Self.DetalleAccesorio" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="Direccion" EntityType="Self.Direccion" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="Entidad" EntityType="Self.Entidad" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="Grupo" EntityType="Self.Grupo" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="MantenimientoVehiculo" EntityType="Self.MantenimientoVehiculo" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="Material" EntityType="Self.Material" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="Operacion" EntityType="Self.Operacion" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="Operario" EntityType="Self.Operario" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="Persona" EntityType="Self.Persona" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="PersonasEntidad" EntityType="Self.PersonasEntidad" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="Plataforma" EntityType="Self.Plataforma" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="Poblacion" EntityType="Self.Poblacion" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="Producto" EntityType="Self.Producto" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="Revision" EntityType="Self.Revision" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="RevisionVehiculo" EntityType="Self.RevisionVehiculo" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="Situacion" EntityType="Self.Situacion" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="TelefonoEntidad" EntityType="Self.TelefonoEntidad" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="TelefonoPersona" EntityType="Self.TelefonoPersona" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="TipoAccesorio" EntityType="Self.TipoAccesorio" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="TipoGrupo" EntityType="Self.TipoGrupo" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="TipoMantenimiento" EntityType="Self.TipoMantenimiento" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="TipoOperacion" EntityType="Self.TipoOperacion" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="TipoRevision" EntityType="Self.TipoRevision" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="TipoVehiculo" EntityType="Self.TipoVehiculo" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="TipoVia" EntityType="Self.TipoVia" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="Unidad" EntityType="Self.Unidad" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="Vehiculo" EntityType="Self.Vehiculo" Schema="gaillard" store:Type="Tables" />
+          <AssociationSet Name="FK_Compartimento_Cuba" Association="Self.FK_Compartimento_Cuba">
+            <End Role="Cuba" EntitySet="Cuba" />
+            <End Role="Compartimento" EntitySet="Compartimento" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Compartimento_Material" Association="Self.FK_Compartimento_Material">
+            <End Role="Material" EntitySet="Material" />
+            <End Role="Compartimento" EntitySet="Compartimento" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Compartimento_Producto" Association="Self.FK_Compartimento_Producto">
+            <End Role="Producto" EntitySet="Producto" />
+            <End Role="Compartimento" EntitySet="Compartimento" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cuba_Material" Association="Self.FK_Cuba_Material">
+            <End Role="Material" EntitySet="Material" />
+            <End Role="Cuba" EntitySet="Cuba" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Cuba_Plataforma" Association="Self.FK_Cuba_Plataforma">
+            <End Role="Plataforma" EntitySet="Plataforma" />
+            <End Role="Cuba" EntitySet="Cuba" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Direccion_Poblacion" Association="Self.FK_Direccion_Poblacion">
+            <End Role="Poblacion" EntitySet="Poblacion" />
+            <End Role="Direccion" EntitySet="Direccion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Direccion_TipoVia" Association="Self.FK_Direccion_TipoVia">
+            <End Role="TipoVia" EntitySet="TipoVia" />
+            <End Role="Direccion" EntitySet="Direccion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Entidad_Direccion" Association="Self.FK_Entidad_Direccion">
+            <End Role="Direccion" EntitySet="Direccion" />
+            <End Role="Entidad" EntitySet="Entidad" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Operacion_Operario" Association="Self.FK_Operacion_Operario">
+            <End Role="Operario" EntitySet="Operario" />
+            <End Role="Operacion" EntitySet="Operacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Operacion_TipoOperacion" Association="Self.FK_Operacion_TipoOperacion">
+            <End Role="TipoOperacion" EntitySet="TipoOperacion" />
+            <End Role="Operacion" EntitySet="Operacion" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Persona_Direccion" Association="Self.FK_Persona_Direccion">
+            <End Role="Direccion" EntitySet="Direccion" />
+            <End Role="Persona" EntitySet="Persona" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonasEntidad_Cargo" Association="Self.FK_PersonasEntidad_Cargo">
+            <End Role="Cargo" EntitySet="Cargo" />
+            <End Role="PersonasEntidad" EntitySet="PersonasEntidad" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonasEntidad_Entidad" Association="Self.FK_PersonasEntidad_Entidad">
+            <End Role="Entidad" EntitySet="Entidad" />
+            <End Role="PersonasEntidad" EntitySet="PersonasEntidad" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TelefonoEntidad_Entidad" Association="Self.FK_TelefonoEntidad_Entidad">
+            <End Role="Entidad" EntitySet="Entidad" />
+            <End Role="TelefonoEntidad" EntitySet="TelefonoEntidad" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TelefonoPersona_Persona" Association="Self.FK_TelefonoPersona_Persona">
+            <End Role="Persona" EntitySet="Persona" />
+            <End Role="TelefonoPersona" EntitySet="TelefonoPersona" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="GaillardModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Accesorio">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TipoAccesorioID" Type="Int32" Nullable="false" />
+          <Property Name="MaterialID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Material" Relationship="GaillardModel.MaterialAccesorio" FromRole="Accesorio" ToRole="Material" />
+          <NavigationProperty Name="TipoAccesorio" Relationship="GaillardModel.AccesorioTipoAccesorio" FromRole="Accesorio" ToRole="TipoAccesorio" />
+          <NavigationProperty Name="DetallesAccesorio" Relationship="GaillardModel.DetalleAccesorioAccesorio" FromRole="Accesorio" ToRole="DetalleAccesorio" />
+          <NavigationProperty Name="AccesoriosGrupo" Relationship="GaillardModel.AccesorioGrupoAccesorio" FromRole="Accesorio" ToRole="AccesorioGrupo" />
+        </EntityType>
+        <EntityType Name="AccesorioGrupo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="GrupoID" Type="Int32" Nullable="false" />
+          <Property Name="AccesorioID" Type="Int32" Nullable="false" />
+          <Property Name="Cantidad" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Grupos" Relationship="GaillardModel.AccesorioGrupoGrupo" FromRole="AccesorioGrupo" ToRole="Grupo" />
+          <NavigationProperty Name="Accesorio" Relationship="GaillardModel.AccesorioGrupoAccesorio" FromRole="AccesorioGrupo" ToRole="Accesorio" />
+        </EntityType>
+        <EntityType Name="CaracteristicaAccesorio">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CaracteristicaAccesorio1" Type="String" MaxLength="20" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="DetalleAccesorios" Relationship="GaillardModel.CaracteristicaAccesorioDetalleAccesorio" FromRole="CaracteristicaAccesorio" ToRole="DetalleAccesorio" />
+        </EntityType>
+        <EntityType Name="Compartimento">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CubaID" Type="Int32" />
+          <Property Name="Numero" Type="Int32" />
+          <Property Name="Capacidad" Type="Int32" />
+          <Property Name="ProductoID" Type="Int32" />
+          <Property Name="MaterialInteriorID" Type="Int32" />
+          <NavigationProperty Name="Cuba" Relationship="GaillardModel.CompartimentoCuba" FromRole="Compartimento" ToRole="Cuba" />
+          <NavigationProperty Name="Material" Relationship="GaillardModel.CompartimentoMaterial" FromRole="Compartimento" ToRole="Material" />
+          <NavigationProperty Name="Productos" Relationship="GaillardModel.CompartimentoProducto" FromRole="Compartimento" ToRole="Producto" />
+          <NavigationProperty Name="Grupos" Relationship="GaillardModel.GruposCompartimento" FromRole="Compartimento" ToRole="Grupo" />
+        </EntityType>
+        <EntityType Name="Cuba">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MatriculaCuba" Type="String" MaxLength="10" FixedLength="false" Unicode="true" Nullable="false" />
+          <Property Name="NumCuadro" Type="Int32" />
+          <Property Name="Codigo" Type="String" MaxLength="7" FixedLength="false" Unicode="true" />
+          <Property Name="Constructor" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="NumFabricacion" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="NumHomologacion" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="FechaConstruccion" Type="DateTime" Precision="0" />
+          <Property Name="PaisFabricacion" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="NumTipoIMO" Type="String" MaxLength="6" FixedLength="false" Unicode="true" />
+          <Property Name="PaisAprobacion" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Autoridad" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="CodigoDiseno" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="PruebaHidraulica" Type="DateTime" Precision="0" />
+          <Property Name="PresionServicioADR" Type="Decimal" Precision="4" Scale="2" />
+          <Property Name="PresionServicioIMO" Type="Decimal" Precision="4" Scale="2" />
+          <Property Name="PresionExterior" Type="Decimal" Precision="4" Scale="2" />
+          <Property Name="PresionTaradoValvulas" Type="Decimal" Precision="4" Scale="2" />
+          <Property Name="TemperaturaCalculoReferencia" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="PesoBruto" Type="Int32" />
+          <Property Name="Tara" Type="Int32" />
+          <Property Name="PesoMaxProducto" Type="Int32" />
+          <Property Name="MaterialExteriorID" Type="Int32" />
+          <Property Name="EspesorCuerpo" Type="Decimal" Precision="4" Scale="2" />
+          <Property Name="EspesorFondo" Type="Decimal" Precision="4" Scale="2" />
+          <Property Name="EspesorEquivalente" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="TipoForro" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="NumAprobacionCSC" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="Modelo" Type="String" MaxLength="25" FixedLength="false" Unicode="true" />
+          <Property Name="PesoMaxApilamiento" Type="Int32" />
+          <Property Name="CargaRigidez" Type="Int32" />
+          <Property Name="PresionPrueba" Type="Decimal" Precision="4" Scale="2" />
+          <Property Name="TemperaturaMinCarga" Type="String" MaxLength="5" FixedLength="false" Unicode="true" />
+          <Property Name="PlataformaID" Type="Int32" />
+          <Property Name="Longitud" Type="Int32" />
+          <Property Name="Ancho" Type="Int32" />
+          <Property Name="Alto" Type="Int32" />
+          <Property Name="UpdatedAt" Type="DateTime" Precision="0" />
+          <Property Name="CreatedAt" Type="DateTime" Precision="0" />
+          <Property Name="UpdatedBy" Type="Int32" />
+          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="NumAprobacionIMDG" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="NumAprobacionADR_RID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="UNPortableTank" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="NumAprobacion" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Material" Relationship="GaillardModel.MaterialCuba" FromRole="Cuba" ToRole="Material" />
+          <NavigationProperty Name="Plataforma" Relationship="GaillardModel.PlataformaCuba" FromRole="Cuba" ToRole="Plataforma" />
+          <NavigationProperty Name="Compartimentos" Relationship="GaillardModel.CompartimentoCuba" FromRole="Cuba" ToRole="Compartimento" />
+          <NavigationProperty Name="Grupos" Relationship="GaillardModel.GrupoCuba" FromRole="Cuba" ToRole="Grupo" />
+          <NavigationProperty Name="Revisions" Relationship="GaillardModel.RevisionCuba" FromRole="Cuba" ToRole="Revision" />
+          <NavigationProperty Name="Operaciones" Relationship="GaillardModel.OperacionCuba" FromRole="Cuba" ToRole="Operacion" />
+        </EntityType>
+        <EntityType Name="DetalleAccesorio">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccesorioID" Type="Int32" />
+          <Property Name="Cantidad" Type="Int32" />
+          <Property Name="CaracteristicaAccesorioID" Type="Int32" />
+          <Property Name="Medida" Type="Decimal" Precision="7" Scale="2" />
+          <Property Name="UnidadID" Type="Int32" />
+          <Property Name="Tipo" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Accesorio" Relationship="GaillardModel.DetalleAccesorioAccesorio" FromRole="DetalleAccesorio" ToRole="Accesorio" />
+          <NavigationProperty Name="Unidad" Relationship="GaillardModel.UnidadDetalleAccesorio" FromRole="DetalleAccesorio" ToRole="Unidad" />
+          <NavigationProperty Name="CaracteristicaAccesorio" Relationship="GaillardModel.CaracteristicaAccesorioDetalleAccesorio" FromRole="DetalleAccesorio" ToRole="CaracteristicaAccesorio" />
+        </EntityType>
+        <EntityType Name="Grupo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TipoGrupoID" Type="Int32" Nullable="false" />
+          <Property Name="CubaID" Type="Int32" Nullable="false" />
+          <Property Name="CompartimentoID" Type="Int32" Nullable="false" />
+          <Property Name="SituacionID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="AccesoriosGrupo" Relationship="GaillardModel.AccesorioGrupoGrupo" FromRole="Grupo" ToRole="AccesorioGrupo" />
+          <NavigationProperty Name="TipoGrupo" Relationship="GaillardModel.GrupoTipoGrupo" FromRole="Grupo" ToRole="TipoGrupo" />
+          <NavigationProperty Name="Cuba" Relationship="GaillardModel.GrupoCuba" FromRole="Grupo" ToRole="Cuba" />
+          <NavigationProperty Name="Situacion" Relationship="GaillardModel.SituacionGrupo" FromRole="Grupo" ToRole="Situacion" />
+          <NavigationProperty Name="Compartimento" Relationship="GaillardModel.GruposCompartimento" FromRole="Grupo" ToRole="Compartimento" />
+        </EntityType>
+        <EntityType Name="MantenimientoVehiculo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VehiculoID" Type="Int32" Nullable="false" />
+          <Property Name="FechaMantenimiento" Type="DateTime" Precision="0" />
+          <Property Name="TipoMantenimientoID" Type="Int32" Nullable="false" />
+          <Property Name="DetalleMantenimiento" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="OperarioID" Type="Int32" Nullable="false" />
+          <Property Name="Kilometros" Type="Int32" />
+          <NavigationProperty Name="Vehiculo" Relationship="GaillardModel.MantenimientoVehiculoVehiculo" FromRole="MantenimientoVehiculo" ToRole="Vehiculo" />
+          <NavigationProperty Name="Operario" Relationship="GaillardModel.OperarioMantenimientoVehiculo" FromRole="MantenimientoVehiculo" ToRole="Operario" />
+          <NavigationProperty Name="TipoMantenimiento" Relationship="GaillardModel.TipoMantenimientoMantenimientoVehiculo" FromRole="MantenimientoVehiculo" ToRole="TipoMantenimiento" />
+        </EntityType>
+        <EntityType Name="Material">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Material1" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="Descripcion" Type="String" MaxLength="60" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Accesorios" Relationship="GaillardModel.MaterialAccesorio" FromRole="Material" ToRole="Accesorio" />
+          <NavigationProperty Name="Cubas" Relationship="GaillardModel.MaterialCuba" FromRole="Material" ToRole="Cuba" />
+          <NavigationProperty Name="Compartimentos" Relationship="GaillardModel.CompartimentoMaterial" FromRole="Material" ToRole="Compartimento" />
+        </EntityType>
+        <EntityType Name="Operacion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CubaID" Type="Int32" Nullable="false" />
+          <Property Name="OperacionID" Type="Int32" />
+          <Property Name="FechaOperacion" Type="DateTime" Precision="0" />
+          <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="OperarioID" Type="Int32" Nullable="false" />
+          <Property Name="Duracion" Type="Time" Precision="7" />
+          <NavigationProperty Name="Cuba" Relationship="GaillardModel.OperacionCuba" FromRole="Operacion" ToRole="Cuba" />
+          <NavigationProperty Name="Operario" Relationship="GaillardModel.OperacionOperario" FromRole="Operacion" ToRole="Operario" />
+          <NavigationProperty Name="TipoOperacion" Relationship="GaillardModel.TipoOperacionOperacion" FromRole="Operacion" ToRole="TipoOperacion" />
+        </EntityType>
+        <EntityType Name="Operario">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Apellidos" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Operaciones" Relationship="GaillardModel.OperacionOperario" FromRole="Operario" ToRole="Operacion" />
+          <NavigationProperty Name="MantenimientosVehiculo" Relationship="GaillardModel.OperarioMantenimientoVehiculo" FromRole="Operario" ToRole="MantenimientoVehiculo" />
+        </EntityType>
+        <EntityType Name="Plataforma">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="MatriculaPlataforma" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="Propiedad" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="Pma" Type="Int32" />
+          <NavigationProperty Name="Cuba" Relationship="GaillardModel.PlataformaCuba" FromRole="Plataforma" ToRole="Cuba" />
+        </EntityType>
+        <EntityType Name="Producto">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Iupac" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="Producto1" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="Concentracion" Type="Int32" />
+          <Property Name="Grupo" Type="Int32" />
+          <Property Name="NumUN" Type="String" MaxLength="4" FixedLength="false" Unicode="true" />
+          <Property Name="Formula" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="Densidad" Type="Int32" />
+          <Property Name="FrasesR" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="FrasesS" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Compartimentos" Relationship="GaillardModel.CompartimentoProducto" FromRole="Producto" ToRole="Compartimento" />
+        </EntityType>
+        <EntityType Name="Revision">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="CubaID" Type="Int32" Nullable="false" />
+          <Property Name="FechaRevision" Type="DateTime" Precision="0" Nullable="false" />
+          <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="ValidaHasta" Type="DateTime" Precision="0" />
+          <Property Name="DescripcionProxima" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Autorizado" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Cuba" Relationship="GaillardModel.RevisionCuba" FromRole="Revision" ToRole="Cuba" />
+        </EntityType>
+        <EntityType Name="RevisionVehiculo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="VehiculoID" Type="Int32" />
+          <Property Name="TipoRevisionID" Type="Int32" />
+          <Property Name="FechaRevision" Type="DateTime" Precision="0" />
+          <Property Name="Detalles" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Ejecutor" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Vehiculo" Relationship="GaillardModel.RevisionVehiculoVehiculo" FromRole="RevisionVehiculo" ToRole="Vehiculo" />
+          <NavigationProperty Name="TipoRevision" Relationship="GaillardModel.TipoRevisionRevisionVehiculo" FromRole="RevisionVehiculo" ToRole="TipoRevision" />
+        </EntityType>
+        <EntityType Name="Situacion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="LadoCubaNumero" Type="Int32" />
+          <Property Name="LadoCubaNombre" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <Property Name="SituacionLadoNumero" Type="Int32" />
+          <Property Name="SituacionLadoLetra" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Grupos" Relationship="GaillardModel.SituacionGrupo" FromRole="Situacion" ToRole="Grupo" />
+        </EntityType>
+        <EntityType Name="TipoAccesorio">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TipoAccesorio1" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Accesorios" Relationship="GaillardModel.AccesorioTipoAccesorio" FromRole="TipoAccesorio" ToRole="Accesorio" />
+        </EntityType>
+        <EntityType Name="TipoGrupo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="NombreGrupo" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Grupos" Relationship="GaillardModel.GrupoTipoGrupo" FromRole="TipoGrupo" ToRole="Grupo" />
+        </EntityType>
+        <EntityType Name="TipoMantenimiento">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Operacion" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="MantenimientosVehiculo" Relationship="GaillardModel.TipoMantenimientoMantenimientoVehiculo" FromRole="TipoMantenimiento" ToRole="MantenimientoVehiculo" />
+        </EntityType>
+        <EntityType Name="TipoOperacion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Operacion" Type="String" MaxLength="30" FixedLength="false" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="Operaciones" Relationship="GaillardModel.TipoOperacionOperacion" FromRole="TipoOperacion" ToRole="Operacion" />
+        </EntityType>
+        <EntityType Name="TipoRevision">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Revision" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="RevisionVehiculoes" Relationship="GaillardModel.TipoRevisionRevisionVehiculo" FromRole="TipoRevision" ToRole="RevisionVehiculo" />
+        </EntityType>
+        <EntityType Name="TipoVehiculo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Vehiculo" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Vehiculos" Relationship="GaillardModel.TipoVehiculoVehiculo" FromRole="TipoVehiculo" ToRole="Vehiculo" />
+        </EntityType>
+        <EntityType Name="Unidad">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Unidad1" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="DetalleAccesorios" Relationship="GaillardModel.UnidadDetalleAccesorio" FromRole="Unidad" ToRole="DetalleAccesorio" />
+        </EntityType>
+        <EntityType Name="Vehiculo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Marca" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="Modelo" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="MatriculaVehiculo" Type="String" MaxLength="12" FixedLength="false" Unicode="true" />
+          <Property Name="TipoVehiculoID" Type="Int32" Nullable="false" />
+          <Property Name="ModeloTacografo" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="Pma" Type="Int32" />
+          <Property Name="Tara" Type="Int32" />
+          <Property Name="FechaCompra" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="RevisionesVehiculo" Relationship="GaillardModel.RevisionVehiculoVehiculo" FromRole="Vehiculo" ToRole="RevisionVehiculo" />
+          <NavigationProperty Name="MantenimientosVehiculo" Relationship="GaillardModel.MantenimientoVehiculoVehiculo" FromRole="Vehiculo" ToRole="MantenimientoVehiculo" />
+          <NavigationProperty Name="TipoVehiculo" Relationship="GaillardModel.TipoVehiculoVehiculo" FromRole="Vehiculo" ToRole="TipoVehiculo" />
+          <Property Name="CargaUtil" Type="Int32" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="KilometrajeCompra" Type="Int32" />
+          <Property Name="TallerHabitualID" Type="Int32" />
+          <Property Name="NumBastidor" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="TipoCombustible" Type="Int32" />
+          <Property Name="NumEjes" Type="Int32" />
+          <Property Name="PotenciaCV" Type="Int32" />
+          <Property Name="Longitud" Type="Int32" />
+          <Property Name="Anchura" Type="Int32" />
+          <Property Name="Altura" Type="Int32" />
+          <Property Name="SeguroID" Type="Int32" />
+        </EntityType>
+        <EntityContainer Name="GaillardEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Accesorios" EntityType="Self.Accesorio" />
+          <EntitySet Name="AccesoriosGrupo" EntityType="Self.AccesorioGrupo" />
+          <EntitySet Name="CaracteristicasAccesorio" EntityType="Self.CaracteristicaAccesorio" />
+          <EntitySet Name="Compartimentos" EntityType="Self.Compartimento" />
+          <EntitySet Name="Cubas" EntityType="Self.Cuba" />
+          <EntitySet Name="DetallesAccesorio" EntityType="Self.DetalleAccesorio" />
+          <EntitySet Name="Grupos" EntityType="Self.Grupo" />
+          <EntitySet Name="MantenimientosVehiculo" EntityType="Self.MantenimientoVehiculo" />
+          <EntitySet Name="Materiales" EntityType="Self.Material" />
+          <EntitySet Name="Operaciones" EntityType="Self.Operacion" />
+          <EntitySet Name="Operarios" EntityType="Self.Operario" />
+          <EntitySet Name="Plataformas" EntityType="Self.Plataforma" />
+          <EntitySet Name="Productos" EntityType="Self.Producto" />
+          <EntitySet Name="Revisiones" EntityType="Self.Revision" />
+          <EntitySet Name="RevisionesVehiculo" EntityType="Self.RevisionVehiculo" />
+          <EntitySet Name="Situaciones" EntityType="Self.Situacion" />
+          <EntitySet Name="TiposAccesorio" EntityType="Self.TipoAccesorio" />
+          <EntitySet Name="TiposGrupo" EntityType="Self.TipoGrupo" />
+          <EntitySet Name="TiposMantenimiento" EntityType="Self.TipoMantenimiento" />
+          <EntitySet Name="TiposOperacion" EntityType="Self.TipoOperacion" />
+          <EntitySet Name="TiposRevision" EntityType="Self.TipoRevision" />
+          <EntitySet Name="TiposVehiculo" EntityType="Self.TipoVehiculo" />
+          <EntitySet Name="Unidades" EntityType="Self.Unidad" />
+          <EntitySet Name="Vehiculos" EntityType="Self.Vehiculo" />
+          <AssociationSet Name="MaterialAccesorio" Association="GaillardModel.MaterialAccesorio">
+            <End Role="Material" EntitySet="Materiales" />
+            <End Role="Accesorio" EntitySet="Accesorios" />
+          </AssociationSet>
+          <AssociationSet Name="AccesorioTipoAccesorio" Association="GaillardModel.AccesorioTipoAccesorio">
+            <End Role="Accesorio" EntitySet="Accesorios" />
+            <End Role="TipoAccesorio" EntitySet="TiposAccesorio" />
+          </AssociationSet>
+          <AssociationSet Name="MaterialCuba" Association="GaillardModel.MaterialCuba">
+            <End Role="Material" EntitySet="Materiales" />
+            <End Role="Cuba" EntitySet="Cubas" />
+          </AssociationSet>
+          <AssociationSet Name="PlataformaCuba" Association="GaillardModel.PlataformaCuba">
+            <End Role="Plataforma" EntitySet="Plataformas" />
+            <End Role="Cuba" EntitySet="Cubas" />
+          </AssociationSet>
+          <AssociationSet Name="CompartimentoCuba" Association="GaillardModel.CompartimentoCuba">
+            <End Role="Compartimento" EntitySet="Compartimentos" />
+            <End Role="Cuba" EntitySet="Cubas" />
+          </AssociationSet>
+          <AssociationSet Name="CompartimentoMaterial" Association="GaillardModel.CompartimentoMaterial">
+            <End Role="Compartimento" EntitySet="Compartimentos" />
+            <End Role="Material" EntitySet="Materiales" />
+          </AssociationSet>
+          <AssociationSet Name="CompartimentoProducto" Association="GaillardModel.CompartimentoProducto">
+            <End Role="Compartimento" EntitySet="Compartimentos" />
+            <End Role="Producto" EntitySet="Productos" />
+          </AssociationSet>
+          <AssociationSet Name="DetalleAccesorioAccesorio" Association="GaillardModel.DetalleAccesorioAccesorio">
+            <End Role="DetalleAccesorio" EntitySet="DetallesAccesorio" />
+            <End Role="Accesorio" EntitySet="Accesorios" />
+          </AssociationSet>
+          <AssociationSet Name="UnidadDetalleAccesorio" Association="GaillardModel.UnidadDetalleAccesorio">
+            <End Role="Unidad" EntitySet="Unidades" />
+            <End Role="DetalleAccesorio" EntitySet="DetallesAccesorio" />
+          </AssociationSet>
+          <AssociationSet Name="CaracteristicaAccesorioDetalleAccesorio" Association="GaillardModel.CaracteristicaAccesorioDetalleAccesorio">
+            <End Role="CaracteristicaAccesorio" EntitySet="CaracteristicasAccesorio" />
+            <End Role="DetalleAccesorio" EntitySet="DetallesAccesorio" />
+          </AssociationSet>
+          <AssociationSet Name="AccesorioGrupoGrupo" Association="GaillardModel.AccesorioGrupoGrupo">
+            <End Role="AccesorioGrupo" EntitySet="AccesoriosGrupo" />
+            <End Role="Grupo" EntitySet="Grupos" />
+          </AssociationSet>
+          <AssociationSet Name="AccesorioGrupoAccesorio" Association="GaillardModel.AccesorioGrupoAccesorio">
+            <End Role="AccesorioGrupo" EntitySet="AccesoriosGrupo" />
+            <End Role="Accesorio" EntitySet="Accesorios" />
+          </AssociationSet>
+          <AssociationSet Name="GrupoTipoGrupo" Association="GaillardModel.GrupoTipoGrupo">
+            <End Role="Grupo" EntitySet="Grupos" />
+            <End Role="TipoGrupo" EntitySet="TiposGrupo" />
+          </AssociationSet>
+          <AssociationSet Name="GrupoCuba" Association="GaillardModel.GrupoCuba">
+            <End Role="Grupo" EntitySet="Grupos" />
+            <End Role="Cuba" EntitySet="Cubas" />
+          </AssociationSet>
+          <AssociationSet Name="SituacionGrupo" Association="GaillardModel.SituacionGrupo">
+            <End Role="Situacion" EntitySet="Situaciones" />
+            <End Role="Grupo" EntitySet="Grupos" />
+          </AssociationSet>
+          <AssociationSet Name="RevisionCuba" Association="GaillardModel.RevisionCuba">
+            <End Role="Revision" EntitySet="Revisiones" />
+            <End Role="Cuba" EntitySet="Cubas" />
+          </AssociationSet>
+          <AssociationSet Name="OperacionCuba" Association="GaillardModel.OperacionCuba">
+            <End Role="Operacion" EntitySet="Operaciones" />
+            <End Role="Cuba" EntitySet="Cubas" />
+          </AssociationSet>
+          <AssociationSet Name="OperacionOperario" Association="GaillardModel.OperacionOperario">
+            <End Role="Operacion" EntitySet="Operaciones" />
+            <End Role="Operario" EntitySet="Operarios" />
+          </AssociationSet>
+          <AssociationSet Name="TipoOperacionOperacion" Association="GaillardModel.TipoOperacionOperacion">
+            <End Role="TipoOperacion" EntitySet="TiposOperacion" />
+            <End Role="Operacion" EntitySet="Operaciones" />
+          </AssociationSet>
+          <AssociationSet Name="RevisionVehiculoVehiculo" Association="GaillardModel.RevisionVehiculoVehiculo">
+            <End Role="RevisionVehiculo" EntitySet="RevisionesVehiculo" />
+            <End Role="Vehiculo" EntitySet="Vehiculos" />
+          </AssociationSet>
+          <AssociationSet Name="MantenimientoVehiculoVehiculo" Association="GaillardModel.MantenimientoVehiculoVehiculo">
+            <End Role="MantenimientoVehiculo" EntitySet="MantenimientosVehiculo" />
+            <End Role="Vehiculo" EntitySet="Vehiculos" />
+          </AssociationSet>
+          <AssociationSet Name="OperarioMantenimientoVehiculo" Association="GaillardModel.OperarioMantenimientoVehiculo">
+            <End Role="Operario" EntitySet="Operarios" />
+            <End Role="MantenimientoVehiculo" EntitySet="MantenimientosVehiculo" />
+          </AssociationSet>
+          <AssociationSet Name="TipoMantenimientoMantenimientoVehiculo" Association="GaillardModel.TipoMantenimientoMantenimientoVehiculo">
+            <End Role="TipoMantenimiento" EntitySet="TiposMantenimiento" />
+            <End Role="MantenimientoVehiculo" EntitySet="MantenimientosVehiculo" />
+          </AssociationSet>
+          <AssociationSet Name="TipoRevisionRevisionVehiculo" Association="GaillardModel.TipoRevisionRevisionVehiculo">
+            <End Role="TipoRevision" EntitySet="TiposRevision" />
+            <End Role="RevisionVehiculo" EntitySet="RevisionesVehiculo" />
+          </AssociationSet>
+          <AssociationSet Name="TipoVehiculoVehiculo" Association="GaillardModel.TipoVehiculoVehiculo">
+            <End Role="TipoVehiculo" EntitySet="TiposVehiculo" />
+            <End Role="Vehiculo" EntitySet="Vehiculos" />
+          </AssociationSet>
+          <AssociationSet Name="GruposCompartimento" Association="GaillardModel.GruposCompartimento">
+            <End Role="Grupo" EntitySet="Grupos" />
+            <End Role="Compartimento" EntitySet="Compartimentos" />
+          </AssociationSet>
+          <EntitySet Name="Cargoes" EntityType="GaillardModel.Cargo" />
+          <EntitySet Name="Direccions" EntityType="GaillardModel.Direccion" />
+          <EntitySet Name="Entidads" EntityType="GaillardModel.Entidad" />
+          <EntitySet Name="Personas" EntityType="GaillardModel.Persona" />
+          <EntitySet Name="PersonasEntidads" EntityType="GaillardModel.PersonasEntidad" />
+          <EntitySet Name="Poblacions" EntityType="GaillardModel.Poblacion" />
+          <EntitySet Name="TelefonoEntidads" EntityType="GaillardModel.TelefonoEntidad" />
+          <EntitySet Name="TelefonoPersonas" EntityType="GaillardModel.TelefonoPersona" />
+          <EntitySet Name="TipoVias" EntityType="GaillardModel.TipoVia" />
+          <AssociationSet Name="FK_PersonasEntidad_Cargo" Association="GaillardModel.FK_PersonasEntidad_Cargo">
+            <End Role="Cargo" EntitySet="Cargoes" />
+            <End Role="PersonasEntidad" EntitySet="PersonasEntidads" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Direccion_Poblacion" Association="GaillardModel.FK_Direccion_Poblacion">
+            <End Role="Poblacion" EntitySet="Poblacions" />
+            <End Role="Direccion" EntitySet="Direccions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Direccion_TipoVia" Association="GaillardModel.FK_Direccion_TipoVia">
+            <End Role="TipoVia" EntitySet="TipoVias" />
+            <End Role="Direccion" EntitySet="Direccions" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Entidad_Direccion" Association="GaillardModel.FK_Entidad_Direccion">
+            <End Role="Direccion" EntitySet="Direccions" />
+            <End Role="Entidad" EntitySet="Entidads" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Persona_Direccion" Association="GaillardModel.FK_Persona_Direccion">
+            <End Role="Direccion" EntitySet="Direccions" />
+            <End Role="Persona" EntitySet="Personas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PersonasEntidad_Entidad" Association="GaillardModel.FK_PersonasEntidad_Entidad">
+            <End Role="Entidad" EntitySet="Entidads" />
+            <End Role="PersonasEntidad" EntitySet="PersonasEntidads" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TelefonoEntidad_Entidad" Association="GaillardModel.FK_TelefonoEntidad_Entidad">
+            <End Role="Entidad" EntitySet="Entidads" />
+            <End Role="TelefonoEntidad" EntitySet="TelefonoEntidads" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TelefonoPersona_Persona" Association="GaillardModel.FK_TelefonoPersona_Persona">
+            <End Role="Persona" EntitySet="Personas" />
+            <End Role="TelefonoPersona" EntitySet="TelefonoPersonas" />
+          </AssociationSet>
+        </EntityContainer>
+        <Association Name="MaterialAccesorio">
+          <End Type="GaillardModel.Material" Role="Material" Multiplicity="1" />
+          <End Type="GaillardModel.Accesorio" Role="Accesorio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Material">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Accesorio">
+              <PropertyRef Name="MaterialID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="AccesorioTipoAccesorio">
+          <End Type="GaillardModel.Accesorio" Role="Accesorio" Multiplicity="*" />
+          <End Type="GaillardModel.TipoAccesorio" Role="TipoAccesorio" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="TipoAccesorio">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Accesorio">
+              <PropertyRef Name="TipoAccesorioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="MaterialCuba">
+          <End Type="GaillardModel.Material" Role="Material" Multiplicity="0..1" />
+          <End Type="GaillardModel.Cuba" Role="Cuba" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Material">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Cuba">
+              <PropertyRef Name="MaterialExteriorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="PlataformaCuba">
+          <End Type="GaillardModel.Plataforma" Role="Plataforma" Multiplicity="0..1" />
+          <End Type="GaillardModel.Cuba" Role="Cuba" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Plataforma">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Cuba">
+              <PropertyRef Name="PlataformaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="CompartimentoCuba">
+          <End Type="GaillardModel.Compartimento" Role="Compartimento" Multiplicity="*" />
+          <End Type="GaillardModel.Cuba" Role="Cuba" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Cuba">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Compartimento">
+              <PropertyRef Name="CubaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="CompartimentoMaterial">
+          <End Type="GaillardModel.Compartimento" Role="Compartimento" Multiplicity="*" />
+          <End Type="GaillardModel.Material" Role="Material" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Material">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Compartimento">
+              <PropertyRef Name="MaterialInteriorID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="CompartimentoProducto">
+          <End Type="GaillardModel.Compartimento" Role="Compartimento" Multiplicity="*" />
+          <End Type="GaillardModel.Producto" Role="Producto" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Producto">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Compartimento">
+              <PropertyRef Name="ProductoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="DetalleAccesorioAccesorio">
+          <End Type="GaillardModel.DetalleAccesorio" Role="DetalleAccesorio" Multiplicity="*" />
+          <End Type="GaillardModel.Accesorio" Role="Accesorio" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Accesorio">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DetalleAccesorio">
+              <PropertyRef Name="AccesorioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="UnidadDetalleAccesorio">
+          <End Type="GaillardModel.Unidad" Role="Unidad" Multiplicity="0..1" />
+          <End Type="GaillardModel.DetalleAccesorio" Role="DetalleAccesorio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Unidad">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DetalleAccesorio">
+              <PropertyRef Name="UnidadID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="CaracteristicaAccesorioDetalleAccesorio">
+          <End Type="GaillardModel.CaracteristicaAccesorio" Role="CaracteristicaAccesorio" Multiplicity="0..1" />
+          <End Type="GaillardModel.DetalleAccesorio" Role="DetalleAccesorio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CaracteristicaAccesorio">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="DetalleAccesorio">
+              <PropertyRef Name="CaracteristicaAccesorioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="AccesorioGrupoGrupo">
+          <End Type="GaillardModel.AccesorioGrupo" Role="AccesorioGrupo" Multiplicity="*" />
+          <End Type="GaillardModel.Grupo" Role="Grupo" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Grupo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="AccesorioGrupo">
+              <PropertyRef Name="GrupoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="AccesorioGrupoAccesorio">
+          <End Type="GaillardModel.AccesorioGrupo" Role="AccesorioGrupo" Multiplicity="*" />
+          <End Type="GaillardModel.Accesorio" Role="Accesorio" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Accesorio">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="AccesorioGrupo">
+              <PropertyRef Name="AccesorioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="GrupoTipoGrupo">
+          <End Type="GaillardModel.Grupo" Role="Grupo" Multiplicity="*" />
+          <End Type="GaillardModel.TipoGrupo" Role="TipoGrupo" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="TipoGrupo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Grupo">
+              <PropertyRef Name="TipoGrupoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="GrupoCuba">
+          <End Type="GaillardModel.Grupo" Role="Grupo" Multiplicity="*" />
+          <End Type="GaillardModel.Cuba" Role="Cuba" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Cuba">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Grupo">
+              <PropertyRef Name="CubaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="SituacionGrupo">
+          <End Type="GaillardModel.Situacion" Role="Situacion" Multiplicity="1" />
+          <End Type="GaillardModel.Grupo" Role="Grupo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Situacion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Grupo">
+              <PropertyRef Name="SituacionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RevisionCuba">
+          <End Type="GaillardModel.Revision" Role="Revision" Multiplicity="*" />
+          <End Type="GaillardModel.Cuba" Role="Cuba" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Cuba">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Revision">
+              <PropertyRef Name="CubaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="OperacionCuba">
+          <End Type="GaillardModel.Operacion" Role="Operacion" Multiplicity="*" />
+          <End Type="GaillardModel.Cuba" Role="Cuba" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Cuba">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Operacion">
+              <PropertyRef Name="CubaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="OperacionOperario">
+          <End Type="GaillardModel.Operacion" Role="Operacion" Multiplicity="*" />
+          <End Type="GaillardModel.Operario" Role="Operario" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Operario">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Operacion">
+              <PropertyRef Name="OperarioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TipoOperacionOperacion">
+          <End Type="GaillardModel.TipoOperacion" Role="TipoOperacion" Multiplicity="0..1" />
+          <End Type="GaillardModel.Operacion" Role="Operacion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoOperacion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Operacion">
+              <PropertyRef Name="OperacionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="RevisionVehiculoVehiculo">
+          <End Type="GaillardModel.RevisionVehiculo" Role="RevisionVehiculo" Multiplicity="*" />
+          <End Type="GaillardModel.Vehiculo" Role="Vehiculo" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Vehiculo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RevisionVehiculo">
+              <PropertyRef Name="VehiculoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="MantenimientoVehiculoVehiculo">
+          <End Type="GaillardModel.MantenimientoVehiculo" Role="MantenimientoVehiculo" Multiplicity="*" />
+          <End Type="GaillardModel.Vehiculo" Role="Vehiculo" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Vehiculo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MantenimientoVehiculo">
+              <PropertyRef Name="VehiculoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="OperarioMantenimientoVehiculo">
+          <End Type="GaillardModel.Operario" Role="Operario" Multiplicity="1" />
+          <End Type="GaillardModel.MantenimientoVehiculo" Role="MantenimientoVehiculo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Operario">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MantenimientoVehiculo">
+              <PropertyRef Name="OperarioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TipoMantenimientoMantenimientoVehiculo">
+          <End Type="GaillardModel.TipoMantenimiento" Role="TipoMantenimiento" Multiplicity="1" />
+          <End Type="GaillardModel.MantenimientoVehiculo" Role="MantenimientoVehiculo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoMantenimiento">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="MantenimientoVehiculo">
+              <PropertyRef Name="TipoMantenimientoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TipoRevisionRevisionVehiculo">
+          <End Type="GaillardModel.TipoRevision" Role="TipoRevision" Multiplicity="0..1" />
+          <End Type="GaillardModel.RevisionVehiculo" Role="RevisionVehiculo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoRevision">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="RevisionVehiculo">
+              <PropertyRef Name="TipoRevisionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="TipoVehiculoVehiculo">
+          <End Type="GaillardModel.TipoVehiculo" Role="TipoVehiculo" Multiplicity="1" />
+          <End Type="GaillardModel.Vehiculo" Role="Vehiculo" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoVehiculo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Vehiculo">
+              <PropertyRef Name="TipoVehiculoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="GruposCompartimento">
+          <End Type="GaillardModel.Grupo" Role="Grupo" Multiplicity="*" />
+          <End Type="GaillardModel.Compartimento" Role="Compartimento" Multiplicity="1" />
+          <ReferentialConstraint>
+            <Principal Role="Compartimento">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Grupo">
+              <PropertyRef Name="CompartimentoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="Cargo">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Cargo1" Type="String" Nullable="false" MaxLength="30" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="PersonasEntidads" Relationship="GaillardModel.FK_PersonasEntidad_Cargo" FromRole="Cargo" ToRole="PersonasEntidad" />
+        </EntityType>
+        <EntityType Name="Direccion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="TipoViaID" Type="Int32" Nullable="false" />
+          <Property Name="NombreVia" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
+          <Property Name="Distrito" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <Property Name="Numero" Type="Int32" />
+          <Property Name="Escalera" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Piso" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Puerta" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="PoblacionID" Type="Int32" Nullable="false" />
+          <Property Name="CP" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Pais" Type="String" MaxLength="20" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Poblacion" Relationship="GaillardModel.FK_Direccion_Poblacion" FromRole="Direccion" ToRole="Poblacion" />
+          <NavigationProperty Name="TipoVia" Relationship="GaillardModel.FK_Direccion_TipoVia" FromRole="Direccion" ToRole="TipoVia" />
+          <NavigationProperty Name="Entidads" Relationship="GaillardModel.FK_Entidad_Direccion" FromRole="Direccion" ToRole="Entidad" />
+          <NavigationProperty Name="Personas" Relationship="GaillardModel.FK_Persona_Direccion" FromRole="Direccion" ToRole="Persona" />
+          <Property Name="Km" Type="Decimal" Precision="5" Scale="1" />
+        </EntityType>
+        <EntityType Name="Entidad">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="NombreEntidad" Type="String" Nullable="false" MaxLength="60" FixedLength="true" Unicode="true" />
+          <Property Name="CIF" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="DireccionID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Direccion" Relationship="GaillardModel.FK_Entidad_Direccion" FromRole="Entidad" ToRole="Direccion" />
+          <NavigationProperty Name="PersonasEntidads" Relationship="GaillardModel.FK_PersonasEntidad_Entidad" FromRole="Entidad" ToRole="PersonasEntidad" />
+          <NavigationProperty Name="TelefonoEntidads" Relationship="GaillardModel.FK_TelefonoEntidad_Entidad" FromRole="Entidad" ToRole="TelefonoEntidad" />
+        </EntityType>
+        <EntityType Name="Persona">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="NombrePersona" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Apellido1" Type="String" Nullable="false" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="Apellido2" Type="String" MaxLength="50" FixedLength="true" Unicode="true" />
+          <Property Name="NIF" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="DireccionID" Type="Int32" />
+          <NavigationProperty Name="Direccion" Relationship="GaillardModel.FK_Persona_Direccion" FromRole="Persona" ToRole="Direccion" />
+          <NavigationProperty Name="TelefonoPersonas" Relationship="GaillardModel.FK_TelefonoPersona_Persona" FromRole="Persona" ToRole="TelefonoPersona" />
+        </EntityType>
+        <EntityType Name="PersonasEntidad">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="EntidadID" Type="Int32" Nullable="false" />
+          <Property Name="PersonaID" Type="Int32" Nullable="false" />
+          <Property Name="CargoID" Type="Int32" />
+          <Property Name="FechaAlta" Type="DateTime" Precision="0" />
+          <Property Name="FechaBaja" Type="DateTime" Precision="0" />
+          <NavigationProperty Name="Cargo" Relationship="GaillardModel.FK_PersonasEntidad_Cargo" FromRole="PersonasEntidad" ToRole="Cargo" />
+          <NavigationProperty Name="Entidad" Relationship="GaillardModel.FK_PersonasEntidad_Entidad" FromRole="PersonasEntidad" ToRole="Entidad" />
+        </EntityType>
+        <EntityType Name="Poblacion">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="NombrePoblacion" Type="String" Nullable="false" MaxLength="30" FixedLength="true" Unicode="true" />
+          <Property Name="Provincia" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
+          <Property Name="Autonomia" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
+          <Property Name="Comarca" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
+          <Property Name="Estado" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
+          <Property Name="Pais" Type="String" MaxLength="30" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Direccions" Relationship="GaillardModel.FK_Direccion_Poblacion" FromRole="Poblacion" ToRole="Direccion" />
+        </EntityType>
+        <EntityType Name="TelefonoEntidad">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Telefono" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="EntidadID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Entidad" Relationship="GaillardModel.FK_TelefonoEntidad_Entidad" FromRole="TelefonoEntidad" ToRole="Entidad" />
+        </EntityType>
+        <EntityType Name="TelefonoPersona">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="TelefonoPersona1" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="PersonaID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="Persona" Relationship="GaillardModel.FK_TelefonoPersona_Persona" FromRole="TelefonoPersona" ToRole="Persona" />
+        </EntityType>
+        <EntityType Name="TipoVia">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="TipoVia1" Type="String" Nullable="false" MaxLength="20" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Direccions" Relationship="GaillardModel.FK_Direccion_TipoVia" FromRole="TipoVia" ToRole="Direccion" />
+        </EntityType>
+        <Association Name="FK_PersonasEntidad_Cargo">
+          <End Type="GaillardModel.Cargo" Role="Cargo" Multiplicity="0..1" />
+          <End Type="GaillardModel.PersonasEntidad" Role="PersonasEntidad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Cargo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PersonasEntidad">
+              <PropertyRef Name="CargoID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Direccion_Poblacion">
+          <End Type="GaillardModel.Poblacion" Role="Poblacion" Multiplicity="1" />
+          <End Type="GaillardModel.Direccion" Role="Direccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Poblacion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Direccion">
+              <PropertyRef Name="PoblacionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Direccion_TipoVia">
+          <End Type="GaillardModel.TipoVia" Role="TipoVia" Multiplicity="1" />
+          <End Type="GaillardModel.Direccion" Role="Direccion" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="TipoVia">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Direccion">
+              <PropertyRef Name="TipoViaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Entidad_Direccion">
+          <End Type="GaillardModel.Direccion" Role="Direccion" Multiplicity="1" />
+          <End Type="GaillardModel.Entidad" Role="Entidad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Direccion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Entidad">
+              <PropertyRef Name="DireccionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Persona_Direccion">
+          <End Type="GaillardModel.Direccion" Role="Direccion" Multiplicity="0..1" />
+          <End Type="GaillardModel.Persona" Role="Persona" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Direccion">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Persona">
+              <PropertyRef Name="DireccionID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PersonasEntidad_Entidad">
+          <End Type="GaillardModel.Entidad" Role="Entidad" Multiplicity="1" />
+          <End Type="GaillardModel.PersonasEntidad" Role="PersonasEntidad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Entidad">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PersonasEntidad">
+              <PropertyRef Name="EntidadID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TelefonoEntidad_Entidad">
+          <End Type="GaillardModel.Entidad" Role="Entidad" Multiplicity="1" />
+          <End Type="GaillardModel.TelefonoEntidad" Role="TelefonoEntidad" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Entidad">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TelefonoEntidad">
+              <PropertyRef Name="EntidadID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TelefonoPersona_Persona">
+          <End Type="GaillardModel.Persona" Role="Persona" Multiplicity="1" />
+          <End Type="GaillardModel.TelefonoPersona" Role="TelefonoPersona" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Persona">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="TelefonoPersona">
+              <PropertyRef Name="PersonaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="GaillardModelStoreContainer" CdmEntityContainer="GaillardEntities">
+          <EntitySetMapping Name="Accesorios">
+            <EntityTypeMapping TypeName="GaillardModel.Accesorio">
+              <MappingFragment StoreEntitySet="Accesorio">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="TipoAccesorioID" ColumnName="TipoAccesorioID" />
+                <ScalarProperty Name="MaterialID" ColumnName="MaterialID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="AccesoriosGrupo">
+            <EntityTypeMapping TypeName="GaillardModel.AccesorioGrupo">
+              <MappingFragment StoreEntitySet="AccesorioGrupo">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="GrupoID" ColumnName="GrupoID" />
+                <ScalarProperty Name="AccesorioID" ColumnName="AccesorioID" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CaracteristicasAccesorio">
+            <EntityTypeMapping TypeName="GaillardModel.CaracteristicaAccesorio">
+              <MappingFragment StoreEntitySet="CaracteristicaAccesorio">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="CaracteristicaAccesorio1" ColumnName="CaracteristicaAccesorio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Compartimentos">
+            <EntityTypeMapping TypeName="GaillardModel.Compartimento">
+              <MappingFragment StoreEntitySet="Compartimento">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="CubaID" ColumnName="CubaID" />
+                <ScalarProperty Name="Numero" ColumnName="Numero" />
+                <ScalarProperty Name="Capacidad" ColumnName="Capacidad" />
+                <ScalarProperty Name="ProductoID" ColumnName="ProductoID" />
+                <ScalarProperty Name="MaterialInteriorID" ColumnName="MaterialInteriorID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cubas">
+            <EntityTypeMapping TypeName="GaillardModel.Cuba">
+              <MappingFragment StoreEntitySet="Cuba">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="MatriculaCuba" ColumnName="MatriculaCuba" />
+                <ScalarProperty Name="NumCuadro" ColumnName="NumCuadro" />
+                <ScalarProperty Name="Codigo" ColumnName="Codigo" />
+                <ScalarProperty Name="Constructor" ColumnName="Constructor" />
+                <ScalarProperty Name="NumFabricacion" ColumnName="NumFabricacion" />
+                <ScalarProperty Name="NumHomologacion" ColumnName="NumHomologacion" />
+                <ScalarProperty Name="FechaConstruccion" ColumnName="FechaConstruccion" />
+                <ScalarProperty Name="PaisFabricacion" ColumnName="PaisFabricacion" />
+                <ScalarProperty Name="NumTipoIMO" ColumnName="NumTipoIMO" />
+                <ScalarProperty Name="PaisAprobacion" ColumnName="PaisAprobacion" />
+                <ScalarProperty Name="Autoridad" ColumnName="Autoridad" />
+                <ScalarProperty Name="CodigoDiseno" ColumnName="CodigoDiseno" />
+                <ScalarProperty Name="PruebaHidraulica" ColumnName="PruebaHidraulica" />
+                <ScalarProperty Name="PresionServicioADR" ColumnName="PresionServicioADR" />
+                <ScalarProperty Name="PresionServicioIMO" ColumnName="PresionServicioIMO" />
+                <ScalarProperty Name="PresionExterior" ColumnName="PresionExterior" />
+                <ScalarProperty Name="PresionTaradoValvulas" ColumnName="PresionTaradoValvulas" />
+                <ScalarProperty Name="TemperaturaCalculoReferencia" ColumnName="TemperaturaCalculoReferencia" />
+                <ScalarProperty Name="PesoBruto" ColumnName="PesoBruto" />
+                <ScalarProperty Name="Tara" ColumnName="Tara" />
+                <ScalarProperty Name="PesoMaxProducto" ColumnName="PesoMaxProducto" />
+                <ScalarProperty Name="MaterialExteriorID" ColumnName="MaterialExteriorID" />
+                <ScalarProperty Name="EspesorCuerpo" ColumnName="EspesorCuerpo" />
+                <ScalarProperty Name="EspesorFondo" ColumnName="EspesorFondo" />
+                <ScalarProperty Name="EspesorEquivalente" ColumnName="EspesorEquivalente" />
+                <ScalarProperty Name="TipoForro" ColumnName="TipoForro" />
+                <ScalarProperty Name="NumAprobacionCSC" ColumnName="NumAprobacionCSC" />
+                <ScalarProperty Name="Modelo" ColumnName="Modelo" />
+                <ScalarProperty Name="PesoMaxApilamiento" ColumnName="PesoMaxApilamiento" />
+                <ScalarProperty Name="CargaRigidez" ColumnName="CargaRigidez" />
+                <ScalarProperty Name="PresionPrueba" ColumnName="PresionPrueba" />
+                <ScalarProperty Name="TemperaturaMinCarga" ColumnName="TemperaturaMinCarga" />
+                <ScalarProperty Name="PlataformaID" ColumnName="PlataformaID" />
+                <ScalarProperty Name="Longitud" ColumnName="Longitud" />
+                <ScalarProperty Name="Ancho" ColumnName="Ancho" />
+                <ScalarProperty Name="Alto" ColumnName="Alto" />
+                <ScalarProperty Name="UpdatedAt" ColumnName="UpdatedAt" />
+                <ScalarProperty Name="CreatedAt" ColumnName="CreatedAt" />
+                <ScalarProperty Name="UpdatedBy" ColumnName="UpdatedBy" />
+                <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
+                <ScalarProperty Name="NumAprobacionIMDG" ColumnName="NumAprobacionIMDG" />
+                <ScalarProperty Name="NumAprobacionADR_RID" ColumnName="NumAprobacionADR/RID" />
+                <ScalarProperty Name="UNPortableTank" ColumnName="UNPortableTank" />
+                <ScalarProperty Name="NumAprobacion" ColumnName="NumAprobacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DetallesAccesorio">
+            <EntityTypeMapping TypeName="GaillardModel.DetalleAccesorio">
+              <MappingFragment StoreEntitySet="DetalleAccesorio">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="AccesorioID" ColumnName="AccesorioID" />
+                <ScalarProperty Name="Cantidad" ColumnName="Cantidad" />
+                <ScalarProperty Name="CaracteristicaAccesorioID" ColumnName="CaracteristicaAccesorioID" />
+                <ScalarProperty Name="Medida" ColumnName="Medida" />
+                <ScalarProperty Name="UnidadID" ColumnName="UnidadID" />
+                <ScalarProperty Name="Tipo" ColumnName="Tipo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Grupos">
+            <EntityTypeMapping TypeName="GaillardModel.Grupo">
+              <MappingFragment StoreEntitySet="Grupo">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="TipoGrupoID" ColumnName="TipoGrupoID" />
+                <ScalarProperty Name="CubaID" ColumnName="CubaID" />
+                <ScalarProperty Name="CompartimentoID" ColumnName="CompartimentoID" />
+                <ScalarProperty Name="SituacionID" ColumnName="SituacionID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="MantenimientosVehiculo">
+            <EntityTypeMapping TypeName="GaillardModel.MantenimientoVehiculo">
+              <MappingFragment StoreEntitySet="MantenimientoVehiculo">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="VehiculoID" ColumnName="VehiculoID" />
+                <ScalarProperty Name="FechaMantenimiento" ColumnName="FechaMantenimiento" />
+                <ScalarProperty Name="TipoMantenimientoID" ColumnName="TipoMantenimientoID" />
+                <ScalarProperty Name="DetalleMantenimiento" ColumnName="DetalleMantenimiento" />
+                <ScalarProperty Name="OperarioID" ColumnName="OperarioID" />
+                <ScalarProperty Name="Kilometros" ColumnName="Kilometros" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Materiales">
+            <EntityTypeMapping TypeName="GaillardModel.Material">
+              <MappingFragment StoreEntitySet="Material">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Material1" ColumnName="Material" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Operaciones">
+            <EntityTypeMapping TypeName="GaillardModel.Operacion">
+              <MappingFragment StoreEntitySet="Operacion">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="CubaID" ColumnName="CubaID" />
+                <ScalarProperty Name="OperacionID" ColumnName="OperacionID" />
+                <ScalarProperty Name="FechaOperacion" ColumnName="FechaOperacion" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="OperarioID" ColumnName="OperarioID" />
+                <ScalarProperty Name="Duracion" ColumnName="Duracion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Operarios">
+            <EntityTypeMapping TypeName="GaillardModel.Operario">
+              <MappingFragment StoreEntitySet="Operario">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="Apellidos" ColumnName="Apellidos" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Plataformas">
+            <EntityTypeMapping TypeName="GaillardModel.Plataforma">
+              <MappingFragment StoreEntitySet="Plataforma">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="MatriculaPlataforma" ColumnName="MatriculaPlataforma" />
+                <ScalarProperty Name="Propiedad" ColumnName="Propiedad" />
+                <ScalarProperty Name="Pma" ColumnName="Pma" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Productos">
+            <EntityTypeMapping TypeName="GaillardModel.Producto">
+              <MappingFragment StoreEntitySet="Producto">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Iupac" ColumnName="Iupac" />
+                <ScalarProperty Name="Producto1" ColumnName="Producto" />
+                <ScalarProperty Name="Concentracion" ColumnName="Concentracion" />
+                <ScalarProperty Name="Grupo" ColumnName="Grupo" />
+                <ScalarProperty Name="NumUN" ColumnName="NumUN" />
+                <ScalarProperty Name="Formula" ColumnName="Formula" />
+                <ScalarProperty Name="Densidad" ColumnName="Densidad" />
+                <ScalarProperty Name="FrasesR" ColumnName="FrasesR" />
+                <ScalarProperty Name="FrasesS" ColumnName="FrasesS" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Revisiones">
+            <EntityTypeMapping TypeName="GaillardModel.Revision">
+              <MappingFragment StoreEntitySet="Revision">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="CubaID" ColumnName="CubaID" />
+                <ScalarProperty Name="FechaRevision" ColumnName="FechaRevision" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="ValidaHasta" ColumnName="ValidaHasta" />
+                <ScalarProperty Name="DescripcionProxima" ColumnName="DescripcionProxima" />
+                <ScalarProperty Name="Autorizado" ColumnName="Autorizado" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="RevisionesVehiculo">
+            <EntityTypeMapping TypeName="GaillardModel.RevisionVehiculo">
+              <MappingFragment StoreEntitySet="RevisionVehiculo">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="VehiculoID" ColumnName="VehiculoID" />
+                <ScalarProperty Name="TipoRevisionID" ColumnName="TipoRevisionID" />
+                <ScalarProperty Name="FechaRevision" ColumnName="FechaRevision" />
+                <ScalarProperty Name="Detalles" ColumnName="Detalles" />
+                <ScalarProperty Name="Ejecutor" ColumnName="Ejecutor" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Situaciones">
+            <EntityTypeMapping TypeName="GaillardModel.Situacion">
+              <MappingFragment StoreEntitySet="Situacion">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="LadoCubaNumero" ColumnName="LadoCubaNumero" />
+                <ScalarProperty Name="LadoCubaNombre" ColumnName="LadoCubaNombre" />
+                <ScalarProperty Name="SituacionLadoNumero" ColumnName="SituacionLadoNumero" />
+                <ScalarProperty Name="SituacionLadoLetra" ColumnName="SituacionLadoLetra" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TiposAccesorio">
+            <EntityTypeMapping TypeName="GaillardModel.TipoAccesorio">
+              <MappingFragment StoreEntitySet="TipoAccesorio">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="TipoAccesorio1" ColumnName="TipoAccesorio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TiposGrupo">
+            <EntityTypeMapping TypeName="GaillardModel.TipoGrupo">
+              <MappingFragment StoreEntitySet="TipoGrupo">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="NombreGrupo" ColumnName="NombreGrupo" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TiposMantenimiento">
+            <EntityTypeMapping TypeName="GaillardModel.TipoMantenimiento">
+              <MappingFragment StoreEntitySet="TipoMantenimiento">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Operacion" ColumnName="TipoMantenimiento" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TiposOperacion">
+            <EntityTypeMapping TypeName="GaillardModel.TipoOperacion">
+              <MappingFragment StoreEntitySet="TipoOperacion">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Operacion" ColumnName="Operacion" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TiposRevision">
+            <EntityTypeMapping TypeName="GaillardModel.TipoRevision">
+              <MappingFragment StoreEntitySet="TipoRevision">
+                <ScalarProperty Name="Revision" ColumnName="Revision" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TiposVehiculo">
+            <EntityTypeMapping TypeName="GaillardModel.TipoVehiculo">
+              <MappingFragment StoreEntitySet="TipoVehiculo">
+                <ScalarProperty Name="Vehiculo" ColumnName="Vehiculo" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Unidades">
+            <EntityTypeMapping TypeName="GaillardModel.Unidad">
+              <MappingFragment StoreEntitySet="Unidad">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Unidad1" ColumnName="Unidad" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Vehiculos">
+            <EntityTypeMapping TypeName="GaillardModel.Vehiculo">
+              <MappingFragment StoreEntitySet="Vehiculo">
+                <ScalarProperty Name="SeguroID" ColumnName="SeguroID" />
+                <ScalarProperty Name="Altura" ColumnName="Altura" />
+                <ScalarProperty Name="Anchura" ColumnName="Anchura" />
+                <ScalarProperty Name="Longitud" ColumnName="Longitud" />
+                <ScalarProperty Name="PotenciaCV" ColumnName="PotenciaCV" />
+                <ScalarProperty Name="NumEjes" ColumnName="NumEjes" />
+                <ScalarProperty Name="TipoCombustible" ColumnName="TipoCombustible" />
+                <ScalarProperty Name="NumBastidor" ColumnName="NumBastidor" />
+                <ScalarProperty Name="TallerHabitualID" ColumnName="TallerHabitualID" />
+                <ScalarProperty Name="KilometrajeCompra" ColumnName="KilometrajeCompra" />
+                <ScalarProperty Name="CargaUtil" ColumnName="CargaUtil" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Marca" ColumnName="Marca" />
+                <ScalarProperty Name="Modelo" ColumnName="Modelo" />
+                <ScalarProperty Name="MatriculaVehiculo" ColumnName="MatriculaVehiculo" />
+                <ScalarProperty Name="TipoVehiculoID" ColumnName="TipoVehiculoID" />
+                <ScalarProperty Name="ModeloTacografo" ColumnName="ModeloTacografo" />
+                <ScalarProperty Name="Pma" ColumnName="Pma" />
+                <ScalarProperty Name="Tara" ColumnName="Tara" />
+                <ScalarProperty Name="FechaCompra" ColumnName="FechaCompra" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Cargoes">
+            <EntityTypeMapping TypeName="GaillardModel.Cargo">
+              <MappingFragment StoreEntitySet="Cargo">
+                <ScalarProperty Name="Cargo1" ColumnName="Cargo" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Direccions">
+            <EntityTypeMapping TypeName="GaillardModel.Direccion">
+              <MappingFragment StoreEntitySet="Direccion">
+                <ScalarProperty Name="Km" ColumnName="Km" />
+                <ScalarProperty Name="Pais" ColumnName="Pais" />
+                <ScalarProperty Name="CP" ColumnName="CP" />
+                <ScalarProperty Name="PoblacionID" ColumnName="PoblacionID" />
+                <ScalarProperty Name="Puerta" ColumnName="Puerta" />
+                <ScalarProperty Name="Piso" ColumnName="Piso" />
+                <ScalarProperty Name="Escalera" ColumnName="Escalera" />
+                <ScalarProperty Name="Numero" ColumnName="Numero" />
+                <ScalarProperty Name="Distrito" ColumnName="Distrito" />
+                <ScalarProperty Name="NombreVia" ColumnName="NombreVia" />
+                <ScalarProperty Name="TipoViaID" ColumnName="TipoViaID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Entidads">
+            <EntityTypeMapping TypeName="GaillardModel.Entidad">
+              <MappingFragment StoreEntitySet="Entidad">
+                <ScalarProperty Name="DireccionID" ColumnName="DireccionID" />
+                <ScalarProperty Name="CIF" ColumnName="CIF" />
+                <ScalarProperty Name="NombreEntidad" ColumnName="NombreEntidad" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Personas">
+            <EntityTypeMapping TypeName="GaillardModel.Persona">
+              <MappingFragment StoreEntitySet="Persona">
+                <ScalarProperty Name="DireccionID" ColumnName="DireccionID" />
+                <ScalarProperty Name="NIF" ColumnName="NIF" />
+                <ScalarProperty Name="Apellido2" ColumnName="Apellido2" />
+                <ScalarProperty Name="Apellido1" ColumnName="Apellido1" />
+                <ScalarProperty Name="NombrePersona" ColumnName="NombrePersona" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PersonasEntidads">
+            <EntityTypeMapping TypeName="GaillardModel.PersonasEntidad">
+              <MappingFragment StoreEntitySet="PersonasEntidad">
+                <ScalarProperty Name="FechaBaja" ColumnName="FechaBaja" />
+                <ScalarProperty Name="FechaAlta" ColumnName="FechaAlta" />
+                <ScalarProperty Name="CargoID" ColumnName="CargoID" />
+                <ScalarProperty Name="PersonaID" ColumnName="PersonaID" />
+                <ScalarProperty Name="EntidadID" ColumnName="EntidadID" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Poblacions">
+            <EntityTypeMapping TypeName="GaillardModel.Poblacion">
+              <MappingFragment StoreEntitySet="Poblacion">
+                <ScalarProperty Name="Pais" ColumnName="Pais" />
+                <ScalarProperty Name="Estado" ColumnName="Estado" />
+                <ScalarProperty Name="Comarca" ColumnName="Comarca" />
+                <ScalarProperty Name="Autonomia" ColumnName="Autonomia" />
+                <ScalarProperty Name="Provincia" ColumnName="Provincia" />
+                <ScalarProperty Name="NombrePoblacion" ColumnName="NombrePoblacion" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TelefonoEntidads">
+            <EntityTypeMapping TypeName="GaillardModel.TelefonoEntidad">
+              <MappingFragment StoreEntitySet="TelefonoEntidad">
+                <ScalarProperty Name="EntidadID" ColumnName="EntidadID" />
+                <ScalarProperty Name="Telefono" ColumnName="Telefono" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TelefonoPersonas">
+            <EntityTypeMapping TypeName="GaillardModel.TelefonoPersona">
+              <MappingFragment StoreEntitySet="TelefonoPersona">
+                <ScalarProperty Name="PersonaID" ColumnName="PersonaID" />
+                <ScalarProperty Name="TelefonoPersona1" ColumnName="TelefonoPersona" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="TipoVias">
+            <EntityTypeMapping TypeName="GaillardModel.TipoVia">
+              <MappingFragment StoreEntitySet="TipoVia">
+                <ScalarProperty Name="TipoVia1" ColumnName="TipoVia" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

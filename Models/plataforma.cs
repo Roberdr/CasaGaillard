@@ -11,21 +11,24 @@ namespace CasaGaillard.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Plataforma
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Plataforma()
         {
             this.Cuba = new HashSet<Cuba>();
         }
     
         public int ID { get; set; }
+
+        [Display(Name = "Matrícula Plataforma")]
         public string MatriculaPlataforma { get; set; }
         public string Propiedad { get; set; }
+
+        [Display(Name = "P.M.A.")]
         public Nullable<int> Pma { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Cuba> Cuba { get; set; }
     }
 }
