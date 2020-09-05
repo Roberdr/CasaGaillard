@@ -13,9 +13,10 @@ using Microsoft.Ajax.Utilities;
 
 namespace CasaGaillard.Controllers
 {
+    [Authorize]
     public class RevisionesController : Controller
     {
-        private GaillardEntities db = new GaillardEntities();
+        private readonly GaillardEntities db = new GaillardEntities();
 
         // GET: Revisiones
         public async Task<ActionResult> Index()
@@ -60,7 +61,7 @@ namespace CasaGaillard.Controllers
         {
             if (ModelState.IsValid)
             {
-                revision.ValidaHasta = revision.FechaRevision.Value.AddMonths(30);
+                revision.ValidaHasta = revision.FechaRevision.AddMonths(30);
                 db.Revisiones.Add(revision);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -154,7 +155,7 @@ namespace CasaGaillard.Controllers
 
             foreach (var rev in rev1)
             {
-                rev.ValidaHasta = rev.FechaRevision.Value.AddMonths(30);
+                rev.ValidaHasta = rev.FechaRevision.AddMonths(30);
                 await db.SaveChangesAsync();
              
             }

@@ -30,12 +30,23 @@ namespace CasaGaillard.Models
         public Nullable<int> Pma { get; set; }
         public Nullable<int> Tara { get; set; }
         public Nullable<System.DateTime> FechaCompra { get; set; }
-        public string TallerHabitual { get; set; }
+        public Nullable<int> CargaUtil { get; set; }
+        public Nullable<int> KilometrajeCompra { get; set; }
+        public Nullable<int> TallerHabitualID { get; set; }
+        public string NumBastidor { get; set; }
+        public Nullable<int> TipoCombustible { get; set; }
+        public Nullable<int> NumEjes { get; set; }
+        public Nullable<int> PotenciaCV { get; set; }
+        public Nullable<int> Longitud { get; set; }
+        public Nullable<int> Anchura { get; set; }
+        public Nullable<int> Altura { get; set; }
+        public Nullable<int> SeguroID { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RevisionVehiculo> RevisionesVehiculo { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<MantenimientoVehiculo> MantenimientosVehiculo { get; set; }
         public virtual TipoVehiculo TipoVehiculo { get; set; }
+        public virtual Entidad Taller { get; set; }
     }
 }

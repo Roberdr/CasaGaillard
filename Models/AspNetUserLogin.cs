@@ -12,16 +12,13 @@ namespace CasaGaillard.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Revision
+    public partial class AspNetUserLogin
     {
-        public int ID { get; set; }
-        public int CubaID { get; set; }
-        public System.DateTime FechaRevision { get; set; }
-        public string Descripcion { get; set; }
-        public Nullable<System.DateTime> ValidaHasta { get; set; }
-        public string DescripcionProxima { get; set; }
-        public string Autorizado { get; set; }
+        public string LoginProvider { get; set; }
+        public string ProviderKey { get; set; }
+        public string ProviderDisplayName { get; set; }
+        public string UserId { get; set; }
     
-        public virtual Cuba Cuba { get; set; }
+        public virtual AspNetUser AspNetUser { get; set; }
     }
 }

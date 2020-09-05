@@ -11,7 +11,8 @@ namespace CasaGaillard.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class TipoAccesorio
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -21,9 +22,10 @@ namespace CasaGaillard.Models
         }
     
         public int ID { get; set; }
+
+        [Display(Name ="Tipo de Accesorio")]
         public string TipoAccesorio1 { get; set; }
     
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Accesorio> Accesorios { get; set; }
     }
 }

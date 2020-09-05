@@ -18,9 +18,15 @@
                 @Html.ActionLink("CASA GAILLARD S.A.", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
             <div class="navbar-collapse collapse" id="navbarContent">
                 <ul class="navbar-nav mr-auto">
-                    <li>@Html.ActionLink("Inicio", "Index", "Home", htmlAttributes: new { @class="nav-link active"})</li>
-                    <li>@Html.ActionLink("Acerca de", "About", "Home", htmlAttributes: new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Contacto", "Contact", "Home", htmlAttributes: new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Inicio", "Index", "Home", routeValues: null, htmlAttributes: new { @class = "nav-link active" })</li>
+                    @using Microsoft.AspNet.Identity
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li>@Html.ActionLink("Cubas", "Index", "Cubas", routeValues: null, htmlAttributes: new { @class = "nav-link" })</li>
+                        <li>@Html.ActionLink("Accesorios", "Index", "Accesorios", routeValues: null, htmlAttributes: new { @class = "nav-link" })</li>
+                    }
+                    <li>@Html.ActionLink("Acerca de", "About", "Home", routeValues: null, htmlAttributes: new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Contacto", "Contact", "Home", routeValues: null, htmlAttributes: new { @class = "nav-link" })</li>
                 </ul>
                 @Html.Partial("_LoginPartial")
             </div>

@@ -11,9 +11,10 @@ using CasaGaillard.Models;
 
 namespace CasaGaillard.Controllers
 {
+    [Authorize]
     public class GruposController : Controller
     {
-        private GaillardEntities db = new GaillardEntities();
+        private readonly GaillardEntities db = new GaillardEntities();
 
         // GET: Grupos
         public async Task<ActionResult> Index()
