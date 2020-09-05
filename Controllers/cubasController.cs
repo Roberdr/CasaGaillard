@@ -8,9 +8,12 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using CasaGaillard.Models;
+using System.Threading;
+using System.Globalization;
 
 namespace CasaGaillard.Controllers
 {
+    [Authorize]
     public class CubasController : Controller
     {
         private readonly GaillardEntities db = new GaillardEntities();
@@ -25,6 +28,16 @@ namespace CasaGaillard.Controllers
         // GET: Cubas/Details/5
         public async Task<ActionResult> Details(int? id)
         {
+
+           
+            CultureInfo culture1 = CultureInfo.CurrentCulture;
+            CultureInfo culture2 = Thread.CurrentThread.CurrentCulture;
+            System.Diagnostics.Debug.WriteLine("The current culture is {0}", culture1.Name);
+            System.Diagnostics.Debug.WriteLine("The two CultureInfo objects are equal: {0}",
+                              culture1 == culture2);
+            ViewBag.culture1 = culture1;
+            ViewBag.culture2 = culture2;
+            
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -33,6 +46,10 @@ namespace CasaGaillard.Controllers
             if (cuba == null)
             {
                 return HttpNotFound();
+            }
+            if (cuba.PesoMaxProducto == null || cuba.PesoMaxProducto == 0)
+            {
+                cuba.PesoMaxProducto = cuba.PesoBruto - cuba.Tara;
             }
             return View(cuba);
         }

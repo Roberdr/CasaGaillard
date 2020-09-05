@@ -43,6 +43,7 @@ namespace CasaGaillard.Models
         public string NumHomologacion { get; set; }
 
         [Display(Name = "Fecha de Construcción")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:MM-yyyy}")]
         public Nullable<System.DateTime> FechaConstruccion { get; set; }
 
         [Display(Name = "País de Fabricación")]
@@ -80,9 +81,11 @@ namespace CasaGaillard.Models
         public Nullable<int> PesoBruto { get; set; }
 
         [Display(Name = "T.A.R.A.")]
+        //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:##,###}")]
         public Nullable<int> Tara { get; set; }
 
         [Display(Name = "Peso Máx. Contenido")]
+        //[DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:N0}")]
         public Nullable<int> PesoMaxProducto { get; set; }
 
         [Display(Name = "Material Fabricación")]

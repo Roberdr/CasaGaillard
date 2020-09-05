@@ -12,16 +12,9 @@ namespace CasaGaillard.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Revision
+    public partial class C__EFMigrationsHistory
     {
-        public int ID { get; set; }
-        public int CubaID { get; set; }
-        public System.DateTime FechaRevision { get; set; }
-        public string Descripcion { get; set; }
-        public Nullable<System.DateTime> ValidaHasta { get; set; }
-        public string DescripcionProxima { get; set; }
-        public string Autorizado { get; set; }
-    
-        public virtual Cuba Cuba { get; set; }
+        public string MigrationId { get; set; }
+        public string ProductVersion { get; set; }
     }
 }

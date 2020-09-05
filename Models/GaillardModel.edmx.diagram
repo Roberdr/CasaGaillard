@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="ed0cfc5f600640788bf8b8da0f8fc800" Name="Diagram1" ZoomLevel="74">
+      <Diagram DiagramId="ed0cfc5f600640788bf8b8da0f8fc800" Name="Diagram1" ZoomLevel="67">
         <EntityTypeShape EntityType="GaillardModel.Accesorio" Width="1.5" PointX="3.25" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="GaillardModel.AccesorioGrupo" Width="1.5" PointX="5.375" PointY="4.125" IsExpanded="true" />
         <EntityTypeShape EntityType="GaillardModel.CaracteristicaAccesorio" Width="1.5" PointX="0.625" PointY="7" IsExpanded="true" />
@@ -23,10 +23,10 @@
         <EntityTypeShape EntityType="GaillardModel.Situacion" Width="1.5" PointX="0.625" PointY="9" IsExpanded="true" />
         <EntityTypeShape EntityType="GaillardModel.TipoAccesorio" Width="1.5" PointX="0.5" PointY="0.625" IsExpanded="true" />
         <EntityTypeShape EntityType="GaillardModel.TipoGrupo" Width="1.5" PointX="3.125" PointY="7.25" IsExpanded="true" />
-        <EntityTypeShape EntityType="GaillardModel.TipoMantenimiento" Width="1.875" PointX="20.25" PointY="6" IsExpanded="true" />
+        <EntityTypeShape EntityType="GaillardModel.TipoMantenimiento" Width="1.875" PointX="18" PointY="7.25" IsExpanded="true" />
         <EntityTypeShape EntityType="GaillardModel.TipoOperacion" Width="1.5" PointX="14.625" PointY="3.75" IsExpanded="true" />
         <EntityTypeShape EntityType="GaillardModel.TipoRevision" Width="1.5" PointX="15.75" PointY="0.75" IsExpanded="true" />
-        <EntityTypeShape EntityType="GaillardModel.TipoVehiculo" Width="1.5" PointX="22.25" PointY="2.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="GaillardModel.TipoVehiculo" Width="1.5" PointX="23.5" PointY="2.25" IsExpanded="true" />
         <EntityTypeShape EntityType="GaillardModel.Unidad" Width="1.5" PointX="2.875" PointY="5.125" IsExpanded="true" />
         <EntityTypeShape EntityType="GaillardModel.Vehiculo" Width="1.5" PointX="20.25" PointY="2" IsExpanded="true" />
         <AssociationConnector Association="GaillardModel.AccesorioGrupoAccesorio" />
@@ -56,11 +56,11 @@
         <AssociationConnector Association="GaillardModel.TipoRevisionRevisionVehiculo" />
         <AssociationConnector Association="GaillardModel.TipoVehiculoVehiculo" />
         <AssociationConnector Association="GaillardModel.GruposCompartimento" />
-        <EntityTypeShape EntityType="GaillardModel.Cargo" Width="1.5" PointX="14.875" PointY="11" />
+        <EntityTypeShape EntityType="GaillardModel.Cargo" Width="1.5" PointX="14.75" PointY="10.75" />
         <EntityTypeShape EntityType="GaillardModel.Direccion" Width="1.5" PointX="12.625" PointY="14.5" />
-        <EntityTypeShape EntityType="GaillardModel.Entidad" Width="1.5" PointX="14.875" PointY="13.625" />
+        <EntityTypeShape EntityType="GaillardModel.Entidad" Width="1.5" PointX="14.75" PointY="13.25" />
         <EntityTypeShape EntityType="GaillardModel.Persona" Width="1.5" PointX="14.875" PointY="20.75" />
-        <EntityTypeShape EntityType="GaillardModel.PersonasEntidad" Width="1.5" PointX="17.125" PointY="13.5" />
+        <EntityTypeShape EntityType="GaillardModel.PersonasEntidad" Width="1.5" PointX="17.5" PointY="11.25" />
         <EntityTypeShape EntityType="GaillardModel.Poblacion" Width="1.5" PointX="10.375" PointY="18.125" />
         <EntityTypeShape EntityType="GaillardModel.TelefonoEntidad" Width="1.5" PointX="17.125" PointY="17.25" />
         <EntityTypeShape EntityType="GaillardModel.TelefonoPersona" Width="1.5" PointX="17.125" PointY="21.125" />
@@ -73,6 +73,22 @@
         <AssociationConnector Association="GaillardModel.FK_PersonasEntidad_Entidad" />
         <AssociationConnector Association="GaillardModel.FK_TelefonoEntidad_Entidad" />
         <AssociationConnector Association="GaillardModel.FK_TelefonoPersona_Persona" />
+        <EntityTypeShape EntityType="GaillardModel.sysdiagram" Width="1.5" PointX="5.75" PointY="11.75" />
+        <EntityTypeShape EntityType="GaillardModel.C__EFMigrationsHistory" Width="1.5" PointX="10.75" PointY="11.75" />
+        <EntityTypeShape EntityType="GaillardModel.AspNetRoleClaim" Width="1.5" PointX="3" PointY="13.375" />
+        <EntityTypeShape EntityType="GaillardModel.AspNetRole" Width="1.5" PointX="0.75" PointY="17.375" />
+        <EntityTypeShape EntityType="GaillardModel.AspNetUserClaim" Width="1.5" PointX="5.25" PointY="18.75" />
+        <EntityTypeShape EntityType="GaillardModel.AspNetUserLogin" Width="1.5" PointX="5.25" PointY="21.5" />
+        <EntityTypeShape EntityType="GaillardModel.AspNetUser" Width="1.5" PointX="3" PointY="17.5" />
+        <EntityTypeShape EntityType="GaillardModel.AspNetUserToken" Width="1.5" PointX="5.25" PointY="16.125" />
+        <EntityTypeShape EntityType="GaillardModel.Combustible" Width="1.5" PointX="13.75" PointY="8.75" />
+        <EntityTypeShape EntityType="GaillardModel.Seguro" Width="1.5" PointX="7.75" PointY="15.75" />
+        <AssociationConnector Association="GaillardModel.FK_AspNetRoleClaims_AspNetRoles_RoleId" />
+        <AssociationConnector Association="GaillardModel.FK_AspNetUserClaims_AspNetUsers_UserId" />
+        <AssociationConnector Association="GaillardModel.FK_AspNetUserLogins_AspNetUsers_UserId" />
+        <AssociationConnector Association="GaillardModel.FK_AspNetUserTokens_AspNetUsers_UserId" />
+        <AssociationConnector Association="GaillardModel.AspNetUserRoles" />
+        <AssociationConnector Association="GaillardModel.VehiculoEntidad" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

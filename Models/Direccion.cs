@@ -32,6 +32,7 @@ namespace CasaGaillard.Models
         public int PoblacionID { get; set; }
         public string CP { get; set; }
         public string Pais { get; set; }
+        public Nullable<decimal> Km { get; set; }
     
         public virtual Poblacion Poblacion { get; set; }
         public virtual TipoVia TipoVia { get; set; }

@@ -12,20 +12,24 @@ namespace CasaGaillard.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class Plataforma
+    public partial class Accesorio
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public Plataforma()
+        public Accesorio()
         {
-            this.Cuba = new HashSet<Cuba>();
+            this.DetallesAccesorio = new HashSet<DetalleAccesorio>();
+            this.AccesoriosGrupo = new HashSet<AccesorioGrupo>();
         }
     
         public int ID { get; set; }
-        public string MatriculaPlataforma { get; set; }
-        public string Propiedad { get; set; }
-        public Nullable<int> Pma { get; set; }
+        public int TipoAccesorioID { get; set; }
+        public int MaterialID { get; set; }
     
+        public virtual Material Material { get; set; }
+        public virtual TipoAccesorio TipoAccesorio { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Cuba> Cuba { get; set; }
+        public virtual ICollection<DetalleAccesorio> DetallesAccesorio { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<AccesorioGrupo> AccesoriosGrupo { get; set; }
     }
 }

@@ -9,6 +9,8 @@ using CasaGaillard.Models;
 using System;
 using CasaGaillard.Models.ViewModels;
 using System.ComponentModel.DataAnnotations;
+using System.Threading;
+using System.Globalization;
 
 namespace CasaGaillard.Controllers
 {
@@ -16,11 +18,13 @@ namespace CasaGaillard.Controllers
     {
         private readonly GaillardEntities db = new GaillardEntities();
 
+        
         public class UltimasRevisiones                  // Objeto para pasar las últimas revisiones a la vista
         {
             public string MatriculaCuba { get; set; }
 
             [DataType(DataType.Date)]
+            [DisplayFormat(DataFormatString = "{0:dd-mm-yyyy}")]
             public DateTime? ValidaHasta { get; set; }
         }
 
@@ -28,7 +32,7 @@ namespace CasaGaillard.Controllers
         public async Task<ActionResult> Index()
         {
             var fechaInicio = DateTime.Now.AddMonths(-2);
-            var fechaFinal = DateTime.Now.AddMonths(1);
+            var fechaFinal = DateTime.Now.AddMonths(10);
 
             var viewModel = from c in db.Cubas
                        join r in db.Revisiones on c.ID equals r.CubaID into gc
@@ -44,7 +48,7 @@ namespace CasaGaillard.Controllers
 
             var viewModel1 = from z in viewModel
                              orderby z.ValidaHasta
-                             where (z.ValidaHasta > fechaInicio) //&& (z.ValidaHasta < fechaFinal)
+                             where (z.ValidaHasta > fechaInicio) && (z.ValidaHasta < fechaFinal)
                              select z;
 
 
