@@ -11,11 +11,14 @@ using CasaGaillard.Models;
 
 namespace CasaGaillard.Controllers
 {
+
+    [Authorize]
     public class AccesoriosController : Controller
     {
-        private GaillardEntities db = new GaillardEntities();
+        private readonly GaillardEntities db = new GaillardEntities();
 
         // GET: Accesorios
+        
         public async Task<ActionResult> Index()
         {
             var accesorios = db.Accesorios.Include(a => a.Material).Include(a => a.TipoAccesorio);

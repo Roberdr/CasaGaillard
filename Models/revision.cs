@@ -15,8 +15,8 @@ namespace CasaGaillard.Models
     public partial class Revision
     {
         public int ID { get; set; }
-        public Nullable<int> CubaID { get; set; }
-        public Nullable<System.DateTime> FechaRevision { get; set; }
+        public int CubaID { get; set; }
+        public System.DateTime FechaRevision { get; set; }
         public string Descripcion { get; set; }
         public Nullable<System.DateTime> ValidaHasta { get; set; }
         public string DescripcionProxima { get; set; }
