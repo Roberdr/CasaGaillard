@@ -13,7 +13,7 @@ namespace CasaGaillard.Controllers
 {
     public class EntidadesController : Controller
     {
-        private GaillardEntities db = new GaillardEntities();
+        private readonly GaillardEntities db = new GaillardEntities();
 
         // GET: Entidades
         public async Task<ActionResult> Index()
