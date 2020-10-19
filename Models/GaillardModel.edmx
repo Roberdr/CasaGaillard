@@ -1847,7 +1847,7 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" />
           <Property Name="Cargo1" Type="String" Nullable="false" MaxLength="30" FixedLength="true" Unicode="true" />
-          <NavigationProperty Name="PersonasEntidads" Relationship="GaillardModel.FK_PersonasEntidad_Cargo" FromRole="Cargo" ToRole="PersonasEntidad" />
+          <NavigationProperty Name="PersonasEntidad" Relationship="GaillardModel.FK_PersonasEntidad_Cargo" FromRole="Cargo" ToRole="PersonasEntidad" />
         </EntityType>
         <EntityType Name="Direccion">
           <Key>
@@ -1879,8 +1879,8 @@
           <Property Name="CIF" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="DireccionID" Type="Int32" Nullable="false" />
           <NavigationProperty Name="Direccion" Relationship="GaillardModel.FK_Entidad_Direccion" FromRole="Entidad" ToRole="Direccion" />
-          <NavigationProperty Name="PersonasEntidads" Relationship="GaillardModel.FK_PersonasEntidad_Entidad" FromRole="Entidad" ToRole="PersonasEntidad" />
-          <NavigationProperty Name="TelefonoEntidads" Relationship="GaillardModel.FK_TelefonoEntidad_Entidad" FromRole="Entidad" ToRole="TelefonoEntidad" />
+          <NavigationProperty Name="PersonasEntidad" Relationship="GaillardModel.FK_PersonasEntidad_Entidad" FromRole="Entidad" ToRole="PersonasEntidad" />
+          <NavigationProperty Name="TelefonosEntidad" Relationship="GaillardModel.FK_TelefonoEntidad_Entidad" FromRole="Entidad" ToRole="TelefonoEntidad" />
           <NavigationProperty Name="VehiculosTaller" Relationship="GaillardModel.VehiculoEntidad" FromRole="Entidad" ToRole="Vehiculo" />
         </EntityType>
         <EntityType Name="Persona">
@@ -1894,7 +1894,7 @@
           <Property Name="NIF" Type="String" Nullable="false" MaxLength="10" FixedLength="true" Unicode="true" />
           <Property Name="DireccionID" Type="Int32" />
           <NavigationProperty Name="Direccion" Relationship="GaillardModel.FK_Persona_Direccion" FromRole="Persona" ToRole="Direccion" />
-          <NavigationProperty Name="TelefonoPersonas" Relationship="GaillardModel.FK_TelefonoPersona_Persona" FromRole="Persona" ToRole="TelefonoPersona" />
+          <NavigationProperty Name="TelefonosPersona" Relationship="GaillardModel.FK_TelefonoPersona_Persona" FromRole="Persona" ToRole="TelefonoPersona" />
         </EntityType>
         <EntityType Name="PersonasEntidad">
           <Key>

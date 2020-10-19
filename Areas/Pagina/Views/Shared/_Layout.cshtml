@@ -1,0 +1,41 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CASA GAILLARD S.A.</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="row">
+        <div class="navbar navbar-dark bg-primary col">
+            <img  src="~/Content/images/logo_gaillard.JPeG" style="height:60px"/>
+            <span class="navbar-text text-center" style="font-size: 60px; color:darkslateblue">
+                CASA GAILLARD S.A.
+            </span>
+
+        </div>
+    </div>
+            
+        <div class="row" style="background-image: url('/Content/images/fondo-cabecera-contacto.jpg');
+                                background-size: cover; background-repeat:no-repeat; background-position:bottom">
+            <div class="col-lg-2 bg-light" style="border:thin blue solid; opacity:0.5">
+                @Html.Partial("_Menu_Lateral")
+            </div>
+            <div class="col-lg-10 body-content" >
+               
+                @RenderBody()
+                <hr />
+                <footer>
+                    <p>&copy; @DateTime.Now.Year - Mantenimiento Casa Gaillard</p>
+                </footer>
+            </div>
+        </div>
+        
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>
