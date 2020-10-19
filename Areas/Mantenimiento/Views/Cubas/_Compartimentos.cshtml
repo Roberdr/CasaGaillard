@@ -1,0 +1,31 @@
+﻿@model CasaGaillard.Models.Cuba
+
+<table class="table table-sm table-borderless col-lg-6">
+    <thead>
+        <tr>
+            <th class="bg-primary" colspan="3">COMPARTIMENTOS</th>
+        </tr>
+        <tr>
+            <th>Número</th>
+            <th>Capacidad</th>
+            <th>Material</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var c in Model.Compartimentos)
+        {
+            <tr>
+                <td>
+                    @c.Numero
+                </td>
+                <td>
+                    @c.Capacidad.Value.ToString("N0") L
+                </td>
+                <td>
+                    @c.Material.Descripcion
+                </td>
+            </tr>
+        }
+    </tbody>
+
+</table>

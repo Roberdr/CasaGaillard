@@ -1,0 +1,52 @@
+﻿@model CasaGaillard.Models.Cuba
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Detalle</h2>
+
+<h4>GAIU @Model.MatriculaCuba.ToString() @Model.NumCuadro</h4>
+<hr />
+
+<ul class="nav nav-tabs" id="cubasTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <a class="nav-link active" id="basicos-tab" data-toggle="tab" href="#basicos" role="tab" aria-controls="basicos" aria-selected="true">Datos Básicos</a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" id="csc-tab" data-toggle="tab" href="#csc" role="tab" aria-controls="csc" aria-selected="false">Placa CSC</a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" id="imdg-tab" data-toggle="tab" href="#imdg" role="tab" aria-controls="imdg" aria-selected="false">Placa IMDG</a>
+    </li>
+    <li class="nav-item" role="presentation">
+        <a class="nav-link" id="fotos-tab" data-toggle="tab" href="#fotos" role="tab" aria-controls="fotos" aria-selected="false">Imágenes</a>
+    </li>
+</ul>
+<div class="tab-content" id="cubasTabContent">
+    <div class="tab-pane fade show active" id="basicos" role="tabpanel" aria-labelledby="basicos-tab">
+        <br />
+        @Html.Partial("_Basicos")
+    </div>
+
+    <div class="tab-pane fade" id="csc" role="tabpanel" aria-labelledby="csc-tab">
+        <br />
+        @Html.Partial("_Csc")
+        @Html.Partial("_Compartimentos")
+    </div>
+
+    <div class="tab-pane fade" id="imdg" role="tabpanel" aria-labelledby="imdg-tab">
+        <br />
+        @Html.Partial("_Imdg")
+    </div>
+
+    <div class="tab-pane fade show" id="fotos" role="tabpanel" aria-labelledby="fotos-tab">
+        <br />
+        @Html.Partial("_Fotos")
+    </div>
+</div>
+
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
