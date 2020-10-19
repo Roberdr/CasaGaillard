@@ -17,7 +17,7 @@ namespace CasaGaillard.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Persona()
         {
-            this.TelefonoPersonas = new HashSet<TelefonoPersona>();
+            this.TelefonosPersona = new HashSet<TelefonoPersona>();
         }
     
         public int ID { get; set; }
@@ -29,6 +29,6 @@ namespace CasaGaillard.Models
     
         public virtual Direccion Direccion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<TelefonoPersona> TelefonoPersonas { get; set; }
+        public virtual ICollection<TelefonoPersona> TelefonosPersona { get; set; }
     }
 }

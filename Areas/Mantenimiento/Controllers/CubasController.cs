@@ -10,7 +10,10 @@ using System.Web.Mvc;
 using CasaGaillard.Models;
 using System.Threading;
 using System.Globalization;
+<<<<<<<< HEAD:Areas/Mantenimiento/Controllers/CubasController.cs
 using System.Collections.Generic;
+========
+>>>>>>>> Nueva:Controllers/cubasController.cs
 
 namespace CasaGaillard.Areas.Mantenimiento.Controllers
 {
@@ -29,6 +32,16 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         // GET: Cubas/Details/5
         public async Task<ActionResult> Details(int? id)
         {
+
+           
+            CultureInfo culture1 = CultureInfo.CurrentCulture;
+            CultureInfo culture2 = Thread.CurrentThread.CurrentCulture;
+            System.Diagnostics.Debug.WriteLine("The current culture is {0}", culture1.Name);
+            System.Diagnostics.Debug.WriteLine("The two CultureInfo objects are equal: {0}",
+                              culture1 == culture2);
+            ViewBag.culture1 = culture1;
+            ViewBag.culture2 = culture2;
+            
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
@@ -42,6 +55,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             {
                 cuba.PesoMaxProducto = cuba.PesoBruto - cuba.Tara;
             }
+<<<<<<<< HEAD:Areas/Mantenimiento/Controllers/CubasController.cs
 
             // Comprueba que haya un directorio con la matricula de la cuba a detallar
             // y crea una lista de los archivos existentes
@@ -62,6 +76,8 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                 }
             }
             ViewBag.files = nameFiles;
+========
+>>>>>>>> Nueva:Controllers/cubasController.cs
             return View(cuba);
         }
 

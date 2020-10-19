@@ -1,5 +1,6 @@
 ﻿using Microsoft.Owin;
 using Owin;
+using Microsoft.AspNetCore.Builder;
 
 [assembly: OwinStartupAttribute(typeof(CasaGaillard.Startup))]
 namespace CasaGaillard

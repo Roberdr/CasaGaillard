@@ -17,8 +17,8 @@ namespace CasaGaillard.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Entidad()
         {
-            this.PersonasEntidads = new HashSet<PersonasEntidad>();
-            this.TelefonoEntidads = new HashSet<TelefonoEntidad>();
+            this.PersonasEntidad = new HashSet<PersonasEntidad>();
+            this.TelefonosEntidad = new HashSet<TelefonoEntidad>();
             this.VehiculosTaller = new HashSet<Vehiculo>();
         }
     
@@ -29,9 +29,9 @@ namespace CasaGaillard.Models
     
         public virtual Direccion Direccion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<PersonasEntidad> PersonasEntidads { get; set; }
+        public virtual ICollection<PersonasEntidad> PersonasEntidad { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<TelefonoEntidad> TelefonoEntidads { get; set; }
+        public virtual ICollection<TelefonoEntidad> TelefonosEntidad { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Vehiculo> VehiculosTaller { get; set; }
     }
