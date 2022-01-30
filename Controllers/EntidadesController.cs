@@ -40,7 +40,7 @@ namespace CasaGaillard.Controllers
         // GET: Entidades/Create
         public ActionResult Create()
         {
-            ViewBag.DireccionID = new SelectList(db.Direcciones, "ID", "NombreVia");
+            ViewBag.DireccionID = new SelectList(from d in db.Direcciones select new { d.ID, nombreVia = d.NombreVia + ", " + d.Numero + " (" + d.Poblacion.NombrePoblacion + ")" }, "ID", "nombreVia");
             return View();
         }
 
@@ -57,8 +57,8 @@ namespace CasaGaillard.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-
-            ViewBag.DireccionID = new SelectList(db.Direcciones, "ID", "NombreVia", entidad.DireccionID);
+            ViewBag.DireccionID = new SelectList(from d in db.Direcciones select new {d.ID, nombreVia = d.NombreVia + ", " + d.Numero + " (" + d.Poblacion.NombrePoblacion + ")" }, "ID", "nombreVia" , entidad.DireccionID);
+            //ViewBag.DireccionID = new SelectList(db.Direcciones, "ID", "NombreVia", entidad.DireccionID);
             return View(entidad);
         }
 
@@ -74,7 +74,7 @@ namespace CasaGaillard.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.DireccionID = new SelectList(db.Direcciones, "ID", "NombreVia", entidad.DireccionID);
+            ViewBag.DireccionID = new SelectList(from d in db.Direcciones select new { d.ID, nombreVia = d.NombreVia + ", " + d.Numero + " (" + d.Poblacion.NombrePoblacion +  ")" }, "ID", "nombreVia", entidad.DireccionID); 
             return View(entidad);
         }
 
@@ -91,7 +91,7 @@ namespace CasaGaillard.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.DireccionID = new SelectList(db.Direcciones, "ID", "NombreVia", entidad.DireccionID);
+            ViewBag.DireccionID = new SelectList(from d in db.Direcciones.ToList() select new { d.ID, nombreVia = d.NombreVia + ", " + d.Numero + " (" + d.Poblacion.NombrePoblacion + ")" }, "ID", "nombreVia", entidad.DireccionID); 
             return View(entidad);
         }
 

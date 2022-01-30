@@ -10,32 +10,33 @@
 <body>
     <div class="row">
         <div class="navbar navbar-dark bg-primary col">
-            <img  src="~/Content/images/logo_gaillard.JPeG" style="height:60px"/>
+            <img src="~/Content/images/logo_gaillard.JPeG" style="height:60px" />
             <span class="navbar-text text-center" style="font-size: 60px; color:darkslateblue">
                 CASA GAILLARD S.A.
             </span>
 
         </div>
     </div>
-            
-        <div class="row" style="background-image: url('/Content/images/fondo-cabecera-contacto.jpg');
+
+    <div class="row" style="background-image: url('/Content/images/fondo-cabecera-contacto.jpg');
                                 background-size: cover; background-repeat:no-repeat; background-position:bottom">
-            <div class="col-lg-2 bg-light" style="border:thin blue solid; opacity:0.5">
-                @Html.Partial("_Menu_Lateral")
-            </div>
-            <div class="col-lg-10 body-content" >
-               
-                @RenderBody()
-                <hr />
-                <footer>
-                    <p>&copy; @DateTime.Now.Year - Mantenimiento Casa Gaillard</p>
-                </footer>
-            </div>
+        <div class="col-lg-2 bg-light" style="border:thin blue solid; opacity:0.5">
+            @Html.Partial("_Menu_Lateral")
         </div>
-        
+        <div class="col-lg-10 body-content">
+
+            @RenderBody()
+            <hr />
+            <footer>
+                <p>&copy; @DateTime.Now.Year - Mantenimiento Casa Gaillard</p>
+            </footer>
+        </div>
+    </div>
+
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/js")
     @RenderSection("scripts", required: false)
 </body>
 </html>

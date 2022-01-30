@@ -10,10 +10,7 @@ using System.Web.Mvc;
 using CasaGaillard.Models;
 using System.Threading;
 using System.Globalization;
-<<<<<<<< HEAD:Areas/Mantenimiento/Controllers/CubasController.cs
 using System.Collections.Generic;
-========
->>>>>>>> Nueva:Controllers/cubasController.cs
 
 namespace CasaGaillard.Areas.Mantenimiento.Controllers
 {
@@ -55,7 +52,6 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             {
                 cuba.PesoMaxProducto = cuba.PesoBruto - cuba.Tara;
             }
-<<<<<<<< HEAD:Areas/Mantenimiento/Controllers/CubasController.cs
 
             // Comprueba que haya un directorio con la matricula de la cuba a detallar
             // y crea una lista de los archivos existentes
@@ -76,8 +72,6 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                 }
             }
             ViewBag.files = nameFiles;
-========
->>>>>>>> Nueva:Controllers/cubasController.cs
             return View(cuba);
         }
 

@@ -1,46 +1,57 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title CASA GAILLARD S.A.</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
-
+    @*@Styles.Render("~/Content/fontawesome")*@
+    @*<script src="https://kit.fontawesome.com/651504c62c.js" crossorigin="anonymous"></script>*@
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/fontawesome.css" integrity="sha512-qUzMY3p2A7wsZaOjjgE3UaFsM8R0hwxTGcQ/Z4vi3eHWg3J7BTyG+2JxjweaHWFrOkXCyvriwQqFMPCvHJmqyA==" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/regular.css" integrity="sha512-RVXK2JBDey8voSjvx1uTfOHjbIya6KE+ccmslcQEh5i5ZDS6u7Z2sJgTbwnXcqT1xcRIu+SogQRd7zVtfvqVOw==" crossorigin="anonymous" />
 </head>
 <body>
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
-                <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarContent"
-                        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                @Html.ActionLink("CASA GAILLARD S.A.", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
-            <div class="navbar-collapse collapse" id="navbarContent">
-                <ul class="navbar-nav mr-auto">
-                    <li>@Html.ActionLink("Inicio", "Index", "Pagina", new { area = "Pagina"}, htmlAttributes: new { @class = "nav-link active" })</li>
-                    @using Microsoft.AspNet.Identity
-                    @if (Request.IsAuthenticated)
-                    {
-                        <li>@Html.ActionLink("Cubas", "Index", "Cubas", new { area = "Mantenimiento" }, htmlAttributes: new { @class = "nav-link" })</li>
-                        <li>@Html.ActionLink("Accesorios", "Index", "Accesorios", new { area = "Mantenimiento" }, htmlAttributes: new { @class = "nav-link" })</li>
-                    }
-                    <li>@Html.ActionLink("Acerca de", "About", "Home", routeValues: null, htmlAttributes: new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Contacto", "Contact", "Home", routeValues: null, htmlAttributes: new { @class = "nav-link" })</li>
-                </ul>
-                @Html.Partial("_LoginPartial")
-            </div>
+        <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#navbarContent"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        @Html.ActionLink("CASA GAILLARD S.A.", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+        <div class="navbar-collapse collapse" id="navbarContent">
+            <ul class="navbar-nav mr-auto">
+                <li>
+                    @Html.ActionLink("Home", "Index", "Pagina", new { area = "Pagina" }, htmlAttributes: new { @class = "nav-link active" })
+                </li>
+                @using Microsoft.AspNet.Identity
+                @if (Request.IsAuthenticated)
+                {
+                    <li>@Html.ActionLink("Cubas", "Index", "Cubas", new { area = "Mantenimiento" }, htmlAttributes: new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Accesorios", "Index", "Accesorios", new { area = "Mantenimiento" }, htmlAttributes: new { @class = "nav-link" })</li>
+                }
+                <li>@Html.ActionLink("Acerca de", "About", "Home", routeValues: null, htmlAttributes: new { @class = "nav-link", data_icon = "fa fa-address-book" })</li>
+                <li>@Html.ActionLink("Contacto", "Contact", "Home", routeValues: null, htmlAttributes: new { @class = "nav-link" })</li>
+            </ul>
+            @Html.Partial("_LoginPartial")
+        </div>
     </nav>
     <div class="container body-content">
         @RenderBody()
-        <hr />
-        <footer>
-            <p>&copy; @DateTime.Now.Year - Mantenimiento Casa Gaillard</p>
-        </footer>
     </div>
 
+    
+
+    <hr />
+    <footer>
+        <p>&copy; @DateTime.Now.Year - Mantenimiento Casa Gaillard</p>
+    </footer>
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/bootstrap")
+    @Scripts.Render("~/bundles/js")
     @RenderSection("scripts", required: false)
+    @*<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/all.min.js" integrity="sha512-F5QTlBqZlvuBEs9LQPqc1iZv2UMxcVXezbHzomzS6Df4MZMClge/8+gXrKw2fl5ysdk4rWjR0vKS7NNkfymaBQ==" crossorigin="anonymous"></script>*@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/js/regular.js" integrity="sha512-Dt4DMmh/duusCY2U/XXOtzv2LRBUAjp/+2nqT+/nZZFiSAUlUkH0UWalCacsoeO9gHBoKIt0xwb2wUl64dS6Zg==" crossorigin="anonymous"></script>
 </body>
 </html>

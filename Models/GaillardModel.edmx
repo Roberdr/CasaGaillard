@@ -1292,7 +1292,7 @@
           <Property Name="Anchura" Type="Int32" />
           <Property Name="Altura" Type="Int32" />
           <Property Name="SeguroID" Type="Int32" />
-          <NavigationProperty Name="Taller" Relationship="GaillardModel.VehiculoEntidad" FromRole="Vehiculo" ToRole="Entidad" />
+          <NavigationProperty Name="Taller" Relationship="GaillardModel.VehiculoTaller" FromRole="Vehiculo" ToRole="Entidad" />
         </EntityType>
         <EntityContainer Name="GaillardEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Accesorios" EntityType="Self.Accesorio" />
@@ -1524,7 +1524,7 @@
             <Parameter Name="new_diagramname" Mode="In" Type="String" />
           </FunctionImport>
           <FunctionImport Name="sp_upgraddiagrams" />
-          <AssociationSet Name="VehiculoEntidad" Association="GaillardModel.VehiculoEntidad">
+          <AssociationSet Name="VehiculoTaller" Association="GaillardModel.VehiculoTaller">
             <End Role="Vehiculo" EntitySet="Vehiculos" />
             <End Role="Entidad" EntitySet="Entidads" />
           </AssociationSet>
@@ -1881,7 +1881,7 @@
           <NavigationProperty Name="Direccion" Relationship="GaillardModel.FK_Entidad_Direccion" FromRole="Entidad" ToRole="Direccion" />
           <NavigationProperty Name="PersonasEntidad" Relationship="GaillardModel.FK_PersonasEntidad_Entidad" FromRole="Entidad" ToRole="PersonasEntidad" />
           <NavigationProperty Name="TelefonosEntidad" Relationship="GaillardModel.FK_TelefonoEntidad_Entidad" FromRole="Entidad" ToRole="TelefonoEntidad" />
-          <NavigationProperty Name="VehiculosTaller" Relationship="GaillardModel.VehiculoEntidad" FromRole="Entidad" ToRole="Vehiculo" />
+          <NavigationProperty Name="VehiculosTaller" Relationship="GaillardModel.VehiculoTaller" FromRole="Entidad" ToRole="Vehiculo" />
         </EntityType>
         <EntityType Name="Persona">
           <Key>
@@ -2230,7 +2230,7 @@
           <Property Type="String" Name="Owner" Nullable="true" MaxLength="128" />
           <Property Type="Int32" Name="OwnerID" Nullable="false" />
         </ComplexType>
-        <Association Name="VehiculoEntidad">
+        <Association Name="VehiculoTaller">
           <End Type="GaillardModel.Vehiculo" Role="Vehiculo" Multiplicity="*" />
           <End Type="GaillardModel.Entidad" Role="Entidad" Multiplicity="0..1" />
           <ReferentialConstraint>

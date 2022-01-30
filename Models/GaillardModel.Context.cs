@@ -69,7 +69,7 @@ namespace CasaGaillard.Models
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; }
         public virtual DbSet<Combustible> Combustibles { get; set; }
-        public virtual DbSet<Seguro> Seguros { get; set; }
+        public virtual DbSet<Seguro> Seguroes { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {

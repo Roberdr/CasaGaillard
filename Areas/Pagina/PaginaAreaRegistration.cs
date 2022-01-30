@@ -17,7 +17,7 @@ namespace CasaGaillard.Areas.Pagina
             context.MapRoute(
                 "Pagina_default",
                 "Pagina/{controller}/{action}/{id}",
-                new { action = "Index", id = UrlParameter.Optional }
+                new { controller = "Pagina", action = "Index", id = UrlParameter.Optional }
             );
         }
     }

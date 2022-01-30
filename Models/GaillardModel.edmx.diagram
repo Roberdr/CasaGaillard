@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="ed0cfc5f600640788bf8b8da0f8fc800" Name="Diagram1" ZoomLevel="67">
+      <Diagram DiagramId="ed0cfc5f600640788bf8b8da0f8fc800" Name="Diagram1" ZoomLevel="77">
         <EntityTypeShape EntityType="GaillardModel.Accesorio" Width="1.5" PointX="3.25" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="GaillardModel.AccesorioGrupo" Width="1.5" PointX="5.375" PointY="4.125" IsExpanded="true" />
         <EntityTypeShape EntityType="GaillardModel.CaracteristicaAccesorio" Width="1.5" PointX="0.625" PointY="7" IsExpanded="true" />
@@ -88,7 +88,7 @@
         <AssociationConnector Association="GaillardModel.FK_AspNetUserLogins_AspNetUsers_UserId" />
         <AssociationConnector Association="GaillardModel.FK_AspNetUserTokens_AspNetUsers_UserId" />
         <AssociationConnector Association="GaillardModel.AspNetUserRoles" />
-        <AssociationConnector Association="GaillardModel.VehiculoEntidad" />
+        <AssociationConnector Association="GaillardModel.VehiculoTaller" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

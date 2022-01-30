@@ -36,6 +36,17 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <PublishDatabaseSettings>
+      <Objects>
+        <ObjectGroup Name="GaillardEntities-Implementación" Order="1">
+          <Destination Path="" />
+          <Object Type="DbFullSql">
+            <PreSource Path="Data Source=PORT%3bInitial Catalog=Gaillard%3bIntegrated Security=True%3bApplication Name=EntityFramework" ScriptSchema="True" ScriptData="False" CopyAllFullTextCatalogs="False" DriDefaults="True" />
+            <Source Path="obj\Debug\AutoScripts\GaillardEntities-Implementación_SchemaOnly.sql" Transacted="True" />
+          </Object>
+        </ObjectGroup>
+      </Objects>
+    </PublishDatabaseSettings>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -47,6 +58,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="FontAwesomeIcons, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\FontAwesomeIcons.1.0.3\lib\FontAwesomeIcons.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.AspNet.Identity.Core.2.2.3\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
     </Reference>
@@ -296,6 +310,9 @@
       <Private>True</Private>
       <HintPath>packages\Microsoft.AspNet.WebPages.3.2.7\lib\net45\System.Web.WebPages.Razor.dll</HintPath>
     </Reference>
+    <Reference Include="WebActivatorEx, Version=2.0.0.0, Culture=neutral, PublicKeyToken=7b26dc2a43f6a0d4, processorArchitecture=MSIL">
+      <HintPath>packages\WebActivatorEx.2.0\lib\net40\WebActivatorEx.dll</HintPath>
+    </Reference>
     <Reference Include="WebGrease">
       <Private>True</Private>
       <HintPath>packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
@@ -364,10 +381,11 @@
     <Compile Include="Areas\Mantenimiento\Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PersonasController.cs" />
-    <Compile Include="Controllers\VehiculosController.cs" />
+    <Compile Include="Areas\Mantenimiento\Controllers\VehiculosController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Models\Accesorio.cs">
       <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
@@ -440,7 +458,7 @@
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Controllers\RevisionesController.cs" />
+    <Compile Include="Areas\Mantenimiento\Controllers\RevisionesController.cs" />
     <Compile Include="Models\MantenimientoVehiculo.cs">
       <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
@@ -556,12 +574,16 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\all.min.css" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
     <Content Include="Content\bootstrap-reboot.css" />
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\CSS\font-awesome.css" />
+    <Content Include="Content\CSS\font-awesome.min.css" />
+    <Content Include="Content\Fonts\fontawesome-webfont.svg" />
     <Content Include="Content\images\660002\DSC_0049.JPG" />
     <Content Include="Content\images\660002\DSC_0050.JPG" />
     <Content Include="Content\images\660002\DSC_0051.JPG" />
@@ -747,6 +769,7 @@
     <Content Include="Models\GaillardModel.edmx.diagram">
       <DependentUpon>GaillardModel.edmx</DependentUpon>
     </Content>
+    <Content Include="Scripts\all.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -767,30 +790,39 @@
     <Content Include="Scripts\globalize\plural.js" />
     <Content Include="Scripts\globalize\relative-time.js" />
     <Content Include="Scripts\globalize\unit.js" />
-    <Content Include="Scripts\index.js.flow" />
-    <Content Include="Scripts\esm\popper.min.js.map" />
-    <Content Include="Scripts\esm\popper.js.map" />
-    <Content Include="Scripts\esm\popper-utils.min.js.map" />
-    <Content Include="Scripts\esm\popper-utils.js.map" />
-    <Content Include="Scripts\bootstrap.min.js.map" />
-    <Content Include="Scripts\bootstrap.js.map" />
-    <Content Include="Scripts\bootstrap.bundle.min.js.map" />
-    <Content Include="Scripts\bootstrap.bundle.js.map" />
-    <Content Include="Content\bootstrap.min.css.map" />
-    <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Content\bootstrap-reboot.min.css.map" />
-    <Content Include="Content\bootstrap-reboot.css.map" />
-    <Content Include="Content\bootstrap-grid.min.css.map" />
-    <Content Include="Content\bootstrap-grid.css.map" />
-    <Content Include="Areas\Pagina\Views\web.config" />
-    <Content Include="Areas\Mantenimiento\Views\web.config" />
-    <Content Include="Areas\Mantenimiento\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\Pagina\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\Pagina\Views\Shared\_Layout.cshtml" />
-    <Content Include="Areas\Pagina\Views\Pagina\Index.cshtml" />
-    <Content Include="Areas\Pagina\Views\Shared\_Menu_Lateral.cshtml" />
-    <Content Include="Areas\Pagina\Views\Pagina\Tienda.cshtml" />
+    <Content Include="Content\Scss\FontAwesome\_variables.scss" />
+    <Content Include="Content\Scss\FontAwesome\_stacked.scss" />
+    <Content Include="Content\Scss\FontAwesome\_rotated-flipped.scss" />
+    <Content Include="Content\Scss\FontAwesome\_path.scss" />
+    <Content Include="Content\Scss\FontAwesome\_mixins.scss" />
+    <Content Include="Content\Scss\FontAwesome\_list.scss" />
+    <Content Include="Content\Scss\FontAwesome\_larger.scss" />
+    <Content Include="Content\Scss\FontAwesome\_icons.scss" />
+    <Content Include="Content\Scss\FontAwesome\_fixed-width.scss" />
+    <Content Include="Content\Scss\FontAwesome\_core.scss" />
+    <Content Include="Content\Scss\FontAwesome\_bordered-pulled.scss" />
+    <Content Include="Content\Scss\FontAwesome\_animated.scss" />
+    <Content Include="Content\Scss\FontAwesome\font-awesome.scss" />
+    <Content Include="Content\Less\FontAwesome\variables.less" />
+    <Content Include="Content\Less\FontAwesome\stacked.less" />
+    <Content Include="Content\Less\FontAwesome\rotated-flipped.less" />
+    <Content Include="Content\Less\FontAwesome\path.less" />
+    <Content Include="Content\Less\FontAwesome\mixins.less" />
+    <Content Include="Content\Less\FontAwesome\list.less" />
+    <Content Include="Content\Less\FontAwesome\larger.less" />
+    <Content Include="Content\Less\FontAwesome\icons.less" />
+    <Content Include="Content\Less\FontAwesome\font-awesome.less" />
+    <Content Include="Content\Less\FontAwesome\fixed-width.less" />
+    <Content Include="Content\Less\FontAwesome\core.less" />
+    <Content Include="Content\Less\FontAwesome\bordered-pulled.less" />
+    <Content Include="Content\Less\FontAwesome\animated.less" />
+    <Content Include="Content\Fonts\FontAwesome.otf" />
+    <Content Include="Content\Fonts\fontawesome-webfont.woff2" />
+    <Content Include="Content\Fonts\fontawesome-webfont.woff" />
+    <Content Include="Content\Fonts\fontawesome-webfont.ttf" />
+    <Content Include="Content\Fonts\fontawesome-webfont.eot" />
     <None Include="Scripts\jquery-3.5.1.intellisense.js" />
+    <Content Include="Scripts\Site.js" />
     <Content Include="Scripts\jquery-3.5.1.js" />
     <Content Include="Scripts\jquery-3.5.1.min.js" />
     <Content Include="Scripts\jquery-3.5.1.slim.js" />
@@ -872,6 +904,153 @@
     <Content Include="Scripts\umd\popper-utils.min.js" />
     <Content Include="Scripts\umd\popper.js" />
     <Content Include="Scripts\umd\popper.min.js" />
+    <Content Include="Views\Scripts\bootstrap.bundle.js" />
+    <Content Include="Views\Scripts\bootstrap.bundle.min.js" />
+    <Content Include="Views\Scripts\bootstrap.js" />
+    <Content Include="Views\Scripts\bootstrap.min.js" />
+    <Content Include="Views\Scripts\cldr.js" />
+    <Content Include="Views\Scripts\cldr\event.js" />
+    <Content Include="Views\Scripts\cldr\supplemental.js" />
+    <Content Include="Views\Scripts\cldr\unresolved.js" />
+    <Content Include="Views\Scripts\esm\popper-utils.js" />
+    <Content Include="Views\Scripts\esm\popper-utils.min.js" />
+    <Content Include="Views\Scripts\esm\popper.js" />
+    <Content Include="Views\Scripts\esm\popper.min.js" />
+    <Content Include="Views\Scripts\globalize.js" />
+    <Content Include="Views\Scripts\globalize\currency.js" />
+    <Content Include="Views\Scripts\globalize\date.js" />
+    <Content Include="Views\Scripts\globalize\message.js" />
+    <Content Include="Views\Scripts\globalize\number.js" />
+    <Content Include="Views\Scripts\globalize\plural.js" />
+    <Content Include="Views\Scripts\globalize\relative-time.js" />
+    <Content Include="Views\Scripts\globalize\unit.js" />
+    <Content Include="Views\Scripts\index.js.flow" />
+    <Content Include="Views\Scripts\esm\popper.min.js.map" />
+    <Content Include="Views\Scripts\esm\popper.js.map" />
+    <Content Include="Views\Scripts\esm\popper-utils.min.js.map" />
+    <Content Include="Views\Scripts\esm\popper-utils.js.map" />
+    <Content Include="Views\Scripts\bootstrap.min.js.map" />
+    <Content Include="Views\Scripts\bootstrap.js.map" />
+    <Content Include="Views\Scripts\bootstrap.bundle.min.js.map" />
+    <Content Include="Views\Scripts\bootstrap.bundle.js.map" />
+    <Content Include="Content\bootstrap.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap-reboot.min.css.map" />
+    <Content Include="Content\bootstrap-reboot.css.map" />
+    <Content Include="Content\bootstrap-grid.min.css.map" />
+    <Content Include="Content\bootstrap-grid.css.map" />
+    <Content Include="Areas\Pagina\Views\web.config" />
+    <Content Include="Areas\Mantenimiento\Views\web.config" />
+    <Content Include="Areas\Mantenimiento\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Pagina\Views\_ViewStart.cshtml" />
+    <Content Include="Areas\Pagina\Views\Shared\_Layout.cshtml" />
+    <Content Include="Areas\Pagina\Views\Pagina\Index.cshtml" />
+    <Content Include="Areas\Pagina\Views\Shared\_Menu_Lateral.cshtml" />
+    <Content Include="Areas\Pagina\Views\Pagina\Tienda.cshtml" />
+    <Content Include="Scripts\bootstrap.bundle.js.map" />
+    <Content Include="Scripts\bootstrap.bundle.min.js.map" />
+    <Content Include="Scripts\bootstrap.js.map" />
+    <Content Include="Scripts\bootstrap.min.js.map" />
+    <Content Include="Scripts\esm\popper-utils.js.map" />
+    <Content Include="Scripts\esm\popper-utils.min.js.map" />
+    <Content Include="Scripts\esm\popper.js.map" />
+    <Content Include="Scripts\esm\popper.min.js.map" />
+    <Content Include="Scripts\index.js.flow" />
+    <Content Include="Scripts\jquery-3.5.1.min.map" />
+    <Content Include="Scripts\jquery-3.5.1.slim.min.map" />
+    <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Scripts\popper-utils.min.js.map" />
+    <Content Include="Scripts\popper.js.map" />
+    <Content Include="Scripts\popper.min.js.map" />
+    <Content Include="Scripts\README.md" />
+    <Content Include="Scripts\umd\popper-utils.js.map" />
+    <Content Include="Scripts\umd\popper-utils.min.js.map" />
+    <Content Include="Scripts\umd\popper.js.flow" />
+    <Content Include="Scripts\umd\popper.js.map" />
+    <Content Include="Scripts\umd\popper.min.js.map" />
+    <None Include="Views\Scripts\jquery-3.5.1.intellisense.js" />
+    <Content Include="Views\Scripts\jquery-3.5.1.js" />
+    <Content Include="Views\Scripts\jquery-3.5.1.min.js" />
+    <Content Include="Views\Scripts\jquery-3.5.1.slim.js" />
+    <Content Include="Views\Scripts\jquery-3.5.1.slim.min.js" />
+    <None Include="Views\Scripts\jquery.validate-vsdoc.js" />
+    <Content Include="Views\Scripts\jquery.validate.js" />
+    <Content Include="Views\Scripts\jquery.validate.min.js" />
+    <Content Include="Views\Scripts\jquery.validate.unobtrusive.js" />
+    <Content Include="Views\Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Views\Scripts\modernizr-2.8.3.js" />
+    <Content Include="Views\Scripts\popper-utils.js" />
+    <Content Include="Views\Scripts\popper-utils.min.js" />
+    <Content Include="Views\Scripts\popper.js" />
+    <Content Include="Views\Scripts\popper.min.js" />
+    <Content Include="Views\Scripts\Site.js" />
+    <Content Include="Views\Scripts\src\index.js" />
+    <Content Include="Views\Scripts\src\methods\defaults.js" />
+    <Content Include="Views\Scripts\src\methods\destroy.js" />
+    <Content Include="Views\Scripts\src\methods\disableEventListeners.js" />
+    <Content Include="Views\Scripts\src\methods\enableEventListeners.js" />
+    <Content Include="Views\Scripts\src\methods\placements.js" />
+    <Content Include="Views\Scripts\src\methods\update.js" />
+    <Content Include="Views\Scripts\src\modifiers\applyStyle.js" />
+    <Content Include="Views\Scripts\src\modifiers\arrow.js" />
+    <Content Include="Views\Scripts\src\modifiers\computeStyle.js" />
+    <Content Include="Views\Scripts\src\modifiers\flip.js" />
+    <Content Include="Views\Scripts\src\modifiers\hide.js" />
+    <Content Include="Views\Scripts\src\modifiers\index.js" />
+    <Content Include="Views\Scripts\src\modifiers\inner.js" />
+    <Content Include="Views\Scripts\src\modifiers\keepTogether.js" />
+    <Content Include="Views\Scripts\src\modifiers\offset.js" />
+    <Content Include="Views\Scripts\src\modifiers\preventOverflow.js" />
+    <Content Include="Views\Scripts\src\modifiers\shift.js" />
+    <Content Include="Views\Scripts\src\utils\clockwise.js" />
+    <Content Include="Views\Scripts\src\utils\computeAutoPlacement.js" />
+    <Content Include="Views\Scripts\src\utils\debounce.js" />
+    <Content Include="Views\Scripts\src\utils\find.js" />
+    <Content Include="Views\Scripts\src\utils\findCommonOffsetParent.js" />
+    <Content Include="Views\Scripts\src\utils\findIndex.js" />
+    <Content Include="Views\Scripts\src\utils\getBordersSize.js" />
+    <Content Include="Views\Scripts\src\utils\getBoundaries.js" />
+    <Content Include="Views\Scripts\src\utils\getBoundingClientRect.js" />
+    <Content Include="Views\Scripts\src\utils\getClientRect.js" />
+    <Content Include="Views\Scripts\src\utils\getFixedPositionOffsetParent.js" />
+    <Content Include="Views\Scripts\src\utils\getOffsetParent.js" />
+    <Content Include="Views\Scripts\src\utils\getOffsetRect.js" />
+    <Content Include="Views\Scripts\src\utils\getOffsetRectRelativeToArbitraryNode.js" />
+    <Content Include="Views\Scripts\src\utils\getOppositePlacement.js" />
+    <Content Include="Views\Scripts\src\utils\getOppositeVariation.js" />
+    <Content Include="Views\Scripts\src\utils\getOuterSizes.js" />
+    <Content Include="Views\Scripts\src\utils\getParentNode.js" />
+    <Content Include="Views\Scripts\src\utils\getPopperOffsets.js" />
+    <Content Include="Views\Scripts\src\utils\getReferenceNode.js" />
+    <Content Include="Views\Scripts\src\utils\getReferenceOffsets.js" />
+    <Content Include="Views\Scripts\src\utils\getRoot.js" />
+    <Content Include="Views\Scripts\src\utils\getRoundedOffsets.js" />
+    <Content Include="Views\Scripts\src\utils\getScroll.js" />
+    <Content Include="Views\Scripts\src\utils\getScrollParent.js" />
+    <Content Include="Views\Scripts\src\utils\getStyleComputedProperty.js" />
+    <Content Include="Views\Scripts\src\utils\getSupportedPropertyName.js" />
+    <Content Include="Views\Scripts\src\utils\getViewportOffsetRectRelativeToArtbitraryNode.js" />
+    <Content Include="Views\Scripts\src\utils\getWindow.js" />
+    <Content Include="Views\Scripts\src\utils\getWindowSizes.js" />
+    <Content Include="Views\Scripts\src\utils\includeScroll.js" />
+    <Content Include="Views\Scripts\src\utils\index.js" />
+    <Content Include="Views\Scripts\src\utils\isBrowser.js" />
+    <Content Include="Views\Scripts\src\utils\isFixed.js" />
+    <Content Include="Views\Scripts\src\utils\isFunction.js" />
+    <Content Include="Views\Scripts\src\utils\isIE.js" />
+    <Content Include="Views\Scripts\src\utils\isModifierEnabled.js" />
+    <Content Include="Views\Scripts\src\utils\isModifierRequired.js" />
+    <Content Include="Views\Scripts\src\utils\isNumeric.js" />
+    <Content Include="Views\Scripts\src\utils\isOffsetContainer.js" />
+    <Content Include="Views\Scripts\src\utils\removeEventListeners.js" />
+    <Content Include="Views\Scripts\src\utils\runModifiers.js" />
+    <Content Include="Views\Scripts\src\utils\setAttributes.js" />
+    <Content Include="Views\Scripts\src\utils\setStyles.js" />
+    <Content Include="Views\Scripts\src\utils\setupEventListeners.js" />
+    <Content Include="Views\Scripts\umd\popper-utils.js" />
+    <Content Include="Views\Scripts\umd\popper-utils.min.js" />
+    <Content Include="Views\Scripts\umd\popper.js" />
+    <Content Include="Views\Scripts\umd\popper.min.js" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -916,17 +1095,17 @@
     <Content Include="Areas\Mantenimiento\Views\Cubas\Details.cshtml" />
     <Content Include="Areas\Mantenimiento\Views\Cubas\Edit.cshtml" />
     <Content Include="Areas\Mantenimiento\Views\Cubas\Index.cshtml" />
-    <Content Include="Views\Vehiculos\Create.cshtml" />
-    <Content Include="Views\Vehiculos\Delete.cshtml" />
-    <Content Include="Views\Vehiculos\Details.cshtml" />
-    <Content Include="Views\Vehiculos\Edit.cshtml" />
-    <Content Include="Views\Vehiculos\Index.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Vehiculos\AddOrEdit.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Vehiculos\Delete.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Vehiculos\Details.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Vehiculos\2AddOrEdit.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Vehiculos\Index.cshtml" />
     <Content Include="Views\Shared\Components\ProximasRevisiones\Default.cshtml" />
-    <Content Include="Views\Revisiones\Create.cshtml" />
-    <Content Include="Views\Revisiones\Delete.cshtml" />
-    <Content Include="Views\Revisiones\Details.cshtml" />
-    <Content Include="Views\Revisiones\Edit.cshtml" />
-    <Content Include="Views\Revisiones\Index.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Revisiones\Create.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Revisiones\Delete.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Revisiones\Details.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Revisiones\Edit.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Revisiones\Index.cshtml" />
     <Content Include="Areas\Mantenimiento\Views\Grupos\Create.cshtml" />
     <Content Include="Areas\Mantenimiento\Views\Grupos\Delete.cshtml" />
     <Content Include="Areas\Mantenimiento\Views\Grupos\Details.cshtml" />
@@ -934,16 +1113,16 @@
     <Content Include="Areas\Mantenimiento\Views\Grupos\Index.cshtml" />
     <Content Include="Areas\Mantenimiento\Views\Grupos\Index2.cshtml" />
     <Content Include="Areas\Mantenimiento\Views\Grupos\Index3.cshtml" />
-    <Content Include="Scripts\umd\popper.min.js.map" />
-    <Content Include="Scripts\umd\popper.js.map" />
-    <Content Include="Scripts\umd\popper.js.flow" />
-    <Content Include="Scripts\umd\popper-utils.min.js.map" />
-    <Content Include="Scripts\umd\popper-utils.js.map" />
-    <Content Include="Scripts\README.md" />
-    <Content Include="Scripts\popper.min.js.map" />
-    <Content Include="Scripts\popper.js.map" />
-    <Content Include="Scripts\popper-utils.min.js.map" />
-    <Content Include="Scripts\popper-utils.js.map" />
+    <Content Include="Views\Scripts\umd\popper.min.js.map" />
+    <Content Include="Views\Scripts\umd\popper.js.map" />
+    <Content Include="Views\Scripts\umd\popper.js.flow" />
+    <Content Include="Views\Scripts\umd\popper-utils.min.js.map" />
+    <Content Include="Views\Scripts\umd\popper-utils.js.map" />
+    <Content Include="Views\Scripts\README.md" />
+    <Content Include="Views\Scripts\popper.min.js.map" />
+    <Content Include="Views\Scripts\popper.js.map" />
+    <Content Include="Views\Scripts\popper-utils.min.js.map" />
+    <Content Include="Views\Scripts\popper-utils.js.map" />
     <Content Include="Views\Direcciones\Create.cshtml" />
     <Content Include="Views\Direcciones\Delete.cshtml" />
     <Content Include="Views\Direcciones\Details.cshtml" />
@@ -969,11 +1148,12 @@
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Mantenimiento\Data\" />
     <Folder Include="Areas\Pagina\Data\" />
+    <Folder Include="Properties\PublishProfiles\" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
-    <Content Include="Scripts\jquery-3.5.1.slim.min.map" />
-    <Content Include="Scripts\jquery-3.5.1.min.map" />
+    <Content Include="Views\Scripts\jquery-3.5.1.slim.min.map" />
+    <Content Include="Views\Scripts\jquery-3.5.1.min.map" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{4A0DDDB5-7A95-4FBF-97CC-616D07737A77}" />
@@ -981,6 +1161,7 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Include="Scripts\index.d.ts" />
+    <TypeScriptCompile Include="Views\Scripts\index.d.ts" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
