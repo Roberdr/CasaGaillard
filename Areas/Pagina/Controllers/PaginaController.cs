@@ -6,6 +6,8 @@ using System.Web.Mvc;
 
 namespace CasaGaillard.Areas.Pagina.Controllers
 {
+    [RouteArea("Pagina")]
+
     public class PaginaController : Controller
     {
         // GET: Pagina/Pagina
