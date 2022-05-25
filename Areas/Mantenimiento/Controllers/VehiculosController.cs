@@ -28,17 +28,6 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             return Json(await vehiculos.ToListAsync(), JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult PoblarSelects()
-        {
-            var selTipoVehiculo = new SelectList(db.TiposVehiculo, "ID", "Vehiculo");
-            var selCombustible = new SelectList(db.Combustibles, "ID", "Combustible1");
-            var selSeguro = new SelectList(db.Seguroes, "ID", "Compania");
-
-            var selects = new { selTipoVehiculo, selCombustible, selSeguro };
-
-            return Json(new { selTipoVehiculo, selCombustible, selSeguro }, JsonRequestBehavior.AllowGet);
-        }
-
         public JsonResult GetVehiculoByID(int? VehiculoID)
         {
             try

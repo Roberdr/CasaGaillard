@@ -33,27 +33,6 @@ function BindVehiculosData() {
     });
 }
 
-//************Adding Record in the database***********
-
-
-//function OpenAddPopup() {
-
-
-
-//    //title text
-//    $("#VehiculoAddOrEditModalLabel").text("Añadir Vehículo")
-//    //clear all input
-//    ClearAllInput();
-//    //open popup
-//    $('#VehiculoAddOrEditModal').modal('show');
-//    //show add patient button and hide update button
-//    $('#btnUpdateVehiculo').hide();
-//    $('#btnAddVehiculo').show();
-//}
-
-//Add Data Function
-
-
 function AddVehiculo() {
     var res = ValidateUserInput();
     if (res == false) {
@@ -101,81 +80,6 @@ function AddVehiculo() {
     });
 }
 
-
-//function OpenEditPopup(VehiculoId) {
-//    $("#VehiculoAddOrEditModalLabel").text("Actualizar Vehículo")
-//    ClearAllInput();
-//    $.ajax({
-//        url: "/Mantenimiento/Vehiculos/GetVehiculoByID?VehiculoID=" + VehiculoId,
-//        type: "GET",
-//        contentType: "application/json;charset=UTF-8",
-//        dataType: "json",
-//        success: function (result) {
-//            //debugger;
-//            $("#AddUpdateModelLabel").val("Update Vehiculo Detail")
-//            $('#hfVehiculoID').val(result.vehiculo.ID);
-//            $('#selTipoVehiculo option').remove();                          // borra los <option> añadidos anteriormente.
-//            $('#selTipoVehiculo').append('<option>Seleccione un tipo de vehículo</option>');
-//            $.each(result.selTipoVehiculo, function (key, value) {          // recorre los datos enviados para el <select>
-//                let selOption = '<option value=' + value.Value + ' ';       
-//                if (value.Value == result.vehiculo.TipoVehiculo.ID) {       // Marca esta <option> como 'selected' según los datos del vehículo.
-//                    selOption += 'selected= "true"';
-//                };
-//                selOption += '>' + value.Text + '</option>';
-//                $('#selTipoVehiculo').append(selOption);                    // Añade  el <option> al <select>
-//            });
-//            $('#txtMarca').val(result.vehiculo.Marca);
-//            $('#txtModelo').val(result.vehiculo.Modelo || '-');
-//            if (result.vehiculo.FechaCompra) {
-//                let fecha = new Date(parseInt(result.vehiculo.FechaCompra.match(/\d+/)[0]));   // Formatea la fecha para mostrarla correctamente.
-//                $('#txtFechaCompra').val(fecha.getDay() + "-" + fecha.getMonth() + "-" + fecha.getFullYear());
-//            }
-//            else {
-//                $('#txtFechaCompra').val('-');
-//            }
-//            $('#txtMatricula').val(result.vehiculo.MatriculaVehiculo || '-');
-//            $('#txtTacografo').val(result.vehiculo.ModeloTacografo || '-');
-//            $('#txtPma').val(result.vehiculo.Pma || '-');
-//            $('#txtTara').val(result.vehiculo.Tara || '-');
-//            $('#txtNumBastidor').val(result.vehiculo.NumBastidor || '-');
-//            $('#txtKilometrosCompra').val(result.vehiculo.KilometrajeCompra || '-');
-//            $('#txtNumEjes').val(result.vehiculo.NumEjes || '-');
-//            $('#txtPotencia').val(result.vehiculo.PotenciaCV || '-');
-//            $('#selTaller option:selected').val(result.vehiculo.TallerHabitualID || '-');
-//            $('#selCombustible option').remove();                          // borra los <option> añadidos anteriormente.
-//            $('#selCombustible').append('<option>Combustible</option>');
-//            $.each(result.selCombustible, function (key, value) {          // recorre los datos enviados para el <select>
-//                let selOption = '<option value=' + value.Value + ' ';
-//                if (value.Value == result.vehiculo.TipoCombustible) {       // Marca esta <option> como 'selected' según los datos del vehículo.
-//                    selOption += 'selected= "true"';
-//                };
-//                selOption += '>' + value.Text + '</option>';
-//                $('#selCombustible').append(selOption);                    // Añade  el <option> al <select>
-//            });
-//            $('#txtLongitud').val(result.vehiculo.Longitud || '-');
-//            $('#txtAnchura').val(result.vehiculo.Anchura || '-');
-//            $('#txtAltura').val(result.vehiculo.Altura || '-');
-//            $('#selSeguro option').remove();                          // borra los <option> añadidos anteriormente.
-//            $('#selSeguro').append('<option>Seguro</option>');
-//            $.each(result.selSeguro, function (key, value) {          // recorre los datos enviados para el <select>
-//                let selOption = '<option value=' + value.Value + ' ';
-//                if (value.Value == result.vehiculo.SeguroID) {       // Marca esta <option> como 'selected' según los datos del vehículo.
-//                    selOption += 'selected= "true"';
-//                };
-//                selOption += '>' + value.Text + '</option>';
-//                $('#selSeguro').append(selOption);                    // Añade  el <option> al <select>
-//            });
-
-//            $('#VehiculoEditModal').modal('show');                          // Muestra la ventana modal
-//            $('#btnUpdateVehiculo').show();                                 // muestra el botón ACTUALIZAR
-//            $('#btnAddVehiculo').hide();                                    // Esconde el botón CREAR
-//        },
-//        error: function (errormessage) {
-//            alert(errormessage.responseText);
-//        }
-//    });
-//    return false;
-//}
 
 function OpenAddOrEditPopup(VehiculoId) {
     ClearAllInput();
