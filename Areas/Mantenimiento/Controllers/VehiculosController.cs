@@ -17,10 +17,96 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         private readonly GaillardEntities db = new GaillardEntities();
 
         // GET: Vehiculos
-        public async Task<ActionResult> Index()
+        public ActionResult Index()
+        {
+            return View();
+        }
+
+        public async Task<JsonResult> GetVehiculos()
         {
             var vehiculos = db.Vehiculos.Include(v => v.TipoVehiculo);
-            return View(await vehiculos.ToListAsync());
+            return Json(await vehiculos.ToListAsync(), JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult PoblarSelects()
+        {
+            var selTipoVehiculo = new SelectList(db.TiposVehiculo, "ID", "Vehiculo");
+            var selCombustible = new SelectList(db.Combustibles, "ID", "Combustible1");
+            var selSeguro = new SelectList(db.Seguroes, "ID", "Compania");
+
+            var selects = new { selTipoVehiculo, selCombustible, selSeguro };
+
+            return Json(new { selTipoVehiculo, selCombustible, selSeguro }, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult GetVehiculoByID(int? VehiculoID)
+        {
+            try
+            {
+                var vehiculo =  db.Vehiculos.Include(v => v.TipoVehiculo).Where(v => v.ID == VehiculoID).FirstOrDefault();
+                var selTipoVehiculo = new SelectList(db.TiposVehiculo, "ID", "Vehiculo");
+                var selCombustible = new SelectList(db.Combustibles, "ID", "Combustible1");
+                var selSeguro = new SelectList(db.Seguroes, "ID", "Compania");
+
+                return Json(new { vehiculo, selTipoVehiculo, selCombustible, selSeguro }, JsonRequestBehavior.AllowGet);
+            }
+            catch(Exception ex)
+            {
+                return (Json(null, JsonRequestBehavior.AllowGet));
+            }
+        }
+
+        public JsonResult UpdateVehiculo(Vehiculo vehiculo)
+        {
+
+            string status = "success";
+            try
+            {
+                db.Entry(vehiculo).State = EntityState.Modified;
+                db.SaveChanges();
+
+            }
+            catch (Exception ex)
+            {
+                status = ex.Message;
+
+            }
+            return Json(vehiculo, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult DeleteVehiculo(int vehiculoId)
+        {
+            string status = "success";
+            try
+            {
+
+                var vehiculo = db.Vehiculos.Find(vehiculoId);
+                db.Vehiculos.Remove(vehiculo);
+                db.SaveChanges();
+
+            }
+            catch (Exception ex)
+            {
+                status = ex.Message;
+
+            }
+            return Json(status, JsonRequestBehavior.AllowGet);
+        }
+
+        public JsonResult AddVehiculo(Vehiculo vehiculo)
+        {
+            string status = "success";
+            try
+            {
+                db.Vehiculos.Add(vehiculo);
+                db.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                status = ex.Message;
+            }
+            return Json(status, JsonRequestBehavior.AllowGet);
+
         }
 
         // GET: Vehiculos/Details/5
@@ -102,7 +188,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> AddOrEdit(int id, [Bind(Include = "ID,Marca,Modelo,MatriculaVehiculo,TipoVehiculoID,ModeloTacografo,Pma,Tara,FechaCompra,TallerHabitual")] Vehiculo vehiculo)
+        public async Task<JsonResult> AddOrEdit(int id, [Bind(Include = "ID,Marca,Modelo,MatriculaVehiculo,TipoVehiculoID,ModeloTacografo,Pma,Tara,FechaCompra,TallerHabitual")] Vehiculo vehiculo)
         {
             if (ModelState.IsValid)
             {
@@ -116,7 +202,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                     db.Entry(vehiculo).State = EntityState.Modified;
                     await db.SaveChangesAsync();                    
                 }
-                return Json(new { isValid = "true", html = "" });
+                return Json(new { isValid = "true", html = "11" });
             }
             ViewBag.TipoVehiculoID = new SelectList(db.TiposVehiculo, "ID", "TipoVehiculo1", vehiculo.TipoVehiculoID);
             return Json(new { isValid = "false", html = ""});
