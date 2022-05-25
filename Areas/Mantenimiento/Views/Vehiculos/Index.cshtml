@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CasaGaillard.Models.Vehiculo>
+﻿@model CasaGaillard.Models.Vehiculo
 
 @{
     ViewBag.Title = "Vehículos";
@@ -8,87 +8,157 @@
 
 
 <table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.TipoVehiculo.Vehiculo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Marca)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Modelo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.MatriculaVehiculo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Pma)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Tara)
-        </th>
-        <th>
-            @*<button type="button"
+    <thead>
+        <tr>
+            <th>
+                Tipo Vehículo
+            </th>
+            <th>
+                Marca
+            </th>
+            <th>
+                Modelo
+            </th>
+            <th>
+                Matrícula
+            </th>
+            <th>
+                PMA
+            </th>
+            <th>
+                TARA
+            </th>
+            <th>
+                <button type="button"
                     class="btn btn-success"
-                    data-target="#editmodal"
-                    data-toggle="modal"
-                    data-url="@Url.Action("AddOrEdit", "Vehiculos")">
+                    @*data-target="#VehiculoEditModal"
+                    data-toggle="modal" *@
+                    onclick="OpenAddOrEditPopup();">
                     <i class="fa fa-random"></i>
-                Nuevo Vehículo
-            </button>*@
-            <a onclick="modalvehiculos('@Url.Action("AddOrEdit","Vehiculos", new { area = "Mantenimiento"})','Nuevo Vehículo', null)" class="btn btn-sm btn-success text-white">
-                <i class="fa fa-random"></i> Nuevo Vehículo
-            </a>
-        </th>
-    </tr>
-
-@foreach (var item in Model) {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.TipoVehiculo.Vehiculo)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Marca)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Modelo)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.MatriculaVehiculo)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Pma)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Tara)
-    </td>
-    <td class="text-center">
-        <a onclick="modalvehiculos('@Url.Action("AddOrEdit","Vehiculos", new { area = "Mantenimiento", id = item.ID })','Editar Vehículo', null)" class="btn btn-sm btn-outline-primary text-primary">
-            <i class="fa fa-sm fa-pen"></i>
-        </a>
-        <a href="@Url.Action("Delete", new { id = item.ID })" class="btn btn-sm btn-outline-danger text-danger">
-            <i class="fa fa-sm fa-trash"></i>
-        </a>
-    </td>
-</tr>
-}
-
+                    Nuevo Vehículo
+                </button>
+            </th>
+        </tr>
+    </thead>
+    <tbody class="tbody"></tbody>
 </table>
-<div class="row">
-    <div class="modal fade modal-dialog-centered" tabindex="-1" id="editmodal" aria-hidden="true" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"></h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
 
-                </div>
+<div class="modal fade modal-dialog-centered"  tabindex="-1" id="VehiculoAddOrEditModal" aria-hidden="true" role="dialog" aria-labelledby="VehiculoAddOrEditModalLabel">
+    <div class="modal-dialog" style="max-width:90%">
+        <div class="modal-content">
+            <div class="modal-header" style="background-color:blue">
+                <h5 class="modal-title" id="VehiculoAddOrEditModalLabel"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
+            <div class="modal-body" style="max-width:100%">
+                <form>
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" id="hfVehiculoID" />
+                    <div class="row">
+                        <div class="form-group col-3">
+                            <label for="selTipoVehiculo">Tipo Vehículo</label>
+                            <select class="form-control" id="selTipoVehiculo" name="selTipoVehiculo"> </select>
+                        </div>
+                        <div class="form-group col-3">
+                            <label for="txtMarca">Marca</label>
+                            <input type="text" class="form-control" id="txtMarca" placeholder="Marca" />
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="txtModelo">Modelo</label>
+                            <input type="text" class="form-control" id="txtModelo" placeholder="Modelo" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-3">
+                            <label for="txtFechaCompra">Fecha Compra</label>
+                            <input type="text" class="form-control" id="txtFechaCompra" placeholder="Fecha Compra" />
+                        </div>
+                        <div class="form-group col-3">
+                            <label for="txtMatricula">Matrícula</label>
+                            <input type="text" class="form-control" id="txtMatricula" placeholder="Matrícula" />
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="txtTacografo">Modelo Tacógrafo</label>
+                            <input type="text" class="form-control" id="txtTacografo" placeholder="Modelo Tacógrafo" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-3">
+                            <label for="txtTara">T.A.R.A.</label>
+                            <input type="text" class="form-control" id="txtTara" placeholder="T.A.R.A." />
+                        </div>
+                        <div class="form-group col-3">
+                            <label for="txtPma">P.M.A.</label>
+                            <input type="text" class="form-control" id="txtPma" placeholder="P.M.A." />
+                        </div>
+                        <div class="form-group col-3">
+                            <label for="txtPotencia">Potencia CV</label>
+                            <input type="text" class="form-control" id="txtPotencia" placeholder="Potencia" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-3">
+                            <label for="txtLongitud">Longitud</label>
+                            <input type="text" class="form-control" id="txtLongitud" placeholder="Longitud" />
+                        </div>
+                        <div class="form-group col-3">
+                            <label for="txtAnchura">Anchura</label>
+                            <input type="text" class="form-control" id="txtAnchura" placeholder="Anchura" />
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="txtAltura">Altura</label>
+                            <input type="text" class="form-control" id="txtAltura" placeholder="Altura" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="form-group col-3">
+                            <label for="txtNumBastidor">Número Bastidor</label>
+                            <input type="text" class="form-control" id="txtNumBastidor" placeholder="Núm. Bastidor" />
+                        </div>
+                        <div class="form-group col-3">
+                            <label for="txtKilometrosCompra">Kilómetros en Compra</label>
+                            <input type="text" class="form-control" id="txtKilometrosCompra" placeholder="Kilómetros" />
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="txtNumEjes">Número de Ejes</label>
+                            <input type="text" class="form-control" id="txtNumEjes" placeholder="Número de Ejes" />
+                        </div>
+                    </div>
+                    <div class="row">
+
+                        <div class="form-group col-3">
+                            <label for="selCombustible">Combustible</label>
+                            <select class="form-control" id="selCombustible" name="selCombustible"> </select>
+                        </div>
+                        <div class="form-group col-6">
+                            <label for="selTaller">Taller Habitual</label>
+                            <select class="form-control" id="selTaller" name="selTaller"></select>
+                        </div>
+                        <div class="form-group col-4">
+                            <label for="selSeguro">Seguro</label>
+                            <select class="form-control" id="selSeguro" name="selSeguro"></select>
+                        </div>
+                    </div>
+                </form>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" id="btnAddVehiculo" onclick="return AddVehiculo();">Crear Vehículo</button>
+                <button type="button" class="btn btn-primary" id="btnUpdateVehiculo" style="display:none;" onclick="UpdateVehiculo();">Actualizar Vehículo</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+
         </div>
+           
     </div>
 </div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/Vehiculo")
+}
+
+
 

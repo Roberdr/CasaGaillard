@@ -1255,7 +1255,6 @@
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Vehiculo" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
-          <NavigationProperty Name="Vehiculos" Relationship="GaillardModel.TipoVehiculoVehiculo" FromRole="TipoVehiculo" ToRole="Vehiculo" />
         </EntityType>
         <EntityType Name="Unidad">
           <Key>

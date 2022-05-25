@@ -22,3 +22,11 @@ select,
 textarea {
     max-width: 280px;
 }
+
+#VehiculoEditModal{
+    width:80%;
+}
+
+modal-dialog{
+    max-width:90%;
+}
