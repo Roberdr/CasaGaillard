@@ -14,7 +14,8 @@ namespace CasaGaillard
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             //Enabling attribute routing 
-            routes.MapMvcAttributeRoutes();
+            //routes.MapMvcAttributeRoutes();
+
 
             routes.MapRoute(
                 name: "Default",

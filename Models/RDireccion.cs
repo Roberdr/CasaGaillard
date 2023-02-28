@@ -10,7 +10,7 @@ namespace CasaGaillard.Models
     public class DireccionMetaData
     {
 
-        [Display(Name = "Nombre")]
+        [Display(Name = "Dirección")]
         public string NombreVia { get; set; }
 
         [Display(Name = "Número")]

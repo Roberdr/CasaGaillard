@@ -28,6 +28,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             [DataType(DataType.Date)]
             [DisplayFormat(DataFormatString = "{0:dd-mm-yyyy}")]
             public DateTime? ValidaHasta { get; set; }
+            public string DescripcionProxima { get; set; }
         }
 
         public async Task<ActionResult> Index()
@@ -44,7 +45,8 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                        select new UltimasRevisiones()
                        { 
                            MatriculaCuba = c.MatriculaCuba, 
-                           ValidaHasta = grupo.ValidaHasta
+                           ValidaHasta = grupo.ValidaHasta,
+                           DescripcionProxima = grupo.DescripcionProxima
                        };
 
             var viewModel1 = from z in viewModel

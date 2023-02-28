@@ -30,9 +30,9 @@
                         <tr>
                             <td></td>
                             <td>@Html.DisplayFor(modelItem => item.FechaRevision)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Descripcion)</td>
-                            <td>@Html.DisplayFor(modelItem => item.Autorizado)</td>
-                            <td>
+                            <td class="col-5">@Html.DisplayFor(modelItem => item.Descripcion)</td>
+                            <td class="col-2">@Html.DisplayFor(modelItem => item.Autorizado)</td>
+                            <td class="col-2">
                                 @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
                                 @Html.ActionLink("Details", "Details", new { id = item.ID }) |
                                 @Html.ActionLink("Delete", "Delete", new { id = item.ID })
