@@ -51,15 +51,15 @@ namespace CasaGaillard.Models
         public virtual DbSet<TipoVehiculo> TiposVehiculo { get; set; }
         public virtual DbSet<Unidad> Unidades { get; set; }
         public virtual DbSet<Vehiculo> Vehiculos { get; set; }
-        public virtual DbSet<Cargo> Cargos { get; set; }
+        public virtual DbSet<Cargo> Cargoes { get; set; }
         public virtual DbSet<Direccion> Direcciones { get; set; }
-        public virtual DbSet<Entidad> Entidades { get; set; }
+        public virtual DbSet<Entidad> Entidads { get; set; }
         public virtual DbSet<Persona> Personas { get; set; }
-        public virtual DbSet<PersonasEntidad> PersonasEntidad { get; set; }
-        public virtual DbSet<Poblacion> Poblaciones { get; set; }
-        public virtual DbSet<TelefonoEntidad> TelefonosEntidad { get; set; }
-        public virtual DbSet<TelefonoPersona> TelefonosPersona { get; set; }
-        public virtual DbSet<TipoVia> TiposVia { get; set; }
+        public virtual DbSet<PersonasEntidad> PersonasEntidads { get; set; }
+        public virtual DbSet<Poblacion> Poblacions { get; set; }
+        public virtual DbSet<TelefonoEntidad> TelefonoEntidads { get; set; }
+        public virtual DbSet<TelefonoPersona> TelefonoPersonas { get; set; }
+        public virtual DbSet<TipoVia> TipoVias { get; set; }
         public virtual DbSet<sysdiagram> sysdiagrams { get; set; }
         public virtual DbSet<C__EFMigrationsHistory> C__EFMigrationsHistory { get; set; }
         public virtual DbSet<AspNetRoleClaim> AspNetRoleClaims { get; set; }

@@ -14,14 +14,15 @@ function BindVehiculosData() {
                 var html = "";
                 $.each(result, function (key, item) {
                     html += '<tr>';
-                    html += '<td>' + item.TipoVehiculo.Vehiculo + '</td>';
+                    html += '<td>' + item.TipoVehiculo + '</td>';
                     html += '<td>' + item.Marca + '</td>';
                     html += '<td>' + item.Modelo + '</td>';
-                    html += '<td>' + item.MatriculaVehiculo + '</td>';
+                    html += '<td>' + item.Matricula + '</td>';
                     html += '<td>' + item.Pma + '</td>';
                     html += '<td>' + item.Tara + '</td>';
-                    html += '<td class="text-center"> <a onclick = "return OpenAddOrEditPopup(' + item.ID + ')" class="btn btn-sm btn-outline-primary text-primary" ><i class="fa fa-sm fa-pen"></i></a>' +
-                    '<a  onclick="DeleteVehiculo(' + item.ID + ')" class="btn btn-sm btn-outline-danger text-danger"><i class="fa fa-sm fa-trash"></i></a></td>';
+                    html += '<td>' + item.CargaUtil + '</td>';
+                    html += '<td class="text-center"> <a onclick = "return OpenAddOrEditPopup(' + item.ID + ')" class="btn btn-sm btn-outline-primary text-primary" style="z-index: 100;" ><i class="fa fa-sm fa-pen"></i></a>' +
+                        '<a  onclick="DeleteVehiculo(' + item.ID + ')" class="btn btn-sm btn-outline-danger text-danger" style="z-index: 100;"><i class="fa fa-sm fa-trash"></i></a></td>';
                     html += '</tr>';
                 });
                 $('.tbody').html(html);

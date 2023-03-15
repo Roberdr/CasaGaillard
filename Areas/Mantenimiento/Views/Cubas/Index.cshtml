@@ -137,11 +137,11 @@
         <th>
             @Html.DisplayNameFor(model => model.NumAprobacion)
         </th>*@
+        @*<th>
+            @Html.DisplayNameFor(model => model.Revisions)
+        </th>*@
         <th>
-            @Html.DisplayNameFor(model => model.Material.Material1)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Plataforma.MatriculaPlataforma)
+            @Html.DisplayNameFor(model => model.Vehiculo.MatriculaVehiculo)
         </th>
         <th></th>
     </tr>
@@ -274,11 +274,11 @@
         <td>
             @Html.DisplayFor(modelItem => item.NumAprobacion)
         </td>*@
+        @*<td>
+            @Html.DisplayFor(modelItem => item.Revisions.Max(r => r.ValidaHasta))
+        </td>*@
         <td>
-            @Html.DisplayFor(modelItem => item.Material.Material1)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Plataforma.MatriculaPlataforma)
+            @Html.DisplayFor(modelItem => item.Vehiculo.MatriculaVehiculo)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.ID }) |

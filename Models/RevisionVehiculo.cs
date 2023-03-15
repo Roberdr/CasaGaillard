@@ -11,15 +11,21 @@ namespace CasaGaillard.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class RevisionVehiculo
     {
         public int ID { get; set; }
         public Nullable<int> VehiculoID { get; set; }
         public Nullable<int> TipoRevisionID { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public Nullable<System.DateTime> FechaRevision { get; set; }
         public string Detalles { get; set; }
         public string Ejecutor { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
+        public Nullable<System.DateTime> Caducidad { get; set; }
     
         public virtual Vehiculo Vehiculo { get; set; }
         public virtual TipoRevision TipoRevision { get; set; }

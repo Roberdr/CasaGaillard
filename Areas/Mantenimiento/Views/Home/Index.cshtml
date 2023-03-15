@@ -37,7 +37,24 @@
   
     <div class="col-md-4">
         <h3>Próximas ITVs de vehículos</h3>
-        <p>En construcción. Detallará las próximas revisiones de los vehículos.</p>
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th class="col-md-4">Matrícula</th>
+                    <th class="col-md-5">Validez</th>
+                    <th class="col-md-3">Tipo</th>
+                </tr>
+
+            </thead>
+            @foreach (var c in ViewBag.RevisV)
+            {
+                <tr>
+                    <td class="col-md-4">@c.MatriculaVehiculo</td>
+                    <td class="col-md-5">@c.Caducidad.ToString("d")</td>
+                    <td class="col-md-3">@c.TipoRevision</td>
+                </tr>
+            }
+        </table>
         <p><a class="btn btn-default" href="#">Más &raquo;</a></p>
     </div>
     <div class="col-md-4">

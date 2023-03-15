@@ -15,7 +15,8 @@ namespace CasaGaillard
                         "~/Scripts/jquery.validate*"));
 
             bundles.Add(new ScriptBundle("~/bundles/js").Include(
-                        "~/Scripts/Site.js"));
+                        "~/Scripts/Site.js",
+                        "~/Scripts/bootstrap.js"));
 
             bundles.Add(new ScriptBundle("~/bundles/vehiculo").Include(
                         "~/Scripts/Vehiculo.js"));
@@ -25,8 +26,8 @@ namespace CasaGaillard
             bundles.Add(new ScriptBundle("~/bundles/modernizr").Include(
                         "~/Scripts/modernizr-*"));
 
-            bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
-                      "~/Scripts/bootstrap.js"));
+            /*bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
+                      "~/Scripts/bootstrap.js"));*/
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",

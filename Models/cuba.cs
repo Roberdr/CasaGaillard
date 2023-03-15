@@ -11,7 +11,8 @@ namespace CasaGaillard.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Cuba
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -30,24 +31,41 @@ namespace CasaGaillard.Models
         public string Constructor { get; set; }
         public string NumFabricacion { get; set; }
         public string NumHomologacion { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public Nullable<System.DateTime> FechaConstruccion { get; set; }
         public string PaisFabricacion { get; set; }
         public string NumTipoIMO { get; set; }
         public string PaisAprobacion { get; set; }
         public string Autoridad { get; set; }
         public string CodigoDiseno { get; set; }
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public Nullable<System.DateTime> PruebaHidraulica { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N}", ApplyFormatInEditMode = true)]
         public Nullable<decimal> PresionServicioADR { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N}", ApplyFormatInEditMode = true)]
         public Nullable<decimal> PresionServicioIMO { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N}", ApplyFormatInEditMode = true)]
         public Nullable<decimal> PresionExterior { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N}", ApplyFormatInEditMode = true)]
         public Nullable<decimal> PresionTaradoValvulas { get; set; }
         public string TemperaturaCalculoReferencia { get; set; }
         public Nullable<int> PesoBruto { get; set; }
         public Nullable<int> Tara { get; set; }
         public Nullable<int> PesoMaxProducto { get; set; }
         public Nullable<int> MaterialExteriorID { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N}", ApplyFormatInEditMode = true)]
         public Nullable<decimal> EspesorCuerpo { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N}", ApplyFormatInEditMode = true)]
         public Nullable<decimal> EspesorFondo { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N}", ApplyFormatInEditMode = true)]
         public string EspesorEquivalente { get; set; }
         public string TipoForro { get; set; }
         public string NumAprobacionCSC { get; set; }
@@ -70,7 +88,6 @@ namespace CasaGaillard.Models
         public string NumAprobacion { get; set; }
     
         public virtual Material Material { get; set; }
-        public virtual Plataforma Plataforma { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Compartimento> Compartimentos { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
@@ -79,5 +96,6 @@ namespace CasaGaillard.Models
         public virtual ICollection<Revision> Revisions { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Operacion> Operaciones { get; set; }
+        public virtual Vehiculo Vehiculo { get; set; }
     }
 }

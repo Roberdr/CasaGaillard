@@ -19,6 +19,7 @@ namespace CasaGaillard.Models
         {
             this.RevisionesVehiculo = new HashSet<RevisionVehiculo>();
             this.MantenimientosVehiculo = new HashSet<MantenimientoVehiculo>();
+            this.Cubas = new HashSet<Cuba>();
         }
     
         public int ID { get; set; }
@@ -48,5 +49,9 @@ namespace CasaGaillard.Models
         public virtual ICollection<MantenimientoVehiculo> MantenimientosVehiculo { get; set; }
         public virtual TipoVehiculo TipoVehiculo { get; set; }
         public virtual Entidad Taller { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Cuba> Cubas { get; set; }
+        public virtual Vehiculo Vehiculo1 { get; set; }
+        public virtual Vehiculo Vehiculo2 { get; set; }
     }
 }

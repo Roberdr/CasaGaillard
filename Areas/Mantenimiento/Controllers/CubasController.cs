@@ -22,7 +22,34 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         // GET: Cubas
         public async Task<ActionResult> Index()
         {
-            var cubas = db.Cubas.Include(c => c.Material).Include(c => c.Plataforma).OrderBy(c => c.MatriculaCuba);
+
+            //var viewModel = from c in db.Cubas
+            //                join r in db.Revisiones on c.ID equals r.CubaID into gc
+            //                from grupo in gc
+            //                    //let Valida = grupo.ValidaHasta
+            //                orderby grupo.ValidaHasta descending
+            //                where grupo.ValidaHasta == gc.Max(x => x.ValidaHasta)
+            //                select new UltimasRevisiones()
+            //                {
+            //                    MatriculaCuba = c.MatriculaCuba,
+            //                    ValidaHasta = grupo.ValidaHasta,
+            //                    DescripcionProxima = grupo.DescripcionProxima
+            //                };
+
+            //var viewModel1 = from z in viewModel
+            //                 orderby z.ValidaHasta
+            //                 where (z.ValidaHasta > fechaInicio) && (z.ValidaHasta < fechaFinal)
+            //                 select z;
+
+
+            //ViewBag.Revis = await viewModel1.ToListAsync();
+            
+            var cubas = db.Cubas
+                .Include(c => c.Material)
+                .Include(c => c.Vehiculo)
+                .Include(c => c.Revisions)
+                .OrderBy(c => c.MatriculaCuba);
+
             return View(await cubas.ToListAsync());
         }
 
@@ -79,7 +106,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         public ActionResult Create()
         {
             ViewBag.MaterialExteriorID = new SelectList(db.Materiales, "ID", "Material1");
-            ViewBag.PlataformaID = new SelectList(db.Plataformas, "ID", "MatriculaPlataforma");
+            ViewBag.PlataformaID = new SelectList(db.Vehiculos.OrderBy(o => o.MatriculaVehiculo), "ID", "MatriculaVehiculo");
             return View();
         }
 
@@ -99,7 +126,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             }
 
             ViewBag.MaterialExteriorID = new SelectList(db.Materiales, "ID", "Material1", cuba.MaterialExteriorID);
-            ViewBag.PlataformaID = new SelectList(db.Plataformas, "ID", "MatriculaPlataforma", cuba.PlataformaID);
+            ViewBag.PlataformaID = new SelectList(db.Vehiculos.OrderBy(o => o.MatriculaVehiculo), "ID", "MatriculaVehiculo", cuba.PlataformaID);
             return View(cuba);
         }
 
@@ -116,7 +143,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                 return HttpNotFound();
             }
             ViewBag.MaterialExteriorID = new SelectList(db.Materiales, "ID", "Material1", cuba.MaterialExteriorID);
-            ViewBag.PlataformaID = new SelectList(db.Plataformas, "ID", "MatriculaPlataforma", cuba.PlataformaID);
+            ViewBag.PlataformaID = new SelectList(db.Vehiculos.OrderBy(o => o.MatriculaVehiculo), "ID", "MatriculaVehiculo", cuba.PlataformaID);
             return View(cuba);
         }
 
@@ -135,7 +162,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.MaterialExteriorID = new SelectList(db.Materiales, "ID", "Material1", cuba.MaterialExteriorID);
-            ViewBag.PlataformaID = new SelectList(db.Plataformas, "ID", "MatriculaPlataforma", cuba.PlataformaID);
+            ViewBag.PlataformaID = new SelectList(db.Vehiculos.OrderBy(o => o.MatriculaVehiculo), "ID", "MatriculaVehiculo", cuba.PlataformaID);
             return View(cuba);
         }
 

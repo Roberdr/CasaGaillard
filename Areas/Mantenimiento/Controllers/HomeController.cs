@@ -11,6 +11,7 @@ using CasaGaillard.Models.ViewModels;
 using System.ComponentModel.DataAnnotations;
 using System.Threading;
 using System.Globalization;
+using System.Data;
 
 namespace CasaGaillard.Areas.Mantenimiento.Controllers
 {
@@ -31,10 +32,23 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             public string DescripcionProxima { get; set; }
         }
 
+        public class UltimasRevisionesVehiculos
+        {
+            public string MatriculaVehiculo { get; set; }
+
+            public string TipoRevision { get; set; }
+
+            [DataType(DataType.Date)]
+            [DisplayFormat(DataFormatString = "{0:dd-mm-yyyy}")]
+            public DateTime? Caducidad { get; set; }
+
+            //public string Cuba { get; set; }
+        }
+
         public async Task<ActionResult> Index()
         {
             var fechaInicio = DateTime.Now.AddMonths(-2);
-            var fechaFinal = DateTime.Now.AddMonths(10);
+            var fechaFinal = DateTime.Now.AddMonths(2);
 
             var viewModel = from c in db.Cubas
                        join r in db.Revisiones on c.ID equals r.CubaID into gc
@@ -54,9 +68,24 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                              where (z.ValidaHasta > fechaInicio) && (z.ValidaHasta < fechaFinal)
                              select z;
 
-
             ViewBag.Revis = await viewModel1.ToListAsync();
-           
+
+            var viewModelV = db.RevisionesVehiculo
+                .Include(i => i.Vehiculo)
+                .Where(r => r.Caducidad > fechaInicio && r.Caducidad < fechaFinal)
+                .GroupBy(r => new { r.Vehiculo.MatriculaVehiculo, r.TipoRevision})
+                .Select(s => new UltimasRevisionesVehiculos()
+                {
+                    MatriculaVehiculo = s.Key.MatriculaVehiculo,
+                    Caducidad = s.Max(m => m.Caducidad),
+                    TipoRevision = s.Key.TipoRevision.Revision,
+                 });
+
+            var viewModel1V = viewModelV
+                .OrderBy(r => r.Caducidad);
+
+            ViewBag.RevisV = await viewModel1V.ToListAsync();
+
             return View();
         }
 

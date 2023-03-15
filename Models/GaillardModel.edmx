@@ -5,23 +5,23 @@
     <!-- SSDL content -->
     <edmx:StorageModels>
     <Schema Namespace="GaillardModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
-      <EntityType Name="sysdiagrams">
-        <Key>
-          <PropertyRef Name="diagram_id" />
-        </Key>
-        <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
-        <Property Name="principal_id" Type="int" Nullable="false" />
-        <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-        <Property Name="version" Type="int" />
-        <Property Name="definition" Type="varbinary(max)" />
-      </EntityType>
-      <EntityType Name="__EFMigrationsHistory">
-        <Key>
-          <PropertyRef Name="MigrationId" />
-        </Key>
-        <Property Name="MigrationId" Type="nvarchar" MaxLength="150" Nullable="false" />
-        <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
-      </EntityType>
+        <EntityType Name="sysdiagrams">
+          <Key>
+            <PropertyRef Name="diagram_id" />
+          </Key>
+          <Property Name="name" Type="nvarchar" MaxLength="128" Nullable="false" />
+          <Property Name="principal_id" Type="int" Nullable="false" />
+          <Property Name="diagram_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="version" Type="int" />
+          <Property Name="definition" Type="varbinary(max)" />
+        </EntityType>
+        <EntityType Name="__EFMigrationsHistory">
+          <Key>
+            <PropertyRef Name="MigrationId" />
+          </Key>
+          <Property Name="MigrationId" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="ProductVersion" Type="nvarchar" MaxLength="32" Nullable="false" />
+        </EntityType>
         <EntityType Name="Accesorio">
           <Key>
             <PropertyRef Name="ID" />
@@ -365,6 +365,7 @@
           <Property Name="FechaRevision" Type="date" />
           <Property Name="Detalles" Type="nvarchar(max)" />
           <Property Name="Ejecutor" Type="nvarchar" MaxLength="45" />
+          <Property Name="Caducidad" Type="date" />
         </EntityType>
         <EntityType Name="Seguro">
           <Key>
@@ -642,11 +643,11 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK_Cuba_Plataforma">
-          <End Role="Plataforma" Type="Self.Plataforma" Multiplicity="0..1" />
+        <Association Name="FK_Cuba_Vehiculo">
+          <End Role="Vehiculo" Type="Self.Vehiculo" Multiplicity="0..1" />
           <End Role="Cuba" Type="Self.Cuba" Multiplicity="*" />
           <ReferentialConstraint>
-            <Principal Role="Plataforma">
+            <Principal Role="Vehiculo">
               <PropertyRef Name="ID" />
             </Principal>
             <Dependent Role="Cuba">
@@ -786,6 +787,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Vehiculo_Vehiculo">
+          <End Role="Vehiculo" Type="Self.Vehiculo" Multiplicity="1" />
+          <End Role="Vehiculo1" Type="Self.Vehiculo" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Vehiculo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Vehiculo1">
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Function Name="fn_diagramobjects" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="true" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" ReturnType="int" />
         <Function Name="sp_alterdiagram" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
           <Parameter Name="diagramname" Type="nvarchar" Mode="In" />
@@ -910,8 +923,8 @@
             <End Role="Material" EntitySet="Material" />
             <End Role="Cuba" EntitySet="Cuba" />
           </AssociationSet>
-          <AssociationSet Name="FK_Cuba_Plataforma" Association="Self.FK_Cuba_Plataforma">
-            <End Role="Plataforma" EntitySet="Plataforma" />
+          <AssociationSet Name="FK_Cuba_Vehiculo" Association="Self.FK_Cuba_Vehiculo">
+            <End Role="Vehiculo" EntitySet="Vehiculo" />
             <End Role="Cuba" EntitySet="Cuba" />
           </AssociationSet>
           <AssociationSet Name="FK_Direccion_Poblacion" Association="Self.FK_Direccion_Poblacion">
@@ -957,6 +970,10 @@
           <AssociationSet Name="FK_TelefonoPersona_Persona" Association="Self.FK_TelefonoPersona_Persona">
             <End Role="Persona" EntitySet="Persona" />
             <End Role="TelefonoPersona" EntitySet="TelefonoPersona" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vehiculo_Vehiculo" Association="Self.FK_Vehiculo_Vehiculo">
+            <End Role="Vehiculo" EntitySet="Vehiculo" />
+            <End Role="Vehiculo1" EntitySet="Vehiculo" />
           </AssociationSet>
         </EntityContainer>
       </Schema></edmx:StorageModels>
@@ -1059,11 +1076,11 @@
           <Property Name="UNPortableTank" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Name="NumAprobacion" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Material" Relationship="GaillardModel.MaterialCuba" FromRole="Cuba" ToRole="Material" />
-          <NavigationProperty Name="Plataforma" Relationship="GaillardModel.PlataformaCuba" FromRole="Cuba" ToRole="Plataforma" />
           <NavigationProperty Name="Compartimentos" Relationship="GaillardModel.CompartimentoCuba" FromRole="Cuba" ToRole="Compartimento" />
           <NavigationProperty Name="Grupos" Relationship="GaillardModel.GrupoCuba" FromRole="Cuba" ToRole="Grupo" />
           <NavigationProperty Name="Revisions" Relationship="GaillardModel.RevisionCuba" FromRole="Cuba" ToRole="Revision" />
           <NavigationProperty Name="Operaciones" Relationship="GaillardModel.OperacionCuba" FromRole="Cuba" ToRole="Operacion" />
+          <NavigationProperty Name="Vehiculo" Relationship="GaillardModel.FK_Cuba_Vehiculo" FromRole="Cuba" ToRole="Vehiculo" />
         </EntityType>
         <EntityType Name="DetalleAccesorio">
           <Key>
@@ -1154,7 +1171,6 @@
           <Property Name="MatriculaPlataforma" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
           <Property Name="Propiedad" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
           <Property Name="Pma" Type="Int32" />
-          <NavigationProperty Name="Cuba" Relationship="GaillardModel.PlataformaCuba" FromRole="Plataforma" ToRole="Cuba" />
         </EntityType>
         <EntityType Name="Producto">
           <Key>
@@ -1197,6 +1213,7 @@
           <Property Name="Ejecutor" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Vehiculo" Relationship="GaillardModel.RevisionVehiculoVehiculo" FromRole="RevisionVehiculo" ToRole="Vehiculo" />
           <NavigationProperty Name="TipoRevision" Relationship="GaillardModel.TipoRevisionRevisionVehiculo" FromRole="RevisionVehiculo" ToRole="TipoRevision" />
+          <Property Name="Caducidad" Type="DateTime" Precision="0" />
         </EntityType>
         <EntityType Name="Situacion">
           <Key>
@@ -1292,6 +1309,9 @@
           <Property Name="Altura" Type="Int32" />
           <Property Name="SeguroID" Type="Int32" />
           <NavigationProperty Name="Taller" Relationship="GaillardModel.VehiculoTaller" FromRole="Vehiculo" ToRole="Entidad" />
+          <NavigationProperty Name="Cubas" Relationship="GaillardModel.FK_Cuba_Vehiculo" FromRole="Vehiculo" ToRole="Cuba" />
+          <NavigationProperty Name="Vehiculo1" Relationship="GaillardModel.FK_Vehiculo_Vehiculo" FromRole="Vehiculo" ToRole="Vehiculo1" />
+          <NavigationProperty Name="Vehiculo2" Relationship="GaillardModel.FK_Vehiculo_Vehiculo" FromRole="Vehiculo1" ToRole="Vehiculo" />
         </EntityType>
         <EntityContainer Name="GaillardEntities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Accesorios" EntityType="Self.Accesorio" />
@@ -1328,10 +1348,6 @@
           </AssociationSet>
           <AssociationSet Name="MaterialCuba" Association="GaillardModel.MaterialCuba">
             <End Role="Material" EntitySet="Materiales" />
-            <End Role="Cuba" EntitySet="Cubas" />
-          </AssociationSet>
-          <AssociationSet Name="PlataformaCuba" Association="GaillardModel.PlataformaCuba">
-            <End Role="Plataforma" EntitySet="Plataformas" />
             <End Role="Cuba" EntitySet="Cubas" />
           </AssociationSet>
           <AssociationSet Name="CompartimentoCuba" Association="GaillardModel.CompartimentoCuba">
@@ -1527,6 +1543,14 @@
             <End Role="Vehiculo" EntitySet="Vehiculos" />
             <End Role="Entidad" EntitySet="Entidads" />
           </AssociationSet>
+          <AssociationSet Name="FK_Cuba_Vehiculo" Association="GaillardModel.FK_Cuba_Vehiculo">
+            <End Role="Vehiculo" EntitySet="Vehiculos" />
+            <End Role="Cuba" EntitySet="Cubas" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Vehiculo_Vehiculo" Association="GaillardModel.FK_Vehiculo_Vehiculo">
+            <End Role="Vehiculo" EntitySet="Vehiculos" />
+            <End Role="Vehiculo1" EntitySet="Vehiculos" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="MaterialAccesorio">
           <End Type="GaillardModel.Material" Role="Material" Multiplicity="1" />
@@ -1561,18 +1585,6 @@
             </Principal>
             <Dependent Role="Cuba">
               <PropertyRef Name="MaterialExteriorID" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-        <Association Name="PlataformaCuba">
-          <End Type="GaillardModel.Plataforma" Role="Plataforma" Multiplicity="0..1" />
-          <End Type="GaillardModel.Cuba" Role="Cuba" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="Plataforma">
-              <PropertyRef Name="ID" />
-            </Principal>
-            <Dependent Role="Cuba">
-              <PropertyRef Name="PlataformaID" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -2241,6 +2253,30 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Cuba_Vehiculo">
+          <End Type="GaillardModel.Vehiculo" Role="Vehiculo" Multiplicity="0..1" />
+          <End Type="GaillardModel.Cuba" Role="Cuba" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Vehiculo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Cuba">
+              <PropertyRef Name="PlataformaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Vehiculo_Vehiculo">
+          <End Type="GaillardModel.Vehiculo" Role="Vehiculo" Multiplicity="1" />
+          <End Type="GaillardModel.Vehiculo" Role="Vehiculo1" Multiplicity="0..1" />
+          <ReferentialConstraint>
+            <Principal Role="Vehiculo">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Vehiculo1">
+              <PropertyRef Name="ID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2447,6 +2483,7 @@
           <EntitySetMapping Name="RevisionesVehiculo">
             <EntityTypeMapping TypeName="GaillardModel.RevisionVehiculo">
               <MappingFragment StoreEntitySet="RevisionVehiculo">
+                <ScalarProperty Name="Caducidad" ColumnName="Caducidad" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="VehiculoID" ColumnName="VehiculoID" />
                 <ScalarProperty Name="TipoRevisionID" ColumnName="TipoRevisionID" />

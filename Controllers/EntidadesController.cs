@@ -18,7 +18,7 @@ namespace CasaGaillard.Controllers
         // GET: Entidades
         public async Task<ActionResult> Index()
         {
-            var entidads = db.Entidades.Include(e => e.Direccion);
+            var entidads = db.Entidads.Include(e => e.Direccion);
             return View(await entidads.ToListAsync());
         }
 
@@ -29,7 +29,7 @@ namespace CasaGaillard.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Entidad entidad = await db.Entidades.FindAsync(id);
+            Entidad entidad = await db.Entidads.FindAsync(id);
             if (entidad == null)
             {
                 return HttpNotFound();
@@ -53,7 +53,7 @@ namespace CasaGaillard.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entidades.Add(entidad);
+                db.Entidads.Add(entidad);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
@@ -69,7 +69,7 @@ namespace CasaGaillard.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Entidad entidad = await db.Entidades.FindAsync(id);
+            Entidad entidad = await db.Entidads.FindAsync(id);
             if (entidad == null)
             {
                 return HttpNotFound();
@@ -102,7 +102,7 @@ namespace CasaGaillard.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Entidad entidad = await db.Entidades.FindAsync(id);
+            Entidad entidad = await db.Entidads.FindAsync(id);
             if (entidad == null)
             {
                 return HttpNotFound();
@@ -115,8 +115,8 @@ namespace CasaGaillard.Controllers
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
-            Entidad entidad = await db.Entidades.FindAsync(id);
-            db.Entidades.Remove(entidad);
+            Entidad entidad = await db.Entidads.FindAsync(id);
+            db.Entidads.Remove(entidad);
             await db.SaveChangesAsync();
             return RedirectToAction("Index");
         }

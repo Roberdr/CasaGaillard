@@ -14,17 +14,45 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
     [Authorize]
     public class VehiculosController : Controller
     {
+        public class DatosVehiculoIndex
+        {
+            public int ID { get; set; }
+            public string TipoVehiculo { get; set; }
+            public string Marca { get; set; }
+            public string Modelo { get; set; }
+            public string Matricula { get; set; }
+            public int? Pma { get; set; }
+            public int? Tara { get; set; }
+            public int? CargaUtil { get; set; }
+        }
+
         private readonly GaillardEntities db = new GaillardEntities();
 
         // GET: Vehiculos
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            return View();
+            var vehiculos = await db.Vehiculos.ToListAsync();
+            return View(vehiculos);
         }
 
         public async Task<JsonResult> GetVehiculos()
         {
-            var vehiculos = db.Vehiculos.Include(v => v.TipoVehiculo);
+
+            var vehiculos = from v in db.Vehiculos
+                            join tv in db.TiposVehiculo on v.TipoVehiculoID equals tv.ID
+                            select new DatosVehiculoIndex()
+                            {
+                                ID = v.ID,
+                                TipoVehiculo = tv.Vehiculo,
+                                Marca = v.Marca,
+                                Modelo = v.Modelo,
+                                Matricula = v.MatriculaVehiculo,
+                                Pma = v.Pma,
+                                Tara = v.Tara,
+                                CargaUtil = v.CargaUtil
+                            };
+                
+                //db.Vehiculos.Include(v => v.TipoVehiculo);
             return Json(await vehiculos.ToListAsync(), JsonRequestBehavior.AllowGet);
         }
 
@@ -33,7 +61,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             try
             {
                 var vehiculo =  db.Vehiculos.Include(v => v.TipoVehiculo).Where(v => v.ID == VehiculoID).FirstOrDefault();
-                var selTipoVehiculo = new SelectList(db.TiposVehiculo, "ID", "Vehiculo");
+                var selTipoVehiculo = new SelectList(db.TiposVehiculo.OrderBy(o => o.Vehiculo), "ID", "Vehiculo");
                 var selCombustible = new SelectList(db.Combustibles, "ID", "Combustible1");
                 var selSeguro = new SelectList(db.Seguroes, "ID", "Compania");
 
@@ -120,7 +148,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             if (id == 0)
             {
                 ViewBag.TipoVehiculoID = new SelectList(db.TiposVehiculo, "ID", "Vehiculo");
-                ViewBag.TallerHabitualID = new SelectList(db.Entidades, "ID", "NombreEntidad");
+                ViewBag.TallerHabitualID = new SelectList(db.Entidads, "ID", "NombreEntidad");
                 return View(new Vehiculo());
             }
             else
@@ -131,7 +159,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                     return HttpNotFound();
                 }
                 ViewBag.TipoVehiculoID = new SelectList(db.TiposVehiculo, "ID", "Vehiculo", vehiculo.TipoVehiculoID);
-                ViewBag.TallerHabitualID = new SelectList(db.Entidades, "ID", "NombreEntidad", vehiculo.TallerHabitualID);
+                ViewBag.TallerHabitualID = new SelectList(db.Entidads, "ID", "NombreEntidad", vehiculo.TallerHabitualID);
                 return View(vehiculo);
             }
             
@@ -168,7 +196,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                 return HttpNotFound();
             }
             ViewBag.TipoVehiculoID = new SelectList(db.TiposVehiculo, "ID", "Vehiculo", vehiculo.TipoVehiculoID);
-            ViewBag.TallerHabitualID = new SelectList(db.Entidades, "ID", "NombreEntidad", vehiculo.TallerHabitualID);
+            ViewBag.TallerHabitualID = new SelectList(db.Entidads, "ID", "NombreEntidad", vehiculo.TallerHabitualID);
             return View(vehiculo);
         }
 

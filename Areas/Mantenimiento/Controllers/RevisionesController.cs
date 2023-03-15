@@ -48,7 +48,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         // GET: Revisiones/Create
         public ActionResult Create()
         {
-            ViewBag.CubaID = new SelectList(db.Cubas, "ID", "MatriculaCuba");
+            ViewBag.CubaID = new SelectList(db.Cubas.OrderBy(o => o.MatriculaCuba), "ID", "MatriculaCuba");
             return View();
         }
 
@@ -67,7 +67,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CubaID = new SelectList(db.Cubas, "ID", "MatriculaCuba", revision.CubaID);
+            ViewBag.CubaID = new SelectList(db.Cubas.OrderBy(o => o.MatriculaCuba), "ID", "MatriculaCuba", revision.CubaID);
             return View(revision);
         }
 
@@ -83,7 +83,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CubaID = new SelectList(db.Cubas, "ID", "MatriculaCuba", revision.CubaID);
+            ViewBag.CubaID = new SelectList(db.Cubas.OrderBy(o => o.MatriculaCuba), "ID", "MatriculaCuba", revision.CubaID);
             return View(revision);
         }
 
@@ -100,7 +100,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.CubaID = new SelectList(db.Cubas, "ID", "MatriculaCuba", revision.CubaID);
+            ViewBag.CubaID = new SelectList(db.Cubas.OrderBy(o => o.MatriculaCuba), "ID", "MatriculaCuba", revision.CubaID);
             return View(revision);
         }
 

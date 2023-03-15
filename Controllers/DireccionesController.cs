@@ -40,8 +40,8 @@ namespace CasaGaillard.Controllers
         // GET: Direcciones/Create
         public ActionResult Create()
         {
-            ViewBag.PoblacionID = new SelectList(db.Poblaciones, "ID", "NombrePoblacion");
-            ViewBag.TipoViaID = new SelectList(db.TiposVia, "ID", "TipoVia1");
+            ViewBag.PoblacionID = new SelectList(db.Poblacions, "ID", "NombrePoblacion");
+            ViewBag.TipoViaID = new SelectList(db.TipoVias, "ID", "TipoVia1");
             return View();
         }
 
@@ -59,8 +59,8 @@ namespace CasaGaillard.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.PoblacionID = new SelectList(db.Poblaciones, "ID", "NombrePoblacion", direccion.PoblacionID);
-            ViewBag.TipoViaID = new SelectList(db.TiposVia, "ID", "TipoVia1", direccion.TipoViaID);
+            ViewBag.PoblacionID = new SelectList(db.Poblacions, "ID", "NombrePoblacion", direccion.PoblacionID);
+            ViewBag.TipoViaID = new SelectList(db.TipoVias, "ID", "TipoVia1", direccion.TipoViaID);
             return View(direccion);
         }
 
@@ -76,8 +76,8 @@ namespace CasaGaillard.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.PoblacionID = new SelectList(db.Poblaciones, "ID", "NombrePoblacion", direccion.PoblacionID);
-            ViewBag.TipoViaID = new SelectList(db.TiposVia, "ID", "TipoVia1", direccion.TipoViaID);
+            ViewBag.PoblacionID = new SelectList(db.Poblacions, "ID", "NombrePoblacion", direccion.PoblacionID);
+            ViewBag.TipoViaID = new SelectList(db.TipoVias, "ID", "TipoVia1", direccion.TipoViaID);
             return View(direccion);
         }
 
@@ -94,8 +94,8 @@ namespace CasaGaillard.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.PoblacionID = new SelectList(db.Poblaciones, "ID", "NombrePoblacion", direccion.PoblacionID);
-            ViewBag.TipoViaID = new SelectList(db.TiposVia, "ID", "TipoVia1", direccion.TipoViaID);
+            ViewBag.PoblacionID = new SelectList(db.Poblacions, "ID", "NombrePoblacion", direccion.PoblacionID);
+            ViewBag.TipoViaID = new SelectList(db.TipoVias, "ID", "TipoVia1", direccion.TipoViaID);
             return View(direccion);
         }
 
