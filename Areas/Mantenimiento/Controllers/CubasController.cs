@@ -83,13 +83,13 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             // Comprueba que haya un directorio con la matricula de la cuba a detallar
             // y crea una lista de los archivos existentes
 
-            string imgPath = "C:/Users/magat/source/repos/CasaGaillard/Content/images/";
+            string imgPath = "C:/inetpub/wwwroot/CG/Content/images/";
             string docPath;
             List<string> nameFiles = new List<string>();
             List<string> d = new List<string>(Directory.EnumerateDirectories(imgPath));
             if (d.Contains(imgPath + cuba.MatriculaCuba.ToString()))
             {
-                docPath = imgPath + cuba.MatriculaCuba.ToString() + "/";
+                docPath = imgPath + cuba.MatriculaCuba.ToString() + '/';
                 List<string> files = new List<string>(Directory.EnumerateFiles(docPath));
 
                 foreach (string f in files)

@@ -392,7 +392,7 @@ namespace CasaGaillard.Controllers
         public ActionResult LogOff()
         {
             AuthenticationManager.SignOut(DefaultAuthenticationTypes.ApplicationCookie);
-            return RedirectToAction("Index", "Pagina", new { area = "Pagina" });
+            return RedirectToAction("Index", "Home", new { area = "Mantenimiento" });
         }
 
         //

@@ -27,26 +27,25 @@
                 <tr>
                     <td colspan="5"><h4>@Html.DisplayFor(modelItem => g.Key)</h4></td>
                 </tr>
-                    foreach (var item in g.OrderByDescending(m => m.Caducidad))
-                    {
-        <tr>
-            <td></td>
-            <td>@Html.DisplayFor(modelItem => item.FechaRevision)</td>
-            <td>@Html.DisplayFor(modelItem => item.Caducidad)</td>
-            <td class="col-2">@Html.DisplayFor(modelItem => item.TipoRevision.Revision)</td>
-            <td class="col-2">@Html.DisplayFor(modelItem => item.Ejecutor)</td>
-            <td class="col-2">
-                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
-            </td>
-        </tr>
-                    }
+                foreach (var item in g.OrderByDescending(m => m.Caducidad))
+                {
+                    <tr>
+                        <td></td>
+                        <td>@Html.DisplayFor(modelItem => item.FechaRevision)</td>
+                        <td>@Html.DisplayFor(modelItem => item.Caducidad)</td>
+                        <td class="col-2">@Html.DisplayFor(modelItem => item.TipoRevision.Revision)</td>
+                        <td class="col-2">@Html.DisplayFor(modelItem => item.Ejecutor)</td>
+                        <td class="col-2">
+                            @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                            @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                            @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                        </td>
+                    </tr>
+                }
 
-                        
+
             }
-                
+
         </tbody>
     </table>
 </div>
-    

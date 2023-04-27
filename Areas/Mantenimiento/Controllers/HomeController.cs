@@ -72,19 +72,19 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
 
             var viewModelV = db.RevisionesVehiculo
                 .Include(i => i.Vehiculo)
-                .Where(r => r.Caducidad > fechaInicio && r.Caducidad < fechaFinal)
                 .GroupBy(r => new { r.Vehiculo.MatriculaVehiculo, r.TipoRevision})
                 .Select(s => new UltimasRevisionesVehiculos()
                 {
                     MatriculaVehiculo = s.Key.MatriculaVehiculo,
                     Caducidad = s.Max(m => m.Caducidad),
                     TipoRevision = s.Key.TipoRevision.Revision,
-                 });
+                 })
+                .OrderBy(r => r.Caducidad)
+                .Where(r => r.Caducidad > fechaInicio && r.Caducidad < fechaFinal);
 
-            var viewModel1V = viewModelV
-                .OrderBy(r => r.Caducidad);
+            
 
-            ViewBag.RevisV = await viewModel1V.ToListAsync();
+            ViewBag.RevisV = await viewModelV.ToListAsync();
 
             return View();
         }

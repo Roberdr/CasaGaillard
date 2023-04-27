@@ -398,6 +398,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="Areas\Mantenimiento\Controllers\MongoDBController.cs" />
     <Compile Include="Areas\Mantenimiento\Controllers\RevisionesVehiculosController.cs" />
     <Compile Include="Areas\Mantenimiento\MantenimientoAreaRegistration.cs" />
     <Compile Include="Areas\Pagina\Controllers\PaginaController.cs" />
@@ -889,8 +890,9 @@
     <Content Include="Areas\Mantenimiento\Views\RevisionesVehiculos\Delete.cshtml" />
     <Content Include="Areas\Mantenimiento\Views\RevisionesVehiculos\Details.cshtml" />
     <Content Include="Areas\Mantenimiento\Views\RevisionesVehiculos\Edit.cshtml" />
-    <Content Include="Areas\Mantenimiento\Views\RevisionesVehiculos\Index.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\RevisionesVehiculos\ProximasRevisiones.cshtml" />
     <Content Include="Areas\Mantenimiento\Views\Vehiculos\Index.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\RevisionesVehiculos\Index.cshtml" />
     <None Include="Scripts\jquery-3.6.3.intellisense.js" />
     <Content Include="Scripts\jquery-3.6.3.js" />
     <Content Include="Scripts\jquery-3.6.3.min.js" />

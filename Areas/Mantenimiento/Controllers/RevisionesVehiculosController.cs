@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using CasaGaillard.Models;
 using CasaGaillard.Models.ViewModels;
 using Microsoft.Ajax.Utilities;
+using System.ComponentModel.DataAnnotations;
 
 namespace CasaGaillard.Areas.Mantenimiento.Controllers
 {
@@ -17,6 +18,16 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
     public class RevisionesVehiculosController : Controller
     {
         private readonly GaillardEntities db = new GaillardEntities();
+
+        public class Revisiones                  // Objeto para pasar las últimas revisiones a la vista
+        {
+            public string MatriculaVehiculo { get; set; }
+
+            [DataType(DataType.Date)]
+            [DisplayFormat(DataFormatString = "{0:dd-mm-yyyy}")]
+            public DateTime? Caducidad { get; set; }
+            public string TipoRevision { get; set; }
+        }
 
         // GET: RevisionesVehiculos
         public async Task<ActionResult> Index()
@@ -26,22 +37,27 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                 .OrderBy(r => r.Vehiculo.MatriculaVehiculo)
                 .GroupBy(r => r.Vehiculo.MatriculaVehiculo);
 
-            var revVehiculos = from rv in revisionesVehiculos
-                                  select (
+           
+            return View(await revisionesVehiculos.ToListAsync());
+        }
 
-                                      from r in rv
-                                      group r by r.TipoRevision into z
-                                      from rz in z
-                                      where rz.Caducidad == z.Max(r => r.Caducidad)
-                                      select new
-                                      {
-                                          rz.Vehiculo.MatriculaVehiculo,
-                                          rz.TipoRevision,
-                                          rz.Caducidad
-                                      }
+        // GET: RevisionesVehiculos/ProximasRevisiones
+        public ActionResult ProximasRevisiones()
+        {
+            var result = from r in db.RevisionesVehiculo
+                         join v in db.Vehiculos on r.VehiculoID equals v.ID
+                         join t in db.TiposRevision on r.TipoRevisionID equals t.ID
+                         group new { v.MatriculaVehiculo, t.Revision, r.Caducidad } by new { v.MatriculaVehiculo, t.Revision } into g
+                         orderby g.Max(x => x.Caducidad)
+                         select new Revisiones()
+                         { 
+                             MatriculaVehiculo = g.Key.MatriculaVehiculo, 
+                             TipoRevision = g.Key.Revision, 
+                             Caducidad = g.Max(x => x.Caducidad) 
+                         };
 
-                                    );
-            return View(await revVehiculos.ToListAsync());
+            ViewBag.res = result.ToList();
+            return View();
         }
 
         // GET: RevisionesVehiculos/Details/5

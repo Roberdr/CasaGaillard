@@ -19,17 +19,19 @@
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
-        @Html.ActionLink("CASA GAILLARD S.A.", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+        @Html.ActionLink("CASA GAILLARD S.A.", "Index", "Home", new { area = "Mantenimiento" }, new { @class = "navbar-brand" })
         <div class="navbar-collapse collapse" id="navbarContent">
             <ul class="navbar-nav mr-auto">
                 <li>
-                    @Html.ActionLink("Home", "Index", "Pagina", new { area = "Pagina" }, htmlAttributes: new { @class = "nav-link active" })
+                    @Html.ActionLink("Home", "Index", "Home", new { area = "Mantenimiento" }, htmlAttributes: new { @class = "nav-link active" })
                 </li>
                 @using Microsoft.AspNet.Identity
                 @if (Request.IsAuthenticated)
                 {
                     <li>@Html.ActionLink("Cubas", "Index", "Cubas", new { area = "Mantenimiento" }, htmlAttributes: new { @class = "nav-link" })</li>
-                    <li>@Html.ActionLink("Accesorios", "Index", "Accesorios", new { area = "Mantenimiento" }, htmlAttributes: new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Revisiones", "Index", "RevisionesVehiculos", new { area = "Mantenimiento" }, htmlAttributes: new { @class = "nav-link" })</li>
+                    <li>@Html.ActionLink("Vehículos", "Index", "Vehiculos", new { area = "Mantenimiento" }, htmlAttributes: new { @class = "nav-link" })</li>
+
                 }
                 <li>@Html.ActionLink("Acerca de", "About", "Home", routeValues: null, htmlAttributes: new { @class = "nav-link", data_icon = "fa fa-address-book" })</li>
                 <li>@Html.ActionLink("Contacto", "Contact", "Home", routeValues: null, htmlAttributes: new { @class = "nav-link" })</li>

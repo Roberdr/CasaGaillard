@@ -54,8 +54,14 @@ namespace CasaGaillard.Models
         [DisplayFormat(DataFormatString = "{0:N}", ApplyFormatInEditMode = true)]
         public Nullable<decimal> PresionTaradoValvulas { get; set; }
         public string TemperaturaCalculoReferencia { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}", ApplyFormatInEditMode = true)]
         public Nullable<int> PesoBruto { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}", ApplyFormatInEditMode = true)]
         public Nullable<int> Tara { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}", ApplyFormatInEditMode = true)]
         public Nullable<int> PesoMaxProducto { get; set; }
         public Nullable<int> MaterialExteriorID { get; set; }
 
@@ -70,7 +76,11 @@ namespace CasaGaillard.Models
         public string TipoForro { get; set; }
         public string NumAprobacionCSC { get; set; }
         public string Modelo { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}", ApplyFormatInEditMode = true)]
         public Nullable<int> PesoMaxApilamiento { get; set; }
+
+        [DisplayFormat(DataFormatString = "{0:N0}", ApplyFormatInEditMode = true)]
         public Nullable<int> CargaRigidez { get; set; }
         public Nullable<decimal> PresionPrueba { get; set; }
         public string TemperaturaMinCarga { get; set; }
