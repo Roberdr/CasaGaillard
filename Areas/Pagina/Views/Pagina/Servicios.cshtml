@@ -1,0 +1,35 @@
+@model IEnumerable<CasaGaillard.Models.ViewModels.ServicioPublicoViewModel>
+
+@{
+    ViewBag.Title = "Servicios";
+}
+
+<section class="public-section public-section--tight">
+    <div class="container">
+        <div class="public-page-head">
+            <div>
+                <span class="public-kicker">Servicios</span>
+                <h1>Líneas de trabajo</h1>
+                <p class="text-muted">Una visión clara de las líneas de trabajo que la empresa ofrece de forma habitual.</p>
+            </div>
+        </div>
+
+        <div class="public-note public-note--accent">
+            Aquí reunimos los servicios de forma sencilla para que el visitante entienda enseguida cómo trabaja la empresa y qué tipo de soporte puede encontrar.
+        </div>
+
+        <div class="public-grid public-grid--three">
+            @foreach (var servicio in Model)
+            {
+                <article class="public-product-card public-product-card--service">
+                    <div class="public-product-card__top">
+                        <h3>@servicio.Titulo</h3>
+                        <span class="public-chip public-chip--muted">Servicio</span>
+                    </div>
+                    <p class="public-product-card__formula">@servicio.Descripcion</p>
+                    <p class="text-muted">@servicio.Detalle</p>
+                </article>
+            }
+        </div>
+    </div>
+</section>

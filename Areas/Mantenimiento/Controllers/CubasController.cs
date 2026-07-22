@@ -5,11 +5,8 @@ using System.Data.Entity;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
 using CasaGaillard.Models;
-using System.Threading;
-using System.Globalization;
 using System.Collections.Generic;
 
 namespace CasaGaillard.Areas.Mantenimiento.Controllers
@@ -19,31 +16,24 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
     {
         private readonly GaillardEntities db = new GaillardEntities();
 
+        private void CargarListasCuba(Cuba cuba = null)
+        {
+            ViewBag.MaterialExteriorID = new SelectList(
+                db.Materiales.OrderBy(m => m.Material1),
+                "ID",
+                "Material1",
+                cuba?.MaterialExteriorID);
+
+            ViewBag.PlataformaID = new SelectList(
+                db.Vehiculos.OrderBy(v => v.MatriculaVehiculo),
+                "ID",
+                "MatriculaVehiculo",
+                cuba?.PlataformaID);
+        }
+
         // GET: Cubas
         public async Task<ActionResult> Index()
         {
-
-            //var viewModel = from c in db.Cubas
-            //                join r in db.Revisiones on c.ID equals r.CubaID into gc
-            //                from grupo in gc
-            //                    //let Valida = grupo.ValidaHasta
-            //                orderby grupo.ValidaHasta descending
-            //                where grupo.ValidaHasta == gc.Max(x => x.ValidaHasta)
-            //                select new UltimasRevisiones()
-            //                {
-            //                    MatriculaCuba = c.MatriculaCuba,
-            //                    ValidaHasta = grupo.ValidaHasta,
-            //                    DescripcionProxima = grupo.DescripcionProxima
-            //                };
-
-            //var viewModel1 = from z in viewModel
-            //                 orderby z.ValidaHasta
-            //                 where (z.ValidaHasta > fechaInicio) && (z.ValidaHasta < fechaFinal)
-            //                 select z;
-
-
-            //ViewBag.Revis = await viewModel1.ToListAsync();
-            
             var cubas = db.Cubas
                 .Include(c => c.Material)
                 .Include(c => c.Vehiculo)
@@ -56,21 +46,15 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         // GET: Cubas/Details/5
         public async Task<ActionResult> Details(int? id)
         {
-
-           
-            CultureInfo culture1 = CultureInfo.CurrentCulture;
-            CultureInfo culture2 = Thread.CurrentThread.CurrentCulture;
-            System.Diagnostics.Debug.WriteLine("The current culture is {0}", culture1.Name);
-            System.Diagnostics.Debug.WriteLine("The two CultureInfo objects are equal: {0}",
-                              culture1 == culture2);
-            ViewBag.culture1 = culture1;
-            ViewBag.culture2 = culture2;
-            
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Cuba cuba = await db.Cubas.FindAsync(id);
+            Cuba cuba = await db.Cubas
+                .Include(c => c.Material)
+                .Include(c => c.Vehiculo)
+                .Include(c => c.Revisions)
+                .FirstOrDefaultAsync(c => c.ID == id);
             if (cuba == null)
             {
                 return HttpNotFound();
@@ -83,19 +67,16 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             // Comprueba que haya un directorio con la matricula de la cuba a detallar
             // y crea una lista de los archivos existentes
 
-            string imgPath = "C:/Users/magat/source/repos/CasaGaillard/Content/images/";
-            string docPath;
+            string imgPath = Server.MapPath("~/Content/images/");
             List<string> nameFiles = new List<string>();
-            List<string> d = new List<string>(Directory.EnumerateDirectories(imgPath));
-            if (d.Contains(imgPath + cuba.MatriculaCuba.ToString()))
+            string cubaImagePath = Path.Combine(imgPath, cuba.MatriculaCuba.ToString());
+            if (Directory.Exists(cubaImagePath))
             {
-                docPath = imgPath + cuba.MatriculaCuba.ToString() + "/";
-                List<string> files = new List<string>(Directory.EnumerateFiles(docPath));
+                List<string> files = new List<string>(Directory.EnumerateFiles(cubaImagePath));
 
                 foreach (string f in files)
                 {
-                    var pos = f.LastIndexOf("/");
-                    nameFiles.Add(f.Substring(pos));
+                    nameFiles.Add(Path.GetFileName(f));
                 }
             }
             ViewBag.files = nameFiles;
@@ -105,8 +86,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         // GET: Cubas/Create
         public ActionResult Create()
         {
-            ViewBag.MaterialExteriorID = new SelectList(db.Materiales, "ID", "Material1");
-            ViewBag.PlataformaID = new SelectList(db.Vehiculos.OrderBy(o => o.MatriculaVehiculo), "ID", "MatriculaVehiculo");
+            CargarListasCuba();
             return View();
         }
 
@@ -120,13 +100,13 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             if (ModelState.IsValid)
             {
                 cuba.CreatedAt = DateTime.Now;
+                cuba.UpdatedAt = DateTime.Now;
                 db.Cubas.Add(cuba);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.MaterialExteriorID = new SelectList(db.Materiales, "ID", "Material1", cuba.MaterialExteriorID);
-            ViewBag.PlataformaID = new SelectList(db.Vehiculos.OrderBy(o => o.MatriculaVehiculo), "ID", "MatriculaVehiculo", cuba.PlataformaID);
+            CargarListasCuba(cuba);
             return View(cuba);
         }
 
@@ -142,8 +122,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.MaterialExteriorID = new SelectList(db.Materiales, "ID", "Material1", cuba.MaterialExteriorID);
-            ViewBag.PlataformaID = new SelectList(db.Vehiculos.OrderBy(o => o.MatriculaVehiculo), "ID", "MatriculaVehiculo", cuba.PlataformaID);
+            CargarListasCuba(cuba);
             return View(cuba);
         }
 
@@ -161,8 +140,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.MaterialExteriorID = new SelectList(db.Materiales, "ID", "Material1", cuba.MaterialExteriorID);
-            ViewBag.PlataformaID = new SelectList(db.Vehiculos.OrderBy(o => o.MatriculaVehiculo), "ID", "MatriculaVehiculo", cuba.PlataformaID);
+            CargarListasCuba(cuba);
             return View(cuba);
         }
 

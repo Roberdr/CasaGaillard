@@ -1,10 +1,10 @@
 ﻿@model CasaGaillard.Models.Cuba
 
 @{
-    ViewBag.Title = "Create";
+    ViewBag.Title = "Crear cuba";
 }
 
-<h2>Create</h2>
+<h2>Crear cuba</h2>
 
 
 @using (Html.BeginForm()) 
@@ -369,15 +369,12 @@
 
         <div class="form-group">
             <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-outline-info" />
+                <input type="submit" value="Guardar" class="btn btn-outline-info" />
+                @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-link" })
             </div>
         </div>
     </div>
 }
-
-<div>
-    @Html.ActionLink("Back to List", "Index")
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

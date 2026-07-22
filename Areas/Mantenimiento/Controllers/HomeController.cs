@@ -16,6 +16,7 @@ using System.Data;
 namespace CasaGaillard.Areas.Mantenimiento.Controllers
 {
 
+    [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento + "," + AppRoles.Consulta)]
     [RouteArea("Mantenimiento")]
     public class HomeController : Controller
     {
@@ -49,31 +50,38 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         {
             var fechaInicio = DateTime.Now.AddMonths(-2);
             var fechaFinal = DateTime.Now.AddMonths(2);
+            var revisionesCubas = new List<UltimasRevisiones>();
+            var revisionesVehiculos = new List<UltimasRevisionesVehiculos>();
+            var tareasRecientes = new List<TareaMantenimientoResumenViewModel>();
 
             var viewModel = from c in db.Cubas
-                       join r in db.Revisiones on c.ID equals r.CubaID into gc
-                       from grupo in gc
-                       //let Valida = grupo.ValidaHasta
-                       orderby grupo.ValidaHasta descending
-                       where grupo.ValidaHasta == gc.Max(x => x.ValidaHasta)
-                       select new UltimasRevisiones()
-                       { 
-                           MatriculaCuba = c.MatriculaCuba, 
-                           ValidaHasta = grupo.ValidaHasta,
-                           DescripcionProxima = grupo.DescripcionProxima
-                       };
+                            join r in db.Revisiones on c.ID equals r.CubaID into gc
+                            from grupo in gc.DefaultIfEmpty()
+                            where grupo != null && grupo.ValidaHasta.HasValue
+                            group new { c, grupo } by c.MatriculaCuba into g
+                            let ultimo = g.OrderByDescending(x => x.grupo.ValidaHasta).FirstOrDefault()
+                            where ultimo != null
+                            select new UltimasRevisiones()
+                            {
+                                MatriculaCuba = ultimo.c.MatriculaCuba,
+                                ValidaHasta = ultimo.grupo.ValidaHasta,
+                                DescripcionProxima = ultimo.grupo.DescripcionProxima
+                            };
 
             var viewModel1 = from z in viewModel
+                             where z.ValidaHasta.HasValue
+                                && z.ValidaHasta > fechaInicio
+                                && z.ValidaHasta < fechaFinal
                              orderby z.ValidaHasta
-                             where (z.ValidaHasta > fechaInicio) && (z.ValidaHasta < fechaFinal)
                              select z;
 
-            ViewBag.Revis = await viewModel1.ToListAsync();
+            revisionesCubas = await viewModel1.ToListAsync();
 
             var viewModelV = db.RevisionesVehiculo
                 .Include(i => i.Vehiculo)
-                .Where(r => r.Caducidad > fechaInicio && r.Caducidad < fechaFinal)
-                .GroupBy(r => new { r.Vehiculo.MatriculaVehiculo, r.TipoRevision})
+                .Where(r => r.Caducidad.HasValue && r.Caducidad > fechaInicio && r.Caducidad < fechaFinal)
+                .Where(r => r.Vehiculo != null && r.TipoRevision != null)
+                .GroupBy(r => new { r.Vehiculo.MatriculaVehiculo, r.TipoRevision })
                 .Select(s => new UltimasRevisionesVehiculos()
                 {
                     MatriculaVehiculo = s.Key.MatriculaVehiculo,
@@ -84,7 +92,32 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             var viewModel1V = viewModelV
                 .OrderBy(r => r.Caducidad);
 
-            ViewBag.RevisV = await viewModel1V.ToListAsync();
+            revisionesVehiculos = await viewModel1V.ToListAsync();
+
+            using (var tareasDb = new TareasMantenimientoContext())
+            {
+                tareasRecientes = await tareasDb.TareasMantenimiento
+                    .AsNoTracking()
+                    .OrderByDescending(t => t.FechaCreacion)
+                    .Take(5)
+                    .Select(t => new TareaMantenimientoResumenViewModel
+                    {
+                        ID = t.ID,
+                        Codigo = t.Codigo,
+                        Titulo = t.Titulo,
+                        Ubicacion = t.Ubicacion,
+                        Equipo = t.Equipo,
+                        Prioridad = t.Prioridad,
+                        Estado = t.Estado,
+                        AsignadaA = t.AsignadaA,
+                        FechaCreacion = t.FechaCreacion
+                    })
+                    .ToListAsync();
+            }
+
+            ViewBag.Revis = revisionesCubas;
+            ViewBag.RevisV = revisionesVehiculos;
+            ViewBag.Tareas = tareasRecientes;
 
             return View();
         }

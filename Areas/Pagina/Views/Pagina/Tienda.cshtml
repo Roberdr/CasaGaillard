@@ -1,10 +1,85 @@
-﻿
+@using System.Linq
+@model CasaGaillard.Models.ViewModels.PaginaStockViewModel
+
 @{
-    ViewBag.Title = "Tienda";
+    ViewBag.Title = "Stock";
 }
 
-<h2>Tienda</h2>
+<section class="public-section public-section--tight">
+    <div class="container">
+        <div class="public-page-head">
+            <div>
+                <span class="public-kicker">Stock público</span>
+                <h1>Productos visibles</h1>
+                <p class="text-muted">
+                    Catálogo público de productos disponibles con una visión rápida de su composición y presencia en
+                    compartimentos.
+                </p>
+            </div>
+        </div>
 
-<h1>PÁGINA EN CONSTRUCCIÓN</h1>
+        <div class="public-stock-toolbar" data-stock-filter-root>
+            <div class="public-stock-toolbar__search">
+                <label for="stockFilter">Buscar producto</label>
+                <input type="search"
+                       id="stockFilter"
+                       class="form-control public-stock-filter"
+                       placeholder="Nombre, fórmula, UN, grupo o material" />
+            </div>
+            <div class="public-stock-toolbar__status">
+                <span id="stockCounter" class="public-chip public-chip--muted">0 visibles</span>
+                <button type="button" id="stockClear" class="btn btn-link public-link">Limpiar filtro</button>
+            </div>
+        </div>
 
-<p>Enumeración de los productos que tiene CASA GAILLARD S.A. a disposición de sus clientes y en que formatos se sirven.</p>
+        @if (Model.Productos != null && Model.Productos.Any())
+        {
+            <div class="public-grid" id="stockGrid">
+                @foreach (var producto in Model.Productos)
+                {
+                    var searchable = string.Join(" ", new[] {
+                        producto.Nombre,
+                        producto.Formula,
+                        producto.Iupac,
+                        producto.NumeroUN,
+                        producto.MaterialPredominante,
+                        producto.Grupo.HasValue ? "grupo " + producto.Grupo.Value.ToString() : null
+                    }.Where(x => !string.IsNullOrWhiteSpace(x)));
+                    <article class="public-product-card" data-stock-card data-search="@searchable">
+                        <div class="public-product-card__top">
+                            <h3>@producto.Nombre</h3>
+                            <span class="public-chip">@("Grupo " + (producto.Grupo.HasValue ? producto.Grupo.Value.ToString() : "N/D"))</span>
+                        </div>
+                        <p class="public-product-card__formula">@producto.Formula</p>
+                        <dl class="public-definition">
+                            <div>
+                                <dt>IUPAC</dt>
+                                <dd>@(!string.IsNullOrWhiteSpace(producto.Iupac) ? producto.Iupac : "No disponible")</dd>
+                            </div>
+                            <div>
+                                <dt>UN</dt>
+                                <dd>@(!string.IsNullOrWhiteSpace(producto.NumeroUN) ? producto.NumeroUN : "N/D")</dd>
+                            </div>
+                            <div>
+                                <dt>Compartimentos</dt>
+                                <dd>@producto.TotalCompartimentos</dd>
+                            </div>
+                            <div>
+                                <dt>Capacidad</dt>
+                                <dd>@(producto.CapacidadTotal.HasValue ? producto.CapacidadTotal.Value.ToString() : "N/D")</dd>
+                            </div>
+                            <div class="public-definition__wide">
+                                <dt>Material</dt>
+                                <dd>@(!string.IsNullOrWhiteSpace(producto.MaterialPredominante) ? producto.MaterialPredominante : "No disponible")</dd>
+                            </div>
+                        </dl>
+                    </article>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="public-note">El catálogo está temporalmente no disponible.</div>
+        }
+    </div>
+</section>

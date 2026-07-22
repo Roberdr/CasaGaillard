@@ -1,0 +1,109 @@
+@model CasaGaillard.Models.TareaMantenimiento
+
+@{
+    ViewBag.Title = "Detalle de tarea";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <h2>Detalle de tarea</h2>
+        <p class="text-muted">Consulta completa de la incidencia registrada.</p>
+        <p>
+            @Html.ActionLink("Volver al listado", "Index", null, new { @class = "btn btn-default" })
+            @if (User.IsInRole(CasaGaillard.Models.AppRoles.Administrador) || User.IsInRole(CasaGaillard.Models.AppRoles.Mantenimiento))
+            {
+                @Html.ActionLink("Editar", "Edit", new { id = Model.ID }, new { @class = "btn btn-primary" })
+                @Html.ActionLink("Gestionar", "Gestion", new { id = Model.ID }, new { @class = "btn btn-success" })
+            }
+        </p>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong>@Model.Codigo</strong> - @Model.Titulo
+            </div>
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>Ubicación</dt>
+                    <dd>@(string.IsNullOrWhiteSpace(Model.Ubicacion) ? "Sin indicar" : Model.Ubicacion)</dd>
+
+                    <dt>Equipo</dt>
+                    <dd>@(string.IsNullOrWhiteSpace(Model.Equipo) ? "Sin indicar" : Model.Equipo)</dd>
+
+                    <dt>Detectado por</dt>
+                    <dd>@(string.IsNullOrWhiteSpace(Model.DetectadoPor) ? "Sin indicar" : Model.DetectadoPor)</dd>
+
+                    <dt>Contacto</dt>
+                    <dd>@(string.IsNullOrWhiteSpace(Model.Contacto) ? "Sin indicar" : Model.Contacto)</dd>
+
+                    <dt>Prioridad</dt>
+                    <dd>@(string.IsNullOrWhiteSpace(Model.Prioridad) ? "Sin indicar" : Model.Prioridad)</dd>
+
+                    <dt>Estado</dt>
+                    <dd>@(string.IsNullOrWhiteSpace(Model.Estado) ? "Sin indicar" : Model.Estado)</dd>
+
+                    <dt>Asignada a</dt>
+                    <dd>@(string.IsNullOrWhiteSpace(Model.AsignadaA) ? "Sin asignar" : Model.AsignadaA)</dd>
+
+                    <dt>Empresa exterior</dt>
+                    <dd>@(string.IsNullOrWhiteSpace(Model.EmpresaExterior) ? "Sin indicar" : Model.EmpresaExterior)</dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading"><strong>Descripción</strong></div>
+            <div class="panel-body">
+                <p style="white-space: pre-wrap;">@Model.Descripcion</p>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading"><strong>Acciones a realizar</strong></div>
+            <div class="panel-body">
+                <p style="white-space: pre-wrap;">@(string.IsNullOrWhiteSpace(Model.AccionesARealizar) ? "Sin acciones definidas todavía." : Model.AccionesARealizar)</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading"><strong>Resumen</strong></div>
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>Creada por</dt>
+                    <dd>@(string.IsNullOrWhiteSpace(Model.CreadoPor) ? "Desconocido" : Model.CreadoPor)</dd>
+
+                    <dt>Fecha detección</dt>
+                    <dd>@Model.FechaDeteccion.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                    <dt>Fecha creación</dt>
+                    <dd>@Model.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</dd>
+
+                    <dt>Actualizada</dt>
+                    <dd>@(Model.FechaActualizacion.HasValue ? Model.FechaActualizacion.Value.ToString("dd/MM/yyyy HH:mm") : "No actualizada")</dd>
+
+                    <dt>Actualizada por</dt>
+                    <dd>@(string.IsNullOrWhiteSpace(Model.ActualizadoPor) ? "Sin cambios" : Model.ActualizadoPor)</dd>
+                </dl>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading"><strong>Accesorios necesarios</strong></div>
+            <div class="panel-body">
+                <p style="white-space: pre-wrap;">@(ViewBag.AccesoriosTexto ?? "Sin accesorios indicados.")</p>
+            </div>
+        </div>
+
+        <div class="panel panel-default">
+            <div class="panel-heading"><strong>Observaciones</strong></div>
+            <div class="panel-body">
+                <p style="white-space: pre-wrap;">@(string.IsNullOrWhiteSpace(Model.Observaciones) ? "Sin observaciones." : Model.Observaciones)</p>
+            </div>
+        </div>
+    </div>
+</div>

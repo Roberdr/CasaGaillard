@@ -1,24 +1,93 @@
-﻿<script defer
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDrljtufH4cA-Gd-v3j0ntsuOj4PGw0VHE&callback=initMap">
-</script>
-<style>
-    #map {
-        height: 100%;
-    }
+@model CasaGaillard.Models.ViewModels.PaginaInicioViewModel
 
-    html, body {
-        height: 100%;
-        margin: 0;
-        padding: 0;
-    }
-</style>
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Inicio";
+    var foto1 = Url.Content("~/Content/images/IMG_20201013_122605.jpg");
+    var foto2 = Url.Content("~/Content/images/DSC_0122.JPG");
+    var foto3 = Url.Content("~/Content/images/DSC_0296.JPG");
+    var foto4 = Url.Content("~/Content/images/IMG_20201013_122550.jpg");
 }
 
-<h1>PÁGINA EN CONSTRUCCIÓN</h1>
+<section class="public-home-frame">
+    <div class="container">
+        <div class="public-home-frame__header">
+            <div class="public-home-frame__brand">
+                <img src="~/Content/images/logo-casa.png" alt="Casa Gaillard" />
+            </div>
+            <div class="public-home-frame__title">
+                <h1>CASA GAILLARD S.A.</h1>
+                <h3>Desde 1924</h3>
+            </div>
+        </div>
+        <div class="public-home-frame__copy">
+            <h2>Presentación</h2>
+            <p>
+                Casa Gaillard somos una empresa de distribución de productos químicos en el ámbito de las Islas Baleares
+                y estamos dedicados tanto al cliente particular como a la industria local, abasteciendo actividades tan
+                diversas como el tratamiento de aguas, la fabricación de detergentes y pinturas, la desalación de agua
+                marina o las artes gráficas.
+            </p>
+        </div>
+    </div>
+</section>
 
-<p>En esta página se verá una introducción de la actividad empresarial de CASA GAILLARD S.A.</p>
+<section class="public-home-section public-home-section--gallery">
+    <div class="container">
+        <div id="companyCarousel" class="carousel slide public-home-carousel" data-ride="carousel" data-interval="5000">
+            <ol class="carousel-indicators">
+                <li data-target="#companyCarousel" data-slide-to="0" class="active"></li>
+                <li data-target="#companyCarousel" data-slide-to="1"></li>
+                <li data-target="#companyCarousel" data-slide-to="2"></li>
+                <li data-target="#companyCarousel" data-slide-to="3"></li>
+            </ol>
+            <div class="carousel-inner">
+                <div class="item active">
+                    <img src="@foto1" alt="Instalaciones de Casa Gaillard 1" />
+                </div>
+                <div class="item">
+                    <img src="@foto2" alt="Instalaciones de Casa Gaillard 2" />
+                </div>
+                <div class="item">
+                    <img src="@foto3" alt="Instalaciones de Casa Gaillard 3" />
+                </div>
+                <div class="item">
+                    <img src="@foto4" alt="Instalaciones de Casa Gaillard 4" />
+                </div>
+            </div>
+            <a class="left carousel-control" href="#companyCarousel" data-slide="prev">
+                <span class="icon-prev" aria-hidden="true"></span>
+            </a>
+            <a class="right carousel-control" href="#companyCarousel" data-slide="next">
+                <span class="icon-next" aria-hidden="true"></span>
+            </a>
+        </div>
+    </div>
+</section>
 
-<div id="map"></div>
-<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1536.926167667554!2d2.670083404707691!3d39.608008745604856!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x1297933b2eea8ea3%3A0x34e829eb3c344e33!2sCasa%20Gaillard%20S.A.!5e0!3m2!1ses!2ses!4v1604765618220!5m2!1ses!2ses" width="600" height="450" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+<section class="public-home-section public-home-section--alt">
+    <div class="container public-home-copy">
+        <h2>Actividad empresarial</h2>
+        <p>
+            Nos encontramos en el Polígono de Son Castelló, donde disponemos de una nave con almacenamiento de un
+            nutrido catálogo de productos químicos a granel y envasados y donde atendemos directamente a clientes
+            particulares, a la vez que servimos en cualquier punto de la isla con nuestros camiones.
+        </p>
+        <p>
+            Disponemos también de una flota de contenedores-cisterna aptos para traer productos químicos desde la
+            Península y para su descarga en las instalaciones del cliente que así lo necesite.
+        </p>
+    </div>
+</section>
+
+<section class="public-home-section">
+    <div class="container public-home-copy">
+        <h2>La historia de Casa Gaillard empieza en 1924</h2>
+        <p>
+            Casa Gaillard inicia su andadura en 1924 en un local de la calle Aragón de Palma, donde es fundada por el
+            francés Mario Gaillard como droguería. Tras más de cincuenta años de actividad en esa ubicación, la
+            empresa se instala también en el Polígono de Son Castelló, donde en 1980 abre un almacén mucho más amplio
+            y centrado en el almacenaje y distribución de productos químicos a granel, una ocupación que con los años
+            se va volviendo la principal.
+        </p>
+    </div>
+</section>

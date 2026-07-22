@@ -21,7 +21,7 @@ namespace CasaGaillard.Models
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
     {
         public ApplicationDbContext()
-            : base("data source=PORT;initial catalog=Gaillard;integrated security=True;multipleactiveresultsets=True;application name=EntityFramework", throwIfV1Schema: false)
+            : base("name=ApplicationDbContext", throwIfV1Schema: false)
         {
         }
 

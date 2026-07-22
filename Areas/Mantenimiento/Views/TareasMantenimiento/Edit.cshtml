@@ -1,0 +1,43 @@
+@model CasaGaillard.Models.ViewModels.TareaMantenimientoFormViewModel
+
+@{
+    ViewBag.Title = "Editar tarea";
+}
+
+<h2>Editar tarea de mantenimiento</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.ID)
+    @Html.HiddenFor(m => m.Codigo)
+    @Html.ValidationSummary(true)
+
+    <div class="alert alert-info">
+        <strong>Código:</strong> @Model.Codigo<br />
+        <strong>Creada:</strong> @Model.FechaCreacion.ToString("dd/MM/yyyy HH:mm")<br />
+        @if (!string.IsNullOrWhiteSpace(Model.CreadoPor))
+        {
+            <span><strong>Creada por:</strong> @Model.CreadoPor<br /></span>
+        }
+        @if (Model.FechaActualizacion.HasValue)
+        {
+            <span><strong>Actualizada:</strong> @Model.FechaActualizacion.Value.ToString("dd/MM/yyyy HH:mm")<br /></span>
+        }
+        @if (!string.IsNullOrWhiteSpace(Model.ActualizadoPor))
+        {
+            <span><strong>Actualizada por:</strong> @Model.ActualizadoPor</span>
+        }
+    </div>
+
+    @Html.Partial("_Form", Model)
+
+    <div class="form-group">
+        <input type="submit" value="Guardar cambios" class="btn btn-primary" />
+        @Html.ActionLink("Cancelar", "Details", new { id = Model.ID }, new { @class = "btn btn-default" })
+    </div>
+}
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

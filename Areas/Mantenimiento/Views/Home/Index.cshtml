@@ -22,14 +22,26 @@
                     </tr>
 
                 </thead>
-                @foreach (var c in ViewBag.Revis)
+                <tbody>
+                    @if (ViewBag.Revis != null)
                 {
-                    <tr>
-                        <td class="col-md-4">@c.MatriculaCuba</td>
-                        <td class="col-md-5">@c.ValidaHasta.ToString("d")</td>
-                        <td class="col-md-3">@c.DescripcionProxima</td>
-                    </tr>
-                }
+                    foreach (var c in ViewBag.Revis)
+                    {
+                        DateTime? validaHasta = c.ValidaHasta;
+                        <tr>
+                            <td class="col-md-4">@c.MatriculaCuba</td>
+                            <td class="col-md-5">@(validaHasta.HasValue ? validaHasta.Value.ToString("d") : "N/D")</td>
+                            <td class="col-md-3">@c.DescripcionProxima</td>
+                        </tr>
+                    }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="3" class="text-muted">No hay revisiones de cuba para mostrar.</td>
+                        </tr>
+                    }
+                </tbody>
             </table>
 
         <p><a class="btn btn-default" href="#">Más &raquo;</a></p>
@@ -46,20 +58,59 @@
                 </tr>
 
             </thead>
-            @foreach (var c in ViewBag.RevisV)
-            {
-                <tr>
-                    <td class="col-md-4">@c.MatriculaVehiculo</td>
-                    <td class="col-md-5">@c.Caducidad.ToString("d")</td>
-                    <td class="col-md-3">@c.TipoRevision</td>
-                </tr>
-            }
+            <tbody>
+                @if (ViewBag.RevisV != null)
+                {
+                    foreach (var c in ViewBag.RevisV)
+                    {
+                        DateTime? caducidad = c.Caducidad;
+                        <tr>
+                            <td class="col-md-4">@c.MatriculaVehiculo</td>
+                            <td class="col-md-5">@(caducidad.HasValue ? caducidad.Value.ToString("d") : "N/D")</td>
+                            <td class="col-md-3">@c.TipoRevision</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3" class="text-muted">No hay ITV próximas para mostrar.</td>
+                    </tr>
+                }
+            </tbody>
         </table>
         <p><a class="btn btn-default" href="#">Más &raquo;</a></p>
     </div>
     <div class="col-md-4">
-        <h3>Resto de mantenimiento</h3>
-        <p>En construcción. Tareas pendientes de ejecutar en mantenimiento.</p>
-        <p><a class="btn btn-default" href="#">Más &raquo;</a></p>
+        <h3>Tareas de mantenimiento</h3>
+        <table class="table table-sm">
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Estado</th>
+                    <th>Prioridad</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (ViewBag.Tareas != null)
+                {
+                    foreach (var t in ViewBag.Tareas)
+                    {
+                        <tr>
+                            <td>@t.Codigo</td>
+                            <td>@t.Estado</td>
+                            <td>@t.Prioridad</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3" class="text-muted">No hay tareas registradas.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <p>@Html.ActionLink("Ver tareas", "Index", "TareasMantenimiento", new { area = "Mantenimiento" }, new { @class = "btn btn-default" })</p>
     </div>
 </div>

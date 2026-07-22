@@ -1,0 +1,40 @@
+@model IEnumerable<CasaGaillard.Models.ViewModels.SeguridadPublicaViewModel>
+
+@{
+    ViewBag.Title = "Seguridad";
+}
+
+<section class="public-section public-section--tight">
+    <div class="container">
+        <div class="public-page-head">
+            <div>
+                <span class="public-kicker">Seguridad</span>
+                <h1>Recomendaciones y actuación</h1>
+                <p class="text-muted">
+                    Recomendaciones básicas para trabajar con orden, minimizar riesgos y reaccionar con rapidez ante una incidencia.
+                </p>
+            </div>
+        </div>
+
+        <div class="public-note public-note--accent">
+            La prioridad aquí es dar mensajes claros y cortos: prevenir, detener, señalizar y comunicar.
+        </div>
+
+        <div class="public-grid public-grid--two">
+            @foreach (var aviso in Model)
+            {
+                <article class="public-product-card public-product-card--security">
+                    <div class="public-product-card__top">
+                        <h3>@aviso.Titulo</h3>
+                        <span class="public-chip public-chip--alert">@aviso.Nivel</span>
+                    </div>
+                    <p>@aviso.Descripcion</p>
+                </article>
+            }
+        </div>
+
+        <div class="public-note">
+            Si detectas una anomalía, detén la tarea, señaliza la zona y comunícalo al responsable correspondiente.
+        </div>
+    </div>
+</section>

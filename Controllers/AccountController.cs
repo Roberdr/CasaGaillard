@@ -1,14 +1,17 @@
 ﻿using System;
 using System.Globalization;
+using System.Data.Entity;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
+using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.Owin.Security;
 using CasaGaillard.Models;
+using CasaGaillard.Models.ViewModels;
 
 namespace CasaGaillard.Controllers
 {
@@ -79,6 +82,11 @@ namespace CasaGaillard.Controllers
             switch (result)
             {
                 case SignInStatus.Success:
+                    if (IsMaintenanceReturnUrl(returnUrl) && !await TieneAccesoAMantenimiento(model.Email))
+                    {
+                        TempData["LoginMessage"] = "Tu cuenta ha iniciado sesión, pero todavía no tiene acceso a Mantenimiento.";
+                        return RedirectToAction("Index", "Pagina", new { area = "Pagina" });
+                    }
                     return RedirectToLocal(returnUrl);
                 case SignInStatus.LockedOut:
                     return View("Lockout");
@@ -205,19 +213,12 @@ namespace CasaGaillard.Controllers
                 var user = await UserManager.FindByNameAsync(model.Email);
                 if (user == null || !(await UserManager.IsEmailConfirmedAsync(user.Id)))
                 {
-                    // No revelar que el usuario no existe o que no está confirmado
                     return View("ForgotPasswordConfirmation");
                 }
 
-                // Para obtener más información sobre cómo habilitar la confirmación de cuentas y el restablecimiento de contraseña, visite https://go.microsoft.com/fwlink/?LinkID=320771
-                // Enviar correo electrónico con este vínculo
-                // string code = await UserManager.GeneratePasswordResetTokenAsync(user.Id);
-                // var callbackUrl = Url.Action("ResetPassword", "Account", new { userId = user.Id, code = code }, protocol: Request.Url.Scheme);		
-                // await UserManager.SendEmailAsync(user.Id, "Restablecer contraseña", "Para restablecer la contraseña, haga clic <a href=\"" + callbackUrl + "\">aquí</a>");
-                // return RedirectToAction("ForgotPasswordConfirmation", "Account");
+                return View("ForgotPasswordConfirmation");
             }
 
-            // Si llegamos a este punto, es que se ha producido un error y volvemos a mostrar el formulario
             return View(model);
         }
 
@@ -227,6 +228,81 @@ namespace CasaGaillard.Controllers
         public ActionResult ForgotPasswordConfirmation()
         {
             return View();
+        }
+
+        //
+        // GET: /Account/BootstrapAdmin
+        [AllowAnonymous]
+        public async Task<ActionResult> BootstrapAdmin()
+        {
+            if (await ExisteAdministradorAsync())
+            {
+                return RedirectToAction("Login");
+            }
+
+            var users = await UserManager.Users
+                .OrderBy(u => u.Email)
+                .ToListAsync();
+
+            var model = new BootstrapAdminViewModel
+            {
+                Users = users.Select(u => new UserRecoveryViewModel
+                {
+                    Id = u.Id,
+                    Email = u.Email,
+                    UserName = u.UserName,
+                    Roles = UserManager.GetRoles(u.Id)
+                }).ToList()
+            };
+
+            return View(model);
+        }
+
+        //
+        // POST: /Account/BootstrapAdmin
+        [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> BootstrapAdmin(BootstrapAdminViewModel model)
+        {
+            if (await ExisteAdministradorAsync())
+            {
+                return RedirectToAction("Login");
+            }
+
+            if (string.IsNullOrWhiteSpace(model.UserId))
+            {
+                ModelState.AddModelError("", "Selecciona un usuario.");
+            }
+            else
+            {
+                var user = await UserManager.FindByIdAsync(model.UserId);
+                if (user == null)
+                {
+                    ModelState.AddModelError("", "El usuario no existe.");
+                }
+                else if (!await UserManager.IsInRoleAsync(user.Id, AppRoles.Administrador))
+                {
+                    await AsegurarRolAsync(AppRoles.Administrador);
+                    await UserManager.AddToRoleAsync(user.Id, AppRoles.Administrador);
+                    TempData["LoginMessage"] = "Se ha asignado el rol de Administrador. Ya puedes entrar al área de mantenimiento.";
+                    return RedirectToAction("Login");
+                }
+            }
+
+            var users = await UserManager.Users
+                .OrderBy(u => u.Email)
+                .ToListAsync();
+
+            model.Users = users.Select(u => new UserRecoveryViewModel
+            {
+                Id = u.Id,
+                Email = u.Email,
+                UserName = u.UserName,
+                Roles = UserManager.GetRoles(u.Id)
+            }).ToList();
+
+            return View(model);
         }
 
         //
@@ -450,6 +526,50 @@ namespace CasaGaillard.Controllers
                 return Redirect(returnUrl);
             }
             return RedirectToAction("Index", "Home");
+        }
+
+        private bool IsMaintenanceReturnUrl(string returnUrl)
+        {
+            return !string.IsNullOrWhiteSpace(returnUrl)
+                && returnUrl.IndexOf("/Mantenimiento", StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
+        private async Task<bool> ExisteAdministradorAsync()
+        {
+            var users = await UserManager.Users.ToListAsync();
+            foreach (var user in users)
+            {
+                if (await UserManager.IsInRoleAsync(user.Id, AppRoles.Administrador))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private async Task AsegurarRolAsync(string roleName)
+        {
+            using (var roleManager = new RoleManager<IdentityRole>(new RoleStore<IdentityRole>(new ApplicationDbContext())))
+            {
+                if (!await roleManager.RoleExistsAsync(roleName))
+                {
+                    await roleManager.CreateAsync(new IdentityRole(roleName));
+                }
+            }
+        }
+
+        private async Task<bool> TieneAccesoAMantenimiento(string email)
+        {
+            var user = await UserManager.FindByNameAsync(email);
+            if (user == null)
+            {
+                return false;
+            }
+
+            return await UserManager.IsInRoleAsync(user.Id, AppRoles.Administrador)
+                || await UserManager.IsInRoleAsync(user.Id, AppRoles.Mantenimiento)
+                || await UserManager.IsInRoleAsync(user.Id, AppRoles.Consulta);
         }
 
         internal class ChallengeResult : HttpUnauthorizedResult

@@ -1,0 +1,38 @@
+@model IEnumerable<CasaGaillard.Models.ViewModels.UserRecoveryViewModel>
+@{
+    ViewBag.Title = "Usuarios";
+}
+
+<h2>Usuarios</h2>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead>
+            <tr>
+                <th>Correo</th>
+                <th>Usuario</th>
+                <th>Roles</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.Email</td>
+                    <td>@user.UserName</td>
+                    <td>@(user.Roles == null ? "" : string.Join(", ", user.Roles))</td>
+                    <td class="text-right">
+                        @Html.ActionLink("Roles", "Roles", "Usuarios", new { area = "Mantenimiento", id = user.Id }, new { @class = "btn btn-sm btn-default" })
+                        @using (Html.BeginForm("GenerarEnlaceRestablecimiento", "Usuarios", FormMethod.Post, new { area = "Mantenimiento", @class = "d-inline" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.Hidden("id", user.Id)
+                            <button type="submit" class="btn btn-sm btn-primary">Reset password</button>
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
   <!-- EF Runtime content -->
   <edmx:Runtime>
@@ -90,8 +90,8 @@
           <Property Name="Alto" Type="int" />
           <Property Name="UpdatedAt" Type="datetime2" Precision="0" />
           <Property Name="CreatedAt" Type="datetime2" Precision="0" />
-          <Property Name="UpdatedBy" Type="int" />
-          <Property Name="CreatedBy" Type="int" />
+          <Property Name="UpdatedBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="50" />
           <Property Name="NumAprobacionIMDG" Type="nvarchar" MaxLength="20" />
           <Property Name="NumAprobacionADR/RID" Type="nvarchar" MaxLength="20" />
           <Property Name="UNPortableTank" Type="nvarchar" MaxLength="15" />
@@ -741,8 +741,8 @@
           <Property Name="Alto" Type="Int32" />
           <Property Name="UpdatedAt" Type="DateTime" Precision="0" />
           <Property Name="CreatedAt" Type="DateTime" Precision="0" />
-          <Property Name="UpdatedBy" Type="Int32" />
-          <Property Name="CreatedBy" Type="Int32" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="50" />
+          <Property Name="CreatedBy" Type="String" MaxLength="50" />
           <Property Name="NumAprobacionIMDG" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="NumAprobacionADR_RID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="UNPortableTank" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
@@ -2098,3 +2098,4 @@
     <Diagrams></Diagrams>
   </Designer>
 </edmx:Edmx>
+

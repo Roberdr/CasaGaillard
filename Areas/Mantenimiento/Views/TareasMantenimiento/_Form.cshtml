@@ -1,0 +1,90 @@
+@model CasaGaillard.Models.ViewModels.TareaMantenimientoFormViewModel
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Titulo)
+            @Html.TextBoxFor(m => m.Titulo, new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.Titulo)
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Ubicacion)
+            @Html.TextBoxFor(m => m.Ubicacion, new { @class = "form-control" })
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Equipo)
+            @Html.TextBoxFor(m => m.Equipo, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.DetectadoPor)
+            @Html.TextBoxFor(m => m.DetectadoPor, new { @class = "form-control" })
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Contacto)
+            @Html.TextBoxFor(m => m.Contacto, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.AsignadaA)
+            @Html.DropDownListFor(m => m.AsignadaA, Model.Empleados, "-- Sin asignar --", new { @class = "form-control" })
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Prioridad)
+            @Html.DropDownListFor(m => m.Prioridad, Model.Prioridades, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Estado)
+            @Html.DropDownListFor(m => m.Estado, Model.Estados, new { @class = "form-control" })
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            @Html.LabelFor(m => m.EmpresaExterior)
+            @Html.TextBoxFor(m => m.EmpresaExterior, new { @class = "form-control" })
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.Descripcion)
+    @Html.TextAreaFor(m => m.Descripcion, 5, 20, new { @class = "form-control" })
+    @Html.ValidationMessageFor(m => m.Descripcion)
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.AccionesARealizar)
+    @Html.TextAreaFor(m => m.AccionesARealizar, 4, 20, new { @class = "form-control" })
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.AccesoriosSeleccionados)
+    @Html.ListBoxFor(m => m.AccesoriosSeleccionados, Model.Accesorios, new { @class = "form-control", size = "8" })
+    <p class="help-block">Mantén pulsada la tecla Ctrl para seleccionar varios accesorios.</p>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.Observaciones)
+    @Html.TextAreaFor(m => m.Observaciones, 4, 20, new { @class = "form-control" })
+</div>

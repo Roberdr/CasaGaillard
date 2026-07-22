@@ -1,38 +1,76 @@
-﻿<!DOCTYPE html>
+@using CasaGaillard.Models
+<!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CASA GAILLARD S.A.</title>
-    @Styles.Render("~/Content/css")
+    <title>@ViewBag.Title - CASA GAILLARD S.A.</title>
+    @Styles.Render("~/bundles/styles")
     @Scripts.Render("~/bundles/modernizr")
 </head>
-<body style="min-height:75rem">
-    <div class="row">
-        <div class="navbar navbar-dark bg-primary col">
-            <img src="~/Content/images/logo_gaillard.JPeG" style="height:60px" />
-            <span class="navbar-text text-center" style="font-size: 60px; color:darkslateblue">
-                CASA GAILLARD S.A.
-            </span>
-
+<body class="public-body">
+    <header class="public-navbar navbar navbar-default navbar-fixed-top">
+        <div class="container public-navbar__inner">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#public-navbar">
+                    <span class="sr-only">Abrir menú</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                @Html.ActionLink("CASA GAILLARD S.A.", "Index", "Pagina", new { area = "Pagina" }, new { @class = "navbar-brand public-brand" })
+                <span class="public-brand__tagline hidden-xs">Distribución, servicios y seguridad</span>
+            </div>
+            <div class="collapse navbar-collapse" id="public-navbar">
+                <ul class="nav navbar-nav navbar-right public-nav">
+                    <li>@Html.ActionLink("Inicio", "Index", "Pagina", new { area = "Pagina" }, null)</li>
+                    <li>@Html.ActionLink("Contacto", "Contacto", "Pagina", new { area = "Pagina" }, null)</li>
+                </ul>
+                <div class="public-navbar__utility">
+                    @if (Request.IsAuthenticated)
+                    {
+                        @Html.ActionLink("Área interna", "Index", "Home", new { area = "Mantenimiento" }, new { @class = "public-utility-link" })
+                        <a class="public-utility-link" href="javascript:document.getElementById('logoutForm').submit()">Cerrar sesión</a>
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Iniciar sesión", "Login", "Account", new { area = "" }, new { @class = "public-utility-link" })
+                    }
+                </div>
+            </div>
         </div>
-    </div>
+    </header>
 
-    <div class="row" style="background-image: url('/Content/images/fondo-cabecera-contacto.jpg');
-                                background-size: cover; background-repeat:no-repeat; background-position:bottom">
-        <div class="col-lg-2 bg-light" style="border:thin blue solid; opacity:0.5">
-            @Html.Partial("_Menu_Lateral")
+    @if (Request.IsAuthenticated)
+    {
+        using (Html.BeginForm("LogOff", "Account", new { area = "" }, FormMethod.Post, new { id = "logoutForm", @class = "hidden" }))
+        {
+            @Html.AntiForgeryToken()
+        }
+    }
+
+    <main class="public-main">
+        @if (TempData["LoginMessage"] != null)
+        {
+            <div class="container">
+                <div class="alert alert-info" role="alert">@TempData["LoginMessage"]</div>
+            </div>
+        }
+        @RenderBody()
+    </main>
+
+    <footer class="public-footer">
+        <div class="container public-footer__inner">
+            <div>
+                <strong>Casa Gaillard S.A.</strong>
+                <span>Información pública, servicios y seguridad</span>
+            </div>
+            <div class="text-right">
+                <span>&copy; @DateTime.Now.Year</span>
+            </div>
         </div>
-        <div class="col-lg-10 body-content">
-
-            @RenderBody()
-            <hr />
-            <footer>
-                <p>&copy; @DateTime.Now.Year - Mantenimiento Casa Gaillard</p>
-            </footer>
-        </div>
-    </div>
-
+    </footer>
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/js")

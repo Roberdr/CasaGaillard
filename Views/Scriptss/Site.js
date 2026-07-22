@@ -29,6 +29,49 @@ function showInPopup (url, title) {
     })
 }
 
+$(function () {
+    var $root = $('[data-stock-filter-root]');
+    if (!$root.length) {
+        return;
+    }
+
+    var $input = $('#stockFilter');
+    var $cards = $('[data-stock-card]');
+    var $counter = $('#stockCounter');
+    var $clear = $('#stockClear');
+
+    function normalize(value) {
+        return (value || '').toString().toLowerCase();
+    }
+
+    function refreshCounter() {
+        var visible = $cards.filter(':visible').length;
+        $counter.text(visible + ' visibles');
+    }
+
+    function applyFilter() {
+        var query = normalize($input.val()).trim();
+
+        $cards.each(function () {
+            var $card = $(this);
+            var haystack = normalize($card.data('search') || $card.text());
+            var match = !query || haystack.indexOf(query) !== -1;
+            $card.toggle(match);
+        });
+
+        refreshCounter();
+    }
+
+    $input.on('input', applyFilter);
+    $clear.on('click', function () {
+        $input.val('');
+        applyFilter();
+        $input.trigger('focus');
+    });
+
+    applyFilter();
+});
+
 //jQueryAjaxPost = form => {
 //    try {
 //        $.ajax({

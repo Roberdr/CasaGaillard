@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using System.Text;
 
 namespace CasaGaillard
 {
@@ -16,6 +17,13 @@ namespace CasaGaillard
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            BundleTable.EnableOptimizations = true;
+        }
+
+        protected void Application_BeginRequest()
+        {
+            Response.ContentEncoding = Encoding.UTF8;
+            Response.Charset = "utf-8";
         }
     }
 }

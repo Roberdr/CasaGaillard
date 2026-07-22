@@ -80,8 +80,8 @@ namespace CasaGaillard.Models
         public Nullable<int> Alto { get; set; }
         public Nullable<System.DateTime> UpdatedAt { get; set; }
         public Nullable<System.DateTime> CreatedAt { get; set; }
-        public Nullable<int> UpdatedBy { get; set; }
-        public Nullable<int> CreatedBy { get; set; }
+        public string UpdatedBy { get; set; }
+        public string CreatedBy { get; set; }
         public string NumAprobacionIMDG { get; set; }
         public string NumAprobacionADR_RID { get; set; }
         public string UNPortableTank { get; set; }

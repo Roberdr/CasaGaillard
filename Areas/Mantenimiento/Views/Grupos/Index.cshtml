@@ -1,68 +1,54 @@
-﻿@model IEnumerable<CasaGaillard.Models.Grupo>
+@model IEnumerable<CasaGaillard.Models.Grupo>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Grupos";
 }
 
-<h2>Index</h2>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Grupos</h2>
+    @Html.ActionLink("Crear grupo", "Create", null, new { @class = "btn btn-success" })
+</div>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.Cuba.MatriculaCuba)
-        </th>
-        <th>
-            Compartimento
-            @*@Html.DisplayNameFor(model => model.Compartimento.Numero)*@
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.TipoGrupo.NombreGrupo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Situacion.LadoCubaNombre)
-        </th>
-        <th>Tipo Accesorio
-            @*@Html.DisplayNameFor(model => model.AccesoriosGrupo.Select(x => x.Accesorio.TipoAccesorio.TipoAccesorio1))
-            *@
-        </th>
-        <th>Cantidad
-            @*@Html.DisplayNameFor(model => model.AccesoriosGrupo.Select(x => x.Cantidad))*@
-        </th>
-        <th></th>
-    </tr>
-
-@foreach (var item in Model) {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.Cuba.MatriculaCuba)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Compartimento.Numero)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.TipoGrupo.NombreGrupo)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Situacion.LadoCubaNombre)
-    </td>
-    <td>
-        @foreach (var a in item.AccesoriosGrupo)
-        {
-            @Html.DisplayFor(modelItem => a.Accesorio.TipoAccesorio.TipoAccesorio1)
-            <br />
-        }
-
-
-    </td>
-    <td>
-        @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-        @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-        @Html.ActionLink("Delete", "Delete", new { id = item.ID })
-    </td>
-</tr>
-}
-
-</table>
+<div class="table-responsive">
+    <table class="table table-sm table-striped table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th>@Html.DisplayNameFor(model => model.Cuba.MatriculaCuba)</th>
+                <th>Compartimento</th>
+                <th>@Html.DisplayNameFor(model => model.TipoGrupo.NombreGrupo)</th>
+                <th>@Html.DisplayNameFor(model => model.Situacion.LadoCubaNombre)</th>
+                <th>Accesorios</th>
+                <th>Cantidad</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.Cuba.MatriculaCuba)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Compartimento.Numero)</td>
+                    <td>@Html.DisplayFor(modelItem => item.TipoGrupo.NombreGrupo)</td>
+                    <td>@Html.DisplayFor(modelItem => item.Situacion.LadoCubaNombre)</td>
+                    <td>
+                        @foreach (var a in item.AccesoriosGrupo)
+                        {
+                            <div>@Html.DisplayFor(modelItem => a.Accesorio.TipoAccesorio.TipoAccesorio1)</div>
+                        }
+                    </td>
+                    <td>
+                        @foreach (var a in item.AccesoriosGrupo)
+                        {
+                            <div>@Html.DisplayFor(modelItem => a.Cantidad)</div>
+                        }
+                    </td>
+                    <td class="text-nowrap">
+                        @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                        @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                        @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

@@ -1,10 +1,10 @@
 ﻿@model CasaGaillard.Models.Cuba
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Detalle de cuba";
 }
 
-<h2>Detalle</h2>
+<h2>Detalle de cuba</h2>
 
 <h4>GAIU @Model.MatriculaCuba.ToString() @Model.NumCuadro</h4>
 <hr />
@@ -47,6 +47,6 @@
 </div>
 
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Editar", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Volver", "Index")
 </p>

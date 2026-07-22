@@ -13,12 +13,18 @@ using Microsoft.Ajax.Utilities;
 
 namespace CasaGaillard.Areas.Mantenimiento.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento + "," + AppRoles.Consulta)]
     public class RevisionesVehiculosController : Controller
     {
         private readonly GaillardEntities db = new GaillardEntities();
 
+        private static DateTime? CalcularCaducidad(DateTime? fechaRevision)
+        {
+            return fechaRevision.HasValue ? fechaRevision.Value.AddMonths(30) : (DateTime?)null;
+        }
+
         // GET: RevisionesVehiculos
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento + "," + AppRoles.Consulta)]
         public async Task<ActionResult> Index()
         {
             var revisionesVehiculos = db.RevisionesVehiculo
@@ -32,7 +38,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                                       from r in rv
                                       group r by r.TipoRevision into z
                                       from rz in z
-                                      where rz.Caducidad == z.Max(r => r.Caducidad)
+                                      where rz.Caducidad.HasValue && rz.Caducidad == z.Max(r => r.Caducidad)
                                       select new
                                       {
                                           rz.Vehiculo.MatriculaVehiculo,
@@ -45,6 +51,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         }
 
         // GET: RevisionesVehiculos/Details/5
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento + "," + AppRoles.Consulta)]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -60,6 +67,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         }
 
         // GET: RevisionesVehiculos/Create
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public ActionResult Create()
         {
             ViewBag.VehiculoID = new SelectList(db.Vehiculos.OrderBy(o => o.MatriculaVehiculo), "ID", "MatriculaVehiculo");
@@ -72,11 +80,12 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public async Task<ActionResult> Create([Bind(Include = "ID,VehiculoID,TipoRevisionID,FechaRevision,Detalles,Ejecutor,Caducidad")] RevisionVehiculo revisionVehiculo)
         {
             if (ModelState.IsValid)
             {
-                //revisionVehiculo.FechaRevision .AddMonths(30);
+                revisionVehiculo.Caducidad = CalcularCaducidad(revisionVehiculo.FechaRevision);
                 db.RevisionesVehiculo.Add(revisionVehiculo);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -88,6 +97,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         }
 
         // GET: RevisionesVehiculos/Edit/5
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -110,10 +120,12 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public async Task<ActionResult> Edit([Bind(Include = "ID,VehiculoID,TipoRevisionID,FechaRevision,Detalles,Ejecutor,Caducidad")] RevisionVehiculo revisionVehiculo)
         {
             if (ModelState.IsValid)
             {
+                revisionVehiculo.Caducidad = CalcularCaducidad(revisionVehiculo.FechaRevision);
                 db.Entry(revisionVehiculo).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
@@ -125,6 +137,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         }
 
         // GET: RevisionesVehiculos/Delete/5
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -142,6 +155,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         // POST: RevisionesVehiculos/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             RevisionVehiculo revisionVehiculo = await db.RevisionesVehiculo.FindAsync(id);
@@ -159,6 +173,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             base.Dispose(disposing);
         }
 
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public async Task<ActionResult> Proximas()
         {
             //List<Revision> rev = new List<Revision>();

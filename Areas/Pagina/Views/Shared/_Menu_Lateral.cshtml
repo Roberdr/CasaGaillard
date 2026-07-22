@@ -1,9 +1,7 @@
-﻿<div>
-    <nav class="nav flex-column">
-        @Html.ActionLink("Inicio", "Index", "Pagina", new { area = "Pagina" }, htmlAttributes: new { @class = "nav-link active" })
-        @Html.ActionLink("Tienda", "Tienda", "Pagina", new { area = "Pagina" }, htmlAttributes: new { @class = "nav-link active"})
-        <a class="nav-link" href="#">Link</a>
-        <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-    </nav>
+<div class="list-group">
+    @Html.ActionLink("Inicio", "Index", "Pagina", new { area = "Pagina" }, new { @class = "list-group-item" })
+    @Html.ActionLink("Stock", "Tienda", "Pagina", new { area = "Pagina" }, new { @class = "list-group-item" })
+    @Html.ActionLink("Servicios", "Servicios", "Pagina", new { area = "Pagina" }, new { @class = "list-group-item" })
+    @Html.ActionLink("Seguridad", "Seguridad", "Pagina", new { area = "Pagina" }, new { @class = "list-group-item" })
+    @Html.ActionLink("Contacto", "Contacto", "Pagina", new { area = "Pagina" }, new { @class = "list-group-item" })
 </div>
-

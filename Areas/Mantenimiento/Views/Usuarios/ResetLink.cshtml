@@ -1,0 +1,17 @@
+@model CasaGaillard.Models.ViewModels.PasswordResetLinkViewModel
+@{
+    ViewBag.Title = "Enlace de restablecimiento";
+}
+
+<h2>Enlace generado</h2>
+
+<p>Se ha generado un enlace de restablecimiento para <strong>@Model.Email</strong>.</p>
+
+<div class="form-group">
+    <label>Enlace</label>
+    <textarea class="form-control" rows="3" readonly="readonly">@Model.ResetUrl</textarea>
+</div>
+
+<p>
+    @Html.ActionLink("Volver al listado", "Index", "Usuarios", new { area = "Mantenimiento" }, new { @class = "btn btn-default" })
+</p>

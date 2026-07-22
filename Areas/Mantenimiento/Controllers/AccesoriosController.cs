@@ -11,14 +11,13 @@ using CasaGaillard.Models;
 
 namespace CasaGaillard.Areas.Mantenimiento.Controllers
 {
-
-    [Authorize]
+    [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento + "," + AppRoles.Consulta)]
     public class AccesoriosController : Controller
     {
         private readonly GaillardEntities db = new GaillardEntities();
 
         // GET: Accesorios
-        
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento + "," + AppRoles.Consulta)]
         public async Task<ActionResult> Index()
         {
             var accesorios = db.Accesorios.Include(a => a.Material).Include(a => a.TipoAccesorio);
@@ -26,6 +25,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         }
 
         // GET: Accesorios/Details/5
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento + "," + AppRoles.Consulta)]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -41,6 +41,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         }
 
         // GET: Accesorios/Create
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public ActionResult Create()
         {
             ViewBag.MaterialID = new SelectList(db.Materiales, "ID", "Material1");
@@ -53,6 +54,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public async Task<ActionResult> Create([Bind(Include = "ID,TipoAccesorioID,MaterialID")] Accesorio accesorio)
         {
             if (ModelState.IsValid)
@@ -68,6 +70,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         }
 
         // GET: Accesorios/Edit/5
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -89,6 +92,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public async Task<ActionResult> Edit([Bind(Include = "ID,TipoAccesorioID,MaterialID")] Accesorio accesorio)
         {
             if (ModelState.IsValid)
@@ -103,6 +107,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         }
 
         // GET: Accesorios/Delete/5
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -120,6 +125,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         // POST: Accesorios/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             Accesorio accesorio = await db.Accesorios.FindAsync(id);

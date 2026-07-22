@@ -1,0 +1,23 @@
+@model CasaGaillard.Models.ViewModels.TareaMantenimientoFormViewModel
+
+@{
+    ViewBag.Title = "Nueva tarea";
+}
+
+<h2>Nueva tarea de mantenimiento</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    @Html.Partial("_Form", Model)
+
+    <div class="form-group">
+        <input type="submit" value="Crear tarea" class="btn btn-primary" />
+        @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-default" })
+    </div>
+}
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+}

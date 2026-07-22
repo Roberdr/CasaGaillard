@@ -1,0 +1,48 @@
+@model CasaGaillard.Models.ViewModels.UserRolesEditViewModel
+@{
+    ViewBag.Title = "Roles de usuario";
+}
+
+<h2>Roles de usuario</h2>
+
+<p>
+    <strong>@Model.Email</strong>
+    <br />
+    <span>@Model.UserName</span>
+</p>
+
+@using (Html.BeginForm("Roles", "Usuarios", FormMethod.Post, new { area = "Mantenimiento", @class = "form-horizontal" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.UserId)
+
+    <div class="form-group">
+        <div class="col-md-10">
+            <div class="checkbox">
+                <label>
+                    @Html.CheckBoxFor(m => m.IsAdministrador)
+                    Administrador
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    @Html.CheckBoxFor(m => m.IsMantenimiento)
+                    Mantenimiento
+                </label>
+            </div>
+            <div class="checkbox">
+                <label>
+                    @Html.CheckBoxFor(m => m.IsConsulta)
+                    Consulta
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 col-md-10">
+            <button type="submit" class="btn btn-primary">Guardar roles</button>
+            @Html.ActionLink("Volver", "Index", "Usuarios", new { area = "Mantenimiento" }, new { @class = "btn btn-default" })
+        </div>
+    </div>
+}

@@ -13,12 +13,13 @@ using Microsoft.Ajax.Utilities;
 
 namespace CasaGaillard.Areas.Mantenimiento.Controllers
 {
-    [Authorize]
+    [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento + "," + AppRoles.Consulta)]
     public class RevisionesController : Controller
     {
         private readonly GaillardEntities db = new GaillardEntities();
 
         // GET: Revisiones
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento + "," + AppRoles.Consulta)]
         public async Task<ActionResult> Index()
         {
             var revisiones = db.Revisiones
@@ -31,6 +32,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         }
 
         // GET: Revisiones/Details/5
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento + "," + AppRoles.Consulta)]
         public async Task<ActionResult> Details(int? id)
         {
             if (id == null)
@@ -46,6 +48,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         }
 
         // GET: Revisiones/Create
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public ActionResult Create()
         {
             ViewBag.CubaID = new SelectList(db.Cubas.OrderBy(o => o.MatriculaCuba), "ID", "MatriculaCuba");
@@ -57,6 +60,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public async Task<ActionResult> Create([Bind(Include = "ID,CubaID,FechaRevision,Descripcion,ValidaHasta,DescripcionProxima,Autorizado")] Revision revision)
         {
             if (ModelState.IsValid)
@@ -72,6 +76,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         }
 
         // GET: Revisiones/Edit/5
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public async Task<ActionResult> Edit(int? id)
         {
             if (id == null)
@@ -92,6 +97,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public async Task<ActionResult> Edit([Bind(Include = "ID,CubaID,FechaRevision,Descripcion,ValidaHasta,DescripcionProxima,Autorizado")] Revision revision)
         {
             if (ModelState.IsValid)
@@ -105,6 +111,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         }
 
         // GET: Revisiones/Delete/5
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public async Task<ActionResult> Delete(int? id)
         {
             if (id == null)
@@ -122,6 +129,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         // POST: Revisiones/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public async Task<ActionResult> DeleteConfirmed(int id)
         {
             Revision revision = await db.Revisiones.FindAsync(id);
@@ -139,6 +147,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             base.Dispose(disposing);
         }
 
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public async Task<ActionResult> Proximas()
         {
             //List<Revision> rev = new List<Revision>();
@@ -149,6 +158,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
 
         }
 
+        [Authorize(Roles = AppRoles.Administrador)]
         public async Task<ActionResult> CambiarValidaHasta()
         {
             var rev1 = await db.Revisiones.ToListAsync();

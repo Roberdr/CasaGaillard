@@ -12,12 +12,20 @@ namespace CasaGaillard.Areas.Pagina
             }
         }
 
-        public override void RegisterArea(AreaRegistrationContext context) 
+        public override void RegisterArea(AreaRegistrationContext context)
         {
+            context.MapRoute(
+                "Pagina_home",
+                "",
+                new { controller = "Pagina", action = "Index" },
+                new[] { "CasaGaillard.Areas.Pagina.Controllers" }
+            );
+
             context.MapRoute(
                 "Pagina_default",
                 "Pagina/{controller}/{action}/{id}",
-                new { controller = "Pagina", action = "Index", id = UrlParameter.Optional }
+                new { controller = "Pagina", action = "Index", id = UrlParameter.Optional },
+                new[] { "CasaGaillard.Areas.Pagina.Controllers" }
             );
         }
     }

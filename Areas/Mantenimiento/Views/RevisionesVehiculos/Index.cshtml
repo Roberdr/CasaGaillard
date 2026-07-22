@@ -30,9 +30,9 @@
                     foreach (var item in g.OrderByDescending(m => m.Caducidad))
                     {
         <tr>
-            <td></td>
-            <td>@Html.DisplayFor(modelItem => item.FechaRevision)</td>
-            <td>@Html.DisplayFor(modelItem => item.Caducidad)</td>
+                    <td></td>
+                    <td>@Html.DisplayFor(modelItem => item.FechaRevision)</td>
+            <td>@(item.Caducidad != null ? item.Caducidad.Value.ToString("d") : "N/D")</td>
             <td class="col-2">@Html.DisplayFor(modelItem => item.TipoRevision.Revision)</td>
             <td class="col-2">@Html.DisplayFor(modelItem => item.Ejecutor)</td>
             <td class="col-2">

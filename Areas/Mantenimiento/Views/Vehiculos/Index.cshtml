@@ -1,26 +1,26 @@
-﻿@model IEnumerable<CasaGaillard.Models.Vehiculo>
+@model IEnumerable<CasaGaillard.Models.Vehiculo>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Vehículos";
 }
 
-<h2>Index</h2>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Vehículos</h2>
+    @Html.ActionLink("Crear vehículo", "AddOrEdit", null, new { @class = "btn btn-success" })
+</div>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-<div class="container">
-    <table class="table table-bordered table-striped">
-        <thead>
+<div class="table-responsive">
+    <table class="table table-sm table-striped table-bordered">
+        <thead class="thead-light">
             <tr>
-                <th>TIPO VEHÍCULO</th>
-                <th>MARCA</th>
-                <th>MODELO</th>
-                <th>MATRÍCULA</th>
+                <th>Tipo</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Matrícula</th>
                 <th>PMA</th>
                 <th>TARA</th>
-                <th>CARGO ÚTIL</th>
-                <th>OPCIONES</th>
+                <th>Carga útil</th>
+                <th></th>
             </tr>
         </thead>
         <tbody>
@@ -34,15 +34,13 @@
                     <td>@Html.DisplayFor(modelItem => item.Pma)</td>
                     <td>@Html.DisplayFor(modelItem => item.Tara)</td>
                     <td>@Html.DisplayFor(modelItem => item.CargaUtil)</td>
-                    <td>
-                        @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                    <td class="text-nowrap">
+                        @Html.ActionLink("Edit", "AddOrEdit", new { id = item.ID }) |
                         @Html.ActionLink("Details", "Details", new { id = item.ID }) |
                         @Html.ActionLink("Delete", "Delete", new { id = item.ID })
                     </td>
                 </tr>
             }
-                
         </tbody>
     </table>
 </div>
-    
