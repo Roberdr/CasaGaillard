@@ -14,17 +14,13 @@ if (-not (Test-Path $appCmd)) {
 
 Write-Host "Preparando IIS para $SiteName..." -ForegroundColor Cyan
 
-$credential = Get-Credential -Message "Cuenta de Windows que ejecutara el pool de IIS. Usa un usuario con acceso a la base GAILLARD.MDF en MSSQLSERVER02."
-$userName = $credential.UserName
-$password = $credential.GetNetworkCredential().Password
-
 & $appCmd list apppool $AppPoolName | Out-Null
 if ($LASTEXITCODE -eq 0) {
     & $appCmd delete apppool "/apppool.name:$AppPoolName" | Out-Null
 }
 
 & $appCmd add apppool "/name:$AppPoolName" "/managedRuntimeVersion:v4.0" "/managedPipelineMode:Integrated" "/startMode:AlwaysRunning" | Out-Null
-& $appCmd set apppool "/apppool.name:$AppPoolName" "/processModel.identityType:SpecificUser" "/processModel.userName:$userName" "/processModel.password:$password" "/processModel.loadUserProfile:true" | Out-Null
+& $appCmd set apppool "/apppool.name:$AppPoolName" "/processModel.identityType:ApplicationPoolIdentity" "/processModel.loadUserProfile:true" | Out-Null
 
 & $appCmd list site $SiteName | Out-Null
 if ($LASTEXITCODE -eq 0) {
@@ -43,3 +39,4 @@ Write-Host ""
 Write-Host "Listo." -ForegroundColor Green
 Write-Host "Sitio: http://localhost:$Port" -ForegroundColor Green
 Write-Host "Pool: $AppPoolName" -ForegroundColor Green
+Write-Host "Identidad del pool: ApplicationPoolIdentity" -ForegroundColor Green

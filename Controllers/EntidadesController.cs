@@ -18,7 +18,9 @@ namespace CasaGaillard.Controllers
         // GET: Entidades
         public async Task<ActionResult> Index()
         {
-            var entidads = db.Entidads.Include(e => e.Direccion);
+            var entidads = db.Entidads
+                .Include(e => e.Direccion)
+                .AsNoTracking();
             return View(await entidads.ToListAsync());
         }
 
