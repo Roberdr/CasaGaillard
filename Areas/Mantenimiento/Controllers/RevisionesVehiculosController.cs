@@ -25,29 +25,79 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
 
         // GET: RevisionesVehiculos
         [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento + "," + AppRoles.Consulta)]
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string matriculaVehiculo = null)
         {
-            var revisionesVehiculos = db.RevisionesVehiculo
+            var consulta = db.RevisionesVehiculo
+                .AsNoTracking()
                 .Include(r => r.Vehiculo)
+                .Include(r => r.TipoRevision)
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(matriculaVehiculo))
+            {
+                consulta = consulta.Where(r => r.Vehiculo != null && r.Vehiculo.MatriculaVehiculo == matriculaVehiculo);
+            }
+
+            var revisionesVehiculos = await consulta
                 .OrderBy(r => r.Vehiculo.MatriculaVehiculo)
-                .GroupBy(r => r.Vehiculo.MatriculaVehiculo);
+                .ThenByDescending(r => r.FechaRevision)
+                .ToListAsync();
 
-            var revVehiculos = from rv in revisionesVehiculos
-                                  select (
+            ViewBag.MatriculaVehiculo = matriculaVehiculo;
 
-                                      from r in rv
-                                      group r by r.TipoRevision into z
-                                      from rz in z
-                                      where rz.Caducidad.HasValue && rz.Caducidad == z.Max(r => r.Caducidad)
-                                      select new
-                                      {
-                                          rz.Vehiculo.MatriculaVehiculo,
-                                          rz.TipoRevision,
-                                          rz.Caducidad
-                                      }
+            var agrupadas = revisionesVehiculos
+                .GroupBy(r => new
+                {
+                    VehiculoID = r.VehiculoID ?? 0,
+                    Matricula = r.Vehiculo != null ? r.Vehiculo.MatriculaVehiculo : string.Empty
+                })
+                .OrderBy(g => g.Key.Matricula)
+                .Select(g => new RevisionVehiculoGrupoViewModel
+                {
+                    VehiculoID = g.Key.VehiculoID,
+                    MatriculaVehiculo = g.Key.Matricula,
+                    TotalRevisiones = g.Count(),
+                    Tipos = g.GroupBy(r => r.TipoRevision != null ? r.TipoRevision.Revision : string.Empty)
+                        .OrderBy(tipo => tipo.Key)
+                        .Select(tipo => new RevisionVehiculoTipoGrupoViewModel
+                        {
+                            TipoRevisionID = tipo.Select(r => r.TipoRevisionID).FirstOrDefault(),
+                            TipoRevision = tipo.Key,
+                            UltimaRevision = tipo
+                                .OrderByDescending(r => r.FechaRevision ?? DateTime.MinValue)
+                                .ThenByDescending(r => r.Caducidad ?? DateTime.MinValue)
+                                .Select(r => new RevisionVehiculoHistorialItemViewModel
+                                {
+                                    ID = r.ID,
+                                    TipoRevisionID = r.TipoRevisionID,
+                                    TipoRevision = r.TipoRevision != null ? r.TipoRevision.Revision : string.Empty,
+                                    FechaRevision = r.FechaRevision,
+                                    Caducidad = r.Caducidad,
+                                    Detalles = r.Detalles,
+                                    Ejecutor = r.Ejecutor
+                                })
+                                .FirstOrDefault(),
+                            Historial = tipo
+                                .OrderByDescending(r => r.FechaRevision ?? DateTime.MinValue)
+                                .ThenByDescending(r => r.Caducidad ?? DateTime.MinValue)
+                                .Select(r => new RevisionVehiculoHistorialItemViewModel
+                                {
+                                    ID = r.ID,
+                                    TipoRevisionID = r.TipoRevisionID,
+                                    TipoRevision = r.TipoRevision != null ? r.TipoRevision.Revision : string.Empty,
+                                    FechaRevision = r.FechaRevision,
+                                    Caducidad = r.Caducidad,
+                                    Detalles = r.Detalles,
+                                    Ejecutor = r.Ejecutor
+                                })
+                                .ToList()
+                        })
+                        .ToList()
+                })
+                .OrderBy(x => x.MatriculaVehiculo)
+                .ToList();
 
-                                    );
-            return View(await revVehiculos.ToListAsync());
+            return View(agrupadas);
         }
 
         // GET: RevisionesVehiculos/Details/5
@@ -68,11 +118,16 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
 
         // GET: RevisionesVehiculos/Create
         [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
-        public ActionResult Create()
+        public ActionResult Create(int? vehiculoID = null, int? tipoRevisionID = null)
         {
-            ViewBag.VehiculoID = new SelectList(db.Vehiculos.OrderBy(o => o.MatriculaVehiculo), "ID", "MatriculaVehiculo");
-            ViewBag.TipoRevisionID = new SelectList(db.TiposRevision.OrderBy(o => o.Revision), "ID", "Revision");
-            return View();
+            ViewBag.VehiculoID = new SelectList(db.Vehiculos.OrderBy(o => o.MatriculaVehiculo), "ID", "MatriculaVehiculo", vehiculoID);
+            ViewBag.TipoRevisionID = new SelectList(db.TiposRevision.OrderBy(o => o.Revision), "ID", "Revision", tipoRevisionID);
+            return View(new RevisionVehiculo
+            {
+                VehiculoID = vehiculoID,
+                TipoRevisionID = tipoRevisionID,
+                FechaRevision = DateTime.Now.Date
+            });
         }
 
         // POST: RevisionesVehiculos/Create

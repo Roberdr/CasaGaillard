@@ -1,34 +1,103 @@
-﻿@model CasaGaillard.Models.Accesorio
+@model CasaGaillard.Models.Accesorio
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Detalle del accesorio";
 }
 
-<h2>Details</h2>
+<h2>Detalle del accesorio</h2>
 
-<div>
-    <h4>Accesorio</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.Material.Material1)
-        </dt>
+<div class="row">
+    <div class="col-md-8">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong>@Model.TipoAccesorio.TipoAccesorio1</strong>
+            </div>
+            <div class="panel-body">
+                <dl class="dl-horizontal">
+                    <dt>Material</dt>
+                    <dd>@Model.Material.Material1</dd>
+                </dl>
+            </div>
+        </div>
 
-        <dd>
-            @Html.DisplayFor(model => model.Material.Material1)
-        </dd>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong>Detalles</strong>
+            </div>
+            <div class="panel-body">
+                @if (Model.DetallesAccesorio != null && Model.DetallesAccesorio.Any())
+                {
+                    <table class="table table-striped table-condensed">
+                        <thead>
+                            <tr>
+                                <th>Característica</th>
+                                <th>Cantidad</th>
+                                <th>Medida</th>
+                                <th>Unidad</th>
+                                <th>Tipo</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var d in Model.DetallesAccesorio)
+                            {
+                                <tr>
+                                    <td>@(d.CaracteristicaAccesorio != null ? d.CaracteristicaAccesorio.CaracteristicaAccesorio1 : "-")</td>
+                                    <td>@(d.Cantidad.HasValue ? d.Cantidad.Value.ToString() : "-")</td>
+                                    <td>@(d.Medida.HasValue ? d.Medida.Value.ToString("0.##") : "-")</td>
+                                    <td>@(d.Unidad != null ? d.Unidad.Unidad1 : "-")</td>
+                                    <td>@(string.IsNullOrWhiteSpace(d.Tipo) ? "-" : d.Tipo)</td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                }
+                else
+                {
+                    <p class="text-muted">No se han definido detalles para este accesorio.</p>
+                }
+            </div>
+        </div>
+    </div>
 
-        <dt>
-            @Html.DisplayNameFor(model => model.TipoAccesorio.TipoAccesorio1)
-        </dt>
+    <div class="col-md-4">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <strong>Fotos</strong>
+            </div>
+            <div class="panel-body">
+                @{
+                    var fotos = ViewBag.Fotos as IEnumerable<CasaGaillard.Models.ViewModels.AccesorioFotoViewModel>;
+                }
 
-        <dd>
-            @Html.DisplayFor(model => model.TipoAccesorio.TipoAccesorio1)
-        </dd>
-
-    </dl>
+                @if (fotos != null && fotos.Any())
+                {
+                    <div class="row accesorio-fotos-galeria">
+                        @foreach (var foto in fotos)
+                        {
+                            <div class="col-xs-6 col-md-12 accesorio-foto-col">
+                                <a href="@Url.Action("Foto", "Accesorios", new { area = "Mantenimiento", id = foto.ID })" target="_blank" class="accesorio-foto-link">
+                                    <img src="@Url.Action("Foto", "Accesorios", new { area = "Mantenimiento", id = foto.ID })"
+                                         alt="Foto del accesorio @(foto.NombreOriginal ?? foto.ID.ToString())"
+                                         class="img-responsive accesorio-foto-thumb" />
+                                </a>
+                                @if (!string.IsNullOrWhiteSpace(foto.NombreOriginal))
+                                {
+                                    <div class="text-muted accesorio-foto-caption">@foto.NombreOriginal</div>
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted">Todavía no hay fotos adjuntas.</p>
+                }
+            </div>
+        </div>
+    </div>
 </div>
+
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Editar", "Edit", new { id = Model.ID }, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Volver al listado", "Index", null, new { @class = "btn btn-default" })
 </p>

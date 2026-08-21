@@ -7,6 +7,7 @@
     <h1>CASA GAILLARD S.A.</h1>
     <p class="lead">Aplicación para el control del mantenimiento en general de la empresa.</p>
     @*<p><a href="#" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>*@
+    <a href="~/Areas/Mantenimiento/Views/Home/Index.cshtml">~/Areas/Mantenimiento/Views/Home/Index.cshtml</a>
 </div>
 
 <div class="row">
@@ -28,7 +29,7 @@
                     foreach (var c in ViewBag.Revis)
                     {
                         DateTime? validaHasta = c.ValidaHasta;
-                        <tr>
+                        <tr class="revision-cuba-panel-row" data-revisiones-url="@Url.Action("Index", "Revisiones", new { area = "Mantenimiento", matriculaCuba = c.MatriculaCuba })">
                             <td class="col-md-4">@c.MatriculaCuba</td>
                             <td class="col-md-5">@(validaHasta.HasValue ? validaHasta.Value.ToString("d") : "N/D")</td>
                             <td class="col-md-3">@c.DescripcionProxima</td>
@@ -44,7 +45,7 @@
                 </tbody>
             </table>
 
-        <p><a class="btn btn-default" href="#">Más &raquo;</a></p>
+        <p>@Html.ActionLink("Más »", "Index", "Revisiones", new { area = "Mantenimiento" }, new { @class = "btn btn-default" })</p>
     </div>
   
     <div class="col-md-4">
@@ -64,7 +65,7 @@
                     foreach (var c in ViewBag.RevisV)
                     {
                         DateTime? caducidad = c.Caducidad;
-                        <tr>
+                        <tr class="revision-vehiculo-panel-row" data-revisiones-url="@Url.Action("Index", "RevisionesVehiculos", new { area = "Mantenimiento", matriculaVehiculo = c.MatriculaVehiculo })">
                             <td class="col-md-4">@c.MatriculaVehiculo</td>
                             <td class="col-md-5">@(caducidad.HasValue ? caducidad.Value.ToString("d") : "N/D")</td>
                             <td class="col-md-3">@c.TipoRevision</td>
@@ -79,7 +80,7 @@
                 }
             </tbody>
         </table>
-        <p><a class="btn btn-default" href="#">Más &raquo;</a></p>
+        <p>@Html.ActionLink("Más »", "Index", "RevisionesVehiculos", new { area = "Mantenimiento" }, new { @class = "btn btn-default" })</p>
     </div>
     <div class="col-md-4">
         <h3>Tareas de mantenimiento</h3>
@@ -96,7 +97,7 @@
                 {
                     foreach (var t in ViewBag.Tareas)
                     {
-                        <tr>
+                        <tr class="tarea-panel-row" data-tarea-url="@Url.Action("Index", "TareasMantenimiento", new { area = "Mantenimiento", codigo = t.Codigo })">
                             <td>@t.Codigo</td>
                             <td>@t.Estado</td>
                             <td>@t.Prioridad</td>
@@ -114,3 +115,34 @@
         <p>@Html.ActionLink("Ver tareas", "Index", "TareasMantenimiento", new { area = "Mantenimiento" }, new { @class = "btn btn-default" })</p>
     </div>
 </div>
+
+<style>
+    .revision-cuba-panel-row,
+    .revision-vehiculo-panel-row,
+    .tarea-panel-row {
+        cursor: pointer;
+    }
+</style>
+
+<script>
+    (function () {
+        document.addEventListener('dblclick', function (event) {
+            var row = event.target.closest('.revision-cuba-panel-row, .revision-vehiculo-panel-row');
+            if (!row) {
+                row = event.target.closest('.tarea-panel-row');
+            }
+
+            if (!row) {
+                return;
+            }
+
+            var url = row.getAttribute('data-revisiones-url') || row.getAttribute('data-tarea-url');
+            if (!url) {
+                return;
+            }
+
+            event.preventDefault();
+            window.location.href = url;
+        });
+    })();
+</script>

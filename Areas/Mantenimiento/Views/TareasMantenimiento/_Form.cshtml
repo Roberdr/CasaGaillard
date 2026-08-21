@@ -88,3 +88,9 @@
     @Html.LabelFor(m => m.Observaciones)
     @Html.TextAreaFor(m => m.Observaciones, 4, 20, new { @class = "form-control" })
 </div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.FotosAdjuntas)
+    <input type="file" name="FotosAdjuntas" class="form-control" accept="image/*" multiple="multiple" />
+    <p class="help-block">Puedes adjuntar varias fotos para mostrar la avería o detalles de la tarea.</p>
+</div>

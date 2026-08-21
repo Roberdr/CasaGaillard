@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using CasaGaillard.Models;
@@ -74,6 +76,25 @@ namespace CasaGaillard.Areas.Pagina.Controllers
             return View();
         }
 
+        public ActionResult Imagen(string archivo)
+        {
+            if (string.IsNullOrWhiteSpace(archivo))
+            {
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+            }
+
+            var raiz = Path.GetFullPath(Server.MapPath("~/Content/images"));
+            var ruta = Path.GetFullPath(Path.Combine(raiz, archivo.Replace('/', Path.DirectorySeparatorChar)));
+            var raizConSeparador = raiz.TrimEnd(Path.DirectorySeparatorChar) + Path.DirectorySeparatorChar;
+
+            if (!ruta.StartsWith(raizConSeparador, StringComparison.OrdinalIgnoreCase) || !System.IO.File.Exists(ruta))
+            {
+                return HttpNotFound();
+            }
+
+            return File(ruta, ObtenerContentType(ruta));
+        }
+
         private IQueryable<ProductoStockPublicoViewModel> ObtenerCatalogoProductos()
         {
             return db.Productos
@@ -117,6 +138,28 @@ namespace CasaGaillard.Areas.Pagina.Controllers
                     Detalle = "Inventario técnico para localizar referencias, formatos y familias de producto."
                 }
             };
+        }
+
+        private static string ObtenerContentType(string ruta)
+        {
+            var extension = Path.GetExtension(ruta);
+
+            if (string.Equals(extension, ".png", StringComparison.OrdinalIgnoreCase))
+            {
+                return "image/png";
+            }
+
+            if (string.Equals(extension, ".gif", StringComparison.OrdinalIgnoreCase))
+            {
+                return "image/gif";
+            }
+
+            if (string.Equals(extension, ".webp", StringComparison.OrdinalIgnoreCase))
+            {
+                return "image/webp";
+            }
+
+            return "image/jpeg";
         }
 
         private IList<SeguridadPublicaViewModel> ObtenerRecomendacionesSeguridad()

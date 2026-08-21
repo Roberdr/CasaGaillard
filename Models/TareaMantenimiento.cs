@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -76,5 +77,7 @@ namespace CasaGaillard.Models
         public DateTime FechaDeteccion { get; set; }
         public DateTime FechaCreacion { get; set; }
         public DateTime? FechaActualizacion { get; set; }
+
+        public virtual ICollection<TareaMantenimientoFoto> Fotos { get; set; }
     }
 }

@@ -2,17 +2,18 @@
 
 @{
     ViewBag.Title = "Inicio";
-    var foto1 = Url.Content("~/Content/images/IMG_20201013_122605.jpg");
-    var foto2 = Url.Content("~/Content/images/DSC_0122.JPG");
-    var foto3 = Url.Content("~/Content/images/DSC_0296.JPG");
-    var foto4 = Url.Content("~/Content/images/IMG_20201013_122550.jpg");
+    var logo = Url.Action("Imagen", "Pagina", new { area = "Pagina", archivo = "logo-casa.png" });
+    var foto1 = Url.Action("Imagen", "Pagina", new { area = "Pagina", archivo = "IMG_20201013_122605.jpg" });
+    var foto2 = Url.Action("Imagen", "Pagina", new { area = "Pagina", archivo = "DSC_0122.JPG" });
+    var foto3 = Url.Action("Imagen", "Pagina", new { area = "Pagina", archivo = "DSC_0296.JPG" });
+    var foto4 = Url.Action("Imagen", "Pagina", new { area = "Pagina", archivo = "IMG_20201013_122550.jpg" });
 }
 
 <section class="public-home-frame">
     <div class="container">
         <div class="public-home-frame__header">
             <div class="public-home-frame__brand">
-                <img src="~/Content/images/logo-casa.png" alt="Casa Gaillard" />
+                <img src="@logo" alt="Casa Gaillard" />
             </div>
             <div class="public-home-frame__title">
                 <h1>CASA GAILLARD S.A.</h1>
@@ -41,24 +42,24 @@
                 <li data-target="#companyCarousel" data-slide-to="3"></li>
             </ol>
             <div class="carousel-inner">
-                <div class="item active">
+                <div class="carousel-item active">
                     <img src="@foto1" alt="Instalaciones de Casa Gaillard 1" />
                 </div>
-                <div class="item">
+                <div class="carousel-item">
                     <img src="@foto2" alt="Instalaciones de Casa Gaillard 2" />
                 </div>
-                <div class="item">
+                <div class="carousel-item">
                     <img src="@foto3" alt="Instalaciones de Casa Gaillard 3" />
                 </div>
-                <div class="item">
+                <div class="carousel-item">
                     <img src="@foto4" alt="Instalaciones de Casa Gaillard 4" />
                 </div>
             </div>
-            <a class="left carousel-control" href="#companyCarousel" data-slide="prev">
-                <span class="icon-prev" aria-hidden="true"></span>
+            <a class="carousel-control-prev" href="#companyCarousel" role="button" data-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             </a>
-            <a class="right carousel-control" href="#companyCarousel" data-slide="next">
-                <span class="icon-next" aria-hidden="true"></span>
+            <a class="carousel-control-next" href="#companyCarousel" role="button" data-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
             </a>
         </div>
     </div>

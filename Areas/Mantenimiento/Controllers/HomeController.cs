@@ -25,6 +25,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         
         public class UltimasRevisiones                  // Objeto para pasar las últimas revisiones a la vista
         {
+            public int CubaID { get; set; }
             public string MatriculaCuba { get; set; }
 
             [DataType(DataType.Date)]
@@ -58,12 +59,13 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                             join r in db.Revisiones on c.ID equals r.CubaID into gc
                             from grupo in gc.DefaultIfEmpty()
                             where grupo != null && grupo.ValidaHasta.HasValue
-                            group new { c, grupo } by c.MatriculaCuba into g
+                            group new { c, grupo } by new { c.ID, c.MatriculaCuba } into g
                             let ultimo = g.OrderByDescending(x => x.grupo.ValidaHasta).FirstOrDefault()
                             where ultimo != null
                             select new UltimasRevisiones()
                             {
-                                MatriculaCuba = ultimo.c.MatriculaCuba,
+                                CubaID = g.Key.ID,
+                                MatriculaCuba = g.Key.MatriculaCuba,
                                 ValidaHasta = ultimo.grupo.ValidaHasta,
                                 DescripcionProxima = ultimo.grupo.DescripcionProxima
                             };

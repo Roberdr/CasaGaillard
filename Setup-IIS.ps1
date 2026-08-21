@@ -30,6 +30,15 @@ if ($LASTEXITCODE -eq 0) {
 & $appCmd add site "/name:$SiteName" "/bindings:http/*:${Port}:" "/physicalPath:$PhysicalPath" | Out-Null
 & $appCmd set app "/app.name:$SiteName/" "/applicationPool:$AppPoolName" | Out-Null
 
+$appDataPath = Join-Path $PhysicalPath "App_Data"
+if (-not (Test-Path $appDataPath)) {
+    New-Item -ItemType Directory -Path $appDataPath | Out-Null
+}
+
+icacls $PhysicalPath /grant "IIS AppPool\$AppPoolName:(OI)(CI)(RX)" /T | Out-Null
+icacls $PhysicalPath /grant "IUSR:(OI)(CI)(RX)" /T | Out-Null
+icacls $appDataPath /grant "IIS AppPool\$AppPoolName:(OI)(CI)(M)" /T | Out-Null
+
 $firewallRule = "IIS $SiteName HTTP $Port"
 if (-not (Get-NetFirewallRule -DisplayName $firewallRule -ErrorAction SilentlyContinue)) {
     New-NetFirewallRule -DisplayName $firewallRule -Direction Inbound -Action Allow -Protocol TCP -LocalPort $Port | Out-Null

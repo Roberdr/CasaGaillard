@@ -1,49 +1,300 @@
-﻿@model List<IGrouping<string, CasaGaillard.Models.Revision>>
+@model IEnumerable<CasaGaillard.Models.ViewModels.RevisionCubaGrupoViewModel>
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Revisiones de cubas";
+    var hoy = DateTime.Now.Date;
+    int? cubaIDSeleccionada = ViewBag.CubaID == null ? (int?)null : (int)ViewBag.CubaID;
+    string matriculaCubaSeleccionada = ViewBag.MatriculaCuba as string ?? Request.QueryString["matriculaCuba"];
+    var modeloFiltrado = Model;
+
+    if (!string.IsNullOrWhiteSpace(matriculaCubaSeleccionada) && modeloFiltrado != null)
+    {
+        modeloFiltrado = modeloFiltrado.Where(c => c.MatriculaCuba == matriculaCubaSeleccionada).ToList();
+    }
+
+    if (!cubaIDSeleccionada.HasValue && modeloFiltrado != null && modeloFiltrado.Count() == 1)
+    {
+        cubaIDSeleccionada = modeloFiltrado.First().CubaID;
+    }
+
+    Func<DateTime?, string> claseCaducidad = caducidad =>
+    {
+        if (!caducidad.HasValue)
+        {
+            return string.Empty;
+        }
+
+        var dias = (caducidad.Value.Date - hoy).TotalDays;
+        if (dias < 0)
+        {
+            return "revision-vehiculo-status-expired";
+        }
+
+        if (dias <= 30)
+        {
+            return "revision-vehiculo-status-warning";
+        }
+
+        return string.Empty;
+    };
+
+    Func<DateTime?, string> etiquetaCaducidad = caducidad =>
+    {
+        if (!caducidad.HasValue)
+        {
+            return string.Empty;
+        }
+
+        var dias = (caducidad.Value.Date - hoy).TotalDays;
+        if (dias < 0)
+        {
+            return "Caducada";
+        }
+
+        if (dias <= 30)
+        {
+            return "Caduca pronto";
+        }
+
+        return string.Empty;
+    };
 }
 
-<h2>Index</h2>
+<h2>Revisiones de cubas</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Nueva revisión", "Create", new { cubaID = cubaIDSeleccionada }, new { @class = "btn btn-primary" })
+    @if (cubaIDSeleccionada.HasValue || !string.IsNullOrWhiteSpace(matriculaCubaSeleccionada))
+    {
+        <text> </text>
+        @Html.ActionLink("Ver todas", "Index", null, new { @class = "btn btn-default" })
+    }
 </p>
-<div class="container">
-    <table class="table table-bordered table-striped">
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
         <thead>
             <tr>
                 <th>Matrícula</th>
-                <th>Fecha de Revisión</th>
+                <th>Última revisión</th>
+                <th>Validez</th>
                 <th>Descripción</th>
                 <th>Autorizado</th>
                 <th>Opciones</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var g in Model)
+            @if (modeloFiltrado != null && modeloFiltrado.Any())
+            {
+                foreach (var cuba in modeloFiltrado)
+                {
+                    var historialId = "historial-" + cuba.CubaID;
+                    var ultima = cuba.UltimaRevision;
+                    var claseResumen = claseCaducidad(ultima != null ? ultima.ValidaHasta : null);
+                    var etiquetaResumen = etiquetaCaducidad(ultima != null ? ultima.ValidaHasta : null);
+                    var createUrl = (!string.IsNullOrWhiteSpace(claseResumen))
+                        ? Url.Action("Create", "Revisiones", new { area = "Mantenimiento", cubaID = cuba.CubaID })
+                        : null;
+                    <tr>
+                        <td>
+                            <div class="revision-cuba-cell">
+                                <button type="button" class="revision-toggle" data-target="#@historialId" aria-expanded="false" aria-controls="@historialId">
+                                    <span class="revision-toggle__label">@cuba.MatriculaCuba</span>
+                                    <span class="revision-toggle__icon"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+                                </button>
+                                <span class="label label-default revision-toggle__count">@cuba.Historial.Count revisiones</span>
+                            </div>
+                        </td>
+                        <td>
+                            @if (ultima != null)
+                            {
+                                if (createUrl != null)
+                                {
+                                    <div class="revision-cuba-summary-item @claseResumen revision-cuba-doubleclick" data-create-url="@createUrl">
+                                        @if (!string.IsNullOrWhiteSpace(etiquetaResumen))
+                                        {
+                                            <div class="revision-cuba-status-strip">@etiquetaResumen</div>
+                                        }
+                                        <div class="revision-cuba-summary-item__top">
+                                            <span class="revision-cuba-summary-item__label">Última revisión</span>
+                                            <span class="revision-cuba-summary-item__date">@ultima.FechaRevision.ToString("d")</span>
+                                        </div>
+                                        <div class="revision-cuba-summary-item__bottom">
+                                            <span>Validez: @(ultima.ValidaHasta.HasValue ? ultima.ValidaHasta.Value.ToString("d") : "N/D")</span>
+                                            <span>@(string.IsNullOrWhiteSpace(ultima.Autorizado) ? "-" : ultima.Autorizado)</span>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="revision-cuba-summary-item @claseResumen">
+                                        @if (!string.IsNullOrWhiteSpace(etiquetaResumen))
+                                        {
+                                            <div class="revision-cuba-status-strip">@etiquetaResumen</div>
+                                        }
+                                        <div class="revision-cuba-summary-item__top">
+                                            <span class="revision-cuba-summary-item__label">Última revisión</span>
+                                            <span class="revision-cuba-summary-item__date">@ultima.FechaRevision.ToString("d")</span>
+                                        </div>
+                                        <div class="revision-cuba-summary-item__bottom">
+                                            <span>Validez: @(ultima.ValidaHasta.HasValue ? ultima.ValidaHasta.Value.ToString("d") : "N/D")</span>
+                                            <span>@(string.IsNullOrWhiteSpace(ultima.Autorizado) ? "-" : ultima.Autorizado)</span>
+                                        </div>
+                                    </div>
+                                }
+                            }
+                            else
+                            {
+                                <span class="text-muted">Sin revisiones</span>
+                            }
+                        </td>
+                        <td>@(ultima != null && ultima.ValidaHasta.HasValue ? ultima.ValidaHasta.Value.ToString("d") : "N/D")</td>
+                        <td>@(ultima != null ? ultima.Descripcion : "Sin revisiones")</td>
+                        <td>@(ultima != null ? ultima.Autorizado : "-")</td>
+                        <td>
+                            @if (ultima != null)
+                            {
+                                @Html.ActionLink("Editar", "Edit", new { id = ultima.ID }) <text> | </text>
+                                @Html.ActionLink("Detalles", "Details", new { id = ultima.ID }) <text> | </text>
+                                @Html.ActionLink("Eliminar", "Delete", new { id = ultima.ID })
+                            }
+                            else
+                            {
+                                <span class="text-muted">Sin acciones</span>
+                            }
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="6" class="revision-history-row">
+                            <div id="@historialId" class="revision-history-hidden">
+                                <div class="revision-history-panel">
+                                    <div class="revision-history-panel__header">
+                                        <div>
+                                            <div class="revision-history-panel__eyebrow">Historial completo</div>
+                                            <strong>@cuba.MatriculaCuba</strong>
+                                        </div>
+                                        <span class="label label-info">@cuba.Historial.Count registros</span>
+                                    </div>
+                                    <div class="revision-history-panel__body">
+                                        @foreach (var revision in cuba.Historial)
+                                        {
+                                            var claseHistorial = claseCaducidad(revision.ValidaHasta);
+                                            var etiquetaHistorial = etiquetaCaducidad(revision.ValidaHasta);
+                                            var createUrlHistorial = (!string.IsNullOrWhiteSpace(claseHistorial))
+                                                ? Url.Action("Create", "Revisiones", new { area = "Mantenimiento", cubaID = cuba.CubaID })
+                                                : null;
+                                            if (createUrlHistorial != null)
+                                            {
+                                                <div class="revision-history-item @claseHistorial revision-cuba-doubleclick" data-create-url="@createUrlHistorial">
+                                                    @if (!string.IsNullOrWhiteSpace(etiquetaHistorial))
+                                                    {
+                                                        <div class="revision-cuba-status-strip">@etiquetaHistorial</div>
+                                                    }
+                                                    <div class="revision-history-item__date">
+                                                        <div class="revision-history-item__day">@revision.FechaRevision.ToString("dd")</div>
+                                                        <div class="revision-history-item__month">@revision.FechaRevision.ToString("MMM yyyy")</div>
+                                                    </div>
+                                                    <div class="revision-history-item__content">
+                                                        <div class="revision-history-item__top">
+                                                            <strong>@revision.Descripcion</strong>
+                                                            <span class="revision-history-item__meta">Validez: @(revision.ValidaHasta.HasValue ? revision.ValidaHasta.Value.ToString("d") : "N/D")</span>
+                                                        </div>
+                                                        <div class="revision-history-item__bottom">
+                                                            <span class="label label-default">@revision.Autorizado</span>
+                                                            <span class="revision-history-item__actions">
+                                                                @Html.ActionLink("Editar", "Edit", new { id = revision.ID }) |
+                                                                @Html.ActionLink("Detalles", "Details", new { id = revision.ID }) |
+                                                                @Html.ActionLink("Eliminar", "Delete", new { id = revision.ID })
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="revision-history-item @claseHistorial">
+                                                    @if (!string.IsNullOrWhiteSpace(etiquetaHistorial))
+                                                    {
+                                                        <div class="revision-cuba-status-strip">@etiquetaHistorial</div>
+                                                    }
+                                                    <div class="revision-history-item__date">
+                                                        <div class="revision-history-item__day">@revision.FechaRevision.ToString("dd")</div>
+                                                        <div class="revision-history-item__month">@revision.FechaRevision.ToString("MMM yyyy")</div>
+                                                    </div>
+                                                    <div class="revision-history-item__content">
+                                                        <div class="revision-history-item__top">
+                                                            <strong>@revision.Descripcion</strong>
+                                                            <span class="revision-history-item__meta">Validez: @(revision.ValidaHasta.HasValue ? revision.ValidaHasta.Value.ToString("d") : "N/D")</span>
+                                                        </div>
+                                                        <div class="revision-history-item__bottom">
+                                                            <span class="label label-default">@revision.Autorizado</span>
+                                                            <span class="revision-history-item__actions">
+                                                                @Html.ActionLink("Editar", "Edit", new { id = revision.ID }) |
+                                                                @Html.ActionLink("Detalles", "Details", new { id = revision.ID }) |
+                                                                @Html.ActionLink("Eliminar", "Delete", new { id = revision.ID })
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
             {
                 <tr>
-                    <td colspan="5"><h4>@Html.DisplayFor(modelItem => g.Key)</h4></td>
+                    <td colspan="6" class="text-muted">No hay revisiones registradas.</td>
                 </tr>
-                    foreach (var item in g.OrderByDescending(m => m.FechaRevision))
-                    {
-                        <tr>
-                            <td></td>
-                            <td>@Html.DisplayFor(modelItem => item.FechaRevision)</td>
-                            <td class="col-5">@Html.DisplayFor(modelItem => item.Descripcion)</td>
-                            <td class="col-2">@Html.DisplayFor(modelItem => item.Autorizado)</td>
-                            <td class="col-2">
-                                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-                                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
-                            </td>
-                        </tr>
-                    }
-
-                        
             }
-                
         </tbody>
     </table>
 </div>
-    
+
+<script>
+    (function () {
+        function toggleHistory(button) {
+            var targetSelector = button.getAttribute('data-target');
+            if (!targetSelector) {
+                return;
+            }
+
+            var target = document.querySelector(targetSelector);
+            if (!target) {
+                return;
+            }
+
+            var isOpen = button.getAttribute('aria-expanded') === 'true';
+            button.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+            target.classList.toggle('revision-history-hidden', isOpen);
+            target.classList.toggle('revision-history-visible', !isOpen);
+        }
+
+        document.addEventListener('click', function (event) {
+            var button = event.target.closest('.revision-toggle');
+            if (button) {
+                event.preventDefault();
+                toggleHistory(button);
+                return;
+            }
+        });
+
+        document.addEventListener('dblclick', function (event) {
+            var card = event.target.closest('.revision-cuba-doubleclick');
+            if (!card) {
+                return;
+            }
+
+            var url = card.getAttribute('data-create-url');
+            if (!url) {
+                return;
+            }
+
+            event.preventDefault();
+            window.location.href = url;
+        });
+    })();
+</script>

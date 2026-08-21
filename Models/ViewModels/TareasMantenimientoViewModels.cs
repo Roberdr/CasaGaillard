@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Web;
 using System.Web.Mvc;
 
 namespace CasaGaillard.Models.ViewModels
@@ -66,6 +67,9 @@ namespace CasaGaillard.Models.ViewModels
         [DataType(DataType.MultilineText)]
         public string Observaciones { get; set; }
 
+        [Display(Name = "Fotos de la avería")]
+        public IEnumerable<HttpPostedFileBase> FotosAdjuntas { get; set; }
+
         public IEnumerable<SelectListItem> Prioridades { get; set; }
         public IEnumerable<SelectListItem> Estados { get; set; }
         public IEnumerable<SelectListItem> Empleados { get; set; }
@@ -125,6 +129,9 @@ namespace CasaGaillard.Models.ViewModels
         [Display(Name = "Observaciones")]
         [DataType(DataType.MultilineText)]
         public string Observaciones { get; set; }
+
+        [Display(Name = "Fotos de la avería")]
+        public IEnumerable<HttpPostedFileBase> FotosAdjuntas { get; set; }
 
         public IEnumerable<SelectListItem> Prioridades { get; set; }
         public IEnumerable<SelectListItem> Estados { get; set; }

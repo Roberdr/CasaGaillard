@@ -19,6 +19,7 @@ namespace CasaGaillard.Models
         }
 
         public DbSet<TareaMantenimiento> TareasMantenimiento { get; set; }
+        public DbSet<TareaMantenimientoFoto> TareaMantenimientoFotos { get; set; }
 
         private static void EnsureSchema()
         {
@@ -75,6 +76,30 @@ BEGIN
 END";
 
                     using (var command = new SqlCommand(createTable, connection))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+
+                    var createPhotosTable = @"
+IF OBJECT_ID('dbo.TareaMantenimientoFotos', 'U') IS NULL
+BEGIN
+    CREATE TABLE dbo.TareaMantenimientoFotos
+    (
+        ID INT IDENTITY(1,1) NOT NULL CONSTRAINT PK_TareaMantenimientoFotos PRIMARY KEY,
+        TareaMantenimientoID INT NOT NULL,
+        RutaArchivo NVARCHAR(260) NOT NULL,
+        NombreOriginal NVARCHAR(255) NULL,
+        ContentType NVARCHAR(100) NULL,
+        FechaCreacion DATETIME NOT NULL,
+        CONSTRAINT FK_TareaMantenimientoFotos_TareasMantenimiento
+            FOREIGN KEY (TareaMantenimientoID) REFERENCES dbo.TareasMantenimiento(ID) ON DELETE CASCADE
+    );
+
+    CREATE INDEX IX_TareaMantenimientoFotos_TareaMantenimientoID
+        ON dbo.TareaMantenimientoFotos(TareaMantenimientoID);
+END";
+
+                    using (var command = new SqlCommand(createPhotosTable, connection))
                     {
                         command.ExecuteNonQuery();
                     }

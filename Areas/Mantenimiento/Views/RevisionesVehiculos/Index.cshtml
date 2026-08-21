@@ -1,52 +1,348 @@
-﻿@model List<IGrouping<string, CasaGaillard.Models.RevisionVehiculo>>
+@model IEnumerable<CasaGaillard.Models.ViewModels.RevisionVehiculoGrupoViewModel>
 
 @{
-    ViewBag.Title = "Index";
+    ViewBag.Title = "Revisiones de vehículos";
+    var hoy = DateTime.Now.Date;
+    string matriculaVehiculoSeleccionada = ViewBag.MatriculaVehiculo as string ?? Request.QueryString["matriculaVehiculo"];
+    var modeloFiltrado = Model;
+    int? vehiculoIDSeleccionado = null;
+
+    if (!string.IsNullOrWhiteSpace(matriculaVehiculoSeleccionada) && modeloFiltrado != null)
+    {
+        modeloFiltrado = modeloFiltrado.Where(v => v.MatriculaVehiculo == matriculaVehiculoSeleccionada).ToList();
+    }
+
+    if (modeloFiltrado != null && modeloFiltrado.Count() == 1)
+    {
+        vehiculoIDSeleccionado = modeloFiltrado.First().VehiculoID;
+    }
+
+    Func<DateTime?, string> claseCaducidad = caducidad =>
+    {
+        if (!caducidad.HasValue)
+        {
+            return string.Empty;
+        }
+
+        var dias = (caducidad.Value.Date - hoy).TotalDays;
+        if (dias < 0)
+        {
+            return "revision-vehiculo-status-expired";
+        }
+
+        if (dias <= 30)
+        {
+            return "revision-vehiculo-status-warning";
+        }
+
+        return string.Empty;
+    };
+
+    Func<DateTime?, string> etiquetaCaducidad = caducidad =>
+    {
+        if (!caducidad.HasValue)
+        {
+            return string.Empty;
+        }
+
+        var dias = (caducidad.Value.Date - hoy).TotalDays;
+        if (dias < 0)
+        {
+            return "Caducada";
+        }
+
+        if (dias <= 30)
+        {
+            return "Caduca pronto";
+        }
+
+        return string.Empty;
+    };
 }
 
-<h2>Index</h2>
+<h2>Revisiones de vehículos</h2>
 
 <p>
-    @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Nueva revisión", "Create", new { vehiculoID = vehiculoIDSeleccionado }, new { @class = "btn btn-primary" })
+    @if (!string.IsNullOrWhiteSpace(matriculaVehiculoSeleccionada))
+    {
+        <text> </text>
+        @Html.ActionLink("Ver todas", "Index", null, new { @class = "btn btn-default" })
+    }
 </p>
-<div class="container">
-    <table class="table table-bordered table-striped">
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
         <thead>
             <tr>
                 <th>Matrícula</th>
-                <th>Fecha de Revisión</th>
-                <th>Fecha de Caducidad</th>
-                <th>Descripción</th>
-                <th>Autorizado</th>
+                <th>Últimas revisiones por tipo</th>
+                <th>Total</th>
                 <th>Opciones</th>
             </tr>
         </thead>
         <tbody>
-            @foreach (var g in Model)
+            @if (modeloFiltrado != null && modeloFiltrado.Any())
+            {
+                foreach (var vehiculo in modeloFiltrado)
+                {
+                    var historialId = "historial-vehiculo-" + vehiculo.VehiculoID;
+                    <tr>
+                        <td>
+                            <div class="revision-vehiculo-cell">
+                                <button type="button"
+                                        class="revision-vehiculo-toggle"
+                                        data-target="#@historialId"
+                                        aria-expanded="false"
+                                        aria-controls="@historialId">
+                                    <span class="revision-vehiculo-toggle__label">@vehiculo.MatriculaVehiculo</span>
+                                    <span class="revision-vehiculo-toggle__icon"><i class="fa fa-chevron-down" aria-hidden="true"></i></span>
+                                </button>
+                                <span class="label label-default revision-vehiculo-toggle__count">@vehiculo.Tipos.Count tipos</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="revision-vehiculo-summary-grid">
+                                @foreach (var tipo in vehiculo.Tipos)
+                                {
+                                    var ultima = tipo.UltimaRevision;
+                                    var claseResumen = claseCaducidad(ultima != null ? ultima.Caducidad : null);
+                                    var etiquetaResumen = etiquetaCaducidad(ultima != null ? ultima.Caducidad : null);
+                                    var createUrlResumen = (!string.IsNullOrWhiteSpace(claseResumen) && tipo.TipoRevisionID.HasValue)
+                                        ? Url.Action("Create", "RevisionesVehiculos", new { area = "Mantenimiento", vehiculoID = vehiculo.VehiculoID, tipoRevisionID = tipo.TipoRevisionID })
+                                        : null;
+
+                                    if (createUrlResumen != null)
+                                    {
+                                        <div class="revision-vehiculo-summary-item @claseResumen revision-vehiculo-doubleclick" data-create-url="@createUrlResumen">
+                                            @if (!string.IsNullOrWhiteSpace(etiquetaResumen))
+                                            {
+                                                <div class="revision-vehiculo-status-strip">@etiquetaResumen</div>
+                                            }
+                                            <div class="revision-vehiculo-summary-item__top">
+                                                <strong>@(string.IsNullOrWhiteSpace(tipo.TipoRevision) ? "Sin tipo" : tipo.TipoRevision)</strong>
+                                                <span class="revision-vehiculo-summary-item__date">
+                                                    @(ultima != null && ultima.FechaRevision.HasValue ? ultima.FechaRevision.Value.ToString("d") : "N/D")
+                                                </span>
+                                            </div>
+                                            <div class="revision-vehiculo-summary-item__bottom">
+                                                <span class="revision-vehiculo-summary-item__meta">
+                                                    Caduca: @(ultima != null && ultima.Caducidad.HasValue ? ultima.Caducidad.Value.ToString("d") : "N/D")
+                                                </span>
+                                                <span class="revision-vehiculo-summary-item__meta">
+                                                    @(ultima != null && !string.IsNullOrWhiteSpace(ultima.Ejecutor) ? ultima.Ejecutor : "Sin ejecutor")
+                                                </span>
+                                                @if (!string.IsNullOrWhiteSpace(etiquetaResumen))
+                                                {
+                                                    <span class="label label-warning revision-vehiculo-status-badge">@etiquetaResumen</span>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="revision-vehiculo-summary-item @claseResumen">
+                                            @if (!string.IsNullOrWhiteSpace(etiquetaResumen))
+                                            {
+                                                <div class="revision-vehiculo-status-strip">@etiquetaResumen</div>
+                                            }
+                                            <div class="revision-vehiculo-summary-item__top">
+                                                <strong>@(string.IsNullOrWhiteSpace(tipo.TipoRevision) ? "Sin tipo" : tipo.TipoRevision)</strong>
+                                                <span class="revision-vehiculo-summary-item__date">
+                                                    @(ultima != null && ultima.FechaRevision.HasValue ? ultima.FechaRevision.Value.ToString("d") : "N/D")
+                                                </span>
+                                            </div>
+                                            <div class="revision-vehiculo-summary-item__bottom">
+                                                <span class="revision-vehiculo-summary-item__meta">
+                                                    Caduca: @(ultima != null && ultima.Caducidad.HasValue ? ultima.Caducidad.Value.ToString("d") : "N/D")
+                                                </span>
+                                                <span class="revision-vehiculo-summary-item__meta">
+                                                    @(ultima != null && !string.IsNullOrWhiteSpace(ultima.Ejecutor) ? ultima.Ejecutor : "Sin ejecutor")
+                                                </span>
+                                                @if (!string.IsNullOrWhiteSpace(etiquetaResumen))
+                                                {
+                                                    <span class="label label-warning revision-vehiculo-status-badge">@etiquetaResumen</span>
+                                                }
+                                            </div>
+                                        </div>
+                                    }
+                                }
+                            </div>
+                        </td>
+                        <td class="text-center">@vehiculo.TotalRevisiones</td>
+                        <td>
+                            <span class="text-muted">Despliega la matrícula</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="4" class="revision-vehiculo-history-row">
+                            <div id="@historialId" class="revision-vehiculo-history-hidden">
+                                <div class="revision-vehiculo-history-panel">
+                                    <div class="revision-vehiculo-history-panel__header">
+                                        <div>
+                                            <div class="revision-vehiculo-history-panel__eyebrow">Historial completo</div>
+                                            <strong>@vehiculo.MatriculaVehiculo</strong>
+                                        </div>
+                                        <span class="label label-info">@vehiculo.TotalRevisiones registros</span>
+                                    </div>
+                                    <div class="revision-vehiculo-history-panel__body">
+                                        @foreach (var tipo in vehiculo.Tipos)
+                                        {
+                                            <div class="revision-vehiculo-type-block">
+                                                <div class="revision-vehiculo-type-block__header">
+                                                    <strong>@(string.IsNullOrWhiteSpace(tipo.TipoRevision) ? "Sin tipo" : tipo.TipoRevision)</strong>
+                                                    <span class="label label-default">@tipo.Historial.Count revisiones</span>
+                                                </div>
+                                                <div class="revision-vehiculo-type-block__list">
+                                                    @foreach (var revision in tipo.Historial)
+                                                    {
+                                                        var claseHistorial = claseCaducidad(revision.Caducidad);
+                                                        var etiquetaHistorial = etiquetaCaducidad(revision.Caducidad);
+                                                        var createUrlHistorial = (!string.IsNullOrWhiteSpace(claseHistorial) && revision.TipoRevisionID.HasValue)
+                                                            ? Url.Action("Create", "RevisionesVehiculos", new { area = "Mantenimiento", vehiculoID = vehiculo.VehiculoID, tipoRevisionID = revision.TipoRevisionID })
+                                                            : null;
+
+                                                        if (createUrlHistorial != null)
+                                                        {
+                                                            <div class="revision-vehiculo-history-item @claseHistorial revision-vehiculo-doubleclick" data-create-url="@createUrlHistorial">
+                                                                @if (!string.IsNullOrWhiteSpace(etiquetaHistorial))
+                                                                {
+                                                                    <div class="revision-vehiculo-status-strip">@etiquetaHistorial</div>
+                                                                }
+                                                                <div class="revision-vehiculo-history-item__date">
+                                                                    <div class="revision-vehiculo-history-item__day">
+                                                                        @(revision.FechaRevision.HasValue ? revision.FechaRevision.Value.ToString("dd") : "--")
+                                                                    </div>
+                                                                    <div class="revision-vehiculo-history-item__month">
+                                                                        @(revision.FechaRevision.HasValue ? revision.FechaRevision.Value.ToString("MMM yyyy") : "Sin fecha")
+                                                                    </div>
+                                                                </div>
+                                                                <div class="revision-vehiculo-history-item__content">
+                                                                    <div class="revision-vehiculo-history-item__top">
+                                                                        <span class="revision-vehiculo-history-item__meta">
+                                                                            Caducidad: @(revision.Caducidad.HasValue ? revision.Caducidad.Value.ToString("d") : "N/D")
+                                                                        </span>
+                                                                        <span class="revision-vehiculo-history-item__meta">
+                                                                            @(string.IsNullOrWhiteSpace(revision.Ejecutor) ? "Sin ejecutor" : revision.Ejecutor)
+                                                                        </span>
+                                                                        @if (!string.IsNullOrWhiteSpace(etiquetaHistorial))
+                                                                        {
+                                                                            <span class="label label-warning revision-vehiculo-status-badge">@etiquetaHistorial</span>
+                                                                        }
+                                                                    </div>
+                                                                    <div class="revision-vehiculo-history-item__details">
+                                                                        @(string.IsNullOrWhiteSpace(revision.Detalles) ? "Sin detalles" : revision.Detalles)
+                                                                    </div>
+                                                                    <div class="revision-vehiculo-history-item__actions">
+                                                                        @Html.ActionLink("Editar", "Edit", new { id = revision.ID }) |
+                                                                        @Html.ActionLink("Detalles", "Details", new { id = revision.ID }) |
+                                                                        @Html.ActionLink("Eliminar", "Delete", new { id = revision.ID })
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                        else
+                                                        {
+                                                            <div class="revision-vehiculo-history-item @claseHistorial">
+                                                                @if (!string.IsNullOrWhiteSpace(etiquetaHistorial))
+                                                                {
+                                                                    <div class="revision-vehiculo-status-strip">@etiquetaHistorial</div>
+                                                                }
+                                                                <div class="revision-vehiculo-history-item__date">
+                                                                    <div class="revision-vehiculo-history-item__day">
+                                                                        @(revision.FechaRevision.HasValue ? revision.FechaRevision.Value.ToString("dd") : "--")
+                                                                    </div>
+                                                                    <div class="revision-vehiculo-history-item__month">
+                                                                        @(revision.FechaRevision.HasValue ? revision.FechaRevision.Value.ToString("MMM yyyy") : "Sin fecha")
+                                                                    </div>
+                                                                </div>
+                                                                <div class="revision-vehiculo-history-item__content">
+                                                                    <div class="revision-vehiculo-history-item__top">
+                                                                        <span class="revision-vehiculo-history-item__meta">
+                                                                            Caducidad: @(revision.Caducidad.HasValue ? revision.Caducidad.Value.ToString("d") : "N/D")
+                                                                        </span>
+                                                                        <span class="revision-vehiculo-history-item__meta">
+                                                                            @(string.IsNullOrWhiteSpace(revision.Ejecutor) ? "Sin ejecutor" : revision.Ejecutor)
+                                                                        </span>
+                                                                        @if (!string.IsNullOrWhiteSpace(etiquetaHistorial))
+                                                                        {
+                                                                            <span class="label label-warning revision-vehiculo-status-badge">@etiquetaHistorial</span>
+                                                                        }
+                                                                    </div>
+                                                                    <div class="revision-vehiculo-history-item__details">
+                                                                        @(string.IsNullOrWhiteSpace(revision.Detalles) ? "Sin detalles" : revision.Detalles)
+                                                                    </div>
+                                                                    <div class="revision-vehiculo-history-item__actions">
+                                                                        @Html.ActionLink("Editar", "Edit", new { id = revision.ID }) |
+                                                                        @Html.ActionLink("Detalles", "Details", new { id = revision.ID }) |
+                                                                        @Html.ActionLink("Eliminar", "Delete", new { id = revision.ID })
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        }
+                                                    }
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            }
+            else
             {
                 <tr>
-                    <td colspan="5"><h4>@Html.DisplayFor(modelItem => g.Key)</h4></td>
+                    <td colspan="4" class="text-muted">No hay revisiones registradas.</td>
                 </tr>
-                    foreach (var item in g.OrderByDescending(m => m.Caducidad))
-                    {
-        <tr>
-                    <td></td>
-                    <td>@Html.DisplayFor(modelItem => item.FechaRevision)</td>
-            <td>@(item.Caducidad != null ? item.Caducidad.Value.ToString("d") : "N/D")</td>
-            <td class="col-2">@Html.DisplayFor(modelItem => item.TipoRevision.Revision)</td>
-            <td class="col-2">@Html.DisplayFor(modelItem => item.Ejecutor)</td>
-            <td class="col-2">
-                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
-            </td>
-        </tr>
-                    }
-
-                        
             }
-                
         </tbody>
     </table>
 </div>
-    
+
+<script>
+    (function () {
+        function toggle(button) {
+            var targetSelector = button.getAttribute('data-target');
+            if (!targetSelector) {
+                return;
+            }
+
+            var target = document.querySelector(targetSelector);
+            if (!target) {
+                return;
+            }
+
+            var isOpen = button.getAttribute('aria-expanded') === 'true';
+            button.setAttribute('aria-expanded', isOpen ? 'false' : 'true');
+            target.classList.toggle('revision-vehiculo-history-hidden', isOpen);
+            target.classList.toggle('revision-vehiculo-history-visible', !isOpen);
+        }
+
+        document.addEventListener('click', function (event) {
+            var button = event.target.closest('.revision-vehiculo-toggle');
+            if (!button) {
+                return;
+            }
+
+            event.preventDefault();
+            toggle(button);
+        });
+
+        document.addEventListener('dblclick', function (event) {
+            var card = event.target.closest('.revision-vehiculo-doubleclick');
+            if (!card) {
+                return;
+            }
+
+            var url = card.getAttribute('data-create-url');
+            if (!url) {
+                return;
+            }
+
+            event.preventDefault();
+            window.location.href = url;
+        });
+    })();
+</script>

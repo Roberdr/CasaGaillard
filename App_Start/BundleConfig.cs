@@ -26,9 +26,9 @@ namespace CasaGaillard
             /*bundles.Add(new ScriptBundle("~/bundles/bootstrap").Include(
                       "~/Scripts/bootstrap.js"));*/
 
-            bundles.Add(new StyleBundle("~/bundles/styles").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/site.css"));
+            bundles.Add(new StyleBundle("~/bundles/styles")
+                      .Include("~/Content/bootstrap.css")
+                      .Include("~/Content/Site.css", new CssRewriteUrlTransform()));
             //bundles.Add(new StyleBundle("~/Content/fontawesome").Include(
             //          "~/Content/CSS/font-awesome.css"));
         }

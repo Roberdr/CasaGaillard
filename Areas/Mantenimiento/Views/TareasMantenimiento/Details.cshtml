@@ -62,6 +62,39 @@
         </div>
 
         <div class="panel panel-default">
+            <div class="panel-heading"><strong>Fotos de la avería</strong></div>
+            <div class="panel-body">
+                @{
+                    var fotos = ViewBag.Fotos as IEnumerable<CasaGaillard.Models.TareaMantenimientoFoto>;
+                }
+
+                @if (fotos != null && fotos.Any())
+                {
+                    <div class="row tarea-fotos-galeria">
+                        @foreach (var foto in fotos)
+                        {
+                            <div class="col-xs-6 col-md-4 tarea-foto-col">
+                                <a href="@Url.Action("Foto", new { id = foto.ID })" target="_blank" class="tarea-foto-link">
+                                    <img src="@Url.Action("Foto", new { id = foto.ID })"
+                                         alt="Foto de la tarea @(foto.NombreOriginal ?? foto.ID.ToString())"
+                                         class="img-responsive tarea-foto-thumb" />
+                                </a>
+                                @if (!string.IsNullOrWhiteSpace(foto.NombreOriginal))
+                                {
+                                    <div class="text-muted tarea-foto-caption">@foto.NombreOriginal</div>
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted">Todavía no hay fotos adjuntas para esta tarea.</p>
+                }
+            </div>
+        </div>
+
+        <div class="panel panel-default">
             <div class="panel-heading"><strong>Acciones a realizar</strong></div>
             <div class="panel-body">
                 <p style="white-space: pre-wrap;">@(string.IsNullOrWhiteSpace(Model.AccionesARealizar) ? "Sin acciones definidas todavía." : Model.AccionesARealizar)</p>

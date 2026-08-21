@@ -3,9 +3,11 @@ using CasaGaillard.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 
 namespace CasaGaillard.Areas.Mantenimiento.Controllers
@@ -17,10 +19,18 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         private readonly TareasMantenimientoContext tareasDb = new TareasMantenimientoContext();
         private readonly GaillardEntities lookupDb = new GaillardEntities();
 
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(string codigo = null)
         {
-            var tareas = await tareasDb.TareasMantenimiento
+            var consulta = tareasDb.TareasMantenimiento
                 .AsNoTracking()
+                .AsQueryable();
+
+            if (!string.IsNullOrWhiteSpace(codigo))
+            {
+                consulta = consulta.Where(t => t.Codigo == codigo);
+            }
+
+            var tareas = await consulta
                 .OrderByDescending(t => t.FechaCreacion)
                 .Select(t => new TareaMantenimientoResumenViewModel
                 {
@@ -35,6 +45,8 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                     FechaCreacion = t.FechaCreacion
                 })
                 .ToListAsync();
+
+            ViewBag.Codigo = codigo;
 
             return View(tareas);
         }
@@ -52,6 +64,11 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                 return HttpNotFound();
             }
 
+            ViewBag.Fotos = await tareasDb.TareaMantenimientoFotos
+                .AsNoTracking()
+                .Where(f => f.TareaMantenimientoID == tarea.ID)
+                .OrderByDescending(f => f.FechaCreacion)
+                .ToListAsync();
             ViewBag.AccesoriosTexto = ObtenerAccesoriosTexto(tarea.AccesoriosNecesarios);
             return View(tarea);
         }
@@ -149,6 +166,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
 
             tareasDb.TareasMantenimiento.Add(tarea);
             await tareasDb.SaveChangesAsync();
+            GuardarFotosAdjuntas(tarea.ID, Request.Files);
 
             TempData["LoginMessage"] = "La tarea de mantenimiento se ha creado correctamente.";
             return RedirectToAction("Details", new { id = tarea.ID });
@@ -205,9 +223,28 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             tarea.FechaActualizacion = DateTime.Now;
 
             await tareasDb.SaveChangesAsync();
+            GuardarFotosAdjuntas(tarea.ID, Request.Files);
 
             TempData["LoginMessage"] = "La tarea se ha actualizado.";
             return RedirectToAction("Details", new { id = tarea.ID });
+        }
+
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento + "," + AppRoles.Consulta)]
+        public async Task<ActionResult> Foto(int id)
+        {
+            var foto = await tareasDb.TareaMantenimientoFotos.AsNoTracking().FirstOrDefaultAsync(f => f.ID == id);
+            if (foto == null)
+            {
+                return HttpNotFound();
+            }
+
+            var ruta = Server.MapPath(foto.RutaArchivo);
+            if (string.IsNullOrWhiteSpace(ruta) || !System.IO.File.Exists(ruta))
+            {
+                return HttpNotFound();
+            }
+
+            return File(ruta, string.IsNullOrWhiteSpace(foto.ContentType) ? "application/octet-stream" : foto.ContentType);
         }
 
         protected override void Dispose(bool disposing)
@@ -229,6 +266,56 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             source.Empleados = GetEmpleados(source.AsignadaA);
             source.Accesorios = GetAccesorios(source.AccesoriosSeleccionados);
             return source;
+        }
+
+        private void GuardarFotosAdjuntas(int tareaId, HttpFileCollectionBase archivos)
+        {
+            if (archivos == null || archivos.Count == 0)
+            {
+                return;
+            }
+
+            var raiz = Server.MapPath("~/App_Data/TareasMantenimientoFotos");
+            Directory.CreateDirectory(raiz);
+
+            for (var i = 0; i < archivos.Count; i++)
+            {
+                var archivo = archivos[i];
+                if (archivo == null || archivo.ContentLength <= 0)
+                {
+                    continue;
+                }
+
+                if (string.IsNullOrWhiteSpace(archivo.ContentType) ||
+                    !archivo.ContentType.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
+                {
+                    continue;
+                }
+
+                var extension = Path.GetExtension(archivo.FileName);
+                if (string.IsNullOrWhiteSpace(extension))
+                {
+                    extension = ".jpg";
+                }
+
+                var carpetaTarea = Path.Combine(raiz, tareaId.ToString());
+                Directory.CreateDirectory(carpetaTarea);
+
+                var nombreFisico = Guid.NewGuid().ToString("N") + extension.ToLowerInvariant();
+                var rutaFisica = Path.Combine(carpetaTarea, nombreFisico);
+                archivo.SaveAs(rutaFisica);
+
+                tareasDb.TareaMantenimientoFotos.Add(new TareaMantenimientoFoto
+                {
+                    TareaMantenimientoID = tareaId,
+                    RutaArchivo = "~/App_Data/TareasMantenimientoFotos/" + tareaId + "/" + nombreFisico,
+                    NombreOriginal = Path.GetFileName(archivo.FileName),
+                    ContentType = archivo.ContentType,
+                    FechaCreacion = DateTime.Now
+                });
+            }
+
+            tareasDb.SaveChanges();
         }
 
         private TareaMantenimientoFormViewModel MapToForm(TareaMantenimiento tarea)

@@ -20,15 +20,65 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
 
         // GET: Revisiones
         [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento + "," + AppRoles.Consulta)]
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(int? cubaID = null, string matriculaCuba = null)
         {
-            var revisiones = db.Revisiones
+            var consulta = db.Revisiones
+                .AsNoTracking()
                 .Include(r => r.Cuba)
-                .OrderBy(r => r.Cuba.MatriculaCuba)
-                .ThenByDescending(r => r.FechaRevision)
-                .GroupBy(r => r.Cuba.MatriculaCuba);
+                .AsQueryable();
 
-            return View(await revisiones.ToListAsync());
+            if (cubaID.HasValue)
+            {
+                consulta = consulta.Where(r => r.CubaID == cubaID.Value);
+            }
+            else if (!string.IsNullOrWhiteSpace(matriculaCuba))
+            {
+                consulta = consulta.Where(r => r.Cuba != null && r.Cuba.MatriculaCuba == matriculaCuba);
+            }
+
+            var revisiones = await consulta
+                    .OrderBy(r => r.Cuba.MatriculaCuba)
+                    .ThenByDescending(r => r.FechaRevision)
+                    .ToListAsync();
+
+            ViewBag.CubaID = cubaID;
+            ViewBag.MatriculaCuba = matriculaCuba;
+
+            var modelo = revisiones
+                .GroupBy(r => new { r.CubaID, Matricula = r.Cuba != null ? r.Cuba.MatriculaCuba : string.Empty })
+                .Select(g => new RevisionCubaGrupoViewModel
+                {
+                    CubaID = g.Key.CubaID,
+                    MatriculaCuba = g.Key.Matricula,
+                    UltimaRevision = g
+                        .OrderByDescending(r => r.FechaRevision)
+                        .Select(r => new RevisionHistorialItemViewModel
+                        {
+                            ID = r.ID,
+                            FechaRevision = r.FechaRevision,
+                            Descripcion = r.Descripcion,
+                            ValidaHasta = r.ValidaHasta,
+                            DescripcionProxima = r.DescripcionProxima,
+                            Autorizado = r.Autorizado
+                        })
+                        .FirstOrDefault(),
+                    Historial = g
+                        .OrderByDescending(r => r.FechaRevision)
+                        .Select(r => new RevisionHistorialItemViewModel
+                        {
+                            ID = r.ID,
+                            FechaRevision = r.FechaRevision,
+                            Descripcion = r.Descripcion,
+                            ValidaHasta = r.ValidaHasta,
+                            DescripcionProxima = r.DescripcionProxima,
+                            Autorizado = r.Autorizado
+                        })
+                        .ToList()
+                })
+                .OrderBy(x => x.MatriculaCuba)
+                .ToList();
+
+            return View(modelo);
         }
 
         // GET: Revisiones/Details/5
@@ -49,10 +99,14 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
 
         // GET: Revisiones/Create
         [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
-        public ActionResult Create()
+        public ActionResult Create(int? cubaID = null)
         {
-            ViewBag.CubaID = new SelectList(db.Cubas.OrderBy(o => o.MatriculaCuba), "ID", "MatriculaCuba");
-            return View();
+            ViewBag.CubaID = new SelectList(db.Cubas.OrderBy(o => o.MatriculaCuba), "ID", "MatriculaCuba", cubaID);
+            return View(new Revision
+            {
+                CubaID = cubaID ?? 0,
+                FechaRevision = DateTime.Now.Date
+            });
         }
 
         // POST: Revisiones/Create

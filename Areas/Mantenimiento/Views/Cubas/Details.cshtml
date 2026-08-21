@@ -50,3 +50,37 @@
     @Html.ActionLink("Editar", "Edit", new { id = Model.ID }) |
     @Html.ActionLink("Volver", "Index")
 </p>
+
+@section scripts {
+    <script>
+        (function ($) {
+            function activateTab($tabLinks, $tabPanes, target) {
+                $tabLinks.removeClass('active').attr('aria-selected', 'false');
+                $tabPanes.removeClass('active show');
+
+                var $targetPane = $(target);
+                var $targetLink = $tabLinks.filter('[href="' + target + '"]');
+
+                if ($targetPane.length && $targetLink.length) {
+                    $targetPane.addClass('active show');
+                    $targetLink.addClass('active').attr('aria-selected', 'true');
+                }
+            }
+
+            $(function () {
+                var $tabLinks = $('#cubasTab .nav-link');
+                var $tabPanes = $('#cubasTabContent .tab-pane');
+
+                $tabLinks.on('click', function (e) {
+                    e.preventDefault();
+                    activateTab($tabLinks, $tabPanes, $(this).attr('href'));
+                });
+
+                var initialHash = window.location.hash;
+                if (initialHash && $(initialHash).length) {
+                    activateTab($tabLinks, $tabPanes, initialHash);
+                }
+            });
+        })(jQuery);
+    </script>
+}

@@ -30,12 +30,11 @@ else
     </ol>
     <div class="carousel-inner">
         @{
-            String m = "/Content/images/" + Model.MatriculaCuba.ToString() + "/";
             var c = 0;
         }
         @foreach (var a in ViewBag.files)
         {
-            var p = m + a;
+            var p = Url.Action("Imagen", "Pagina", new { area = "Pagina", archivo = Model.MatriculaCuba.ToString() + "/" + a });
             var cl = (c == 0) ? "carousel-item active" : "carousel-item";
             <div class="@cl">
                 <img src="@p" class="d-block w-100">

@@ -2,13 +2,27 @@
 
 @{
     ViewBag.Title = "Tareas de mantenimiento";
+    string codigoSeleccionado = ViewBag.Codigo as string ?? Request.QueryString["codigo"];
+    var modeloFiltrado = Model;
+
+    if (!string.IsNullOrWhiteSpace(codigoSeleccionado) && modeloFiltrado != null)
+    {
+        modeloFiltrado = modeloFiltrado.Where(t => t.Codigo == codigoSeleccionado).ToList();
+    }
 }
 
 <div class="row">
     <div class="col-md-12">
         <h2>Tareas de mantenimiento</h2>
         <p class="text-muted">Registro de incidencias detectadas en vehículos, instalaciones y equipos.</p>
-        <p>@Html.ActionLink("Nueva tarea", "Create", null, new { @class = "btn btn-primary" })</p>
+        <p>
+            @Html.ActionLink("Nueva tarea", "Create", null, new { @class = "btn btn-primary" })
+            @if (!string.IsNullOrWhiteSpace(codigoSeleccionado))
+            {
+                <text> </text>
+                @Html.ActionLink("Ver todas", "Index", null, new { @class = "btn btn-default" })
+            }
+        </p>
     </div>
 </div>
 
@@ -29,9 +43,9 @@
                 </tr>
             </thead>
             <tbody>
-                @if (Model != null && Model.Any())
+                @if (modeloFiltrado != null && modeloFiltrado.Any())
                 {
-                    foreach (var tarea in Model)
+                    foreach (var tarea in modeloFiltrado)
                     {
                         <tr>
                             <td>@tarea.Codigo</td>

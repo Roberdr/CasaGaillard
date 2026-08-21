@@ -1,0 +1,142 @@
+@model CasaGaillard.Models.ViewModels.AccesorioFormViewModel
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.TipoAccesorioID)
+            @Html.DropDownListFor(m => m.TipoAccesorioID, Model.TiposAccesorio, "-- Seleccione --", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.TipoAccesorioID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.MaterialID)
+            @Html.DropDownListFor(m => m.MaterialID, Model.Materiales, "-- Seleccione --", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.MaterialID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
+@{
+    var detallesExistentes = (Model.Detalles ?? new List<CasaGaillard.Models.ViewModels.DetalleAccesorioFormViewModel>())
+        .Where(d => d != null && (d.ID > 0 || d.CaracteristicaAccesorioID.HasValue || d.Cantidad.HasValue || d.Medida.HasValue || d.UnidadID.HasValue || !string.IsNullOrWhiteSpace(d.Tipo)))
+        .ToList();
+}
+
+@if (detallesExistentes.Any())
+{
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>Detalles ya guardados</strong>
+        </div>
+        <div class="panel-body">
+            <div class="table-responsive">
+                <table class="table table-condensed table-striped table-bordered accesorio-detalles-table">
+                    <thead>
+                        <tr>
+                            <th>Característica</th>
+                            <th>Cantidad</th>
+                            <th>Medida</th>
+                            <th>Unidad</th>
+                            <th>Tipo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var detalle in detallesExistentes)
+                        {
+                            <tr>
+                                <td>@(string.IsNullOrWhiteSpace(detalle.CaracteristicaNombre) ? (detalle.CaracteristicaAccesorioID.HasValue ? detalle.CaracteristicaAccesorioID.Value.ToString() : "-") : detalle.CaracteristicaNombre)</td>
+                                <td>@(detalle.Cantidad.HasValue ? detalle.Cantidad.Value.ToString() : "-")</td>
+                                <td>@(detalle.Medida.HasValue ? detalle.Medida.Value.ToString() : "-")</td>
+                                <td>@(string.IsNullOrWhiteSpace(detalle.UnidadNombre) ? (detalle.UnidadID.HasValue ? detalle.UnidadID.Value.ToString() : "-") : detalle.UnidadNombre)</td>
+                                <td>@(string.IsNullOrWhiteSpace(detalle.Tipo) ? "-" : detalle.Tipo)</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <strong>Detalles del accesorio</strong>
+    </div>
+    <div class="panel-body">
+        <p class="text-muted">Rellena solo las líneas que necesites. Las filas vacías se ignorarán al guardar.</p>
+        <div class="table-responsive">
+            <table class="table table-condensed table-bordered accesorio-detalles-table">
+                <thead>
+                    <tr>
+                        <th>Característica</th>
+                        <th>Cantidad</th>
+                        <th>Medida</th>
+                        <th>Unidad</th>
+                        <th>Tipo</th>
+                        <th>Eliminar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @for (var i = 0; i < Model.Detalles.Count; i++)
+                    {
+                        <tr>
+                            <td>
+                                @Html.HiddenFor(m => m.Detalles[i].ID)
+                                @Html.DropDownListFor(m => m.Detalles[i].CaracteristicaAccesorioID, Model.Caracteristicas, "-- Sin característica --", new { @class = "form-control input-sm" })
+                            </td>
+                            <td style="width: 100px;">
+                                @Html.TextBoxFor(m => m.Detalles[i].Cantidad, new { @class = "form-control input-sm", type = "number", min = "0" })
+                            </td>
+                            <td style="width: 120px;">
+                                @Html.TextBoxFor(m => m.Detalles[i].Medida, new { @class = "form-control input-sm", type = "number", step = "0.01", min = "0" })
+                            </td>
+                            <td style="width: 160px;">
+                                @Html.DropDownListFor(m => m.Detalles[i].UnidadID, Model.Unidades, "-- Sin unidad --", new { @class = "form-control input-sm" })
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(m => m.Detalles[i].Tipo, new { @class = "form-control input-sm" })
+                            </td>
+                            <td class="text-center" style="width: 80px;">
+                                @Html.CheckBoxFor(m => m.Detalles[i].Eliminar)
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.FotosAdjuntas)
+    <input type="file" name="FotosAdjuntas" class="form-control" accept="image/*" multiple="multiple" />
+    <p class="help-block">Puedes adjuntar varias fotos para ver el estado o los detalles del accesorio.</p>
+</div>
+
+@if (Model.FotosExistentes != null && Model.FotosExistentes.Any())
+{
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <strong>Fotos actuales</strong>
+        </div>
+        <div class="panel-body">
+            <div class="row accesorio-fotos-galeria">
+                @foreach (var foto in Model.FotosExistentes)
+                {
+                    <div class="col-xs-6 col-md-3 accesorio-foto-col">
+                        <a href="@Url.Action("Foto", "Accesorios", new { area = "Mantenimiento", id = foto.ID })" target="_blank" class="accesorio-foto-link">
+                            <img src="@Url.Action("Foto", "Accesorios", new { area = "Mantenimiento", id = foto.ID })"
+                                 alt="Foto del accesorio @(foto.NombreOriginal ?? foto.ID.ToString())"
+                                 class="img-responsive accesorio-foto-thumb" />
+                        </a>
+                        @if (!string.IsNullOrWhiteSpace(foto.NombreOriginal))
+                        {
+                            <div class="text-muted accesorio-foto-caption">@foto.NombreOriginal</div>
+                        }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+}
