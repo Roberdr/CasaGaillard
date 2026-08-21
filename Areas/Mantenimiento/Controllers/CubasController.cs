@@ -67,6 +67,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             // Comprueba que haya un directorio con la matricula de la cuba a detallar
             // y crea una lista de los archivos existentes
 
+<<<<<<< HEAD
             string imgPath = Server.MapPath("~/Content/images/");
             List<string> nameFiles = new List<string>();
             string cubaImagePath = Path.Combine(imgPath, cuba.MatriculaCuba.ToString());
@@ -79,6 +80,23 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                     nameFiles.Add(Path.GetFileName(f));
                 }
             }
+=======
+            string imgPath = "C:/inetpub/wwwroot/CG/Content/images/";
+            string docPath;
+            List<string> nameFiles = new List<string>();
+            List<string> d = new List<string>(Directory.EnumerateDirectories(imgPath));
+            if (d.Contains(imgPath + cuba.MatriculaCuba.ToString()))
+            {
+                docPath = imgPath + cuba.MatriculaCuba.ToString() + '/';
+                List<string> files = new List<string>(Directory.EnumerateFiles(docPath));
+
+                foreach (string f in files)
+                {
+                    var pos = f.LastIndexOf("/");
+                    nameFiles.Add(f.Substring(pos));
+                }
+            }
+>>>>>>> 3f4f7f27e6a76f6022a1930ba4c1281642bcfbc2
             ViewBag.files = nameFiles;
             return View(cuba);
         }
