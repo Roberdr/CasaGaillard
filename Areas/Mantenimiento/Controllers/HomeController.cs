@@ -89,10 +89,11 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                     MatriculaVehiculo = s.Key.MatriculaVehiculo,
                     Caducidad = s.Max(m => m.Caducidad),
                     TipoRevision = s.Key.TipoRevision.Revision,
-                 });
+                 })
+                .OrderBy(r => r.Caducidad)
+                .Where(r => r.Caducidad > fechaInicio && r.Caducidad < fechaFinal);
 
-            var viewModel1V = viewModelV
-                .OrderBy(r => r.Caducidad);
+            
 
             revisionesVehiculos = await viewModel1V.ToListAsync();
 

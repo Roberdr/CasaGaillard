@@ -10,6 +10,7 @@ using System.Web.Mvc;
 using CasaGaillard.Models;
 using CasaGaillard.Models.ViewModels;
 using Microsoft.Ajax.Utilities;
+using System.ComponentModel.DataAnnotations;
 
 namespace CasaGaillard.Areas.Mantenimiento.Controllers
 {

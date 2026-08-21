@@ -1,0 +1,34 @@
+﻿@model IEnumerable<CasaGaillard.Areas.Mantenimiento.Controllers.RevisionesVehiculosController.Revisiones>
+
+@{
+    ViewBag.Title = "Próximas Revisiones";
+}
+
+<h2>Próximas Revisiones</h2>
+
+<div class="container">
+
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                <th>Matrícula</th>
+                <th>Tipo Revisión</th>
+                <th>Fecha de Caducidad</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var g in ViewBag.res)
+            {
+                <tr>
+
+                    <td>@g.MatriculaVehiculo</td>
+                    <td>@g.TipoRevision</td>
+                    <td>@g.Caducidad.ToString("d")</td>
+
+                </tr>
+            }
+
+        </tbody>
+    </table>
+</div>
+
