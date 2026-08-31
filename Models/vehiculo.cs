@@ -42,6 +42,7 @@ namespace CasaGaillard.Models
         public Nullable<int> Anchura { get; set; }
         public Nullable<int> Altura { get; set; }
         public Nullable<int> SeguroID { get; set; }
+        public bool Baja { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<RevisionVehiculo> RevisionesVehiculo { get; set; }

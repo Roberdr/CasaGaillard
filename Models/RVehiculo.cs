@@ -39,5 +39,8 @@ namespace CasaGaillard.Models
         [Display(Name = "CV Potencia")]
         public Nullable<int> PotenciaCV { get; set; }
 
+        [Display(Name = "Dado de baja")]
+        public bool Baja { get; set; }
+
     }
 }

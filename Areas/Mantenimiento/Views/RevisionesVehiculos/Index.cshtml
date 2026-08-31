@@ -4,6 +4,7 @@
     ViewBag.Title = "Revisiones de vehículos";
     var hoy = DateTime.Now.Date;
     string matriculaVehiculoSeleccionada = ViewBag.MatriculaVehiculo as string ?? Request.QueryString["matriculaVehiculo"];
+    bool incluirBajas = ViewBag.IncluirBajas == true;
     var modeloFiltrado = Model;
     int? vehiculoIDSeleccionado = null;
 
@@ -64,6 +65,15 @@
 
 <p>
     @Html.ActionLink("Nueva revisión", "Create", new { vehiculoID = vehiculoIDSeleccionado }, new { @class = "btn btn-primary" })
+    <text> </text>
+    @if (incluirBajas)
+    {
+        @Html.ActionLink("Ocultar bajas", "Index", new { matriculaVehiculo = matriculaVehiculoSeleccionada, incluirBajas = false }, new { @class = "btn btn-default" })
+    }
+    else
+    {
+        @Html.ActionLink("Ver bajas", "Index", new { matriculaVehiculo = matriculaVehiculoSeleccionada, incluirBajas = true }, new { @class = "btn btn-default" })
+    }
     @if (!string.IsNullOrWhiteSpace(matriculaVehiculoSeleccionada))
     {
         <text> </text>

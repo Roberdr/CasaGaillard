@@ -24,15 +24,25 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             return fechaRevision.HasValue ? fechaRevision.Value.AddMonths(30) : (DateTime?)null;
         }
 
+        private static DateTime? ObtenerCaducidad(DateTime? caducidad, DateTime? fechaRevision)
+        {
+            return caducidad ?? CalcularCaducidad(fechaRevision);
+        }
+
         // GET: RevisionesVehiculos
         [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento + "," + AppRoles.Consulta)]
-        public async Task<ActionResult> Index(string matriculaVehiculo = null)
+        public async Task<ActionResult> Index(string matriculaVehiculo = null, bool incluirBajas = false)
         {
             var consulta = db.RevisionesVehiculo
                 .AsNoTracking()
                 .Include(r => r.Vehiculo)
                 .Include(r => r.TipoRevision)
                 .AsQueryable();
+
+            if (!incluirBajas)
+            {
+                consulta = consulta.Where(r => r.Vehiculo != null && !r.Vehiculo.Baja);
+            }
 
             if (!string.IsNullOrWhiteSpace(matriculaVehiculo))
             {
@@ -45,6 +55,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                 .ToListAsync();
 
             ViewBag.MatriculaVehiculo = matriculaVehiculo;
+            ViewBag.IncluirBajas = incluirBajas;
 
             var agrupadas = revisionesVehiculos
                 .GroupBy(r => new
@@ -121,7 +132,8 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public ActionResult Create(int? vehiculoID = null, int? tipoRevisionID = null)
         {
-            ViewBag.VehiculoID = new SelectList(db.Vehiculos.OrderBy(o => o.MatriculaVehiculo), "ID", "MatriculaVehiculo", vehiculoID);
+            var vehiculos = db.Vehiculos.Where(v => !v.Baja || (vehiculoID.HasValue && v.ID == vehiculoID.Value));
+            ViewBag.VehiculoID = new SelectList(vehiculos.OrderBy(o => o.MatriculaVehiculo), "ID", "MatriculaVehiculo", vehiculoID);
             ViewBag.TipoRevisionID = new SelectList(db.TiposRevision.OrderBy(o => o.Revision), "ID", "Revision", tipoRevisionID);
             return View(new RevisionVehiculo
             {
@@ -141,13 +153,14 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         {
             if (ModelState.IsValid)
             {
-                revisionVehiculo.Caducidad = CalcularCaducidad(revisionVehiculo.FechaRevision);
+                revisionVehiculo.Caducidad = ObtenerCaducidad(revisionVehiculo.Caducidad, revisionVehiculo.FechaRevision);
                 db.RevisionesVehiculo.Add(revisionVehiculo);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.VehiculoID = new SelectList(db.Vehiculos.OrderBy(o => o.MatriculaVehiculo), "ID", "MatriculaVehiculo", revisionVehiculo.VehiculoID);
+            var vehiculos = db.Vehiculos.Where(v => !v.Baja || (revisionVehiculo.VehiculoID.HasValue && v.ID == revisionVehiculo.VehiculoID.Value));
+            ViewBag.VehiculoID = new SelectList(vehiculos.OrderBy(o => o.MatriculaVehiculo), "ID", "MatriculaVehiculo", revisionVehiculo.VehiculoID);
             ViewBag.TipoRevisionID = new SelectList(db.TiposRevision.OrderBy(o => o.Revision), "ID", "Revision", revisionVehiculo.TipoRevisionID);
             return View(revisionVehiculo);
         }
@@ -165,7 +178,8 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.VehiculoID = new SelectList(db.Vehiculos.OrderBy(o => o.MatriculaVehiculo), "ID", "MatriculaVehiculo", revisionVehiculo.VehiculoID);
+            var vehiculos = db.Vehiculos.Where(v => !v.Baja || (revisionVehiculo.VehiculoID.HasValue && v.ID == revisionVehiculo.VehiculoID.Value));
+            ViewBag.VehiculoID = new SelectList(vehiculos.OrderBy(o => o.MatriculaVehiculo), "ID", "MatriculaVehiculo", revisionVehiculo.VehiculoID);
             ViewBag.TipoRevisionID = new SelectList(db.TiposRevision.OrderBy(o => o.Revision), "ID", "Revision", revisionVehiculo.TipoRevisionID);
 
             return View(revisionVehiculo);
@@ -181,12 +195,13 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         {
             if (ModelState.IsValid)
             {
-                revisionVehiculo.Caducidad = CalcularCaducidad(revisionVehiculo.FechaRevision);
+                revisionVehiculo.Caducidad = ObtenerCaducidad(revisionVehiculo.Caducidad, revisionVehiculo.FechaRevision);
                 db.Entry(revisionVehiculo).State = EntityState.Modified;
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.VehiculoID = new SelectList(db.Vehiculos.OrderBy(o => o.MatriculaVehiculo), "ID", "MatriculaVehiculo", revisionVehiculo.VehiculoID);
+            var vehiculos = db.Vehiculos.Where(v => !v.Baja || (revisionVehiculo.VehiculoID.HasValue && v.ID == revisionVehiculo.VehiculoID.Value));
+            ViewBag.VehiculoID = new SelectList(vehiculos.OrderBy(o => o.MatriculaVehiculo), "ID", "MatriculaVehiculo", revisionVehiculo.VehiculoID);
             ViewBag.TipoRevisionID = new SelectList(db.TiposRevision.OrderBy(o => o.Revision), "ID", "Revision", revisionVehiculo.TipoRevisionID);
 
             return View(revisionVehiculo);

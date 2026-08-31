@@ -9,42 +9,43 @@
     @Styles.Render("~/bundles/styles")
     @Scripts.Render("~/bundles/modernizr")
 </head>
-<body class="public-body">
-    <header class="public-navbar navbar navbar-default navbar-fixed-top">
-        <div class="container public-navbar__inner">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#public-navbar">
-                    <span class="sr-only">Abrir menú</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @Html.ActionLink("CASA GAILLARD S.A.", "Index", "Pagina", new { area = "Pagina" }, new { @class = "navbar-brand public-brand" })
-                <span class="public-brand__tagline hidden-xs">Distribución, servicios y seguridad</span>
-            </div>
-            <div class="collapse navbar-collapse" id="public-navbar">
-                <ul class="nav navbar-nav navbar-right public-nav">
-                    <li>@Html.ActionLink("Inicio", "Index", "Pagina", new { area = "Pagina" }, null)</li>
-                    <li>@Html.ActionLink("Contacto", "Contacto", "Pagina", new { area = "Pagina" }, null)</li>
-                </ul>
-                <div class="public-navbar__utility">
-                    @if (Request.IsAuthenticated)
+<body class="public-body container">
+    <nav class="navbar sticky-top navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+            @Html.ActionLink("CASA GAILLARD S.A.", "Index", "Pagina", new { area = "Pagina" }, new { @class = "navbar-brand" })
+            <!--
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#public-navbar" aria-controls="public-navbar" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            -->
+            <div class="collapse navbar-collapse d-flex" id="public-navbar">
+                <ul class=" navbar-nav">
+                    <li>@Html.ActionLink("Contacto", "Contacto", "Pagina", new { area = "Pagina" }, new { @class = "nav-link" })</li>
+
+               
+                @if (Request.IsAuthenticated)
                     {
-                        @Html.ActionLink("Área interna", "Index", "Home", new { area = "Mantenimiento" }, new { @class = "public-utility-link" })
-                        <a class="public-utility-link" href="javascript:document.getElementById('logoutForm').submit()">Cerrar sesión</a>
+                       
+                        <li class="nav-item">
+                            @Html.ActionLink("Área interna", "Index", "Home", new { area = "Mantenimiento" }, new { @class = "nav-link" })
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="javascript:document.getElementById('logoutForm').submit()">Cerrar sesión</a>
+                        </li>
+                       
                     }
                     else
                     {
-                        @Html.ActionLink("Iniciar sesión", "Login", "Account", new { area = "" }, new { @class = "public-utility-link" })
+                        @Html.ActionLink("Iniciar sesión", "Login", "Account", new { area = "" }, new { @class = "form-control nav-item" })
                     }
-                </div>
+               </ul>
             </div>
         </div>
-    </header>
+    </nav>
 
     @if (Request.IsAuthenticated)
     {
-        using (Html.BeginForm("LogOff", "Account", new { area = "" }, FormMethod.Post, new { id = "logoutForm", @class = "hidden" }))
+        using (Html.BeginForm("LogOff", "Account", new { area = "" }, FormMethod.Post, new { id = "logoutForm", @class = "hidden d-flex" }))
         {
             @Html.AntiForgeryToken()
         }

@@ -31,11 +31,19 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
 
         // GET: Vehiculos
         [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento + "," + AppRoles.Consulta)]
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(bool incluirBajas = false)
         {
             var vehiculos = db.Vehiculos
                 .Include(v => v.TipoVehiculo)
-                .Include(v => v.Taller);
+                .Include(v => v.Taller)
+                .AsQueryable();
+
+            if (!incluirBajas)
+            {
+                vehiculos = vehiculos.Where(v => !v.Baja);
+            }
+
+            ViewBag.IncluirBajas = incluirBajas;
 
             return View(await vehiculos.ToListAsync());
         }
@@ -83,7 +91,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
-        public async Task<ActionResult> AddOrEdit([Bind(Include = "ID,Marca,Modelo,MatriculaVehiculo,TipoVehiculoID,ModeloTacografo,Pma,Tara,FechaCompra,TallerHabitualID")] Vehiculo vehiculo)
+        public async Task<ActionResult> AddOrEdit([Bind(Include = "ID,Marca,Modelo,MatriculaVehiculo,TipoVehiculoID,ModeloTacografo,Pma,Tara,FechaCompra,TallerHabitualID,Baja")] Vehiculo vehiculo)
         {
             if (ModelState.IsValid)
             {
@@ -108,6 +116,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                     vehiculoToUpdate.Tara = vehiculo.Tara;
                     vehiculoToUpdate.FechaCompra = vehiculo.FechaCompra;
                     vehiculoToUpdate.TallerHabitualID = vehiculo.TallerHabitualID;
+                    vehiculoToUpdate.Baja = vehiculo.Baja;
                 }
 
                 await db.SaveChangesAsync();

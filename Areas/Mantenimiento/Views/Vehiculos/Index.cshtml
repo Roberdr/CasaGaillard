@@ -2,11 +2,22 @@
 
 @{
     ViewBag.Title = "Vehículos";
+    bool incluirBajas = ViewBag.IncluirBajas == true;
 }
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2 class="mb-0">Vehículos</h2>
-    @Html.ActionLink("Crear vehículo", "AddOrEdit", null, new { @class = "btn btn-success" })
+    <div>
+        @if (incluirBajas)
+        {
+            @Html.ActionLink("Ocultar bajas", "Index", new { incluirBajas = false }, new { @class = "btn btn-outline-secondary" })
+        }
+        else
+        {
+            @Html.ActionLink("Ver bajas", "Index", new { incluirBajas = true }, new { @class = "btn btn-outline-secondary" })
+        }
+        @Html.ActionLink("Crear vehículo", "AddOrEdit", null, new { @class = "btn btn-success" })
+    </div>
 </div>
 
 <div class="table-responsive">
@@ -20,6 +31,10 @@
                 <th>PMA</th>
                 <th>TARA</th>
                 <th>Carga útil</th>
+                @if (incluirBajas)
+                {
+                    <th>Estado</th>
+                }
                 <th></th>
             </tr>
         </thead>
@@ -34,6 +49,19 @@
                     <td>@Html.DisplayFor(modelItem => item.Pma)</td>
                     <td>@Html.DisplayFor(modelItem => item.Tara)</td>
                     <td>@Html.DisplayFor(modelItem => item.CargaUtil)</td>
+                    @if (incluirBajas)
+                    {
+                        <td>
+                            @if (item.Baja)
+                            {
+                                <span class="label label-default">Baja</span>
+                            }
+                            else
+                            {
+                                <span class="label label-success">Activo</span>
+                            }
+                        </td>
+                    }
                     <td class="text-nowrap">
                         @Html.ActionLink("Edit", "AddOrEdit", new { id = item.ID }) |
                         @Html.ActionLink("Details", "Details", new { id = item.ID }) |

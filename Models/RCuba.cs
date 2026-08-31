@@ -110,6 +110,9 @@ namespace CasaGaillard.Models
 
         [Display(Name = "Núm. de Aprobación")]
         public string NumAprobacion { get; set; }
+
+        [Display(Name = "Dada de baja")]
+        public bool Baja { get; set; }
     }
    
 }

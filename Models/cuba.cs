@@ -96,6 +96,7 @@ namespace CasaGaillard.Models
         public string NumAprobacionADR_RID { get; set; }
         public string UNPortableTank { get; set; }
         public string NumAprobacion { get; set; }
+        public bool Baja { get; set; }
     
         public virtual Material Material { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

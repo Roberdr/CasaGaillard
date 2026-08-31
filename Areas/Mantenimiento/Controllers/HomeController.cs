@@ -58,7 +58,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             var viewModel = from c in db.Cubas
                             join r in db.Revisiones on c.ID equals r.CubaID into gc
                             from grupo in gc.DefaultIfEmpty()
-                            where grupo != null && grupo.ValidaHasta.HasValue
+                            where !c.Baja && grupo != null && grupo.ValidaHasta.HasValue
                             group new { c, grupo } by new { c.ID, c.MatriculaCuba } into g
                             let ultimo = g.OrderByDescending(x => x.grupo.ValidaHasta).FirstOrDefault()
                             where ultimo != null
@@ -82,7 +82,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             var viewModelV = db.RevisionesVehiculo
                 .Include(i => i.Vehiculo)
                 .Where(r => r.Caducidad.HasValue && r.Caducidad > fechaInicio && r.Caducidad < fechaFinal)
-                .Where(r => r.Vehiculo != null && r.TipoRevision != null)
+                .Where(r => r.Vehiculo != null && !r.Vehiculo.Baja && r.TipoRevision != null)
                 .GroupBy(r => new { r.Vehiculo.MatriculaVehiculo, r.TipoRevision })
                 .Select(s => new UltimasRevisionesVehiculos()
                 {
@@ -95,7 +95,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
 
             
 
-            revisionesVehiculos = await viewModel1V.ToListAsync();
+            revisionesVehiculos = await viewModelV.ToListAsync();
 
             using (var tareasDb = new TareasMantenimientoContext())
             {

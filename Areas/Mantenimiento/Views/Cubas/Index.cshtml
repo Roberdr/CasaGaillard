@@ -2,11 +2,22 @@
 
 @{
     ViewBag.Title = "Cubas";
+    bool incluirBajas = ViewBag.IncluirBajas == true;
 }
 
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h2 class="mb-0">Cubas</h2>
-    @Html.ActionLink("Crear cuba", "Create", null, new { @class = "btn btn-success" })
+    <div>
+        @if (incluirBajas)
+        {
+            @Html.ActionLink("Ocultar bajas", "Index", new { incluirBajas = false }, new { @class = "btn btn-outline-secondary" })
+        }
+        else
+        {
+            @Html.ActionLink("Ver bajas", "Index", new { incluirBajas = true }, new { @class = "btn btn-outline-secondary" })
+        }
+        @Html.ActionLink("Crear cuba", "Create", null, new { @class = "btn btn-success" })
+    </div>
 </div>
 
 <div class="table-responsive">
@@ -22,6 +33,10 @@
                 <th>Tara</th>
                 <th>Peso máximo</th>
                 <th>Actualizada</th>
+                @if (incluirBajas)
+                {
+                    <th>Estado</th>
+                }
                 <th></th>
             </tr>
         </thead>
@@ -38,6 +53,19 @@
                     <td>@Html.DisplayFor(modelItem => item.Tara)</td>
                     <td>@Html.DisplayFor(modelItem => item.PesoMaxProducto)</td>
                     <td>@Html.DisplayFor(modelItem => item.UpdatedAt)</td>
+                    @if (incluirBajas)
+                    {
+                        <td>
+                            @if (item.Baja)
+                            {
+                                <span class="label label-default">Baja</span>
+                            }
+                            else
+                            {
+                                <span class="label label-success">Activa</span>
+                            }
+                        </td>
+                    }
                     <td class="text-nowrap">
                         @Html.ActionLink("Editar", "Edit", new { id = item.ID }) |
                         @Html.ActionLink("Detalle", "Details", new { id = item.ID }) |

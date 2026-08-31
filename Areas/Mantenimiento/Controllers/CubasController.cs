@@ -18,6 +18,16 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
 
         private void CargarListasCuba(Cuba cuba = null)
         {
+            var vehiculos = db.Vehiculos.AsQueryable();
+            if (cuba == null || !cuba.PlataformaID.HasValue)
+            {
+                vehiculos = vehiculos.Where(v => !v.Baja);
+            }
+            else
+            {
+                vehiculos = vehiculos.Where(v => !v.Baja || v.ID == cuba.PlataformaID.Value);
+            }
+
             ViewBag.MaterialExteriorID = new SelectList(
                 db.Materiales.OrderBy(m => m.Material1),
                 "ID",
@@ -25,20 +35,23 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                 cuba?.MaterialExteriorID);
 
             ViewBag.PlataformaID = new SelectList(
-                db.Vehiculos.OrderBy(v => v.MatriculaVehiculo),
+                vehiculos.OrderBy(v => v.MatriculaVehiculo),
                 "ID",
                 "MatriculaVehiculo",
                 cuba?.PlataformaID);
         }
 
         // GET: Cubas
-        public async Task<ActionResult> Index()
+        public async Task<ActionResult> Index(bool incluirBajas = false)
         {
             var cubas = db.Cubas
                 .Include(c => c.Material)
                 .Include(c => c.Vehiculo)
                 .Include(c => c.Revisions)
+                .Where(c => incluirBajas || !c.Baja)
                 .OrderBy(c => c.MatriculaCuba);
+
+            ViewBag.IncluirBajas = incluirBajas;
 
             return View(await cubas.ToListAsync());
         }
@@ -67,7 +80,6 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             // Comprueba que haya un directorio con la matricula de la cuba a detallar
             // y crea una lista de los archivos existentes
 
-<<<<<<< HEAD
             string imgPath = Server.MapPath("~/Content/images/");
             List<string> nameFiles = new List<string>();
             string cubaImagePath = Path.Combine(imgPath, cuba.MatriculaCuba.ToString());
@@ -80,8 +92,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                     nameFiles.Add(Path.GetFileName(f));
                 }
             }
-=======
-            string imgPath = "C:/inetpub/wwwroot/CG/Content/images/";
+/*            string imgPath = "C:/inetpub/wwwroot/CG/Content/images/";
             string docPath;
             List<string> nameFiles = new List<string>();
             List<string> d = new List<string>(Directory.EnumerateDirectories(imgPath));
@@ -95,8 +106,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                     var pos = f.LastIndexOf("/");
                     nameFiles.Add(f.Substring(pos));
                 }
-            }
->>>>>>> 3f4f7f27e6a76f6022a1930ba4c1281642bcfbc2
+            }*/
             ViewBag.files = nameFiles;
             return View(cuba);
         }
@@ -113,7 +123,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ID,MatriculaCuba,NumCuadro,Codigo,Constructor,NumFabricacion,NumHomologacion,FechaConstruccion,PaisFabricacion,NumTipoIMO,PaisAprobacion,Autoridad,CodigoDiseno,PruebaHidraulica,PresionServicioADR,PresionServicioIMO,PresionExterior,PresionTaradoValvulas,TemperaturaCalculoReferencia,PesoBruto,Tara,PesoMaxProducto,MaterialExteriorID,EspesorCuerpo,EspesorFondo,EspesorEquivalente,TipoForro,NumAprobacionCSC,Modelo,PesoMaxApilamiento,CargaRigidez,PresionPrueba,TemperaturaMinCarga,PlataformaID,Longitud,Ancho,Alto,UpdatedAt,CreatedAt,UpdatedBy,CreatedBy,NumAprobacionIMDG,NumAprobacionADR_RID,UNPortableTank,NumAprobacion")] Cuba cuba)
+        public async Task<ActionResult> Create([Bind(Include = "ID,MatriculaCuba,NumCuadro,Codigo,Constructor,NumFabricacion,NumHomologacion,FechaConstruccion,PaisFabricacion,NumTipoIMO,PaisAprobacion,Autoridad,CodigoDiseno,PruebaHidraulica,PresionServicioADR,PresionServicioIMO,PresionExterior,PresionTaradoValvulas,TemperaturaCalculoReferencia,PesoBruto,Tara,PesoMaxProducto,MaterialExteriorID,EspesorCuerpo,EspesorFondo,EspesorEquivalente,TipoForro,NumAprobacionCSC,Modelo,PesoMaxApilamiento,CargaRigidez,PresionPrueba,TemperaturaMinCarga,PlataformaID,Longitud,Ancho,Alto,UpdatedAt,CreatedAt,UpdatedBy,CreatedBy,NumAprobacionIMDG,NumAprobacionADR_RID,UNPortableTank,NumAprobacion,Baja")] Cuba cuba)
         {
             if (ModelState.IsValid)
             {
@@ -149,7 +159,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         // más información vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,MatriculaCuba,NumCuadro,Codigo,Constructor,NumFabricacion,NumHomologacion,FechaConstruccion,PaisFabricacion,NumTipoIMO,PaisAprobacion,Autoridad,CodigoDiseno,PruebaHidraulica,PresionServicioADR,PresionServicioIMO,PresionExterior,PresionTaradoValvulas,TemperaturaCalculoReferencia,PesoBruto,Tara,PesoMaxProducto,MaterialExteriorID,EspesorCuerpo,EspesorFondo,EspesorEquivalente,TipoForro,NumAprobacionCSC,Modelo,PesoMaxApilamiento,CargaRigidez,PresionPrueba,TemperaturaMinCarga,PlataformaID,Longitud,Ancho,Alto,UpdatedAt,CreatedAt,UpdatedBy,CreatedBy,NumAprobacionIMDG,NumAprobacionADR_RID,UNPortableTank,NumAprobacion")] Cuba cuba)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,MatriculaCuba,NumCuadro,Codigo,Constructor,NumFabricacion,NumHomologacion,FechaConstruccion,PaisFabricacion,NumTipoIMO,PaisAprobacion,Autoridad,CodigoDiseno,PruebaHidraulica,PresionServicioADR,PresionServicioIMO,PresionExterior,PresionTaradoValvulas,TemperaturaCalculoReferencia,PesoBruto,Tara,PesoMaxProducto,MaterialExteriorID,EspesorCuerpo,EspesorFondo,EspesorEquivalente,TipoForro,NumAprobacionCSC,Modelo,PesoMaxApilamiento,CargaRigidez,PresionPrueba,TemperaturaMinCarga,PlataformaID,Longitud,Ancho,Alto,UpdatedAt,CreatedAt,UpdatedBy,CreatedBy,NumAprobacionIMDG,NumAprobacionADR_RID,UNPortableTank,NumAprobacion,Baja")] Cuba cuba)
         {
             if (ModelState.IsValid)
             {

@@ -18,14 +18,24 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
     {
         private readonly GaillardEntities db = new GaillardEntities();
 
+        private static DateTime? ObtenerValidaHasta(DateTime? validaHasta, DateTime fechaRevision)
+        {
+            return validaHasta ?? fechaRevision.AddMonths(30);
+        }
+
         // GET: Revisiones
         [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento + "," + AppRoles.Consulta)]
-        public async Task<ActionResult> Index(int? cubaID = null, string matriculaCuba = null)
+        public async Task<ActionResult> Index(int? cubaID = null, string matriculaCuba = null, bool incluirBajas = false)
         {
             var consulta = db.Revisiones
                 .AsNoTracking()
                 .Include(r => r.Cuba)
                 .AsQueryable();
+
+            if (!incluirBajas)
+            {
+                consulta = consulta.Where(r => r.Cuba != null && !r.Cuba.Baja);
+            }
 
             if (cubaID.HasValue)
             {
@@ -43,6 +53,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
 
             ViewBag.CubaID = cubaID;
             ViewBag.MatriculaCuba = matriculaCuba;
+            ViewBag.IncluirBajas = incluirBajas;
 
             var modelo = revisiones
                 .GroupBy(r => new { r.CubaID, Matricula = r.Cuba != null ? r.Cuba.MatriculaCuba : string.Empty })
@@ -101,7 +112,8 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public ActionResult Create(int? cubaID = null)
         {
-            ViewBag.CubaID = new SelectList(db.Cubas.OrderBy(o => o.MatriculaCuba), "ID", "MatriculaCuba", cubaID);
+            var cubas = db.Cubas.Where(c => !c.Baja || (cubaID.HasValue && c.ID == cubaID.Value));
+            ViewBag.CubaID = new SelectList(cubas.OrderBy(o => o.MatriculaCuba), "ID", "MatriculaCuba", cubaID);
             return View(new Revision
             {
                 CubaID = cubaID ?? 0,
@@ -119,13 +131,14 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         {
             if (ModelState.IsValid)
             {
-                revision.ValidaHasta = revision.FechaRevision.AddMonths(30);
+                revision.ValidaHasta = ObtenerValidaHasta(revision.ValidaHasta, revision.FechaRevision);
                 db.Revisiones.Add(revision);
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CubaID = new SelectList(db.Cubas.OrderBy(o => o.MatriculaCuba), "ID", "MatriculaCuba", revision.CubaID);
+            var cubas = db.Cubas.Where(c => !c.Baja || c.ID == revision.CubaID);
+            ViewBag.CubaID = new SelectList(cubas.OrderBy(o => o.MatriculaCuba), "ID", "MatriculaCuba", revision.CubaID);
             return View(revision);
         }
 
@@ -142,7 +155,8 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CubaID = new SelectList(db.Cubas.OrderBy(o => o.MatriculaCuba), "ID", "MatriculaCuba", revision.CubaID);
+            var cubas = db.Cubas.Where(c => !c.Baja || c.ID == revision.CubaID);
+            ViewBag.CubaID = new SelectList(cubas.OrderBy(o => o.MatriculaCuba), "ID", "MatriculaCuba", revision.CubaID);
             return View(revision);
         }
 
@@ -160,7 +174,8 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            ViewBag.CubaID = new SelectList(db.Cubas.OrderBy(o => o.MatriculaCuba), "ID", "MatriculaCuba", revision.CubaID);
+            var cubas = db.Cubas.Where(c => !c.Baja || c.ID == revision.CubaID);
+            ViewBag.CubaID = new SelectList(cubas.OrderBy(o => o.MatriculaCuba), "ID", "MatriculaCuba", revision.CubaID);
             return View(revision);
         }
 
