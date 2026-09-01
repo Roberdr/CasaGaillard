@@ -196,6 +196,7 @@
           <Property Name="NumAprobacionADR/RID" Type="nvarchar" MaxLength="20" />
           <Property Name="UNPortableTank" Type="nvarchar" MaxLength="15" />
           <Property Name="NumAprobacion" Type="nvarchar" MaxLength="20" />
+          <Property Name="Baja" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="DetalleAccesorio">
           <Key>
@@ -486,6 +487,7 @@
           <Property Name="Anchura" Type="int" />
           <Property Name="Altura" Type="int" />
           <Property Name="SeguroID" Type="int" />
+          <Property Name="Baja" Type="bit" Nullable="false" />
         </EntityType>
         <Association Name="FK_Accesorio_Material">
           <End Role="Material" Type="Self.Material" Multiplicity="1" />
@@ -1075,6 +1077,7 @@
           <Property Name="NumAprobacionADR_RID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="UNPortableTank" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Name="NumAprobacion" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Baja" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Material" Relationship="GaillardModel.MaterialCuba" FromRole="Cuba" ToRole="Material" />
           <NavigationProperty Name="Compartimentos" Relationship="GaillardModel.CompartimentoCuba" FromRole="Cuba" ToRole="Compartimento" />
           <NavigationProperty Name="Grupos" Relationship="GaillardModel.GrupoCuba" FromRole="Cuba" ToRole="Grupo" />
@@ -1308,6 +1311,7 @@
           <Property Name="Anchura" Type="Int32" />
           <Property Name="Altura" Type="Int32" />
           <Property Name="SeguroID" Type="Int32" />
+          <Property Name="Baja" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="Taller" Relationship="GaillardModel.VehiculoTaller" FromRole="Vehiculo" ToRole="Entidad" />
           <NavigationProperty Name="Cubas" Relationship="GaillardModel.FK_Cuba_Vehiculo" FromRole="Vehiculo" ToRole="Cuba" />
           <NavigationProperty Name="Vehiculo1" Relationship="GaillardModel.FK_Vehiculo_Vehiculo" FromRole="Vehiculo" ToRole="Vehiculo1" />
@@ -2370,6 +2374,7 @@
                 <ScalarProperty Name="NumAprobacionADR_RID" ColumnName="NumAprobacionADR/RID" />
                 <ScalarProperty Name="UNPortableTank" ColumnName="UNPortableTank" />
                 <ScalarProperty Name="NumAprobacion" ColumnName="NumAprobacion" />
+                <ScalarProperty Name="Baja" ColumnName="Baja" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -2583,6 +2588,7 @@
                 <ScalarProperty Name="Pma" ColumnName="Pma" />
                 <ScalarProperty Name="Tara" ColumnName="Tara" />
                 <ScalarProperty Name="FechaCompra" ColumnName="FechaCompra" />
+                <ScalarProperty Name="Baja" ColumnName="Baja" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="packages\EntityFramework.6.4.4\build\EntityFramework.props" Condition="Exists('packages\EntityFramework.6.4.4\build\EntityFramework.props')" />
+  <Import Project="packages\EntityFramework.6.5.2\build\EntityFramework.props" Condition="Exists('packages\EntityFramework.6.5.2\build\EntityFramework.props')" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
@@ -72,10 +72,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
+      <HintPath>packages\EntityFramework.6.5.2\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
-      <HintPath>packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
+      <HintPath>packages\EntityFramework.6.5.2\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="FontAwesomeIcons, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>packages\FontAwesomeIcons.1.0.3\lib\FontAwesomeIcons.dll</HintPath>
@@ -239,10 +239,20 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PersonasController.cs" />
     <Compile Include="Areas\Mantenimiento\Controllers\VehiculosController.cs" />
+    <Compile Include="DataCore\CasaGaillardContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
+    <Content Include="Migrations\20260828_AddBajaToVehiculosCubas.sql" />
+    <Compile Include="ModelsCore\Accesorio.cs" />
+    <Compile Include="ModelsCore\Familia.cs" />
+    <Compile Include="ModelsCore\Mantenimiento.cs" />
+    <Compile Include="ModelsCore\PlanMantenimiento.cs" />
+    <Compile Include="ModelsCore\Subfamilia.cs" />
+    <Compile Include="ModelsCore\TipoAccesorio.cs" />
+    <Compile Include="ModelsCore\TipoMantenimiento.cs" />
+    <Compile Include="ModelsCore\Ubicacion.cs" />
     <Compile Include="Models\Accesorio.cs">
       <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
@@ -297,6 +307,7 @@
     <Compile Include="Models\Entidad.cs">
       <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Familia.cs" />
     <Compile Include="Models\GaillardModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -318,6 +329,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\AppRoles.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\Subfamilia.cs" />
     <Compile Include="Models\TareaMantenimiento.cs" />
     <Compile Include="Models\TareaMantenimientoFoto.cs" />
     <Compile Include="Models\TareasMantenimientoContext.cs" />
@@ -702,6 +714,13 @@
     <Content Include="Content\Fonts\fontawesome-webfont.woff" />
     <Content Include="Content\Fonts\fontawesome-webfont.ttf" />
     <Content Include="Content\Fonts\fontawesome-webfont.eot" />
+    <Content Include="Areas\Mantenimiento\Views\RevisionesVehiculos\Create.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\RevisionesVehiculos\Delete.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\RevisionesVehiculos\Details.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\RevisionesVehiculos\Edit.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\RevisionesVehiculos\ProximasRevisiones.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Vehiculos\Index.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\RevisionesVehiculos\Index.cshtml" />
     <Content Include="Scripts\bootstrap.min.js.map" />
     <Content Include="Scripts\bootstrap.js.map" />
     <Content Include="Scripts\bootstrap.esm.min.js.map" />
@@ -724,13 +743,7 @@
     <Content Include="Content\bootstrap-grid.rtl.css.map" />
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
-    <Content Include="Areas\Mantenimiento\Views\RevisionesVehiculos\Create.cshtml" />
-    <Content Include="Areas\Mantenimiento\Views\RevisionesVehiculos\Delete.cshtml" />
-    <Content Include="Areas\Mantenimiento\Views\RevisionesVehiculos\Details.cshtml" />
-    <Content Include="Areas\Mantenimiento\Views\RevisionesVehiculos\Edit.cshtml" />
-    <Content Include="Areas\Mantenimiento\Views\RevisionesVehiculos\ProximasRevisiones.cshtml" />
-    <Content Include="Areas\Mantenimiento\Views\Vehiculos\Index.cshtml" />
-    <Content Include="Areas\Mantenimiento\Views\RevisionesVehiculos\Index.cshtml" />
+    <Content Include="appsettings.json" />
     <None Include="Scripts\jquery-3.6.3.intellisense.js" />
     <Content Include="Scripts\jquery-3.6.3.js" />
     <Content Include="Scripts\jquery-3.6.3.min.js" />
@@ -973,11 +986,10 @@
     <PropertyGroup>
       <ErrorText>Este proyecto hace referencia a los paquetes NuGet que faltan en este equipo. Use la restauración de paquetes NuGet para descargarlos. Para obtener más información, consulte http://go.microsoft.com/fwlink/?LinkID=322105. El archivo que falta es {0}.</ErrorText>
     </PropertyGroup>
-    <Error Condition="!Exists('packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
-    <Error Condition="!Exists('packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
     <Error Condition="!Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.3.6.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.3.6.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets'))" />
+    <Error Condition="!Exists('packages\EntityFramework.6.5.2\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EntityFramework.6.5.2\build\EntityFramework.props'))" />
+    <Error Condition="!Exists('packages\EntityFramework.6.5.2\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\EntityFramework.6.5.2\build\EntityFramework.targets'))" />
   </Target>
-  <Import Project="packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
   <Import Project="packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.3.6.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets" Condition="Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.3.6.0\build\net472\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -985,4 +997,5 @@
   </Target>
   <Target Name="AfterBuild">
   </Target> -->
+  <Import Project="packages\EntityFramework.6.5.2\build\EntityFramework.targets" Condition="Exists('packages\EntityFramework.6.5.2\build\EntityFramework.targets')" />
 </Project>
