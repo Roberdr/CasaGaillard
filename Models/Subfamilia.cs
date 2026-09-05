@@ -12,21 +12,24 @@ namespace CasaGaillard.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class TipoAccesorio
+    public partial class Subfamilia
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
-        public TipoAccesorio()
+        public Subfamilia()
         {
-            this.Accesorios = new HashSet<Accesorio>();
+            this.Accesorio = new HashSet<Accesorio>();
+            this.TipoAccesorio = new HashSet<TipoAccesorio>();
         }
     
-        public int ID { get; set; }
-        public string TipoAccesorio1 { get; set; }
-        public Nullable<int> SubfamiliaId { get; set; }
+        public int SubfamiliaId { get; set; }
+        public int FamiliaId { get; set; }
+        public string Nombre { get; set; }
         public string Descripcion { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<Accesorio> Accesorios { get; set; }
-        public virtual Subfamilia Subfamilia { get; set; }
+        public virtual ICollection<Accesorio> Accesorio { get; set; }
+        public virtual Familia Familia { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<TipoAccesorio> TipoAccesorio { get; set; }
     }
 }

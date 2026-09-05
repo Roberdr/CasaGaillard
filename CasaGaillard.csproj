@@ -239,28 +239,19 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PersonasController.cs" />
     <Compile Include="Areas\Mantenimiento\Controllers\VehiculosController.cs" />
-    <Compile Include="DataCore\CasaGaillardContext.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Content Include="Migrations\20260828_AddBajaToVehiculosCubas.sql" />
-    <Compile Include="ModelsCore\Accesorio.cs" />
-    <Compile Include="ModelsCore\Familia.cs" />
-    <Compile Include="ModelsCore\Mantenimiento.cs" />
-    <Compile Include="ModelsCore\PlanMantenimiento.cs" />
-    <Compile Include="ModelsCore\Subfamilia.cs" />
-    <Compile Include="ModelsCore\TipoAccesorio.cs" />
-    <Compile Include="ModelsCore\TipoMantenimiento.cs" />
-    <Compile Include="ModelsCore\Ubicacion.cs" />
     <Compile Include="Models\Accesorio.cs">
       <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AccesorioFoto.cs" />
-    <Compile Include="Models\AccesoriosFotosContext.cs" />
     <Compile Include="Models\AccesorioGrupo.cs">
       <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\AccesoriosFotosContext.cs" />
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\AspNetRole.cs">
       <DependentUpon>GaillardModel.tt</DependentUpon>
@@ -307,7 +298,10 @@
     <Compile Include="Models\Entidad.cs">
       <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\Familia.cs" />
+    <Compile Include="Models\Familia.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\GaillardEntities.Extensions.cs" />
     <Compile Include="Models\GaillardModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -329,12 +323,9 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\AppRoles.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\Subfamilia.cs" />
-    <Compile Include="Models\TareaMantenimiento.cs" />
-    <Compile Include="Models\TareaMantenimientoFoto.cs" />
-    <Compile Include="Models\TareasMantenimientoContext.cs" />
-    <Compile Include="Areas\Mantenimiento\Controllers\RevisionesController.cs" />
-    <Compile Include="Areas\Mantenimiento\Controllers\UsuariosController.cs" />
+    <Compile Include="Models\Mantenimiento.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\MantenimientoVehiculo.cs">
       <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
@@ -353,6 +344,9 @@
     <Compile Include="Models\PersonasEntidad.cs">
       <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\PlanMantenimiento.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\Plataforma.cs">
       <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
@@ -362,6 +356,35 @@
     <Compile Include="Models\Producto.cs">
       <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\Revision.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\RevisionVehiculo.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Seguro.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Situacion.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sp_helpdiagrams_Result.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Subfamilia.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\sysdiagram.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TareaMantenimiento.cs" />
+    <Compile Include="Models\TareaMantenimientoFoto.cs" />
+    <Compile Include="Models\TareasMantenimientoContext.cs" />
+    <Compile Include="Areas\Mantenimiento\Controllers\RevisionesController.cs" />
+    <Compile Include="Areas\Mantenimiento\Controllers\UsuariosController.cs" />
     <Compile Include="Models\RCaracteristicaAccesorio.cs" />
     <Compile Include="Models\RCargo.cs" />
     <Compile Include="Models\RCombustible.cs" />
@@ -369,12 +392,6 @@
     <Compile Include="Models\RCuba.cs" />
     <Compile Include="Models\RDireccion.cs" />
     <Compile Include="Models\REntidad.cs" />
-    <Compile Include="Models\Revision.cs">
-      <DependentUpon>GaillardModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\RevisionVehiculo.cs">
-      <DependentUpon>GaillardModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\RMantenimientoVehiculo.cs" />
     <Compile Include="Models\RMaterial.cs" />
     <Compile Include="Models\ROperacion.cs" />
@@ -397,21 +414,6 @@
     <Compile Include="Models\RTipoVia.cs" />
     <Compile Include="Models\RUnidad.cs" />
     <Compile Include="Models\RVehiculo.cs" />
-    <Compile Include="Models\Seguro.cs">
-      <DependentUpon>GaillardModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\Situacion.cs">
-      <DependentUpon>GaillardModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sp_helpdiagramdefinition_Result.cs">
-      <DependentUpon>GaillardModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sp_helpdiagrams_Result.cs">
-      <DependentUpon>GaillardModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\sysdiagram.cs">
-      <DependentUpon>GaillardModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\TelefonoEntidad.cs">
       <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
@@ -437,6 +439,9 @@
       <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\TipoVia.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Ubicacion.cs">
       <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\Unidad.cs">

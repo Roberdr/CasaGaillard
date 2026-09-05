@@ -55,7 +55,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         {
             ViewBag.TipoGrupoID = new SelectList(db.TiposGrupo, "ID", "NombreGrupo");
             ViewBag.CubaID = new SelectList(db.Cubas, "ID", "MatriculaCuba");
-            ViewBag.SituacionID = new SelectList(db.Situaciones, "ID", "LadoCubaNombre");
+            ViewBag.SituacionID = new SelectList(db.Situacion, "ID", "LadoCubaNombre");
 
             return View();
         }
@@ -77,7 +77,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
 
             ViewBag.TipoGrupoID = new SelectList(db.TiposGrupo, "ID", "NombreGrupo", grupo.TipoGrupoID);
             ViewBag.CubaID = new SelectList(db.Cubas, "ID", "MatriculaCuba", grupo.CubaID);
-            ViewBag.SituacionID = new SelectList(db.Situaciones, "ID", "SituacionLadoLetra", grupo.SituacionID);
+            ViewBag.SituacionID = new SelectList(db.Situacion, "ID", "SituacionLadoLetra", grupo.SituacionID);
             return View(grupo);
         }
 
@@ -96,7 +96,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             }
             ViewBag.TipoGrupoID = new SelectList(db.TiposGrupo, "ID", "NombreGrupo", grupo.TipoGrupoID);
             ViewBag.CubaID = new SelectList(db.Cubas, "ID", "MatriculaCuba", grupo.CubaID);
-            ViewBag.SituacionID = new SelectList(db.Situaciones, "ID", "LadoCubaNombre", grupo.SituacionID);
+            ViewBag.SituacionID = new SelectList(db.Situacion, "ID", "LadoCubaNombre", grupo.SituacionID);
             return View(grupo);
         }
 
@@ -116,7 +116,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             }
             ViewBag.TipoGrupoID = new SelectList(db.TiposGrupo, "ID", "NombreGrupo", grupo.TipoGrupoID);
             ViewBag.CubaID = new SelectList(db.Cubas, "ID", "MatriculaCuba", grupo.CubaID);
-            ViewBag.SituacionID = new SelectList(db.Situaciones, "ID", "LadoCubaNombre", grupo.SituacionID);
+            ViewBag.SituacionID = new SelectList(db.Situacion, "ID", "LadoCubaNombre", grupo.SituacionID);
             return View(grupo);
         }
 

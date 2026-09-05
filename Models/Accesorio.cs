@@ -19,11 +19,20 @@ namespace CasaGaillard.Models
         {
             this.DetallesAccesorio = new HashSet<DetalleAccesorio>();
             this.AccesoriosGrupo = new HashSet<AccesorioGrupo>();
+            this.Mantenimiento = new HashSet<Mantenimiento>();
+            this.PlanMantenimiento = new HashSet<PlanMantenimiento>();
         }
     
         public int ID { get; set; }
         public int TipoAccesorioID { get; set; }
         public int MaterialID { get; set; }
+        public string Nombre { get; set; }
+        public string Descripcion { get; set; }
+        public Nullable<int> FamiliaId { get; set; }
+        public Nullable<int> SubfamiliaId { get; set; }
+        public Nullable<int> UbicacionId { get; set; }
+        public Nullable<System.DateTime> FechaAlta { get; set; }
+        public bool Activo { get; set; }
     
         public virtual Material Material { get; set; }
         public virtual TipoAccesorio TipoAccesorio { get; set; }
@@ -31,5 +40,12 @@ namespace CasaGaillard.Models
         public virtual ICollection<DetalleAccesorio> DetallesAccesorio { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<AccesorioGrupo> AccesoriosGrupo { get; set; }
+        public virtual Familia Familia { get; set; }
+        public virtual Subfamilia Subfamilia { get; set; }
+        public virtual Ubicacion Ubicacion { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Mantenimiento> Mantenimiento { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<PlanMantenimiento> PlanMantenimiento { get; set; }
     }
 }

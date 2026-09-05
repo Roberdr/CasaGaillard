@@ -21,11 +21,11 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             var vehiculos = db.Vehiculos.AsQueryable();
             if (cuba == null || !cuba.PlataformaID.HasValue)
             {
-                vehiculos = vehiculos.Where(v => !v.Baja);
+                vehiculos = vehiculos.Where(v => (v.Baja != true));
             }
             else
             {
-                vehiculos = vehiculos.Where(v => !v.Baja || v.ID == cuba.PlataformaID.Value);
+                vehiculos = vehiculos.Where(v => (v.Baja != true) || v.ID == cuba.PlataformaID.Value);
             }
 
             ViewBag.MaterialExteriorID = new SelectList(
@@ -48,7 +48,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                 .Include(c => c.Material)
                 .Include(c => c.Vehiculo)
                 .Include(c => c.Revisions)
-                .Where(c => incluirBajas || !c.Baja)
+                .Where(c => incluirBajas || (c.Baja != true))
                 .OrderBy(c => c.MatriculaCuba);
 
             ViewBag.IncluirBajas = incluirBajas;

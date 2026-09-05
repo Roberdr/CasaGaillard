@@ -12,17 +12,15 @@ namespace CasaGaillard.Models
     using System;
     using System.Collections.Generic;
     
-    public partial class RevisionVehiculo
+    public partial class Mantenimiento
     {
-        public int ID { get; set; }
-        public Nullable<int> VehiculoID { get; set; }
-        public Nullable<int> TipoRevisionID { get; set; }
-        public Nullable<System.DateTime> FechaRevision { get; set; }
-        public string Detalles { get; set; }
-        public string Ejecutor { get; set; }
-        public Nullable<System.DateTime> Caducidad { get; set; }
+        public int MantenimientoId { get; set; }
+        public int AccesorioId { get; set; }
+        public int TipoMantenimientoId { get; set; }
+        public System.DateTime Fecha { get; set; }
+        public string Observaciones { get; set; }
+        public string RealizadoPor { get; set; }
     
-        public virtual Vehiculo Vehiculo { get; set; }
-        public virtual TipoRevision TipoRevision { get; set; }
+        public virtual Accesorio Accesorio { get; set; }
     }
 }

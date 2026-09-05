@@ -1347,7 +1347,7 @@
         </Association>
         <Association Name="OperacionCuba">
           <End Type="GaillardModel.Operacion" Role="Operacion" Multiplicity="*" />
-          <End Type="GaillardModel.Cuba" Role="Cuba" Multiplicity="1" />
+          <End Type="GaillardModel.Cuba" Role="Cuba" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="Cuba">
               <PropertyRef Name="ID" />

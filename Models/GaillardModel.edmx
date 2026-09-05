@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
   <!-- EF Runtime content -->
   <edmx:Runtime>
@@ -29,6 +29,13 @@
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TipoAccesorioID" Type="int" Nullable="false" />
           <Property Name="MaterialID" Type="int" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="150" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="500" />
+          <Property Name="FamiliaId" Type="int" />
+          <Property Name="SubfamiliaId" Type="int" />
+          <Property Name="UbicacionId" Type="int" />
+          <Property Name="FechaAlta" Type="datetime" />
+          <Property Name="Activo" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="AccesorioGrupo">
           <Key>
@@ -190,13 +197,13 @@
           <Property Name="Alto" Type="int" />
           <Property Name="UpdatedAt" Type="datetime2" Precision="0" />
           <Property Name="CreatedAt" Type="datetime2" Precision="0" />
-          <Property Name="UpdatedBy" Type="nvarchar" MaxLength="50" />
-          <Property Name="CreatedBy" Type="nvarchar" MaxLength="50" />
+          <Property Name="UpdatedBy" Type="nvarchar" MaxLength="128" />
+          <Property Name="CreatedBy" Type="nvarchar" MaxLength="128" />
           <Property Name="NumAprobacionIMDG" Type="nvarchar" MaxLength="20" />
           <Property Name="NumAprobacionADR/RID" Type="nvarchar" MaxLength="20" />
           <Property Name="UNPortableTank" Type="nvarchar" MaxLength="15" />
           <Property Name="NumAprobacion" Type="nvarchar" MaxLength="20" />
-          <Property Name="Baja" Type="bit" Nullable="false" />
+          <Property Name="Baja" Type="bit" />
         </EntityType>
         <EntityType Name="DetalleAccesorio">
           <Key>
@@ -236,6 +243,14 @@
           <Property Name="CIF" Type="nchar" MaxLength="10" />
           <Property Name="DireccionID" Type="int" Nullable="false" />
         </EntityType>
+        <EntityType Name="Familia">
+          <Key>
+            <PropertyRef Name="FamiliaId" />
+          </Key>
+          <Property Name="FamiliaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="300" />
+        </EntityType>
         <EntityType Name="Grupo">
           <Key>
             <PropertyRef Name="ID" />
@@ -245,6 +260,17 @@
           <Property Name="CubaID" Type="int" Nullable="false" />
           <Property Name="CompartimentoID" Type="int" Nullable="false" />
           <Property Name="SituacionID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Mantenimiento">
+          <Key>
+            <PropertyRef Name="MantenimientoId" />
+          </Key>
+          <Property Name="MantenimientoId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccesorioId" Type="int" Nullable="false" />
+          <Property Name="TipoMantenimientoId" Type="int" Nullable="false" />
+          <Property Name="Fecha" Type="datetime" Nullable="false" />
+          <Property Name="Observaciones" Type="nvarchar" MaxLength="500" />
+          <Property Name="RealizadoPor" Type="nvarchar" MaxLength="150" />
         </EntityType>
         <EntityType Name="MantenimientoVehiculo">
           <Key>
@@ -271,12 +297,13 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
-          <Property Name="CubaID" Type="int" Nullable="false" />
           <Property Name="OperacionID" Type="int" />
           <Property Name="FechaOperacion" Type="date" />
           <Property Name="Descripcion" Type="nvarchar(max)" />
           <Property Name="OperarioID" Type="int" Nullable="false" />
           <Property Name="Duracion" Type="time" Precision="7" />
+          <Property Name="CubaID" Type="int" />
+          <Property Name="VehiculoID" Type="int" />
         </EntityType>
         <EntityType Name="Operario">
           <Key>
@@ -307,6 +334,16 @@
           <Property Name="CargoID" Type="int" />
           <Property Name="FechaAlta" Type="date" />
           <Property Name="FechaBaja" Type="date" />
+        </EntityType>
+        <EntityType Name="PlanMantenimiento">
+          <Key>
+            <PropertyRef Name="PlanId" />
+          </Key>
+          <Property Name="PlanId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="AccesorioId" Type="int" Nullable="false" />
+          <Property Name="PeriodicidadDias" Type="int" Nullable="false" />
+          <Property Name="UltimaEjecucion" Type="datetime" />
+          <Property Name="ProximaEjecucion" Type="datetime" />
         </EntityType>
         <EntityType Name="Plataforma">
           <Key>
@@ -391,6 +428,15 @@
           <Property Name="SituacionLadoNumero" Type="int" />
           <Property Name="SituacionLadoLetra" Type="nvarchar" MaxLength="45" />
         </EntityType>
+        <EntityType Name="Subfamilia">
+          <Key>
+            <PropertyRef Name="SubfamiliaId" />
+          </Key>
+          <Property Name="SubfamiliaId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="FamiliaId" Type="int" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="300" />
+        </EntityType>
         <EntityType Name="TelefonoEntidad">
           <Key>
             <PropertyRef Name="ID" />
@@ -413,6 +459,8 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TipoAccesorio" Type="nvarchar" MaxLength="45" />
+          <Property Name="SubfamiliaId" Type="int" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="300" />
         </EntityType>
         <EntityType Name="TipoGrupo">
           <Key>
@@ -427,6 +475,7 @@
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TipoMantenimiento" Type="nvarchar" MaxLength="45" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="3000" />
         </EntityType>
         <EntityType Name="TipoOperacion">
           <Key>
@@ -455,6 +504,14 @@
           </Key>
           <Property Name="ID" Type="int" Nullable="false" />
           <Property Name="TipoVia" Type="nchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Ubicacion">
+          <Key>
+            <PropertyRef Name="UbicacionId" />
+          </Key>
+          <Property Name="UbicacionId" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Nombre" Type="nvarchar" MaxLength="150" Nullable="false" />
+          <Property Name="Descripcion" Type="nvarchar" MaxLength="300" />
         </EntityType>
         <EntityType Name="Unidad">
           <Key>
@@ -487,8 +544,32 @@
           <Property Name="Anchura" Type="int" />
           <Property Name="Altura" Type="int" />
           <Property Name="SeguroID" Type="int" />
-          <Property Name="Baja" Type="bit" Nullable="false" />
+          <Property Name="Baja" Type="bit" />
         </EntityType>
+        <Association Name="FK__Subfamili__Famil__0DD9F539">
+          <End Role="Familia" Type="Self.Familia" Multiplicity="1" />
+          <End Role="Subfamilia" Type="Self.Subfamilia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Familia">
+              <PropertyRef Name="FamiliaId" />
+            </Principal>
+            <Dependent Role="Subfamilia">
+              <PropertyRef Name="FamiliaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Accesorio_Familia">
+          <End Role="Familia" Type="Self.Familia" Multiplicity="0..1" />
+          <End Role="Accesorio" Type="Self.Accesorio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Familia">
+              <PropertyRef Name="FamiliaId" />
+            </Principal>
+            <Dependent Role="Accesorio">
+              <PropertyRef Name="FamiliaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Accesorio_Material">
           <End Role="Material" Type="Self.Material" Multiplicity="1" />
           <End Role="Accesorio" Type="Self.Accesorio" Multiplicity="*" />
@@ -501,6 +582,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Accesorio_Subfamilia">
+          <End Role="Subfamilia" Type="Self.Subfamilia" Multiplicity="0..1" />
+          <End Role="Accesorio" Type="Self.Accesorio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subfamilia">
+              <PropertyRef Name="SubfamiliaId" />
+            </Principal>
+            <Dependent Role="Accesorio">
+              <PropertyRef Name="SubfamiliaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Accesorio_TipoAccesorio">
           <End Role="TipoAccesorio" Type="Self.TipoAccesorio" Multiplicity="1" />
           <End Role="Accesorio" Type="Self.Accesorio" Multiplicity="*" />
@@ -510,6 +603,18 @@
             </Principal>
             <Dependent Role="Accesorio">
               <PropertyRef Name="TipoAccesorioID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Accesorio_Ubicacion">
+          <End Role="Ubicacion" Type="Self.Ubicacion" Multiplicity="0..1" />
+          <End Role="Accesorio" Type="Self.Accesorio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ubicacion">
+              <PropertyRef Name="UbicacionId" />
+            </Principal>
+            <Dependent Role="Accesorio">
+              <PropertyRef Name="UbicacionId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -693,6 +798,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_Mantenimiento_Accesorio">
+          <End Role="Accesorio" Type="Self.Accesorio" Multiplicity="1" />
+          <End Role="Mantenimiento" Type="Self.Mantenimiento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Accesorio">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Mantenimiento">
+              <PropertyRef Name="AccesorioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Operacion_Operario">
           <End Role="Operario" Type="Self.Operario" Multiplicity="1" />
           <End Role="Operacion" Type="Self.Operacion" Multiplicity="*" />
@@ -753,6 +870,18 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <Association Name="FK_PlanMantenimiento_Accesorio">
+          <End Role="Accesorio" Type="Self.Accesorio" Multiplicity="1" />
+          <End Role="PlanMantenimiento" Type="Self.PlanMantenimiento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Accesorio">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PlanMantenimiento">
+              <PropertyRef Name="AccesorioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
         <Association Name="FK_Revision_Cuba">
           <End Role="Cuba" Type="Self.Cuba" Multiplicity="1" />
           <End Role="Revision" Type="Self.Revision" Multiplicity="*" />
@@ -786,6 +915,18 @@
             </Principal>
             <Dependent Role="TelefonoPersona">
               <PropertyRef Name="PersonaID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TipoAccesorio_Subfamilia">
+          <End Role="Subfamilia" Type="Self.Subfamilia" Multiplicity="0..1" />
+          <End Role="TipoAccesorio" Type="Self.TipoAccesorio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subfamilia">
+              <PropertyRef Name="SubfamiliaId" />
+            </Principal>
+            <Dependent Role="TipoAccesorio">
+              <PropertyRef Name="SubfamiliaId" />
             </Dependent>
           </ReferentialConstraint>
         </Association>
@@ -852,13 +993,16 @@
           <EntitySet Name="DetalleAccesorio" EntityType="Self.DetalleAccesorio" Schema="gaillard" store:Type="Tables" />
           <EntitySet Name="Direccion" EntityType="Self.Direccion" Schema="gaillard" store:Type="Tables" />
           <EntitySet Name="Entidad" EntityType="Self.Entidad" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="Familia" EntityType="Self.Familia" Schema="gaillard" store:Type="Tables" />
           <EntitySet Name="Grupo" EntityType="Self.Grupo" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="Mantenimiento" EntityType="Self.Mantenimiento" Schema="gaillard" store:Type="Tables" />
           <EntitySet Name="MantenimientoVehiculo" EntityType="Self.MantenimientoVehiculo" Schema="gaillard" store:Type="Tables" />
           <EntitySet Name="Material" EntityType="Self.Material" Schema="gaillard" store:Type="Tables" />
           <EntitySet Name="Operacion" EntityType="Self.Operacion" Schema="gaillard" store:Type="Tables" />
           <EntitySet Name="Operario" EntityType="Self.Operario" Schema="gaillard" store:Type="Tables" />
           <EntitySet Name="Persona" EntityType="Self.Persona" Schema="gaillard" store:Type="Tables" />
           <EntitySet Name="PersonasEntidad" EntityType="Self.PersonasEntidad" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="PlanMantenimiento" EntityType="Self.PlanMantenimiento" Schema="gaillard" store:Type="Tables" />
           <EntitySet Name="Plataforma" EntityType="Self.Plataforma" Schema="gaillard" store:Type="Tables" />
           <EntitySet Name="Poblacion" EntityType="Self.Poblacion" Schema="gaillard" store:Type="Tables" />
           <EntitySet Name="Producto" EntityType="Self.Producto" Schema="gaillard" store:Type="Tables" />
@@ -866,6 +1010,7 @@
           <EntitySet Name="RevisionVehiculo" EntityType="Self.RevisionVehiculo" Schema="gaillard" store:Type="Tables" />
           <EntitySet Name="Seguro" EntityType="Self.Seguro" Schema="gaillard" store:Type="Tables" />
           <EntitySet Name="Situacion" EntityType="Self.Situacion" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="Subfamilia" EntityType="Self.Subfamilia" Schema="gaillard" store:Type="Tables" />
           <EntitySet Name="TelefonoEntidad" EntityType="Self.TelefonoEntidad" Schema="gaillard" store:Type="Tables" />
           <EntitySet Name="TelefonoPersona" EntityType="Self.TelefonoPersona" Schema="gaillard" store:Type="Tables" />
           <EntitySet Name="TipoAccesorio" EntityType="Self.TipoAccesorio" Schema="gaillard" store:Type="Tables" />
@@ -875,14 +1020,31 @@
           <EntitySet Name="TipoRevision" EntityType="Self.TipoRevision" Schema="gaillard" store:Type="Tables" />
           <EntitySet Name="TipoVehiculo" EntityType="Self.TipoVehiculo" Schema="gaillard" store:Type="Tables" />
           <EntitySet Name="TipoVia" EntityType="Self.TipoVia" Schema="gaillard" store:Type="Tables" />
+          <EntitySet Name="Ubicacion" EntityType="Self.Ubicacion" Schema="gaillard" store:Type="Tables" />
           <EntitySet Name="Unidad" EntityType="Self.Unidad" Schema="gaillard" store:Type="Tables" />
           <EntitySet Name="Vehiculo" EntityType="Self.Vehiculo" Schema="gaillard" store:Type="Tables" />
+          <AssociationSet Name="FK__Subfamili__Famil__0DD9F539" Association="Self.FK__Subfamili__Famil__0DD9F539">
+            <End Role="Familia" EntitySet="Familia" />
+            <End Role="Subfamilia" EntitySet="Subfamilia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Accesorio_Familia" Association="Self.FK_Accesorio_Familia">
+            <End Role="Familia" EntitySet="Familia" />
+            <End Role="Accesorio" EntitySet="Accesorio" />
+          </AssociationSet>
           <AssociationSet Name="FK_Accesorio_Material" Association="Self.FK_Accesorio_Material">
             <End Role="Material" EntitySet="Material" />
             <End Role="Accesorio" EntitySet="Accesorio" />
           </AssociationSet>
+          <AssociationSet Name="FK_Accesorio_Subfamilia" Association="Self.FK_Accesorio_Subfamilia">
+            <End Role="Subfamilia" EntitySet="Subfamilia" />
+            <End Role="Accesorio" EntitySet="Accesorio" />
+          </AssociationSet>
           <AssociationSet Name="FK_Accesorio_TipoAccesorio" Association="Self.FK_Accesorio_TipoAccesorio">
             <End Role="TipoAccesorio" EntitySet="TipoAccesorio" />
+            <End Role="Accesorio" EntitySet="Accesorio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Accesorio_Ubicacion" Association="Self.FK_Accesorio_Ubicacion">
+            <End Role="Ubicacion" EntitySet="Ubicacion" />
             <End Role="Accesorio" EntitySet="Accesorio" />
           </AssociationSet>
           <AssociationSet Name="FK_AspNetRoleClaims_AspNetRoles_RoleId" Association="Self.FK_AspNetRoleClaims_AspNetRoles_RoleId">
@@ -941,6 +1103,10 @@
             <End Role="Direccion" EntitySet="Direccion" />
             <End Role="Entidad" EntitySet="Entidad" />
           </AssociationSet>
+          <AssociationSet Name="FK_Mantenimiento_Accesorio" Association="Self.FK_Mantenimiento_Accesorio">
+            <End Role="Accesorio" EntitySet="Accesorio" />
+            <End Role="Mantenimiento" EntitySet="Mantenimiento" />
+          </AssociationSet>
           <AssociationSet Name="FK_Operacion_Operario" Association="Self.FK_Operacion_Operario">
             <End Role="Operario" EntitySet="Operario" />
             <End Role="Operacion" EntitySet="Operacion" />
@@ -961,6 +1127,10 @@
             <End Role="Entidad" EntitySet="Entidad" />
             <End Role="PersonasEntidad" EntitySet="PersonasEntidad" />
           </AssociationSet>
+          <AssociationSet Name="FK_PlanMantenimiento_Accesorio" Association="Self.FK_PlanMantenimiento_Accesorio">
+            <End Role="Accesorio" EntitySet="Accesorio" />
+            <End Role="PlanMantenimiento" EntitySet="PlanMantenimiento" />
+          </AssociationSet>
           <AssociationSet Name="FK_Revision_Cuba" Association="Self.FK_Revision_Cuba">
             <End Role="Cuba" EntitySet="Cuba" />
             <End Role="Revision" EntitySet="Revision" />
@@ -972,6 +1142,10 @@
           <AssociationSet Name="FK_TelefonoPersona_Persona" Association="Self.FK_TelefonoPersona_Persona">
             <End Role="Persona" EntitySet="Persona" />
             <End Role="TelefonoPersona" EntitySet="TelefonoPersona" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TipoAccesorio_Subfamilia" Association="Self.FK_TipoAccesorio_Subfamilia">
+            <End Role="Subfamilia" EntitySet="Subfamilia" />
+            <End Role="TipoAccesorio" EntitySet="TipoAccesorio" />
           </AssociationSet>
           <AssociationSet Name="FK_Vehiculo_Vehiculo" Association="Self.FK_Vehiculo_Vehiculo">
             <End Role="Vehiculo" EntitySet="Vehiculo" />
@@ -993,6 +1167,18 @@
           <NavigationProperty Name="TipoAccesorio" Relationship="GaillardModel.AccesorioTipoAccesorio" FromRole="Accesorio" ToRole="TipoAccesorio" />
           <NavigationProperty Name="DetallesAccesorio" Relationship="GaillardModel.DetalleAccesorioAccesorio" FromRole="Accesorio" ToRole="DetalleAccesorio" />
           <NavigationProperty Name="AccesoriosGrupo" Relationship="GaillardModel.AccesorioGrupoAccesorio" FromRole="Accesorio" ToRole="AccesorioGrupo" />
+          <Property Name="Nombre" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Descripcion" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="FamiliaId" Type="Int32" />
+          <Property Name="SubfamiliaId" Type="Int32" />
+          <Property Name="UbicacionId" Type="Int32" />
+          <Property Name="FechaAlta" Type="DateTime" Precision="3" />
+          <Property Name="Activo" Type="Boolean" Nullable="false" />
+          <NavigationProperty Name="Familia" Relationship="GaillardModel.FK_Accesorio_Familia" FromRole="Accesorio" ToRole="Familia" />
+          <NavigationProperty Name="Subfamilia" Relationship="GaillardModel.FK_Accesorio_Subfamilia" FromRole="Accesorio" ToRole="Subfamilia" />
+          <NavigationProperty Name="Ubicacion" Relationship="GaillardModel.FK_Accesorio_Ubicacion" FromRole="Accesorio" ToRole="Ubicacion" />
+          <NavigationProperty Name="Mantenimiento" Relationship="GaillardModel.FK_Mantenimiento_Accesorio" FromRole="Accesorio" ToRole="Mantenimiento" />
+          <NavigationProperty Name="PlanMantenimiento" Relationship="GaillardModel.FK_PlanMantenimiento_Accesorio" FromRole="Accesorio" ToRole="PlanMantenimiento" />
         </EntityType>
         <EntityType Name="AccesorioGrupo">
           <Key>
@@ -1071,13 +1257,13 @@
           <Property Name="Alto" Type="Int32" />
           <Property Name="UpdatedAt" Type="DateTime" Precision="0" />
           <Property Name="CreatedAt" Type="DateTime" Precision="0" />
-          <Property Name="UpdatedBy" Type="String" MaxLength="50" />
-          <Property Name="CreatedBy" Type="String" MaxLength="50" />
+          <Property Name="UpdatedBy" Type="String" MaxLength="128" Unicode="true" FixedLength="false" />
+          <Property Name="CreatedBy" Type="String" MaxLength="128" Unicode="true" FixedLength="false" />
           <Property Name="NumAprobacionIMDG" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="NumAprobacionADR_RID" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
           <Property Name="UNPortableTank" Type="String" MaxLength="15" FixedLength="false" Unicode="true" />
           <Property Name="NumAprobacion" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
-          <Property Name="Baja" Type="Boolean" Nullable="false" />
+          <Property Name="Baja" Type="Boolean" />
           <NavigationProperty Name="Material" Relationship="GaillardModel.MaterialCuba" FromRole="Cuba" ToRole="Material" />
           <NavigationProperty Name="Compartimentos" Relationship="GaillardModel.CompartimentoCuba" FromRole="Cuba" ToRole="Compartimento" />
           <NavigationProperty Name="Grupos" Relationship="GaillardModel.GrupoCuba" FromRole="Cuba" ToRole="Grupo" />
@@ -1146,7 +1332,7 @@
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
-          <Property Name="CubaID" Type="Int32" Nullable="false" />
+          <Property Name="CubaID" Type="Int32" />
           <Property Name="OperacionID" Type="Int32" />
           <Property Name="FechaOperacion" Type="DateTime" Precision="0" />
           <Property Name="Descripcion" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
@@ -1155,6 +1341,7 @@
           <NavigationProperty Name="Cuba" Relationship="GaillardModel.OperacionCuba" FromRole="Operacion" ToRole="Cuba" />
           <NavigationProperty Name="Operario" Relationship="GaillardModel.OperacionOperario" FromRole="Operacion" ToRole="Operario" />
           <NavigationProperty Name="TipoOperacion" Relationship="GaillardModel.TipoOperacionOperacion" FromRole="Operacion" ToRole="TipoOperacion" />
+          <Property Name="VehiculoID" Type="Int32" />
         </EntityType>
         <EntityType Name="Operario">
           <Key>
@@ -1236,6 +1423,9 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="TipoAccesorio1" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="Accesorios" Relationship="GaillardModel.AccesorioTipoAccesorio" FromRole="TipoAccesorio" ToRole="Accesorio" />
+          <Property Name="SubfamiliaId" Type="Int32" />
+          <Property Name="Descripcion" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Subfamilia" Relationship="GaillardModel.FK_TipoAccesorio_Subfamilia" FromRole="TipoAccesorio" ToRole="Subfamilia" />
         </EntityType>
         <EntityType Name="TipoGrupo">
           <Key>
@@ -1252,6 +1442,7 @@
           <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="Operacion" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
           <NavigationProperty Name="MantenimientosVehiculo" Relationship="GaillardModel.TipoMantenimientoMantenimientoVehiculo" FromRole="TipoMantenimiento" ToRole="MantenimientoVehiculo" />
+          <Property Name="Descripcion" Type="String" MaxLength="3000" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="TipoOperacion">
           <Key>
@@ -1311,7 +1502,7 @@
           <Property Name="Anchura" Type="Int32" />
           <Property Name="Altura" Type="Int32" />
           <Property Name="SeguroID" Type="Int32" />
-          <Property Name="Baja" Type="Boolean" Nullable="false" />
+          <Property Name="Baja" Type="Boolean" />
           <NavigationProperty Name="Taller" Relationship="GaillardModel.VehiculoTaller" FromRole="Vehiculo" ToRole="Entidad" />
           <NavigationProperty Name="Cubas" Relationship="GaillardModel.FK_Cuba_Vehiculo" FromRole="Vehiculo" ToRole="Cuba" />
           <NavigationProperty Name="Vehiculo1" Relationship="GaillardModel.FK_Vehiculo_Vehiculo" FromRole="Vehiculo" ToRole="Vehiculo1" />
@@ -1555,6 +1746,39 @@
             <End Role="Vehiculo" EntitySet="Vehiculos" />
             <End Role="Vehiculo1" EntitySet="Vehiculos" />
           </AssociationSet>
+          <EntitySet Name="Familia" EntityType="GaillardModel.Familia" />
+          <EntitySet Name="Mantenimiento" EntityType="GaillardModel.Mantenimiento" />
+          <EntitySet Name="PlanMantenimiento" EntityType="GaillardModel.PlanMantenimiento" />
+          <EntitySet Name="Subfamilia" EntityType="GaillardModel.Subfamilia" />
+          <EntitySet Name="Ubicacion" EntityType="GaillardModel.Ubicacion" />
+          <AssociationSet Name="FK_Accesorio_Familia" Association="GaillardModel.FK_Accesorio_Familia">
+            <End Role="Familia" EntitySet="Familia" />
+            <End Role="Accesorio" EntitySet="Accesorios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Accesorio_Subfamilia" Association="GaillardModel.FK_Accesorio_Subfamilia">
+            <End Role="Subfamilia" EntitySet="Subfamilia" />
+            <End Role="Accesorio" EntitySet="Accesorios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Accesorio_Ubicacion" Association="GaillardModel.FK_Accesorio_Ubicacion">
+            <End Role="Ubicacion" EntitySet="Ubicacion" />
+            <End Role="Accesorio" EntitySet="Accesorios" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Mantenimiento_Accesorio" Association="GaillardModel.FK_Mantenimiento_Accesorio">
+            <End Role="Accesorio" EntitySet="Accesorios" />
+            <End Role="Mantenimiento" EntitySet="Mantenimiento" />
+          </AssociationSet>
+          <AssociationSet Name="FK__Subfamili__Famil__0DD9F539" Association="GaillardModel.FK__Subfamili__Famil__0DD9F539">
+            <End Role="Familia" EntitySet="Familia" />
+            <End Role="Subfamilia" EntitySet="Subfamilia" />
+          </AssociationSet>
+          <AssociationSet Name="FK_TipoAccesorio_Subfamilia" Association="GaillardModel.FK_TipoAccesorio_Subfamilia">
+            <End Role="Subfamilia" EntitySet="Subfamilia" />
+            <End Role="TipoAccesorio" EntitySet="TiposAccesorio" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PlanMantenimiento_Accesorio" Association="GaillardModel.FK_PlanMantenimiento_Accesorio">
+            <End Role="Accesorio" EntitySet="Accesorios" />
+            <End Role="PlanMantenimiento" EntitySet="PlanMantenimiento" />
+          </AssociationSet>
         </EntityContainer>
         <Association Name="MaterialAccesorio">
           <End Type="GaillardModel.Material" Role="Material" Multiplicity="1" />
@@ -1738,7 +1962,7 @@
         </Association>
         <Association Name="OperacionCuba">
           <End Type="GaillardModel.Operacion" Role="Operacion" Multiplicity="*" />
-          <End Type="GaillardModel.Cuba" Role="Cuba" Multiplicity="1" />
+          <End Type="GaillardModel.Cuba" Role="Cuba" Multiplicity="0..1" />
           <ReferentialConstraint>
             <Principal Role="Cuba">
               <PropertyRef Name="ID" />
@@ -2281,6 +2505,144 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
+        <EntityType Name="Familia">
+          <Key>
+            <PropertyRef Name="FamiliaId" />
+          </Key>
+          <Property Name="FamiliaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Descripcion" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Accesorio" Relationship="GaillardModel.FK_Accesorio_Familia" FromRole="Familia" ToRole="Accesorio" />
+          <NavigationProperty Name="Subfamilia" Relationship="GaillardModel.FK__Subfamili__Famil__0DD9F539" FromRole="Familia" ToRole="Subfamilia" />
+        </EntityType>
+        <EntityType Name="Mantenimiento">
+          <Key>
+            <PropertyRef Name="MantenimientoId" />
+          </Key>
+          <Property Name="MantenimientoId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccesorioId" Type="Int32" Nullable="false" />
+          <Property Name="TipoMantenimientoId" Type="Int32" Nullable="false" />
+          <Property Name="Fecha" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="Observaciones" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
+          <Property Name="RealizadoPor" Type="String" MaxLength="150" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Accesorio" Relationship="GaillardModel.FK_Mantenimiento_Accesorio" FromRole="Mantenimiento" ToRole="Accesorio" />
+        </EntityType>
+        <EntityType Name="PlanMantenimiento">
+          <Key>
+            <PropertyRef Name="PlanId" />
+          </Key>
+          <Property Name="PlanId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="AccesorioId" Type="Int32" Nullable="false" />
+          <Property Name="PeriodicidadDias" Type="Int32" Nullable="false" />
+          <Property Name="UltimaEjecucion" Type="DateTime" Precision="3" />
+          <Property Name="ProximaEjecucion" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="Accesorio" Relationship="GaillardModel.FK_PlanMantenimiento_Accesorio" FromRole="PlanMantenimiento" ToRole="Accesorio" />
+        </EntityType>
+        <EntityType Name="Subfamilia">
+          <Key>
+            <PropertyRef Name="SubfamiliaId" />
+          </Key>
+          <Property Name="SubfamiliaId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="FamiliaId" Type="Int32" Nullable="false" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Descripcion" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Accesorio" Relationship="GaillardModel.FK_Accesorio_Subfamilia" FromRole="Subfamilia" ToRole="Accesorio" />
+          <NavigationProperty Name="Familia" Relationship="GaillardModel.FK__Subfamili__Famil__0DD9F539" FromRole="Subfamilia" ToRole="Familia" />
+          <NavigationProperty Name="TipoAccesorio" Relationship="GaillardModel.FK_TipoAccesorio_Subfamilia" FromRole="Subfamilia" ToRole="TipoAccesorio" />
+        </EntityType>
+        <EntityType Name="Ubicacion">
+          <Key>
+            <PropertyRef Name="UbicacionId" />
+          </Key>
+          <Property Name="UbicacionId" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Nombre" Type="String" Nullable="false" MaxLength="150" FixedLength="false" Unicode="true" />
+          <Property Name="Descripcion" Type="String" MaxLength="300" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Accesorio" Relationship="GaillardModel.FK_Accesorio_Ubicacion" FromRole="Ubicacion" ToRole="Accesorio" />
+        </EntityType>
+        <Association Name="FK_Accesorio_Familia">
+          <End Type="GaillardModel.Familia" Role="Familia" Multiplicity="0..1" />
+          <End Type="GaillardModel.Accesorio" Role="Accesorio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Familia">
+              <PropertyRef Name="FamiliaId" />
+            </Principal>
+            <Dependent Role="Accesorio">
+              <PropertyRef Name="FamiliaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Accesorio_Subfamilia">
+          <End Type="GaillardModel.Subfamilia" Role="Subfamilia" Multiplicity="0..1" />
+          <End Type="GaillardModel.Accesorio" Role="Accesorio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subfamilia">
+              <PropertyRef Name="SubfamiliaId" />
+            </Principal>
+            <Dependent Role="Accesorio">
+              <PropertyRef Name="SubfamiliaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Accesorio_Ubicacion">
+          <End Type="GaillardModel.Ubicacion" Role="Ubicacion" Multiplicity="0..1" />
+          <End Type="GaillardModel.Accesorio" Role="Accesorio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Ubicacion">
+              <PropertyRef Name="UbicacionId" />
+            </Principal>
+            <Dependent Role="Accesorio">
+              <PropertyRef Name="UbicacionId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Mantenimiento_Accesorio">
+          <End Type="GaillardModel.Accesorio" Role="Accesorio" Multiplicity="1" />
+          <End Type="GaillardModel.Mantenimiento" Role="Mantenimiento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Accesorio">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Mantenimiento">
+              <PropertyRef Name="AccesorioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK__Subfamili__Famil__0DD9F539">
+          <End Type="GaillardModel.Familia" Role="Familia" Multiplicity="1" />
+          <End Type="GaillardModel.Subfamilia" Role="Subfamilia" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Familia">
+              <PropertyRef Name="FamiliaId" />
+            </Principal>
+            <Dependent Role="Subfamilia">
+              <PropertyRef Name="FamiliaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_TipoAccesorio_Subfamilia">
+          <End Type="GaillardModel.Subfamilia" Role="Subfamilia" Multiplicity="0..1" />
+          <End Type="GaillardModel.TipoAccesorio" Role="TipoAccesorio" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Subfamilia">
+              <PropertyRef Name="SubfamiliaId" />
+            </Principal>
+            <Dependent Role="TipoAccesorio">
+              <PropertyRef Name="SubfamiliaId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PlanMantenimiento_Accesorio">
+          <End Type="GaillardModel.Accesorio" Role="Accesorio" Multiplicity="1" />
+          <End Type="GaillardModel.PlanMantenimiento" Role="PlanMantenimiento" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Accesorio">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="PlanMantenimiento">
+              <PropertyRef Name="AccesorioId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -2290,6 +2652,13 @@
           <EntitySetMapping Name="Accesorios">
             <EntityTypeMapping TypeName="GaillardModel.Accesorio">
               <MappingFragment StoreEntitySet="Accesorio">
+                <ScalarProperty Name="Activo" ColumnName="Activo" />
+                <ScalarProperty Name="FechaAlta" ColumnName="FechaAlta" />
+                <ScalarProperty Name="UbicacionId" ColumnName="UbicacionId" />
+                <ScalarProperty Name="SubfamiliaId" ColumnName="SubfamiliaId" />
+                <ScalarProperty Name="FamiliaId" ColumnName="FamiliaId" />
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="TipoAccesorioID" ColumnName="TipoAccesorioID" />
                 <ScalarProperty Name="MaterialID" ColumnName="MaterialID" />
@@ -2427,6 +2796,7 @@
           <EntitySetMapping Name="Operaciones">
             <EntityTypeMapping TypeName="GaillardModel.Operacion">
               <MappingFragment StoreEntitySet="Operacion">
+                <ScalarProperty Name="VehiculoID" ColumnName="VehiculoID" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="CubaID" ColumnName="CubaID" />
                 <ScalarProperty Name="OperacionID" ColumnName="OperacionID" />
@@ -2512,6 +2882,8 @@
           <EntitySetMapping Name="TiposAccesorio">
             <EntityTypeMapping TypeName="GaillardModel.TipoAccesorio">
               <MappingFragment StoreEntitySet="TipoAccesorio">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="SubfamiliaId" ColumnName="SubfamiliaId" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="TipoAccesorio1" ColumnName="TipoAccesorio" />
               </MappingFragment>
@@ -2528,6 +2900,7 @@
           <EntitySetMapping Name="TiposMantenimiento">
             <EntityTypeMapping TypeName="GaillardModel.TipoMantenimiento">
               <MappingFragment StoreEntitySet="TipoMantenimiento">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Operacion" ColumnName="TipoMantenimiento" />
               </MappingFragment>
@@ -2835,6 +3208,57 @@
           </FunctionImportMapping>
           <FunctionImportMapping FunctionImportName="sp_renamediagram" FunctionName="GaillardModel.Store.sp_renamediagram" />
           <FunctionImportMapping FunctionImportName="sp_upgraddiagrams" FunctionName="GaillardModel.Store.sp_upgraddiagrams" />
+          <EntitySetMapping Name="Familia">
+            <EntityTypeMapping TypeName="GaillardModel.Familia">
+              <MappingFragment StoreEntitySet="Familia">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="FamiliaId" ColumnName="FamiliaId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Mantenimiento">
+            <EntityTypeMapping TypeName="GaillardModel.Mantenimiento">
+              <MappingFragment StoreEntitySet="Mantenimiento">
+                <ScalarProperty Name="RealizadoPor" ColumnName="RealizadoPor" />
+                <ScalarProperty Name="Observaciones" ColumnName="Observaciones" />
+                <ScalarProperty Name="Fecha" ColumnName="Fecha" />
+                <ScalarProperty Name="TipoMantenimientoId" ColumnName="TipoMantenimientoId" />
+                <ScalarProperty Name="AccesorioId" ColumnName="AccesorioId" />
+                <ScalarProperty Name="MantenimientoId" ColumnName="MantenimientoId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PlanMantenimiento">
+            <EntityTypeMapping TypeName="GaillardModel.PlanMantenimiento">
+              <MappingFragment StoreEntitySet="PlanMantenimiento">
+                <ScalarProperty Name="ProximaEjecucion" ColumnName="ProximaEjecucion" />
+                <ScalarProperty Name="UltimaEjecucion" ColumnName="UltimaEjecucion" />
+                <ScalarProperty Name="PeriodicidadDias" ColumnName="PeriodicidadDias" />
+                <ScalarProperty Name="AccesorioId" ColumnName="AccesorioId" />
+                <ScalarProperty Name="PlanId" ColumnName="PlanId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Subfamilia">
+            <EntityTypeMapping TypeName="GaillardModel.Subfamilia">
+              <MappingFragment StoreEntitySet="Subfamilia">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="FamiliaId" ColumnName="FamiliaId" />
+                <ScalarProperty Name="SubfamiliaId" ColumnName="SubfamiliaId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Ubicacion">
+            <EntityTypeMapping TypeName="GaillardModel.Ubicacion">
+              <MappingFragment StoreEntitySet="Ubicacion">
+                <ScalarProperty Name="Descripcion" ColumnName="Descripcion" />
+                <ScalarProperty Name="Nombre" ColumnName="Nombre" />
+                <ScalarProperty Name="UbicacionId" ColumnName="UbicacionId" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
         </EntityContainerMapping>
       </Mapping>
     </edmx:Mappings>
@@ -2849,7 +3273,7 @@
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
         <DesignerProperty Name="UseLegacyProvider" Value="false" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />

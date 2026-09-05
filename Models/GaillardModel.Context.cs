@@ -52,7 +52,7 @@ namespace CasaGaillard.Models
         public virtual DbSet<Unidad> Unidades { get; set; }
         public virtual DbSet<Vehiculo> Vehiculos { get; set; }
         public virtual DbSet<Cargo> Cargoes { get; set; }
-        public virtual DbSet<Direccion> Direcciones { get; set; }
+        public virtual DbSet<Direccion> Direccions { get; set; }
         public virtual DbSet<Entidad> Entidads { get; set; }
         public virtual DbSet<Persona> Personas { get; set; }
         public virtual DbSet<PersonasEntidad> PersonasEntidads { get; set; }
@@ -69,7 +69,12 @@ namespace CasaGaillard.Models
         public virtual DbSet<AspNetUser> AspNetUsers { get; set; }
         public virtual DbSet<AspNetUserToken> AspNetUserTokens { get; set; }
         public virtual DbSet<Combustible> Combustibles { get; set; }
-        public virtual DbSet<Seguro> Seguroes { get; set; }
+        public virtual DbSet<Seguro> Seguros { get; set; }
+        public virtual DbSet<Familia> Familia { get; set; }
+        public virtual DbSet<Mantenimiento> Mantenimiento { get; set; }
+        public virtual DbSet<PlanMantenimiento> PlanMantenimiento { get; set; }
+        public virtual DbSet<Subfamilia> Subfamilia { get; set; }
+        public virtual DbSet<Ubicacion> Ubicacion { get; set; }
     
         public virtual int sp_alterdiagram(string diagramname, Nullable<int> owner_id, Nullable<int> version, byte[] definition)
         {
