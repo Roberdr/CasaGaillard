@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - CASA GAILLARD S.A.</title>
     @Styles.Render("~/bundles/styles")
+    @RenderSection("Styles", required: false)
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body class="public-body container">
@@ -75,6 +76,6 @@
 
     @Scripts.Render("~/bundles/jquery")
     @Scripts.Render("~/bundles/js")
-    @RenderSection("scripts", required: false)
+    @RenderSection("Scripts", required: false)
 </body>
 </html>

@@ -2,93 +2,138 @@
 
 @{
     ViewBag.Title = "Inicio";
-    var logo = Url.Action("Imagen", "Pagina", new { area = "Pagina", archivo = "logo-casa.png" });
+    var logo = Url.Content("~/Content/images/logo_gaillard.JPeG");
+    var mainImage = Url.Content("~/Content/images/Quimica.jpeg");
     var foto1 = Url.Action("Imagen", "Pagina", new { area = "Pagina", archivo = "IMG_20201013_122605.jpg" });
     var foto2 = Url.Action("Imagen", "Pagina", new { area = "Pagina", archivo = "DSC_0122.JPG" });
     var foto3 = Url.Action("Imagen", "Pagina", new { area = "Pagina", archivo = "DSC_0296.JPG" });
     var foto4 = Url.Action("Imagen", "Pagina", new { area = "Pagina", archivo = "IMG_20201013_122550.jpg" });
+    var contactBg = Url.Content("~/Content/images/fondo-cabecera-contacto.jpg");
 }
 
-<section class="public-home-frame">
+@section Styles {
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.css" />
+}
+
+<section class="pagina-hero">
     <div class="container">
-        <div class="public-home-frame__header">
-            <div class="public-home-frame__brand">
+        <div class="hero-inner">
+            <div class="hero-brand">
                 <img src="@logo" alt="Casa Gaillard" />
             </div>
-            <div class="public-home-frame__title">
-                <h1>CASA GAILLARD S.A.</h1>
-                <h3>Desde 1924</h3>
+            <div class="hero-copy">
+                <h1>Casa Gaillard S.A.</h1>
+                <h3>Almacenaje y distribución de productos químicos a granel — desde 1924</h3>
+                <p style="margin-top:12px; max-width:720px; color:#475569;">
+                    Especialistas en suministro, logística y distribución para la industria y clientes profesionales en
+                    las Islas Baleares. Soluciones seguras, trazables y con capacidad para manejo de cargas a granel.
+                </p>
+                <div class="hero-cta">
+                    <a href="#contact" class="btn btn-primary">Contactar ahora</a>
+                    <a href="#servicios" class="btn btn-outline-primary" style="margin-left:8px;">Nuestros servicios</a>
+                </div>
             </div>
-        </div>
-        <div class="public-home-frame__copy">
-            <h2>Presentación</h2>
-            <p>
-                Casa Gaillard somos una empresa de distribución de productos químicos en el ámbito de las Islas Baleares
-                y estamos dedicados tanto al cliente particular como a la industria local, abasteciendo actividades tan
-                diversas como el tratamiento de aguas, la fabricación de detergentes y pinturas, la desalación de agua
-                marina o las artes gráficas.
-            </p>
+            <div class="hero-media">
+                <img src="@mainImage" alt="Almacenaje y logística" class="pagina-hero-image" />
+            </div>
         </div>
     </div>
 </section>
 
-<section class="public-home-section public-home-section--gallery">
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+    <script src="~/Scripts/Pagina/feather-init.js"></script>
+}
+
+<section class="pagina-features">
     <div class="container">
-        <div id="companyCarousel" class="carousel slide public-home-carousel" data-ride="carousel" data-interval="5000">
-            <ol class="carousel-indicators">
-                <li data-target="#companyCarousel" data-slide-to="0" class="active"></li>
-                <li data-target="#companyCarousel" data-slide-to="1"></li>
-                <li data-target="#companyCarousel" data-slide-to="2"></li>
-                <li data-target="#companyCarousel" data-slide-to="3"></li>
-            </ol>
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img src="@foto1" alt="Instalaciones de Casa Gaillard 1" />
-                </div>
-                <div class="carousel-item">
-                    <img src="@foto2" alt="Instalaciones de Casa Gaillard 2" />
-                </div>
-                <div class="carousel-item">
-                    <img src="@foto3" alt="Instalaciones de Casa Gaillard 3" />
-                </div>
-                <div class="carousel-item">
-                    <img src="@foto4" alt="Instalaciones de Casa Gaillard 4" />
+        <div class="row">
+            <div class="col-md-8">
+                <div class="row g-3">
+                    <div class="col-md-6">
+                        <div class="feature-card">
+                            <div class="feature-icon">
+                                <i data-feather="truck"></i>
+                            </div>
+                            <div>
+                                <h4 class="feature-title">Logística propia</h4>
+                                <p class="feature-desc">Flota propia para distribución y descarga en cliente, con contenedores cisterna.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="feature-card">
+                            <div class="feature-icon"><i data-feather="box"></i></div>
+                            <div>
+                                <h4 class="feature-title">Almacenaje seguro</h4>
+                                <p class="feature-desc">Instalaciones en Polígono Son Castelló con zonas segregadas según compatibilidades.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="feature-card">
+                            <div class="feature-icon"><i data-feather="shield"></i></div>
+                            <div>
+                                <h4 class="feature-title">Cumplimiento y seguridad</h4>
+                                <p class="feature-desc">Protocolos HSE, gestión de documentación y transporte ADR cuando procede.</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="feature-card">
+                            <div class="feature-icon"><i data-feather="repeat"></i></div>
+                            <div>
+                                <h4 class="feature-title">Suministro a medida</h4>
+                                <p class="feature-desc">Suministro a granel y envasado, adaptado a las necesidades del cliente.</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <a class="carousel-control-prev" href="#companyCarousel" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            </a>
-            <a class="carousel-control-next" href="#companyCarousel" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            </a>
+            <div class="col-md-4">
+                <div class="safety-panel">
+                    <h5>Panel de seguridad</h5>
+                    <p style="margin-bottom:6px;">Pictogramas y fichas de seguridad disponibles bajo petición.</p>
+                    <ul>
+                        <li>Transporte ADR</li>
+                        <li>Almacenamiento segregado</li>
+                        <li>Equipos EPI y formación continua</li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </section>
 
-<section class="public-home-section public-home-section--alt">
-    <div class="container public-home-copy">
-        <h2>Actividad empresarial</h2>
-        <p>
-            Nos encontramos en el Polígono de Son Castelló, donde disponemos de una nave con almacenamiento de un
-            nutrido catálogo de productos químicos a granel y envasados y donde atendemos directamente a clientes
-            particulares, a la vez que servimos en cualquier punto de la isla con nuestros camiones.
-        </p>
-        <p>
-            Disponemos también de una flota de contenedores-cisterna aptos para traer productos químicos desde la
-            Península y para su descarga en las instalaciones del cliente que así lo necesite.
-        </p>
+<section class="pagina-gallery">
+    <div class="container">
+        <h3>Instalaciones</h3>
+        <div class="row">
+            <div class="col-md-3 gallery-item"><img src="@foto1" alt="" /></div>
+            <div class="col-md-3 gallery-item"><img src="@foto2" alt="" /></div>
+            <div class="col-md-3 gallery-item"><img src="@foto3" alt="" /></div>
+            <div class="col-md-3 gallery-item"><img src="@foto4" alt="" /></div>
+        </div>
     </div>
 </section>
 
-<section class="public-home-section">
-    <div class="container public-home-copy">
-        <h2>La historia de Casa Gaillard empieza en 1924</h2>
-        <p>
-            Casa Gaillard inicia su andadura en 1924 en un local de la calle Aragón de Palma, donde es fundada por el
-            francés Mario Gaillard como droguería. Tras más de cincuenta años de actividad en esa ubicación, la
-            empresa se instala también en el Polígono de Son Castelló, donde en 1980 abre un almacén mucho más amplio
-            y centrado en el almacenaje y distribución de productos químicos a granel, una ocupación que con los años
-            se va volviendo la principal.
-        </p>
+<section id="servicios" class="public-home-section public-home-copy">
+    <div class="container">
+        <h2>Nuestra actividad</h2>
+        <p>Nos ubicamos en el Polígono de Son Castelló, desde donde operamos con un amplio catálogo de productos químicos a granel y envasados, atendiendo a industria y clientes profesionales.</p>
+        <p>Contamos con capacidad de importación, almacenamiento y entrega local, así como servicios de descarga en destino con vehículos cisterna.</p>
+    </div>
+</section>
+
+<section id="contact" class="pagina-cta">
+    <div class="container d-flex" style="background-image: url('@contactBg'); background-size: cover; background-position: center; border-radius:8px; padding:18px;">
+        <div>
+            <h4>¿Necesita suministro o asesoramiento técnico?</h4>
+            <p style="margin:0; color:#475569;">Contacte con nuestro departamento comercial y logístico para recibir una propuesta a medida.</p>
+        </div>
+        <div>
+            <a class="btn btn-primary" href="mailto:info@casagaillard.example">Enviar correo</a>
+            <a class="btn btn-outline-primary" href="tel:+34123456789" style="margin-left:8px;">Llámanos</a>
+        </div>
     </div>
 </section>

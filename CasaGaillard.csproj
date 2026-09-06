@@ -219,6 +219,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Start\BundleConfig.cs" />
+    <Compile Include="App_Start\DecimalModelBinder.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
@@ -450,6 +451,7 @@
     <Compile Include="Models\Vehiculo.cs">
       <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\ViewModels\AccesoriosIndexViewModel.cs" />
     <Compile Include="Models\ViewModels\PaginaPublicaViewModels.cs" />
     <Compile Include="Models\ViewModels\ProximasRevisiones.cs" />
     <Compile Include="Models\ViewModels\PasswordRecoveryViewModels.cs" />
@@ -665,6 +667,9 @@
     <Content Include="Models\GaillardModel.edmx.diagram">
       <DependentUpon>GaillardModel.edmx</DependentUpon>
     </Content>
+    <Content Include="Scripts\Accesorios\details.js" />
+    <Content Include="Scripts\Accesorios\edit.js" />
+    <Content Include="Scripts\Accesorios\index.js" />
     <Content Include="Scripts\all.js" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -761,6 +766,8 @@
     <Content Include="Scripts\jquery.validate.min.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.js" />
     <Content Include="Scripts\jquery.validate.unobtrusive.min.js" />
+    <Content Include="Scripts\mantenimiento-home-panel.js" />
+    <Content Include="Scripts\Pagina\feather-init.js" />
     <Content Include="Scripts\Site.js" />
     <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\popper-utils.js" />

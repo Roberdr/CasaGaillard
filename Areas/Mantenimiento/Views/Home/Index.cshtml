@@ -87,7 +87,7 @@
         <table class="table table-sm">
             <thead>
                 <tr>
-                    <th>Código</th>
+                    <th>Equipo</th>
                     <th>Estado</th>
                     <th>Prioridad</th>
                 </tr>
@@ -98,7 +98,7 @@
                     foreach (var t in ViewBag.Tareas)
                     {
                         <tr class="tarea-panel-row" data-tarea-url="@Url.Action("Index", "TareasMantenimiento", new { area = "Mantenimiento", codigo = t.Codigo })">
-                            <td>@t.Codigo</td>
+                            <td>@t.Equipo</td>
                             <td>@t.Estado</td>
                             <td>@t.Prioridad</td>
                         </tr>
@@ -124,25 +124,4 @@
     }
 </style>
 
-<script>
-    (function () {
-        document.addEventListener('dblclick', function (event) {
-            var row = event.target.closest('.revision-cuba-panel-row, .revision-vehiculo-panel-row');
-            if (!row) {
-                row = event.target.closest('.tarea-panel-row');
-            }
-
-            if (!row) {
-                return;
-            }
-
-            var url = row.getAttribute('data-revisiones-url') || row.getAttribute('data-tarea-url');
-            if (!url) {
-                return;
-            }
-
-            event.preventDefault();
-            window.location.href = url;
-        });
-    })();
-</script>
+<script src="~/Scripts/mantenimiento-home-panel.js"></script>

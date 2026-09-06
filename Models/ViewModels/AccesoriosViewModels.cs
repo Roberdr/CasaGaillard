@@ -57,8 +57,15 @@ namespace CasaGaillard.Models.ViewModels
 
         public IEnumerable<SelectListItem> TiposAccesorio { get; set; }
         public IEnumerable<SelectListItem> Materiales { get; set; }
+        public IEnumerable<SelectListItem> Familias { get; set; }
+        public IEnumerable<SelectListItem> Subfamilias { get; set; }
         public IEnumerable<SelectListItem> Caracteristicas { get; set; }
         public IEnumerable<SelectListItem> Unidades { get; set; }
         public IEnumerable<AccesorioFotoViewModel> FotosExistentes { get; set; }
+        [Display(Name = "Familia")]
+        public int? FamiliaID { get; set; }
+
+        [Display(Name = "Subfamilia")]
+        public int? SubfamiliaID { get; set; }
     }
 }
