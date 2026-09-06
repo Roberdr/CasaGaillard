@@ -58,7 +58,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             var viewModel = from c in db.Cubas
                             join r in db.Revisiones on c.ID equals r.CubaID into gc
                             from grupo in gc.DefaultIfEmpty()
-                            where !c.Baja && grupo != null && grupo.ValidaHasta.HasValue
+                            where (c.Baja != true) && grupo != null && grupo.ValidaHasta.HasValue
                             group new { c, grupo } by new { c.ID, c.MatriculaCuba } into g
                             let ultimo = g.OrderByDescending(x => x.grupo.ValidaHasta).FirstOrDefault()
                             where ultimo != null
@@ -79,16 +79,18 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
 
             revisionesCubas = await viewModel1.ToListAsync();
 
+            // Obtener la última caducidad por vehículo y tipo, sin filtrar por fecha antes del GroupBy
+            // (si filtramos antes podemos perder la última revisión si queda fuera del rango)
             var viewModelV = db.RevisionesVehiculo
                 .Include(i => i.Vehiculo)
-                .Where(r => r.Caducidad.HasValue && r.Caducidad > fechaInicio && r.Caducidad < fechaFinal)
-                .Where(r => r.Vehiculo != null && !r.Vehiculo.Baja && r.TipoRevision != null)
-                .GroupBy(r => new { r.Vehiculo.MatriculaVehiculo, r.TipoRevision })
+                .Include(i => i.TipoRevision)
+                .Where(r => r.Vehiculo != null && (r.Vehiculo.Baja != true) && r.TipoRevision != null)
+                .GroupBy(r => new { r.Vehiculo.MatriculaVehiculo, r.TipoRevisionID })
                 .Select(s => new UltimasRevisionesVehiculos()
                 {
                     MatriculaVehiculo = s.Key.MatriculaVehiculo,
                     Caducidad = s.Max(m => m.Caducidad),
-                    TipoRevision = s.Key.TipoRevision.Revision,
+                    TipoRevision = s.Select(m => m.TipoRevision != null ? m.TipoRevision.Revision : string.Empty).FirstOrDefault(),
                  })
                 .OrderBy(r => r.Caducidad)
                 .Where(r => r.Caducidad > fechaInicio && r.Caducidad < fechaFinal);

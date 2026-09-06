@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CasaGaillard.Models.Accesorio>
+﻿@model CasaGaillard.Models.ViewModels.AccesoriosIndexViewModel
 
 @{
     ViewBag.Title = "Accesorios";
@@ -8,46 +8,95 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
-<table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.TipoAccesorio.TipoAccesorio1)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Material.Material1)
-        </th>
-        <th>Características</th>
-        <th>Opciones</th>
-    </tr>
 
-@foreach (var item in Model) {
-<tr>
-    <td>
-        @Html.DisplayFor(modelItem => item.TipoAccesorio.TipoAccesorio1)
-    </td>
-    <td>
-        @Html.DisplayFor(modelItem => item.Material.Material1)
-    </td>
-    <td>
-        @foreach (var d in item.DetallesAccesorio)
-        {
-            @Html.DisplayFor(modelItem => d.CaracteristicaAccesorio.CaracteristicaAccesorio1)
-            <span>&nbsp;</span>
-            @Html.DisplayFor(modelItem => d.Cantidad)
-            <span>&nbsp;</span>
-            @Html.DisplayFor(modelItem => d.Medida)
-            <span>&nbsp;</span>
-            @Html.DisplayFor(modelItem => d.Unidad.Unidad1)
-            <br />
-        }
-    </td>
-    <td>
-        
-        @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-        @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-        @Html.ActionLink("Delete", "Delete", new { id = item.ID })
-    </td>
-</tr>
+@using (Html.BeginForm("Index", "Accesorios", FormMethod.Get, new { @class = "form-inline filter-bar", role = "form" }))
+{
+    <div class="filter-group">
+        @Html.DropDownList("tipoAccesorioId", Model.TiposAccesorio, "-- Tipo --", new { @class = "form-control" })
+    </div>
+    <div class="filter-group">
+        @Html.DropDownList("materialId", Model.Materiales, "-- Material --", new { @class = "form-control" })
+    </div>
+    <div class="filter-group">
+        @Html.DropDownList("familiaId", Model.Familias, "-- Familia --", new { @class = "form-control", id = "filterFamilia" })
+    </div>
+    <div class="filter-group">
+        @Html.DropDownList("subfamiliaId", Model.Subfamilias, "-- Subfamilia --", new { @class = "form-control", id = "filterSubfamilia" })
+    </div>
+    <div class="filter-group flex-grow">
+        <input type="text" name="q" value="@Model.Query" class="form-control" placeholder="Buscar nombre o descripción" />
+    </div>
+    <div class="filter-group">
+        <button type="submit" class="btn btn-primary">Filtrar</button>
+    </div>
 }
 
-</table>
+<div class="public-grid public-grid--three">
+    @foreach (var item in Model.Accesorios) {
+        var fotoId = Model.FotoIdByAccesorio != null && Model.FotoIdByAccesorio.ContainsKey(item.ID) ? (int?)Model.FotoIdByAccesorio[item.ID] : (int?)null;
+        <div class="public-card accesorio-card">
+            <div class="accesorio-card-media">
+                @if (fotoId.HasValue)
+                {
+                    <img src="@Url.Action("Foto", "Accesorios", new { area = "Mantenimiento", id = fotoId.Value })" alt="Imagen" />
+                }
+                else
+                {
+                    <div class="accesorio-card-placeholder">@item.TipoAccesorio.TipoAccesorio1</div>
+                }
+            </div>
+            <div class="accesorio-card-body">
+                <h4 class="accesorio-card-title">@(string.IsNullOrWhiteSpace(item.Nombre) ? item.TipoAccesorio.TipoAccesorio1 : item.Nombre)</h4>
+                <p class="accesorio-card-sub">@item.Material.Material1 @if(item.Familia != null) { <span>&middot; @item.Familia.Nombre</span> }</p>
+
+                <div class="accesorio-card-badges">
+                    <span class="badge @(item.Activo ? "badge-success" : "badge-secondary")">@(item.Activo ? "Activo" : "Inactivo")</span>
+                    @if (item.Subfamilia != null) { <span class="badge badge-light">@item.Subfamilia.Nombre</span> }
+                </div>
+
+                <div class="accesorio-card-details">
+                    @foreach (var d in item.DetallesAccesorio)
+                    {
+                        <div class="detalle-line">
+                            <strong>@Html.DisplayFor(modelItem => d.CaracteristicaAccesorio.CaracteristicaAccesorio1)</strong>
+                            <span>&nbsp;@Html.DisplayFor(modelItem => d.Cantidad)&nbsp;@Html.DisplayFor(modelItem => d.Medida)&nbsp;@Html.DisplayFor(modelItem => d.Unidad.Unidad1)</span>
+                        </div>
+                    }
+                </div>
+
+                <div class="accesorio-card-actions">
+                    @Html.ActionLink("Detalles", "Details", new { id = item.ID, returnUrl = Request.RawUrl }, new { @class = "btn btn-sm btn-outline-primary" })
+                    @Html.ActionLink("Editar", "Edit", new { id = item.ID, returnUrl = Request.RawUrl }, new { @class = "btn btn-sm btn-primary", style = "margin-left:8px;" })
+                    @Html.ActionLink("Eliminar", "Delete", new { id = item.ID, returnUrl = Request.RawUrl }, new { @class = "btn btn-sm btn-danger", style = "margin-left:8px;" })
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Paginación simple -->
+@{
+    var total = Model.TotalItems;
+    var page = Model.Page <= 0 ? 1 : Model.Page;
+    var pageSize = Model.PageSize <= 0 ? 10 : Model.PageSize;
+    var totalPages = Model.TotalPages;
+}
+@if (totalPages > 1)
+{
+    <nav>
+        <ul class="pagination">
+            <li class="page-item @(page == 1 ? "disabled" : "")">
+                <a class="page-link" href="@Url.Action("Index", new { tipoAccesorioId = Model.TipoAccesorioId, materialId = Model.MaterialId, familiaId = Model.FamiliaId, subfamiliaId = Model.SubfamiliaId, q = Model.Query, page = page - 1 })">Anterior</a>
+            </li>
+            @for (int p = 1; p <= totalPages; p++)
+            {
+                <li class="page-item @(p == page ? "active" : "")">
+                    <a class="page-link" href="@Url.Action("Index", new { tipoAccesorioId = Model.TipoAccesorioId, materialId = Model.MaterialId, familiaId = Model.FamiliaId, subfamiliaId = Model.SubfamiliaId, q = Model.Query, page = p })">@p</a>
+                </li>
+            }
+            <li class="page-item @(page >= totalPages ? "disabled" : "")">
+                <a class="page-link" href="@Url.Action("Index", new { tipoAccesorioId = Model.TipoAccesorioId, materialId = Model.MaterialId, familiaId = Model.FamiliaId, subfamiliaId = Model.SubfamiliaId, q = Model.Query, page = page + 1 })">Siguiente</a>
+            </li>
+        </ul>
+    </nav>
+}

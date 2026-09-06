@@ -34,7 +34,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
 
             if (!incluirBajas)
             {
-                consulta = consulta.Where(r => r.Cuba != null && !r.Cuba.Baja);
+                consulta = consulta.Where(r => r.Cuba != null && (r.Cuba.Baja != true));
             }
 
             if (cubaID.HasValue)
@@ -112,7 +112,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public ActionResult Create(int? cubaID = null)
         {
-            var cubas = db.Cubas.Where(c => !c.Baja || (cubaID.HasValue && c.ID == cubaID.Value));
+            var cubas = db.Cubas.Where(c => (c.Baja != true) || (cubaID.HasValue && c.ID == cubaID.Value));
             ViewBag.CubaID = new SelectList(cubas.OrderBy(o => o.MatriculaCuba), "ID", "MatriculaCuba", cubaID);
             return View(new Revision
             {
@@ -137,7 +137,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                 return RedirectToAction("Index");
             }
 
-            var cubas = db.Cubas.Where(c => !c.Baja || c.ID == revision.CubaID);
+            var cubas = db.Cubas.Where(c => (c.Baja != true) || c.ID == revision.CubaID);
             ViewBag.CubaID = new SelectList(cubas.OrderBy(o => o.MatriculaCuba), "ID", "MatriculaCuba", revision.CubaID);
             return View(revision);
         }
@@ -155,7 +155,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             {
                 return HttpNotFound();
             }
-            var cubas = db.Cubas.Where(c => !c.Baja || c.ID == revision.CubaID);
+            var cubas = db.Cubas.Where(c => (c.Baja != true) || c.ID == revision.CubaID);
             ViewBag.CubaID = new SelectList(cubas.OrderBy(o => o.MatriculaCuba), "ID", "MatriculaCuba", revision.CubaID);
             return View(revision);
         }
@@ -174,7 +174,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            var cubas = db.Cubas.Where(c => !c.Baja || c.ID == revision.CubaID);
+            var cubas = db.Cubas.Where(c => (c.Baja != true) || c.ID == revision.CubaID);
             ViewBag.CubaID = new SelectList(cubas.OrderBy(o => o.MatriculaCuba), "ID", "MatriculaCuba", revision.CubaID);
             return View(revision);
         }

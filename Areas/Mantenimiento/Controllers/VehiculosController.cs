@@ -40,7 +40,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
 
             if (!incluirBajas)
             {
-                vehiculos = vehiculos.Where(v => !v.Baja);
+                vehiculos = vehiculos.Where(v => (v.Baja != true));
             }
 
             ViewBag.IncluirBajas = incluirBajas;

@@ -29,12 +29,25 @@
 
     </dl>
 
-    @using (Html.BeginForm()) {
-        @Html.AntiForgeryToken()
+@{
+    var returnUrl = ViewBag.ReturnUrl as string;
+}
 
-        <div class="form-actions no-color">
-            <input type="submit" value="Delete" class="btn btn-default" /> |
-            @Html.ActionLink("Back to List", "Index")
-        </div>
-    }
+@using (Html.BeginForm("Delete", "Accesorios", new { area = "Mantenimiento", id = Model.ID, returnUrl = returnUrl }, FormMethod.Post)) {
+    @Html.AntiForgeryToken()
+
+    @Html.Hidden("returnUrl", returnUrl)
+
+    <div class="form-actions no-color">
+        <input type="submit" value="Eliminar" class="btn btn-danger" /> |
+        @if (!string.IsNullOrWhiteSpace(returnUrl))
+        {
+            <a href="@HttpUtility.HtmlEncode(returnUrl)">Volver</a>
+        }
+        else
+        {
+            @Html.ActionLink("Volver al listado", "Index")
+        }
+    </div>
+}
 </div>

@@ -17,46 +17,89 @@
     </div>
 </div>
 
-@{
-    var detallesExistentes = (Model.Detalles ?? new List<CasaGaillard.Models.ViewModels.DetalleAccesorioFormViewModel>())
-        .Where(d => d != null && (d.ID > 0 || d.CaracteristicaAccesorioID.HasValue || d.Cantidad.HasValue || d.Medida.HasValue || d.UnidadID.HasValue || !string.IsNullOrWhiteSpace(d.Tipo)))
-        .ToList();
-}
-
-@if (detallesExistentes.Any())
-{
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <strong>Detalles ya guardados</strong>
-        </div>
-        <div class="panel-body">
-            <div class="table-responsive">
-                <table class="table table-condensed table-striped table-bordered accesorio-detalles-table">
-                    <thead>
-                        <tr>
-                            <th>Característica</th>
-                            <th>Cantidad</th>
-                            <th>Medida</th>
-                            <th>Unidad</th>
-                            <th>Tipo</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach (var detalle in detallesExistentes)
-                        {
-                            <tr>
-                                <td>@(string.IsNullOrWhiteSpace(detalle.CaracteristicaNombre) ? (detalle.CaracteristicaAccesorioID.HasValue ? detalle.CaracteristicaAccesorioID.Value.ToString() : "-") : detalle.CaracteristicaNombre)</td>
-                                <td>@(detalle.Cantidad.HasValue ? detalle.Cantidad.Value.ToString() : "-")</td>
-                                <td>@(detalle.Medida.HasValue ? detalle.Medida.Value.ToString() : "-")</td>
-                                <td>@(string.IsNullOrWhiteSpace(detalle.UnidadNombre) ? (detalle.UnidadID.HasValue ? detalle.UnidadID.Value.ToString() : "-") : detalle.UnidadNombre)</td>
-                                <td>@(string.IsNullOrWhiteSpace(detalle.Tipo) ? "-" : detalle.Tipo)</td>
-                            </tr>
-                        }
-                    </tbody>
-                </table>
-            </div>
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.FamiliaID)
+            @Html.DropDownListFor(m => m.FamiliaID, Model.Familias, "-- Sin familia --", new { @class = "form-control", id = "FamiliaID" })
+            @Html.ValidationMessageFor(m => m.FamiliaID, "", new { @class = "text-danger" })
         </div>
     </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.SubfamiliaID)
+            @Html.DropDownListFor(m => m.SubfamiliaID, Model.Subfamilias, "-- Sin subfamilia --", new { @class = "form-control", id = "SubfamiliaID", data_selected = Model.SubfamiliaID })
+            @Html.ValidationMessageFor(m => m.SubfamiliaID, "", new { @class = "text-danger" })
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    (function () {
+        function $(sel) { return document.querySelector(sel); }
+
+        var familiaSelect = $('#FamiliaID') || document.querySelector('[name="FamiliaID"]');
+        var subfamiliaSelect = document.getElementById('SubfamiliaID');
+
+        if (!familiaSelect || !subfamiliaSelect) return;
+
+        function clearOptions() {
+            subfamiliaSelect.options.length = 0;
+        }
+
+        function addEmpty() {
+            var opt = document.createElement('option');
+            opt.value = '';
+            opt.text = '-- Sin subfamilia --';
+            subfamiliaSelect.appendChild(opt);
+        }
+
+        function loadSubfamilias(familiaId, selectValueToChoose) {
+            clearOptions();
+
+            if (!familiaId) {
+                addEmpty();
+                if (selectValueToChoose) subfamiliaSelect.value = selectValueToChoose;
+                return;
+            }
+
+            var url = '@Url.Action("SubfamiliasPorFamilia", "Accesorios", new { area = "Mantenimiento" })' + '?familiaId=' + encodeURIComponent(familiaId);
+
+            fetch(url, { credentials: 'same-origin' })
+                .then(function (r) { return r.json(); })
+                .then(function (data) {
+                    addEmpty();
+                    data.forEach(function (s) {
+                        var opt = document.createElement('option');
+                        opt.value = s.id;
+                        opt.text = s.text;
+                        subfamiliaSelect.appendChild(opt);
+                    });
+                    if (selectValueToChoose) {
+                        subfamiliaSelect.value = selectValueToChoose;
+                    }
+                })
+                .catch(function () { /* silenciar error */ });
+        }
+
+        familiaSelect.addEventListener('change', function () {
+            loadSubfamilias(this.value);
+        });
+
+        // Si estamos en edit y ya hay una familia seleccionada, cargar subfamilias y seleccionar la subfamilia existente
+        var selectedFamilia = familiaSelect.value;
+        // MVC converts underscores in attribute names to hyphens (data_selected -> data-selected).
+        // Leer ambos por compatibilidad y usar dataset como fallback.
+        var selectedSub = subfamiliaSelect.getAttribute('data-selected') || subfamiliaSelect.getAttribute('data_selected') || (subfamiliaSelect.dataset ? subfamiliaSelect.dataset.selected : null);
+        if (selectedFamilia) {
+            loadSubfamilias(selectedFamilia, selectedSub);
+        }
+    })();
+  
+</script>
+
+@{
+    // Mostrar los detalles dentro de la tabla editable más abajo; no duplicar lista
 }
 
 <div class="panel panel-default">
@@ -83,16 +126,16 @@
                         <tr>
                             <td>
                                 @Html.HiddenFor(m => m.Detalles[i].ID)
-                                @Html.DropDownListFor(m => m.Detalles[i].CaracteristicaAccesorioID, Model.Caracteristicas, "-- Sin característica --", new { @class = "form-control input-sm" })
+                                @Html.DropDownListFor(m => m.Detalles[i].CaracteristicaAccesorioID, new SelectList(Model.Caracteristicas, "Value", "Text", Model.Detalles[i].CaracteristicaAccesorioID), "-- Sin característica --", new { @class = "form-control input-sm" })
                             </td>
                             <td style="width: 100px;">
                                 @Html.TextBoxFor(m => m.Detalles[i].Cantidad, new { @class = "form-control input-sm", type = "number", min = "0" })
                             </td>
                             <td style="width: 120px;">
-                                @Html.TextBoxFor(m => m.Detalles[i].Medida, new { @class = "form-control input-sm", type = "number", step = "0.01", min = "0" })
+                                @Html.TextBoxFor(m => m.Detalles[i].Medida, new { @class = "form-control input-sm campo-numerico", type = "text", inputmode = "decimal", value = String.Format(new System.Globalization.CultureInfo("es-Es"), "{0:N2}", Model.Detalles[i].Medida), placeholder = "0.00" })
                             </td>
                             <td style="width: 160px;">
-                                @Html.DropDownListFor(m => m.Detalles[i].UnidadID, Model.Unidades, "-- Sin unidad --", new { @class = "form-control input-sm" })
+                                @Html.DropDownListFor(m => m.Detalles[i].UnidadID, new SelectList(Model.Unidades, "Value", "Text", Model.Detalles[i].UnidadID), "-- Sin unidad --", new { @class = "form-control input-sm" })
                             </td>
                             <td>
                                 @Html.TextBoxFor(m => m.Detalles[i].Tipo, new { @class = "form-control input-sm" })
@@ -108,6 +151,7 @@
     </div>
 </div>
 
+        
 <div class="form-group">
     @Html.LabelFor(m => m.FotosAdjuntas)
     <input type="file" name="FotosAdjuntas" class="form-control" accept="image/*" multiple="multiple" />

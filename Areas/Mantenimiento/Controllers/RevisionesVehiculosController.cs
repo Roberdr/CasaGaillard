@@ -41,7 +41,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
 
             if (!incluirBajas)
             {
-                consulta = consulta.Where(r => r.Vehiculo != null && !r.Vehiculo.Baja);
+                consulta = consulta.Where(r => r.Vehiculo != null && (r.Vehiculo.Baja != true));
             }
 
             if (!string.IsNullOrWhiteSpace(matriculaVehiculo))
@@ -132,7 +132,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public ActionResult Create(int? vehiculoID = null, int? tipoRevisionID = null)
         {
-            var vehiculos = db.Vehiculos.Where(v => !v.Baja || (vehiculoID.HasValue && v.ID == vehiculoID.Value));
+            var vehiculos = db.Vehiculos.Where(v => (v.Baja != true) || (vehiculoID.HasValue && v.ID == vehiculoID.Value));
             ViewBag.VehiculoID = new SelectList(vehiculos.OrderBy(o => o.MatriculaVehiculo), "ID", "MatriculaVehiculo", vehiculoID);
             ViewBag.TipoRevisionID = new SelectList(db.TiposRevision.OrderBy(o => o.Revision), "ID", "Revision", tipoRevisionID);
             return View(new RevisionVehiculo
@@ -159,7 +159,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                 return RedirectToAction("Index");
             }
 
-            var vehiculos = db.Vehiculos.Where(v => !v.Baja || (revisionVehiculo.VehiculoID.HasValue && v.ID == revisionVehiculo.VehiculoID.Value));
+            var vehiculos = db.Vehiculos.Where(v => (v.Baja != true) || (revisionVehiculo.VehiculoID.HasValue && v.ID == revisionVehiculo.VehiculoID.Value));
             ViewBag.VehiculoID = new SelectList(vehiculos.OrderBy(o => o.MatriculaVehiculo), "ID", "MatriculaVehiculo", revisionVehiculo.VehiculoID);
             ViewBag.TipoRevisionID = new SelectList(db.TiposRevision.OrderBy(o => o.Revision), "ID", "Revision", revisionVehiculo.TipoRevisionID);
             return View(revisionVehiculo);
@@ -178,7 +178,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             {
                 return HttpNotFound();
             }
-            var vehiculos = db.Vehiculos.Where(v => !v.Baja || (revisionVehiculo.VehiculoID.HasValue && v.ID == revisionVehiculo.VehiculoID.Value));
+            var vehiculos = db.Vehiculos.Where(v => (v.Baja != true) || (revisionVehiculo.VehiculoID.HasValue && v.ID == revisionVehiculo.VehiculoID.Value));
             ViewBag.VehiculoID = new SelectList(vehiculos.OrderBy(o => o.MatriculaVehiculo), "ID", "MatriculaVehiculo", revisionVehiculo.VehiculoID);
             ViewBag.TipoRevisionID = new SelectList(db.TiposRevision.OrderBy(o => o.Revision), "ID", "Revision", revisionVehiculo.TipoRevisionID);
 
@@ -200,7 +200,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                 await db.SaveChangesAsync();
                 return RedirectToAction("Index");
             }
-            var vehiculos = db.Vehiculos.Where(v => !v.Baja || (revisionVehiculo.VehiculoID.HasValue && v.ID == revisionVehiculo.VehiculoID.Value));
+            var vehiculos = db.Vehiculos.Where(v => (v.Baja != true) || (revisionVehiculo.VehiculoID.HasValue && v.ID == revisionVehiculo.VehiculoID.Value));
             ViewBag.VehiculoID = new SelectList(vehiculos.OrderBy(o => o.MatriculaVehiculo), "ID", "MatriculaVehiculo", revisionVehiculo.VehiculoID);
             ViewBag.TipoRevisionID = new SelectList(db.TiposRevision.OrderBy(o => o.Revision), "ID", "Revision", revisionVehiculo.TipoRevisionID);
 

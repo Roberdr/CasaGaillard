@@ -6,19 +6,32 @@
 
 <h2>Editar accesorio</h2>
 
-@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+@using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data", id = "accesorioForm" }))
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(m => m.ID)
+    @Html.Hidden("returnUrl", ViewBag.ReturnUrl as string)
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     @Html.Partial("_Form", Model)
 
     <div class="form-group">
         <input type="submit" value="Guardar cambios" class="btn btn-primary" />
-        @Html.ActionLink("Cancelar", "Details", new { id = Model.ID }, new { @class = "btn btn-default" })
+        <button type="button" id="btnAddDetalle" class="btn btn-default">Añadir detalle</button>
+        @{
+            var returnUrl = ViewBag.ReturnUrl as string;
+        }
+        @if (!string.IsNullOrWhiteSpace(returnUrl))
+        {
+            <a href="@HttpUtility.HtmlEncode(returnUrl)" class="btn btn-danger">Cancelar</a>
+        }
+        else
+        {
+            @Html.ActionLink("Cancelar", "Details", new { id = Model.ID }, new { @class = "btn btn-danger" })
+        }
     </div>
 }
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/Accesorios/edit.js"></script>
 }
