@@ -354,6 +354,13 @@ modal-dialog {
     box-shadow: 0 8px 20px rgba(15, 23, 42, 0.04);
 }
 
+/* Ensure cards inside the grid stretch to same height so actions align at bottom */
+.public-grid > .public-card {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
 /* Tema corporativo: azul oscuro + verde azulado + acento naranja */
 :root {
     --brand-900: #0b2740;
@@ -378,9 +385,18 @@ modal-dialog {
 .accesorio-card-badges .badge { margin-right:6px; }
 .accesorio-card-actions { margin-top:auto; display:flex; justify-content:flex-end; }
 
+/* Detalle lines inside accessory cards: improve contrast and spacing */
+.accesorio-card-details { max-height: 88px; overflow: auto; padding-top: 8px; border-top: 1px dashed rgba(15,23,42,0.04); }
+.detalle-line { display: flex; gap: 8px; align-items: center; font-size: 13px; color: #334155; }
+.detalle-line strong { min-width: 120px; color: var(--brand-700); font-weight: 600; }
+.detalle-line span { color: #475569; font-size: 13px; }
+.accesorio-card-details::-webkit-scrollbar { height: 6px; width: 6px; }
+.accesorio-card-details::-webkit-scrollbar-thumb { background: rgba(15,23,42,0.06); border-radius: 6px; }
+
 /* Grid responsive */
 .public-grid { display:grid; grid-template-columns: repeat(1, minmax(0,1fr)); gap:16px; }
 @media(min-width:768px){ .public-grid--three { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+@media(min-width:768px){ .public-grid--four { grid-template-columns: repeat(4, minmax(0,1fr)); } }
 
 .public-card--intro {
     min-height: 160px;

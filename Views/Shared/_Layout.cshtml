@@ -33,7 +33,20 @@
                         if (User.IsInRole(AppRoles.Administrador) || User.IsInRole(AppRoles.Mantenimiento))
                         {
                             <li>@Html.ActionLink("Tareas", "Index", "TareasMantenimiento", new { area = "Mantenimiento" }, htmlAttributes: new { @class = "maintenance-nav__link" })</li>
-                            <li>@Html.ActionLink("Cubas", "Index", "Cubas", new { area = "Mantenimiento" }, htmlAttributes: new { @class = "maintenance-nav__link" })</li>
+                            <li class="dropdown">
+                                <a class="maintenance-nav__link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Cisternas
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>@Html.ActionLink("Cubas", "Index", "Cubas", new { area = "Mantenimiento" }, htmlAttributes: new { @class = "dropdown-item maintenance-nav__link" })</li>
+                                    <li>@Html.ActionLink("Revisiones", "Index", "Revisiones", new { area = "Mantenimiento" }, htmlAttributes: new { @class = "dropdown-item maintenance-nav__link" })</li>
+
+                                    <li><a class="dropdown-item" href="#">Another action</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                </ul>
+                            </li>
+                            
                             <li>@Html.ActionLink("Vehículos", "Index", "Vehiculos", new { area = "Mantenimiento" }, htmlAttributes: new { @class = "maintenance-nav__link" })</li>
                             <li>@Html.ActionLink("Grupos", "Index", "Grupos", new { area = "Mantenimiento" }, htmlAttributes: new { @class = "maintenance-nav__link" })</li>
                             <li>@Html.ActionLink("Accesorios", "Index", "Accesorios", new { area = "Mantenimiento" }, htmlAttributes: new { @class = "maintenance-nav__link" })</li>

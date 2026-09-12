@@ -1,11 +1,13 @@
-﻿using System;
+﻿using CasaGaillard.Models;
+using CasaGaillard.Models.ViewModels;
+using PagedList;
+using System;
 using System.Data;
 using System.Data.Entity;
 using System.Linq;
-using System.Threading.Tasks;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Mvc;
-using CasaGaillard.Models;
 
 namespace CasaGaillard.Areas.Mantenimiento.Controllers
 {
@@ -31,11 +33,12 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
 
         // GET: Vehiculos
         [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento + "," + AppRoles.Consulta)]
-        public async Task<ActionResult> Index(bool incluirBajas = false)
+        public ActionResult Index(string matricula, string marca, string modelo, string tipo, int page = 1, bool incluirBajas = false)
         {
             var vehiculos = db.Vehiculos
                 .Include(v => v.TipoVehiculo)
                 .Include(v => v.Taller)
+                .OrderBy(v => v.MatriculaVehiculo)
                 .AsQueryable();
 
             if (!incluirBajas)
@@ -45,7 +48,27 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
 
             ViewBag.IncluirBajas = incluirBajas;
 
-            return View(await vehiculos.ToListAsync());
+            if (!string.IsNullOrEmpty(matricula))
+                vehiculos = vehiculos.Where(v => v.MatriculaVehiculo.Contains(matricula));
+
+            if (!string.IsNullOrEmpty(marca))
+                vehiculos = vehiculos.Where(v => v.Marca.Contains(marca));
+
+            if (!string.IsNullOrEmpty(modelo))
+                vehiculos = vehiculos.Where(v => v.Modelo.Contains(modelo));
+
+            if (!string.IsNullOrEmpty(tipo))
+                vehiculos = vehiculos.Where(v => v.TipoVehiculo.Vehiculo == tipo);
+
+            var paged = vehiculos.OrderBy(v => v.MatriculaVehiculo)
+                                 .ToPagedList(page, 8); // 10 por página
+
+            var vm = new VehiculosIndexViewModel
+            {
+                PagedList = paged
+            };
+
+            return View(vm);
         }
 
         // GET: Vehiculos/AddOrEdit

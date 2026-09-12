@@ -31,7 +31,7 @@
     </div>
 }
 
-<div class="public-grid public-grid--three">
+<div class="public-grid public-grid--four">
     @foreach (var item in Model.Accesorios) {
         var fotoId = Model.FotoIdByAccesorio != null && Model.FotoIdByAccesorio.ContainsKey(item.ID) ? (int?)Model.FotoIdByAccesorio[item.ID] : (int?)null;
         <div class="public-card accesorio-card">
@@ -64,7 +64,7 @@
                     }
                 </div>
 
-                <div class="accesorio-card-actions">
+                <div class="accesorio-card-actions align-bottom">
                     @Html.ActionLink("Detalles", "Details", new { id = item.ID, returnUrl = Request.RawUrl }, new { @class = "btn btn-sm btn-outline-primary" })
                     @Html.ActionLink("Editar", "Edit", new { id = item.ID, returnUrl = Request.RawUrl }, new { @class = "btn btn-sm btn-primary", style = "margin-left:8px;" })
                     @Html.ActionLink("Eliminar", "Delete", new { id = item.ID, returnUrl = Request.RawUrl }, new { @class = "btn btn-sm btn-danger", style = "margin-left:8px;" })

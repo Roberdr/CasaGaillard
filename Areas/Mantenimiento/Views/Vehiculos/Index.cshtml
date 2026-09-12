@@ -1,4 +1,4 @@
-@model IEnumerable<CasaGaillard.Models.Vehiculo>
+@model CasaGaillard.Models.ViewModels.VehiculosIndexViewModel
 
 @{
     ViewBag.Title = "Vehículos";
@@ -19,6 +19,47 @@
         @Html.ActionLink("Crear vehículo", "AddOrEdit", null, new { @class = "btn btn-success" })
     </div>
 </div>
+@using (Html.BeginForm("Index", "Vehiculos", FormMethod.Get))
+{
+    <div class="row mb-3">
+
+        <div class="col-md-2">
+            @Html.Label("Matrícula")
+            @Html.TextBox("matricula", Request["matricula"], new { @class = "form-control" })
+        </div>
+
+        <div class="col-md-2">
+            @Html.Label("Marca")
+            @Html.TextBox("marca", Request["marca"], new { @class = "form-control" })
+        </div>
+
+        <div class="col-md-2">
+            @Html.Label("Modelo")
+            @Html.TextBox("modelo", Request["modelo"], new { @class = "form-control" })
+        </div>
+
+        <div class="col-md-2">
+            @Html.Label("Estado")
+            @Html.DropDownList("estado",
+                new SelectList(new[] { "Activo", "Inactivo", "Baja" }),
+                "Todos",
+                new { @class = "form-control" })
+        </div>
+
+        <div class="col-md-2">
+            @Html.Label("Tipo")
+            @Html.DropDownList("tipo",
+                new SelectList(new[] { "Camión", "Furgón", "Turismo", "Remolque" }),
+                "Todos",
+                new { @class = "form-control" })
+        </div>
+
+        <div class="col-md-2 mt-4">
+            <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+        </div>
+    </div>
+}
+
 
 <div class="table-responsive">
     <table class="table table-sm table-striped table-bordered">
@@ -39,7 +80,7 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var item in Model)
+            @foreach (var item in Model.PagedList)
             {
                 <tr>
                     <td>@Html.DisplayFor(modelItem => item.TipoVehiculo.Vehiculo)</td>
@@ -52,7 +93,7 @@
                     @if (incluirBajas)
                     {
                         <td>
-                            @if (item.Baja)
+                            @if (item.Baja == true)
                             {
                                 <span class="label label-default">Baja</span>
                             }
@@ -72,3 +113,57 @@
         </tbody>
     </table>
 </div>
+@if (Model?.PagedList != null && Model.PagedList.PageCount > 1)
+{
+    <nav aria-label="Paginación">
+        <ul class="pagination">
+
+            @if (Model.PagedList.HasPreviousPage)
+            {
+                <li class="page-item">
+                    @Html.ActionLink("«", "Index", new
+                    {
+                        page = Model.PagedList.PageNumber - 1,
+                        matricula = Request["matricula"],
+                        marca = Request["marca"],
+                        modelo = Request["modelo"],
+                        estado = Request["estado"],
+                        tipo = Request["tipo"]
+                    }, new { @class = "page-link" })
+                </li>
+            }
+
+            @for (int i = 1; i <= Model.PagedList.PageCount; i++)
+            {
+                var activeClass = i == Model.PagedList.PageNumber ? "active" : string.Empty;
+            <li class="page-item @(activeClass)">
+                @Html.ActionLink(i.ToString(), "Index", new
+                {
+                    page = i,
+                    matricula = Request["matricula"],
+                    marca = Request["marca"],
+                    modelo = Request["modelo"],
+                    estado = Request["estado"],
+                    tipo = Request["tipo"]
+                }, new { @class = "page-link" })
+            </li>
+            }
+
+            @if (Model.PagedList.HasNextPage)
+            {
+                <li class="page-item">
+                    @Html.ActionLink("»", "Index", new
+                    {
+                        page = Model.PagedList.PageNumber + 1,
+                        matricula = Request["matricula"],
+                        marca = Request["marca"],
+                        modelo = Request["modelo"],
+                        estado = Request["estado"],
+                        tipo = Request["tipo"]
+                    }, new { @class = "page-link" })
+                </li>
+            }
+
+        </ul>
+    </nav>
+}

@@ -1,102 +1,77 @@
 @model CasaGaillard.Models.ViewModels.AccesorioFormViewModel
 
 <div class="row">
-    <div class="col-md-6">
-        <div class="form-group">
-            @Html.LabelFor(m => m.TipoAccesorioID)
-            @Html.DropDownListFor(m => m.TipoAccesorioID, Model.TiposAccesorio, "-- Seleccione --", new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.TipoAccesorioID, "", new { @class = "text-danger" })
+    <div class="col-lg-3 col-md-6">
+        <div class="row">
+            <div class="form-group">
+                @Html.LabelFor(m => m.TipoAccesorioID)
+                @Html.DropDownListFor(m => m.TipoAccesorioID, Model.TiposAccesorio, "-- Seleccione --", new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.TipoAccesorioID, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.LabelFor(m => m.FamiliaID)
+                @Html.DropDownListFor(m => m.FamiliaID, Model.Familias, "-- Sin familia --", new { @class = "form-control", id = "FamiliaID" })
+                @Html.ValidationMessageFor(m => m.FamiliaID, "", new { @class = "text-danger" })
+            </div>
+        </div> 
+        <div class="row">
+            <div class="form-group">
+                @Html.LabelFor(m => m.FotosAdjuntas)
+                <input type="file" name="FotosAdjuntas" class="form-control" accept="image/*" multiple="multiple" />
+                <p class="help-block">Puedes adjuntar varias fotos para ver el estado o los detalles del accesorio.</p>
+            </div>
         </div>
     </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            @Html.LabelFor(m => m.MaterialID)
-            @Html.DropDownListFor(m => m.MaterialID, Model.Materiales, "-- Seleccione --", new { @class = "form-control" })
-            @Html.ValidationMessageFor(m => m.MaterialID, "", new { @class = "text-danger" })
+    <div class="col-lg-3 col-md-6">
+        <div class="row">
+            <div class="form-group">
+                @Html.LabelFor(m => m.MaterialID)
+                @Html.DropDownListFor(m => m.MaterialID, Model.Materiales, "-- Seleccione --", new { @class = "form-control" })
+                @Html.ValidationMessageFor(m => m.MaterialID, "", new { @class = "text-danger" })
+            </div>
         </div>
+        <div class="row">
+            <div class="form-group">
+                @Html.LabelFor(m => m.SubfamiliaID)
+                @Html.DropDownListFor(m => m.SubfamiliaID, Model.Subfamilias, "-- Sin subfamilia --", new { @class = "form-control", id = "SubfamiliaID", data_selected = Model.SubfamiliaID, data_url = Url.Action("SubfamiliasPorFamilia", "Accesorios", new { area = "Mantenimiento" }) })
+                @Html.ValidationMessageFor(m => m.SubfamiliaID, "", new { @class = "text-danger" })
+            </div>
+        </div>     
+    </div>
+    <div class="col-lg-6">
+        @if (Model.FotosExistentes != null && Model.FotosExistentes.Any())
+        {
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <strong>Fotos actuales</strong>
+                </div>
+                <div class="panel-body">
+                    <div class="row accesorio-fotos-galeria">
+                        @foreach (var foto in Model.FotosExistentes)
+                        {
+                            <div class="col-xs-6 col-md-3 accesorio-foto-col">
+                                <a href="@Url.Action("Foto", "Accesorios", new { area = "Mantenimiento", id = foto.ID })" target="_blank" class="accesorio-foto-link">
+                                    <img src="@Url.Action("Foto", "Accesorios", new { area = "Mantenimiento", id = foto.ID })"
+                                         alt="Foto del accesorio @(foto.NombreOriginal ?? foto.ID.ToString())"
+                                         class="img-responsive accesorio-foto-thumb" />
+                                </a>
+                                @if (!string.IsNullOrWhiteSpace(foto.NombreOriginal))
+                                {
+                                    <div class="text-muted accesorio-foto-caption">@foto.NombreOriginal</div>
+                                }
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        }
     </div>
 </div>
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="form-group">
-            @Html.LabelFor(m => m.FamiliaID)
-            @Html.DropDownListFor(m => m.FamiliaID, Model.Familias, "-- Sin familia --", new { @class = "form-control", id = "FamiliaID" })
-            @Html.ValidationMessageFor(m => m.FamiliaID, "", new { @class = "text-danger" })
-        </div>
-    </div>
-    <div class="col-md-6">
-        <div class="form-group">
-            @Html.LabelFor(m => m.SubfamiliaID)
-            @Html.DropDownListFor(m => m.SubfamiliaID, Model.Subfamilias, "-- Sin subfamilia --", new { @class = "form-control", id = "SubfamiliaID", data_selected = Model.SubfamiliaID })
-            @Html.ValidationMessageFor(m => m.SubfamiliaID, "", new { @class = "text-danger" })
-        </div>
-    </div>
-</div>
 
-<script type="text/javascript">
-    (function () {
-        function $(sel) { return document.querySelector(sel); }
-
-        var familiaSelect = $('#FamiliaID') || document.querySelector('[name="FamiliaID"]');
-        var subfamiliaSelect = document.getElementById('SubfamiliaID');
-
-        if (!familiaSelect || !subfamiliaSelect) return;
-
-        function clearOptions() {
-            subfamiliaSelect.options.length = 0;
-        }
-
-        function addEmpty() {
-            var opt = document.createElement('option');
-            opt.value = '';
-            opt.text = '-- Sin subfamilia --';
-            subfamiliaSelect.appendChild(opt);
-        }
-
-        function loadSubfamilias(familiaId, selectValueToChoose) {
-            clearOptions();
-
-            if (!familiaId) {
-                addEmpty();
-                if (selectValueToChoose) subfamiliaSelect.value = selectValueToChoose;
-                return;
-            }
-
-            var url = '@Url.Action("SubfamiliasPorFamilia", "Accesorios", new { area = "Mantenimiento" })' + '?familiaId=' + encodeURIComponent(familiaId);
-
-            fetch(url, { credentials: 'same-origin' })
-                .then(function (r) { return r.json(); })
-                .then(function (data) {
-                    addEmpty();
-                    data.forEach(function (s) {
-                        var opt = document.createElement('option');
-                        opt.value = s.id;
-                        opt.text = s.text;
-                        subfamiliaSelect.appendChild(opt);
-                    });
-                    if (selectValueToChoose) {
-                        subfamiliaSelect.value = selectValueToChoose;
-                    }
-                })
-                .catch(function () { /* silenciar error */ });
-        }
-
-        familiaSelect.addEventListener('change', function () {
-            loadSubfamilias(this.value);
-        });
-
-        // Si estamos en edit y ya hay una familia seleccionada, cargar subfamilias y seleccionar la subfamilia existente
-        var selectedFamilia = familiaSelect.value;
-        // MVC converts underscores in attribute names to hyphens (data_selected -> data-selected).
-        // Leer ambos por compatibilidad y usar dataset como fallback.
-        var selectedSub = subfamiliaSelect.getAttribute('data-selected') || subfamiliaSelect.getAttribute('data_selected') || (subfamiliaSelect.dataset ? subfamiliaSelect.dataset.selected : null);
-        if (selectedFamilia) {
-            loadSubfamilias(selectedFamilia, selectedSub);
-        }
-    })();
-  
-</script>
+<script src="~/Scripts/Accesorios/subfamilias.js"></script>
 
 @{
     // Mostrar los detalles dentro de la tabla editable más abajo; no duplicar lista
@@ -152,35 +127,6 @@
 </div>
 
         
-<div class="form-group">
-    @Html.LabelFor(m => m.FotosAdjuntas)
-    <input type="file" name="FotosAdjuntas" class="form-control" accept="image/*" multiple="multiple" />
-    <p class="help-block">Puedes adjuntar varias fotos para ver el estado o los detalles del accesorio.</p>
-</div>
 
-@if (Model.FotosExistentes != null && Model.FotosExistentes.Any())
-{
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            <strong>Fotos actuales</strong>
-        </div>
-        <div class="panel-body">
-            <div class="row accesorio-fotos-galeria">
-                @foreach (var foto in Model.FotosExistentes)
-                {
-                    <div class="col-xs-6 col-md-3 accesorio-foto-col">
-                        <a href="@Url.Action("Foto", "Accesorios", new { area = "Mantenimiento", id = foto.ID })" target="_blank" class="accesorio-foto-link">
-                            <img src="@Url.Action("Foto", "Accesorios", new { area = "Mantenimiento", id = foto.ID })"
-                                 alt="Foto del accesorio @(foto.NombreOriginal ?? foto.ID.ToString())"
-                                 class="img-responsive accesorio-foto-thumb" />
-                        </a>
-                        @if (!string.IsNullOrWhiteSpace(foto.NombreOriginal))
-                        {
-                            <div class="text-muted accesorio-foto-caption">@foto.NombreOriginal</div>
-                        }
-                    </div>
-                }
-            </div>
-        </div>
-    </div>
-}
+
+

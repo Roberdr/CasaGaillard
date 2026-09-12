@@ -19,7 +19,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         private readonly AccesoriosFotosContext fotosDb = new AccesoriosFotosContext();
 
         // GET: Accesorios
-        public async Task<ActionResult> Index(int? tipoAccesorioId, int? materialId, int? familiaId, int? subfamiliaId, string q, int page = 1, int pageSize = 3)
+        public async Task<ActionResult> Index(int? tipoAccesorioId, int? materialId, int? familiaId, int? subfamiliaId, string q, int page = 1, int pageSize = 4)
         {
             var query = db.Accesorios
                 .Include(a => a.Material)
