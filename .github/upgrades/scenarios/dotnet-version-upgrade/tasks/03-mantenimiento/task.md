@@ -6,3 +6,7 @@
 6. step-6: Validación — compilar solución y ejecutar tests.
 7. step-7: Documentar progreso y complete_task.
 8. step-8: Commit y branch-sync.
+
+## New subtasks
+- 03.02-scaffold-core: Scaffold ASP.NET Core project CasaGaillard.Core (side-by-side)
+- 03.03-migrate-intervenciones-to-core: Migrar controlador Intervenciones a CasaGaillard.Core
