@@ -1,21 +1,25 @@
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
+using CasaGaillard.Core.Services;
+using CasaGaillard.Core.Models;
 
 namespace CasaGaillard.Core.Controllers
 {
     [Area("Mantenimiento")]
     public class IntervencionesController : Controller
     {
-        public IntervencionesController()
+        private readonly IIntervencionesService _service;
+
+        public IntervencionesController(IIntervencionesService service)
         {
-            // TODO: inject services (DbContext, logger, etc.) via DI
+            _service = service;
         }
 
         // GET: Mantenimiento/Intervenciones
         public async Task<IActionResult> Index()
         {
-            // TODO: implement data access
-            return View();
+            var items = await _service.GetAllAsync();
+            return View(items);
         }
 
         // GET: Mantenimiento/Intervenciones/Details/5
@@ -24,8 +28,11 @@ namespace CasaGaillard.Core.Controllers
             if (id == null)
                 return NotFound();
 
-            // TODO: load model
-            return View();
+            var model = await _service.GetByIdAsync(id.Value);
+            if (model == null)
+                return NotFound();
+
+            return View(model);
         }
 
         // GET: Mantenimiento/Intervenciones/Create
@@ -37,12 +44,12 @@ namespace CasaGaillard.Core.Controllers
         // POST: Mantenimiento/Intervenciones/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(object model)
+        public async Task<IActionResult> Create(IntervencionViewModel model)
         {
             if (!ModelState.IsValid)
                 return View(model);
 
-            // TODO: save model via DI service
+            await _service.CreateAsync(model);
             return RedirectToAction(nameof(Index));
         }
 
@@ -52,14 +59,17 @@ namespace CasaGaillard.Core.Controllers
             if (id == null)
                 return NotFound();
 
-            // TODO: load model for edit
-            return View();
+            var model = await _service.GetByIdAsync(id.Value);
+            if (model == null)
+                return NotFound();
+
+            return View(model);
         }
 
         // POST: Mantenimiento/Intervenciones/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, object model)
+        public async Task<IActionResult> Edit(int id, IntervencionViewModel model)
         {
             if (id == 0)
                 return BadRequest();
@@ -67,7 +77,7 @@ namespace CasaGaillard.Core.Controllers
             if (!ModelState.IsValid)
                 return View(model);
 
-            // TODO: update model via DI service
+            await _service.UpdateAsync(id, model);
             return RedirectToAction(nameof(Index));
         }
 
@@ -75,7 +85,7 @@ namespace CasaGaillard.Core.Controllers
         [HttpPost]
         public async Task<IActionResult> AddRepuesto(int intervenId, int repuestoId)
         {
-            // TODO: implement
+            await _service.AddRepuestoAsync(intervenId, repuestoId);
             return Ok();
         }
 
@@ -83,7 +93,7 @@ namespace CasaGaillard.Core.Controllers
         [HttpPost]
         public async Task<IActionResult> RemoveRepuesto(int id)
         {
-            // TODO: implement
+            await _service.RemoveRepuestoAsync(id);
             return Ok();
         }
     }

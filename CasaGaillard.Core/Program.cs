@@ -3,6 +3,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddRazorPages();
 
+// Register application services
+builder.Services.AddScoped<CasaGaillard.Core.Services.IIntervencionesService, CasaGaillard.Core.Services.IntervencionesService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
