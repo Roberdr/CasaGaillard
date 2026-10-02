@@ -8,6 +8,22 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
 
+// Asp ire explicit wiring (if Aspire.Hosting is referenced at compile time)
+#if NET10_0_OR_GREATER
+try
+{
+    // Some Aspire packages expose AddAspire extension methods
+    var aspireAddMethod = typeof(Microsoft.Extensions.DependencyInjection.ServiceCollectionServiceExtensions)
+        .GetMethods(BindingFlags.Public | BindingFlags.Static)
+        .FirstOrDefault(m => m.Name == "AddAspire");
+    if (aspireAddMethod != null)
+    {
+        aspireAddMethod.Invoke(null, new object[] { builder.Services });
+    }
+}
+catch { }
+#endif
+
 // Register application services
 builder.Services.AddScoped<CasaGaillard.Core.Services.IIntervencionesService, CasaGaillard.Core.Services.IntervencionesService>();
 
@@ -56,6 +72,20 @@ try
     app.MapStaticAssets();
 }
 catch { }
+
+// If compile-time Aspire exists, try to call UseAspire
+#if NET10_0_OR_GREATER
+try
+{
+    var useAspireMethod = app.GetType().GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance)
+        .FirstOrDefault(m => m.Name == "UseAspire" || m.Name == "UseAspireHost");
+    if (useAspireMethod != null)
+    {
+        try { useAspireMethod.Invoke(app, null); } catch { }
+    }
+}
+catch { }
+#endif
 
 app.Run();
 
