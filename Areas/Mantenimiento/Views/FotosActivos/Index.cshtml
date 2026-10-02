@@ -1,0 +1,54 @@
+@model CasaGaillard.Models.ViewModels.InstalacionEquipoFotosViewModel
+@using System.Linq
+@{ ViewBag.Title = "Fotos"; }
+<h2>Fotos: @Model.Titulo</h2>
+<p>
+    @if (Model.Tipo == "Instalacion")
+    { @Html.ActionLink("Volver a instalaciones", "Index", "Instalaciones", new { area = "Mantenimiento" }, new { @class = "btn btn-default" }) }
+    else
+    { @Html.ActionLink("Volver a equipos", "Index", "Equipos", new { area = "Mantenimiento" }, new { @class = "btn btn-default" }) }
+</p>
+
+@if (User.IsInRole(CasaGaillard.Models.AppRoles.Administrador) || User.IsInRole(CasaGaillard.Models.AppRoles.Mantenimiento))
+{
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>Subir fotos</strong></div>
+        <div class="panel-body">
+            @using (Html.BeginForm("Subir", "FotosActivos", new { area = "Mantenimiento", tipo = Model.Tipo, id = Model.ActivoID }, FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <input type="file" name="Fotos" accept="image/jpeg,image/png,image/gif,image/webp" multiple required />
+                <p class="help-block">JPG, PNG, GIF o WEBP; hasta 5 MB por imagen y 10 imágenes por envío.</p>
+                <button type="submit" class="btn btn-primary">Subir fotos</button>
+            }
+        </div>
+    </div>
+}
+
+@if (Model.Fotos != null && Model.Fotos.Any())
+{
+    <div class="row">
+        @foreach (var foto in Model.Fotos)
+        {
+            <div class="col-sm-4 col-md-3" style="margin-bottom:20px">
+                <a href="@Url.Action("Foto", "FotosActivos", new { area = "Mantenimiento", id = foto.ID })" target="_blank">
+                    <img src="@Url.Action("Foto", "FotosActivos", new { area = "Mantenimiento", id = foto.ID })" alt="@foto.NombreOriginal" class="img-responsive img-thumbnail" style="height:180px;width:100%;object-fit:contain" />
+                </a>
+                <p>@foto.NombreOriginal<br /><small>@foto.FechaCreacion.ToString("g")</small></p>
+                @if (User.IsInRole(CasaGaillard.Models.AppRoles.Administrador) || User.IsInRole(CasaGaillard.Models.AppRoles.Mantenimiento))
+                {
+                    using (Html.BeginForm("Eliminar", "FotosActivos", new { area = "Mantenimiento", fotoId = foto.ID }, FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('¿Eliminar esta foto?');">Eliminar</button>
+                    }
+                }
+            </div>
+        }
+    </div>
+}
+else
+{
+    <p class="text-muted">Todavía no hay fotos para este elemento.</p>
+}

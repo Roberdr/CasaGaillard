@@ -1,4 +1,4 @@
-﻿@model IEnumerable<CasaGaillard.Areas.Mantenimiento.Controllers.RevisionesVehiculosController.Revisiones>
+﻿@model IEnumerable<CasaGaillard.Models.ViewModels.ProximaRevisionVehiculoViewModel>
 
 @{
     ViewBag.Title = "Próximas Revisiones";
@@ -17,13 +17,13 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var g in ViewBag.res)
+            @foreach (var g in Model)
             {
                 <tr>
 
                     <td>@g.MatriculaVehiculo</td>
                     <td>@g.TipoRevision</td>
-                    <td>@g.Caducidad.ToString("d")</td>
+                    <td>@(g.Caducidad.HasValue ? g.Caducidad.Value.ToString("d") : "")</td>
 
                 </tr>
             }

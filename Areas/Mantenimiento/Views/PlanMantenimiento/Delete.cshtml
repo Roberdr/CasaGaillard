@@ -1,0 +1,44 @@
+@model CasaGaillard.Models.PlanMantenimiento
+
+@{
+    ViewBag.Title = "Eliminar plan";
+}
+
+<h2>Eliminar plan</h2>
+
+<h3>¿Seguro que quieres eliminar este plan?</h3>
+
+<div>
+    <h4>Plan de Mantenimiento</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Accesorio</dt>
+        <dd>
+            @if (Model.Accesorio != null)
+            {
+                var nombre = string.IsNullOrWhiteSpace(Model.Accesorio.Nombre) ? "Accesorio " + Model.Accesorio.ID : Model.Accesorio.Nombre;
+                <span>@nombre</span>
+            }
+            @if (Model.EquipoId.HasValue)
+            {
+                <span>@(ViewBag.NombreEquipo as string ?? "Equipo " + Model.EquipoId.Value)</span>
+            }
+        </dd>
+
+        <dt>Ubicación / grupo</dt>
+        <dd>@(string.IsNullOrWhiteSpace(ViewBag.AccesorioGrupoTexto as string) ? "Sin grupo asignado" : ViewBag.AccesorioGrupoTexto)</dd>
+
+        <dt>Periodicidad</dt>
+        <dd>@Model.PeriodicidadDias días</dd>
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-danger" />
+            @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-default" })
+        </div>
+    }
+</div>

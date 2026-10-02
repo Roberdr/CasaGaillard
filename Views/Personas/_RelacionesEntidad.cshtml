@@ -1,0 +1,55 @@
+@model CasaGaillard.Models.Persona
+@using System
+
+<h3>Entidades relacionadas</h3>
+@if (TempData["PersonaError"] != null) { <div class="alert alert-danger">@TempData["PersonaError"]</div> }
+<table class="table table-striped">
+    <thead><tr><th>Entidad</th><th>Cargo</th><th>Desde</th><th>Hasta</th><th>Editar relación</th></tr></thead>
+    <tbody>
+    @foreach (var relacion in Model.PersonasEntidad.OrderByDescending(x => x.FechaBaja == null).ThenBy(x => x.Entidad.NombreEntidad))
+    {
+        <tr>
+            <td>@Html.ActionLink(relacion.Entidad.NombreEntidad.Trim(), "Details", "Entidades", new { id = relacion.EntidadID }, null)</td>
+            <td>@(relacion.Cargo == null ? "—" : relacion.Cargo.Cargo1.Trim())</td>
+            <td>@(relacion.FechaAlta.HasValue ? relacion.FechaAlta.Value.ToString("d") : "—")</td>
+            <td>@(relacion.FechaBaja.HasValue ? relacion.FechaBaja.Value.ToString("d") : "Vigente")</td>
+            <td>
+                @using (Html.BeginForm("EditarRelacion", "Personas", FormMethod.Post, new { @class = "form-inline" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("personaID", Model.ID)
+                    @Html.Hidden("relacionID", relacion.ID)
+                    @Html.Hidden("returnTo", (string)ViewBag.ReturnTo)
+                    @Html.DropDownList("cargoID", new SelectList(ViewBag.CargosLista, "Value", "Text", relacion.CargoID), "Sin cargo", new { @class = "form-control" })
+                    <input type="date" name="fechaAlta" value="@(relacion.FechaAlta.HasValue ? relacion.FechaAlta.Value.ToString("yyyy-MM-dd") : "")" class="form-control" />
+                    <input type="date" name="fechaBaja" value="@(relacion.FechaBaja.HasValue ? relacion.FechaBaja.Value.ToString("yyyy-MM-dd") : "")" class="form-control" />
+                    <button type="submit" class="btn btn-sm btn-primary">Guardar</button>
+                }
+                @if (!relacion.FechaBaja.HasValue)
+                {
+                    using (Html.BeginForm("DarDeBajaRelacion", "Personas", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("personaID", Model.ID)
+                        @Html.Hidden("relacionID", relacion.ID)
+                        @Html.Hidden("returnTo", (string)ViewBag.ReturnTo)
+                        <button type="submit" class="btn btn-sm btn-outline-warning">Dar de baja</button>
+                    }
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<h4>Vincular con una entidad</h4>
+@using (Html.BeginForm("AgregarEntidad", "Personas", FormMethod.Post, new { @class = "form-inline" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.Hidden("personaID", Model.ID)
+    @Html.Hidden("returnTo", (string)ViewBag.ReturnTo)
+    @Html.DropDownList("entidadID", (SelectList)ViewBag.EntidadID, "Seleccionar entidad...", new { @class = "form-control" })
+    @Html.DropDownList("cargoID", new SelectList(ViewBag.CargosLista, "Value", "Text"), "Sin cargo", new { @class = "form-control" })
+    <input type="date" name="fechaAlta" value="@DateTime.Today.ToString("yyyy-MM-dd")" class="form-control" />
+    <button type="submit" class="btn btn-primary">Vincular</button>
+}

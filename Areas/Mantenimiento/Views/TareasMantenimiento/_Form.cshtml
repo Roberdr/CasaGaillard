@@ -3,6 +3,54 @@
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
+            @Html.LabelFor(m => m.InstalacionId)
+            @Html.DropDownListFor(m => m.InstalacionId, Model.Instalaciones, "-- Sin instalación vinculada --", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.InstalacionId)
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.EquipoId)
+            @Html.DropDownListFor(m => m.EquipoId, Model.Equipos, "-- Sin equipo vinculado --", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.EquipoId)
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="form-group">
+            @Html.LabelFor(m => m.CubaId)
+            @Html.DropDownListFor(m => m.CubaId, Model.Cubas, "-- Sin cisterna vinculada --", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.CubaId)
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            @Html.LabelFor(m => m.GrupoId)
+            @Html.DropDownListFor(m => m.GrupoId, Model.Grupos, "-- Sin grupo vinculado --", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.GrupoId)
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            @Html.LabelFor(m => m.VehiculoId)
+            @Html.DropDownListFor(m => m.VehiculoId, Model.Vehiculos, "-- Sin vehículo vinculado --", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.VehiculoId)
+        </div>
+    </div>
+</div>
+
+<div class="form-group">
+    @Html.LabelFor(m => m.PlanMantenimientoId)
+    @Html.DropDownListFor(m => m.PlanMantenimientoId, Model.PlanesMantenimiento, "-- Sin plan asociado --", new { @class = "form-control" })
+    @Html.ValidationMessageFor(m => m.PlanMantenimientoId)
+    <p class="help-block">Vincula la tarea a una instalación/equipo, una cisterna/grupo o un vehículo. Si eliges un grupo, se completará su cisterna.</p>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="form-group">
             @Html.LabelFor(m => m.Titulo)
             @Html.TextBoxFor(m => m.Titulo, new { @class = "form-control" })
             @Html.ValidationMessageFor(m => m.Titulo)
@@ -10,7 +58,7 @@
     </div>
     <div class="col-md-6">
         <div class="form-group">
-            @Html.LabelFor(m => m.Ubicacion)
+            @Html.LabelFor(m => m.Ubicacion, "Ubicación (texto histórico)")
             @Html.TextBoxFor(m => m.Ubicacion, new { @class = "form-control" })
         </div>
     </div>
@@ -19,14 +67,15 @@
 <div class="row">
     <div class="col-md-6">
         <div class="form-group">
-            @Html.LabelFor(m => m.Equipo)
+            @Html.LabelFor(m => m.Equipo, "Equipo (texto histórico)")
             @Html.TextBoxFor(m => m.Equipo, new { @class = "form-control" })
         </div>
     </div>
     <div class="col-md-6">
         <div class="form-group">
             @Html.LabelFor(m => m.DetectadoPor)
-            @Html.TextBoxFor(m => m.DetectadoPor, new { @class = "form-control" })
+            @Html.DropDownListFor(m => m.DetectadoPorPersonaID, Model.PersonasDetectadoPor, "-- Sin vincular --", new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.DetectadoPor, new { @class = "form-control", placeholder = "Se completará al seleccionar una persona", @readonly = "readonly" })
         </div>
     </div>
 </div>
@@ -35,13 +84,15 @@
     <div class="col-md-6">
         <div class="form-group">
             @Html.LabelFor(m => m.Contacto)
-            @Html.TextBoxFor(m => m.Contacto, new { @class = "form-control" })
+            @Html.DropDownListFor(m => m.ContactoPersonaID, Model.PersonasContacto, "-- Sin vincular --", new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.Contacto, new { @class = "form-control", placeholder = "Se completará al seleccionar una persona", @readonly = "readonly" })
         </div>
     </div>
     <div class="col-md-6">
         <div class="form-group">
             @Html.LabelFor(m => m.AsignadaA)
-            @Html.DropDownListFor(m => m.AsignadaA, Model.Empleados, "-- Sin asignar --", new { @class = "form-control" })
+            @Html.DropDownListFor(m => m.AsignadaAPersonaID, Model.PersonasAsignadaA, "-- Sin asignar --", new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.AsignadaA, new { @class = "form-control", placeholder = "Se completará al seleccionar una persona", @readonly = "readonly" })
         </div>
     </div>
 </div>
@@ -62,7 +113,8 @@
     <div class="col-md-4">
         <div class="form-group">
             @Html.LabelFor(m => m.EmpresaExterior)
-            @Html.TextBoxFor(m => m.EmpresaExterior, new { @class = "form-control" })
+            @Html.DropDownListFor(m => m.EmpresaExteriorEntidadID, Model.Entidades, "-- Sin vincular --", new { @class = "form-control" })
+            @Html.TextBoxFor(m => m.EmpresaExterior, new { @class = "form-control", placeholder = "Se completará al seleccionar una entidad", @readonly = "readonly" })
         </div>
     </div>
 </div>

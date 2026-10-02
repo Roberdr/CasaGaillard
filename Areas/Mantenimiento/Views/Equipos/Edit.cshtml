@@ -1,0 +1,12 @@
+@model CasaGaillard.Models.ViewModels.EquipoFormViewModel
+@{ ViewBag.Title = "Editar equipo"; }
+<h2>Editar equipo</h2>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal">
+        <hr />
+        @Html.Partial("_Form", Model)
+        <div class="form-group"><div class="col-md-offset-2 col-md-10"><button type="submit" class="btn btn-primary">Guardar</button> @Html.ActionLink("Volver", "Index", new { instalacionId = Model.InstalacionId }, new { @class = "btn btn-default" })</div></div>
+    </div>
+}

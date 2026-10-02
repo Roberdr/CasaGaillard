@@ -1,0 +1,49 @@
+@model IEnumerable<CasaGaillard.Models.ViewModels.EquipoFilaViewModel>
+@{ ViewBag.Title = "Equipos de instalaciones"; }
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Equipos de instalaciones</h2>
+    @Html.ActionLink("Nuevo equipo", "Create", new { instalacionId = ViewBag.InstalacionId }, new { @class = "btn btn-success" })
+</div>
+
+<div class="form-inline mb-3">
+    @using (Html.BeginForm("Index", "Equipos", FormMethod.Get, new { @class = "form-inline" }))
+    {
+        @Html.DropDownList("instalacionId", (System.Collections.Generic.IEnumerable<System.Web.Mvc.SelectListItem>)ViewBag.Instalaciones, "Todas las instalaciones", new { @class = "form-control", onchange = "this.form.submit()" })
+        if (ViewBag.IncluirBajas == true)
+        { <input type="hidden" name="incluirBajas" value="true" /> }
+        <noscript><button type="submit" class="btn btn-default">Filtrar</button></noscript>
+        if (ViewBag.IncluirBajas == true)
+        { @Html.ActionLink("Ocultar inactivos", "Index", new { instalacionId = ViewBag.InstalacionId }, new { @class = "btn btn-default" }) }
+        else
+        { @Html.ActionLink("Mostrar inactivos", "Index", new { instalacionId = ViewBag.InstalacionId, incluirBajas = true }, new { @class = "btn btn-default" }) }
+    }
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead><tr><th>Instalación</th><th>Tipo</th><th>Código</th><th>Elemento / padre</th><th>Fabricante / modelo</th><th>Número de serie</th><th>Estado</th><th></th></tr></thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.InstalacionNombre</td><td>@item.TipoElemento</td><td>@item.Codigo</td><td><span style="padding-left:@(item.Nivel * 20)px">@(item.Nivel > 0 ? "└ " : "")@item.Nombre</span>@if (!string.IsNullOrWhiteSpace(item.PadreNombre)) { <small class="text-muted"><br />Padre: @item.PadreNombre</small> }</td>
+                <td>@item.Fabricante @item.Modelo</td><td>@item.NumeroSerie</td><td>@(item.Activo ? "Activo" : "Inactivo")</td>
+                <td class="text-nowrap">
+                    @Html.ActionLink("Fotos", "Index", "FotosActivos", new { area = "Mantenimiento", tipo = "Equipo", id = item.Id }, null)
+                    |
+                    @Html.ActionLink("Editar", "Edit", new { id = item.Id })
+                    @if (item.Activo)
+                    {
+                        using (Html.BeginForm("DarDeBaja", "Equipos", new { id = item.Id }, FormMethod.Post, new { @class = "d-inline" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-link" onclick="return confirm('¿Marcar este equipo como inactivo?');">Dar de baja</button>
+                        }
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

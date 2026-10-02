@@ -1,0 +1,51 @@
+@model CasaGaillard.Models.ViewModels.IntervencionFilaViewModel
+@{ ViewBag.Title = "Detalle de intervención"; var repuestos = ViewBag.Repuestos as IEnumerable<CasaGaillard.Models.ViewModels.IntervencionRepuestoViewModel>; var form = ViewBag.RepuestoForm as CasaGaillard.Models.ViewModels.IntervencionRepuestoFormViewModel; }
+
+<h2>Intervención de @Model.TareaCodigo</h2>
+<p>
+    @Html.ActionLink("Volver a las intervenciones", "Index", new { tareaId = Model.TareaMantenimientoId }, new { @class = "btn btn-default" })
+    @if (User.IsInRole(CasaGaillard.Models.AppRoles.Administrador) || User.IsInRole(CasaGaillard.Models.AppRoles.Mantenimiento))
+    { @Html.ActionLink("Editar intervención", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary" }) }
+</p>
+<div class="panel panel-default"><div class="panel-heading"><strong>@Model.FechaInicio.ToString("dd/MM/yyyy HH:mm") — @Model.Tecnico</strong></div>
+    <div class="panel-body">
+        <p style="white-space: pre-wrap;">@Model.Descripcion</p>
+        <p><strong>Fin:</strong> @(Model.FechaFin.HasValue ? Model.FechaFin.Value.ToString("dd/MM/yyyy HH:mm") : "Sin indicar")
+           <strong>Horas:</strong> @(Model.HorasEmpleadas.HasValue ? Model.HorasEmpleadas.Value.ToString("0.##") : "—")
+           <strong>Mano de obra:</strong> @(Model.CosteManoObra.HasValue ? Model.CosteManoObra.Value.ToString("C") : "—")</p>
+    </div>
+</div>
+
+<h3>Repuestos utilizados</h3>
+<div class="table-responsive"><table class="table table-striped table-bordered">
+    <thead><tr><th>Repuesto</th><th>Cantidad</th><th>Coste unitario</th><th>Observaciones</th><th></th></tr></thead><tbody>
+    @if (repuestos != null)
+    {
+        foreach (var item in repuestos)
+        {
+            <tr><td>@item.AccesorioNombre</td><td>@item.Cantidad</td><td>@(item.CosteUnitario.HasValue ? item.CosteUnitario.Value.ToString("C") : "—")</td><td>@item.Observaciones</td><td>
+                @if (User.IsInRole(CasaGaillard.Models.AppRoles.Administrador) || User.IsInRole(CasaGaillard.Models.AppRoles.Mantenimiento))
+                {
+                    using (Html.BeginForm("RemoveRepuesto", "Intervenciones", new { id = item.Id }, FormMethod.Post, new { @class = "form-inline" }))
+                    { @Html.AntiForgeryToken()<button type="submit" class="btn btn-link" onclick="return confirm('¿Quitar este repuesto de la intervención?');">Quitar</button> }
+                }
+            </td></tr>
+        }
+    }
+    </tbody></table></div>
+
+@if (User.IsInRole(CasaGaillard.Models.AppRoles.Administrador) || User.IsInRole(CasaGaillard.Models.AppRoles.Mantenimiento))
+{
+    <h4>Añadir repuesto consumido</h4>
+    <p>@Html.ActionLink("Crear repuesto nuevo", "Create", "Accesorios", new { area = "Mantenimiento", intervencionId = form.IntervencionId }, new { @class = "btn btn-default" })</p>
+    using (Html.BeginForm("AddRepuesto", "Intervenciones", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @Html.Hidden("IntervencionId", form.IntervencionId)
+        <div class="form-group"><label for="AccesorioId">Repuesto</label>@Html.DropDownList("AccesorioId", form.Accesorios, "Selecciona un repuesto", new { @class = "form-control" })</div>
+        <div class="form-group"><label for="Cantidad">Cantidad</label>@Html.TextBox("Cantidad", form.Cantidad, new { @class = "form-control", type = "number", min = "0.001", step = "0.001" })</div>
+        <div class="form-group"><label for="CosteUnitario">Coste unitario</label>@Html.TextBox("CosteUnitario", form.CosteUnitario, new { @class = "form-control", type = "number", min = "0", step = "0.01" })</div>
+        <div class="form-group"><label for="Observaciones">Observaciones</label>@Html.TextBox("Observaciones", form.Observaciones, new { @class = "form-control", maxlength = "500" })</div>
+        <button type="submit" class="btn btn-primary">Añadir repuesto</button>
+    }
+}

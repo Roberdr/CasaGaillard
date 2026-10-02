@@ -14,6 +14,16 @@
         <h4>Direccion</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @if (ViewBag.PersonaID != null)
+        {
+            @Html.Hidden("personaID", (int)ViewBag.PersonaID)
+            <p class="text-muted">Al guardar volverás a la edición de la persona con esta dirección seleccionada.</p>
+        }
+        @if (ViewBag.ParaEntidad == true)
+        {
+            @Html.Hidden("paraEntidad", true)
+            <p class="text-muted">Al guardar volverás al alta de entidad con esta dirección seleccionada.</p>
+        }
 
         <div class="form-group">
             @Html.LabelFor(model => model.TipoViaID, "TipoViaID", htmlAttributes: new { @class = "control-label col-md-2" })
@@ -104,6 +114,13 @@
 }
 
 <div>
-    @Html.ActionLink("Back to List", "Index")
+    @if (ViewBag.ParaEntidad == true)
+    {
+        <a href="@Url.Content("~/Entidades/Create")">Volver al alta de entidad</a>
+    }
+    else
+    {
+        @Html.ActionLink("Back to List", "Index", new { area = "" })
+    }
 </div>
 

@@ -38,8 +38,10 @@ namespace CasaGaillard.Controllers
         }
 
         // GET: Direcciones/Create
-        public ActionResult Create()
+        public ActionResult Create(int? personaID = null, bool paraEntidad = false)
         {
+            ViewBag.PersonaID = personaID;
+            ViewBag.ParaEntidad = paraEntidad;
             ViewBag.PoblacionID = new SelectList(db.Poblacions, "ID", "NombrePoblacion");
             ViewBag.TipoViaID = new SelectList(db.TipoVias, "ID", "TipoVia1");
             return View();
@@ -50,15 +52,25 @@ namespace CasaGaillard.Controllers
         // más detalles, vea https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Create([Bind(Include = "ID,TipoViaID,NombreVia,Distrito,Numero,Escalera,Piso,Puerta,PoblacionID,CP,Pais")] Direccion direccion)
+        public async Task<ActionResult> Create([Bind(Include = "ID,TipoViaID,NombreVia,Distrito,Numero,Escalera,Piso,Puerta,PoblacionID,CP,Pais")] Direccion direccion, int? personaID = null, bool paraEntidad = false)
         {
             if (ModelState.IsValid)
             {
                 db.Direcciones.Add(direccion);
                 await db.SaveChangesAsync();
+                if (paraEntidad)
+                {
+                    return RedirectToAction("Create", "Entidades", new { direccionID = direccion.ID });
+                }
+                if (personaID.HasValue && await db.Personas.AnyAsync(p => p.ID == personaID.Value))
+                {
+                    return RedirectToAction("Edit", "Personas", new { id = personaID.Value, direccionID = direccion.ID });
+                }
                 return RedirectToAction("Index");
             }
 
+            ViewBag.PersonaID = personaID;
+            ViewBag.ParaEntidad = paraEntidad;
             ViewBag.PoblacionID = new SelectList(db.Poblacions, "ID", "NombrePoblacion", direccion.PoblacionID);
             ViewBag.TipoViaID = new SelectList(db.TipoVias, "ID", "TipoVia1", direccion.TipoViaID);
             return View(direccion);

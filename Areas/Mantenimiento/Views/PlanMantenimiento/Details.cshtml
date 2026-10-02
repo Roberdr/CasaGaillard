@@ -1,0 +1,47 @@
+@model CasaGaillard.Models.PlanMantenimiento
+
+@{
+    ViewBag.Title = "Detalle plan";
+}
+
+<h2>Detalle plan</h2>
+
+<div>
+    <h4>Plan de Mantenimiento</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>Accesorio</dt>
+        <dd>
+            @if (Model.EquipoId.HasValue)
+            {
+                <span>@(ViewBag.NombreEquipo as string ?? "Equipo " + Model.EquipoId.Value)</span>
+            }
+            @if (Model.Accesorio != null)
+            {
+                var nombre = string.IsNullOrWhiteSpace(Model.Accesorio.Nombre) ? "Accesorio " + Model.Accesorio.ID : Model.Accesorio.Nombre;
+                <span>@nombre</span>
+                if (Model.Accesorio.TipoAccesorio != null)
+                {
+                    <span class="text-muted">(@Model.Accesorio.TipoAccesorio.TipoAccesorio1)</span>
+                }
+            }
+        </dd>
+
+        <dt>Ubicación / grupo</dt>
+        <dd>@(string.IsNullOrWhiteSpace(ViewBag.AccesorioGrupoTexto as string) ? "Sin grupo asignado" : ViewBag.AccesorioGrupoTexto)</dd>
+
+        <dt>Periodicidad</dt>
+        <dd>@Model.PeriodicidadDias días</dd>
+
+        <dt>Última ejecución</dt>
+        <dd>@(Model.UltimaEjecucion.HasValue ? Model.UltimaEjecucion.Value.ToString("dd/MM/yyyy") : "")</dd>
+
+        <dt>Próxima ejecución</dt>
+        <dd>@(Model.ProximaEjecucion.HasValue ? Model.ProximaEjecucion.Value.ToString("dd/MM/yyyy") : "")</dd>
+    </dl>
+</div>
+
+<p>
+    @Html.ActionLink("Editar", "Edit", new { id = Model.PlanId }, new { @class = "btn btn-primary" })
+    @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-default" })
+</p>

@@ -58,4 +58,11 @@ namespace CasaGaillard.Models.ViewModels
         public List<RevisionVehiculoTipoGrupoViewModel> Tipos { get; set; } = new List<RevisionVehiculoTipoGrupoViewModel>();
         public int TotalRevisiones { get; set; }
     }
+
+    public class ProximaRevisionVehiculoViewModel
+    {
+        public string MatriculaVehiculo { get; set; }
+        public string TipoRevision { get; set; }
+        public DateTime? Caducidad { get; set; }
+    }
 }

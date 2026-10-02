@@ -1,0 +1,25 @@
+@model CasaGaillard.Models.PlanMantenimiento
+
+@{
+    ViewBag.Title = "Crear plan";
+}
+
+<h2>Crear plan</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <h4>Plan de Mantenimiento</h4>
+        <hr />
+        @Html.Partial("_Form", Model)
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Crear" class="btn btn-success" />
+                @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-default" })
+            </div>
+        </div>
+    </div>
+}

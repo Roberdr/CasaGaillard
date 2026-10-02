@@ -1,0 +1,77 @@
+@model CasaGaillard.Models.ViewModels.CostesMantenimientoViewModel
+@using System.Linq
+@{
+    ViewBag.Title = "Costes de mantenimiento";
+    var totalIntervenciones = Model.Resumen.Sum(x => x.NumeroIntervenciones);
+    var totalHoras = Model.Resumen.Sum(x => x.HorasEmpleadas);
+    var totalManoObra = Model.Resumen.Sum(x => x.CosteManoObra);
+    var totalRepuestos = Model.Resumen.Sum(x => x.CosteRepuestos);
+    var totalRepuestosSinCoste = Model.Resumen.Sum(x => x.RepuestosSinCoste);
+    var total = Model.Resumen.Sum(x => x.CosteTotal);
+}
+
+<h2>Historial y costes de mantenimiento</h2>
+
+@using (Html.BeginForm("Index", "CostesMantenimiento", FormMethod.Get, new { @class = "form-horizontal" }))
+{
+    <div class="row">
+        <div class="col-md-3 form-group">@Html.LabelFor(m => m.FechaDesde)<div class="col-md-12">@Html.TextBoxFor(m => m.FechaDesde, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })</div></div>
+        <div class="col-md-3 form-group">@Html.LabelFor(m => m.FechaHasta)<div class="col-md-12">@Html.TextBoxFor(m => m.FechaHasta, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })@Html.ValidationMessageFor(m => m.FechaHasta, "", new { @class = "text-danger" })</div></div>
+        <div class="col-md-3 form-group">@Html.LabelFor(m => m.InstalacionId)<div class="col-md-12">@Html.DropDownListFor(m => m.InstalacionId, Model.Instalaciones, "Todas las instalaciones", new { @class = "form-control", onchange = "this.form.submit()" })</div></div>
+        <div class="col-md-3 form-group">@Html.LabelFor(m => m.EquipoId)<div class="col-md-12">@Html.DropDownListFor(m => m.EquipoId, Model.Equipos, "Todos los equipos", new { @class = "form-control" })</div></div>
+    </div>
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <button type="submit" class="btn btn-primary">Aplicar filtros</button>
+    @Html.ActionLink("Limpiar", "Index", null, new { @class = "btn btn-default" })
+}
+
+<h3>Resumen por instalación y equipo</h3>
+@if (Model.Resumen.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead><tr><th>Instalación</th><th>Equipo</th><th>Intervenciones</th><th>Horas</th><th>Mano de obra</th><th>Repuestos</th><th>Líneas sin coste</th><th>Total</th></tr></thead>
+            <tbody>
+            @foreach (var item in Model.Resumen)
+            {
+                <tr>
+                    <td>@(string.IsNullOrWhiteSpace(item.InstalacionCodigo) ? item.InstalacionNombre : item.InstalacionCodigo + " - " + item.InstalacionNombre)</td>
+                    <td>@(string.IsNullOrWhiteSpace(item.EquipoCodigo) ? item.EquipoNombre : item.EquipoCodigo + " - " + item.EquipoNombre)</td>
+                    <td>@item.NumeroIntervenciones</td><td>@item.HorasEmpleadas.ToString("0.##")</td>
+                    <td>@item.CosteManoObra.ToString("C")</td><td>@item.CosteRepuestos.ToString("C")</td><td>@item.RepuestosSinCoste</td><td><strong>@item.CosteTotal.ToString("C")</strong></td>
+                </tr>
+            }
+            </tbody>
+            <tfoot><tr><th colspan="2">Total filtrado</th><th>@totalIntervenciones</th><th>@totalHoras.ToString("0.##")</th><th>@totalManoObra.ToString("C")</th><th>@totalRepuestos.ToString("C")</th><th>@totalRepuestosSinCoste</th><th>@total.ToString("C")</th></tr></tfoot>
+        </table>
+    </div>
+    if (totalRepuestosSinCoste > 0)
+    { <p class="text-warning">Hay @totalRepuestosSinCoste líneas de repuesto sin coste unitario; no se incluyen en los importes.</p> }
+}
+else
+{
+    <p class="text-muted">No hay intervenciones para los filtros seleccionados.</p>
+}
+
+<h3>Detalle de intervenciones</h3>
+@if (Model.Intervenciones.Any())
+{
+    <div class="table-responsive">
+        <table class="table table-striped table-bordered">
+            <thead><tr><th>Fecha</th><th>Tarea</th><th>Instalación / equipo</th><th>Técnico</th><th>Horas</th><th>Mano de obra</th><th>Repuestos</th><th>Líneas sin coste</th><th>Total</th><th></th></tr></thead>
+            <tbody>
+            @foreach (var item in Model.Intervenciones)
+            {
+                <tr>
+                    <td>@item.FechaInicio.ToString("dd/MM/yyyy")</td>
+                    <td>@Html.ActionLink(item.TareaCodigo + " - " + item.TareaTitulo, "Details", "TareasMantenimiento", new { area = "Mantenimiento", id = item.TareaMantenimientoId }, null)</td>
+                    <td>@item.InstalacionNombre<br /><small>@item.EquipoCodigo @item.EquipoNombre</small></td>
+                    <td>@item.Tecnico</td><td>@(item.HorasEmpleadas.HasValue ? item.HorasEmpleadas.Value.ToString("0.##") : "—")</td>
+                    <td>@item.CosteManoObra.ToString("C")</td><td>@item.CosteRepuestos.ToString("C")</td><td>@item.RepuestosSinCoste</td><td><strong>@item.CosteTotal.ToString("C")</strong></td>
+                    <td>@Html.ActionLink("Ver", "Details", "Intervenciones", new { area = "Mantenimiento", id = item.Id }, null)</td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+}

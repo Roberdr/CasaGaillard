@@ -1,0 +1,19 @@
+@model CasaGaillard.Models.ViewModels.IntervencionFormViewModel
+@{ ViewBag.Title = "Registrar intervención"; }
+
+<h2>Registrar intervención</h2>
+<p class="text-muted">Tarea @Model.TareaCodigo — @Model.TareaTitulo</p>
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(m => m.TareaMantenimientoId)
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    <div class="form-group">@Html.LabelFor(m => m.TecnicoPersonaID, "Técnico") @Html.DropDownListFor(m => m.TecnicoPersonaID, Model.Personas, "Seleccionar persona...", new { @class = "form-control" }) @Html.ValidationMessageFor(m => m.TecnicoPersonaID, "", new { @class = "text-danger" })</div>
+    <div class="form-group">@Html.LabelFor(m => m.FechaInicio) @Html.TextBoxFor(m => m.FechaInicio, "{0:yyyy-MM-ddTHH:mm}", new { @class = "form-control", type = "datetime-local" }) @Html.ValidationMessageFor(m => m.FechaInicio, "", new { @class = "text-danger" })</div>
+    <div class="form-group">@Html.LabelFor(m => m.FechaFin) @Html.TextBoxFor(m => m.FechaFin, "{0:yyyy-MM-ddTHH:mm}", new { @class = "form-control", type = "datetime-local" }) @Html.ValidationMessageFor(m => m.FechaFin, "", new { @class = "text-danger" })</div>
+    <div class="form-group">@Html.LabelFor(m => m.Descripcion) @Html.TextAreaFor(m => m.Descripcion, new { @class = "form-control", rows = 5 }) @Html.ValidationMessageFor(m => m.Descripcion, "", new { @class = "text-danger" })</div>
+    <div class="form-group">@Html.LabelFor(m => m.HorasEmpleadas) @Html.TextBoxFor(m => m.HorasEmpleadas, new { @class = "form-control", type = "text", inputmode = "decimal", placeholder = "0,00" }) @Html.ValidationMessageFor(m => m.HorasEmpleadas, "", new { @class = "text-danger" })</div>
+    <div class="form-group">@Html.LabelFor(m => m.CosteManoObra) @Html.TextBoxFor(m => m.CosteManoObra, new { @class = "form-control", type = "text", inputmode = "decimal", placeholder = "0,00" }) @Html.ValidationMessageFor(m => m.CosteManoObra, "", new { @class = "text-danger" })</div>
+    <button type="submit" class="btn btn-primary">Guardar intervención</button>
+    @Html.ActionLink("Cancelar", "Index", new { tareaId = Model.TareaMantenimientoId }, new { @class = "btn btn-default" })
+}

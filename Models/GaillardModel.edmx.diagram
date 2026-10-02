@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="ed0cfc5f600640788bf8b8da0f8fc800" Name="Diagram1" ZoomLevel="65">
+      <Diagram DiagramId="ed0cfc5f600640788bf8b8da0f8fc800" Name="Diagram1" ZoomLevel="74">
         <EntityTypeShape EntityType="GaillardModel.Accesorio" Width="1.5" PointX="3.25" PointY="0.5" IsExpanded="true" />
         <EntityTypeShape EntityType="GaillardModel.AccesorioGrupo" Width="1.5" PointX="5.25" PointY="3.125" IsExpanded="true" />
         <EntityTypeShape EntityType="GaillardModel.CaracteristicaAccesorio" Width="1.5" PointX="0.625" PointY="7" IsExpanded="true" />
@@ -92,7 +92,12 @@
         <AssociationConnector Association="GaillardModel.FK_Vehiculo_Vehiculo" />
         <EntityTypeShape EntityType="GaillardModel.Familia" Width="1.5" PointX="3.125" PointY="9.5" />
         <EntityTypeShape EntityType="GaillardModel.Mantenimiento" Width="1.5" PointX="3.25" PointY="5.75" />
-        <EntityTypeShape EntityType="GaillardModel.PlanMantenimiento" Width="1.5" PointX="0.5" PointY="12.625" />
+        <EntityTypeShape EntityType="GaillardModel.PlanMantenimiento" Width="1.5" PointX="0.5" PointY="11.25" />
+        <EntityTypeShape EntityType="GaillardModel.TipoInstalacion" Width="2" PointX="25" PointY="0.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="GaillardModel.Instalacion" Width="2" PointX="25" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="GaillardModel.Equipo" Width="2" PointX="29" PointY="3" IsExpanded="true" />
+        <EntityTypeShape EntityType="GaillardModel.EquipoAccesorio" Width="2" PointX="32.5" PointY="5" IsExpanded="true" />
+        <EntityTypeShape EntityType="GaillardModel.InstalacionDocumento" Width="2" PointX="25" PointY="6" IsExpanded="true" />
         <EntityTypeShape EntityType="GaillardModel.Subfamilia" Width="1.5" PointX="5" PointY="9.375" />
         <EntityTypeShape EntityType="GaillardModel.Ubicacion" Width="1.5" PointX="3.5" PointY="12.375" />
         <AssociationConnector Association="GaillardModel.FK_Accesorio_Familia" />
@@ -102,6 +107,15 @@
         <AssociationConnector Association="GaillardModel.FK__Subfamili__Famil__0DD9F539" />
         <AssociationConnector Association="GaillardModel.FK_TipoAccesorio_Subfamilia" />
         <AssociationConnector Association="GaillardModel.FK_PlanMantenimiento_Accesorio" />
+        <AssociationConnector Association="GaillardModel.FK_Instalacion_TipoInstalacion" />
+        <AssociationConnector Association="GaillardModel.FK_Instalacion_ResponsablePersona" />
+        <AssociationConnector Association="GaillardModel.FK_Instalacion_Ubicacion" />
+        <AssociationConnector Association="GaillardModel.FK_Equipo_Instalacion" />
+        <AssociationConnector Association="GaillardModel.FK_Equipo_EquipoPadre" />
+        <AssociationConnector Association="GaillardModel.FK_EquipoAccesorio_Equipo" />
+        <AssociationConnector Association="GaillardModel.FK_EquipoAccesorio_Accesorio" />
+        <AssociationConnector Association="GaillardModel.FK_InstalacionDocumento_Instalacion" />
+        <AssociationConnector Association="GaillardModel.FK_PlanMantenimiento_Equipo" />
       </Diagram>
     </edmx:Diagrams>
   </edmx:Designer>

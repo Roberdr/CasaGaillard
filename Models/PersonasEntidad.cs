@@ -23,5 +23,6 @@ namespace CasaGaillard.Models
     
         public virtual Cargo Cargo { get; set; }
         public virtual Entidad Entidad { get; set; }
+        public virtual Persona Persona { get; set; }
     }
 }

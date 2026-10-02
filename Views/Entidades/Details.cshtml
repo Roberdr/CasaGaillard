@@ -1,42 +1,101 @@
-﻿@model CasaGaillard.Models.Entidad
-
+@model CasaGaillard.Models.Entidad
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Ficha de entidad";
+    var fechaHoy = DateTime.Today.ToString("yyyy-MM-dd");
 }
 
-<h2>Details</h2>
+<h2>Ficha de entidad</h2>
+<dl class="dl-horizontal">
+    <dt>Entidad</dt><dd>@Model.NombreEntidad</dd>
+    <dt>CIF</dt><dd>@Model.CIF</dd>
+    <dt>Dirección</dt><dd>@(Model.Direccion == null ? "Sin dirección" : Model.Direccion.NombreVia + " " + Model.Direccion.Numero + ", " + Model.Direccion.Poblacion.NombrePoblacion)</dd>
+</dl>
 
-<div>
-    <h4>Entidad</h4>
-    <hr />
-    <dl class="dl-horizontal">
-        <dt>
-            @Html.DisplayNameFor(model => model.NombreEntidad)
-        </dt>
+@if (TempData["EntidadError"] != null) { <div class="alert alert-danger">@TempData["EntidadError"]</div> }
 
-        <dd>
-            @Html.DisplayFor(model => model.NombreEntidad)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.CIF)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.CIF)
-        </dd>
-
-        <dt>
-            @Html.DisplayNameFor(model => model.Direccion.NombreVia)
-        </dt>
-
-        <dd>
-            @Html.DisplayFor(model => model.Direccion.NombreVia)
-        </dd>
-
-    </dl>
+<h3>Teléfonos</h3>
+@if (TempData["EntidadError"] != null) { <div class="alert alert-danger">@TempData["EntidadError"]</div> }
+<div class="entidad-telefonos" style="display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:12px;">
+    @foreach (var telefono in Model.TelefonosEntidad)
+    {
+        <div style="position:relative; display:inline-flex; align-items:center; padding:6px 18px 6px 6px; border:1px solid #ccc; border-radius:4px;">
+            @using (Html.BeginForm("ActualizarTelefono", "Entidades", FormMethod.Post, new { style = "margin:0;" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("entidadID", Model.ID)
+                @Html.Hidden("id", telefono.ID)
+                @Html.Hidden("returnTo", "Details")
+                @Html.TextBox("telefono", telefono.Telefono.Trim(), new { @class = "form-control", maxlength = "10", size = "10", style = "width:12ch; border:0; box-shadow:none; padding:0;", onkeydown = "if(event.key === 'Enter'){event.preventDefault(); this.form.submit();}" })
+            }
+            @using (Html.BeginForm("EliminarTelefono", "Entidades", FormMethod.Post, new { style = "position:absolute; top:-8px; right:-8px; margin:0;" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("entidadID", Model.ID)
+                @Html.Hidden("id", telefono.ID)
+                @Html.Hidden("returnTo", "Details")
+                <button type="submit" aria-label="Eliminar teléfono" title="Eliminar teléfono" class="btn btn-danger btn-xs" style="width:20px; height:20px; padding:0; border-radius:50%; line-height:18px;">×</button>
+            }
+        </div>
+    }
+    @using (Html.BeginForm("AgregarTelefono", "Entidades", FormMethod.Post, new { style = "margin:0;" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.Hidden("entidadID", Model.ID)
+        @Html.Hidden("returnTo", "Details")
+        <div style="display:flex; align-items:center; gap:4px;">
+            <input name="telefono" maxlength="10" size="10" class="form-control" style="width:12ch;" placeholder="Nuevo teléfono" aria-label="Nuevo teléfono" />
+            <button type="submit" aria-label="Añadir teléfono" title="Añadir teléfono" class="btn btn-success" style="width:34px; height:34px; padding:0; font-size:22px;">+</button>
+        </div>
+    }
 </div>
-<p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
-</p>
+
+<h3>Personas de la entidad</h3>
+<table class="table table-striped">
+    <thead><tr><th>Persona</th><th>Cargo</th><th>Desde</th><th>Hasta</th><th></th></tr></thead>
+    <tbody>
+    @foreach (var relacion in Model.PersonasEntidad.OrderByDescending(x => x.FechaBaja == null).ThenBy(x => x.Persona.Apellido1))
+    {
+        <tr>
+            <td>@Html.ActionLink((relacion.Persona.NombrePersona + " " + relacion.Persona.Apellido1 + " " + (relacion.Persona.Apellido2 ?? "")).Trim(), "Details", "Personas", new { id = relacion.PersonaID }, null)</td>
+            <td>@(relacion.Cargo == null ? "—" : relacion.Cargo.Cargo1.Trim())</td>
+            <td>@(relacion.FechaAlta.HasValue ? relacion.FechaAlta.Value.ToString("d") : "—")</td>
+            <td>@(relacion.FechaBaja.HasValue ? relacion.FechaBaja.Value.ToString("d") : "Vigente")</td>
+            <td>
+                @using (Html.BeginForm("EditarRelacion", "Entidades", FormMethod.Post, new { @class = "mb-2" }))
+                {
+                    @Html.AntiForgeryToken()
+                    @Html.Hidden("entidadID", Model.ID)
+                    @Html.Hidden("relacionID", relacion.ID)
+                    @Html.DropDownList("cargoID", new SelectList(ViewBag.CargosLista, "Value", "Text", relacion.CargoID), "Sin cargo", new { @class = "form-control" })
+                    <input type="date" name="fechaAlta" value="@(relacion.FechaAlta.HasValue ? relacion.FechaAlta.Value.ToString("yyyy-MM-dd") : "")" class="form-control" />
+                    <input type="date" name="fechaBaja" value="@(relacion.FechaBaja.HasValue ? relacion.FechaBaja.Value.ToString("yyyy-MM-dd") : "")" class="form-control" />
+                    <button type="submit" class="btn btn-sm btn-primary">Guardar relación</button>
+                }
+                @if (!relacion.FechaBaja.HasValue)
+                {
+                    using (Html.BeginForm("DarDeBajaPersona", "Entidades", FormMethod.Post))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.Hidden("entidadID", Model.ID)
+                        @Html.Hidden("relacionID", relacion.ID)
+                        <button type="submit" class="btn btn-sm btn-outline-warning">Dar de baja</button>
+                    }
+                }
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<h4>Vincular persona</h4>
+@using (Html.BeginForm("AgregarPersona", "Entidades", FormMethod.Post, new { @class = "form-inline" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.Hidden("entidadID", Model.ID)
+    @Html.DropDownList("personaID", (SelectList)ViewBag.PersonaID, "Seleccionar persona...", new { @class = "form-control" })
+    @Html.DropDownList("cargoID", (SelectList)ViewBag.CargoID, "Sin cargo", new { @class = "form-control" })
+    <input type="date" name="fechaAlta" value="@fechaHoy" class="form-control" />
+    <button type="submit" class="btn btn-primary">Vincular</button>
+}
+
+<p class="mt-3">@Html.ActionLink("Editar entidad", "Edit", new { id = Model.ID }, new { @class = "btn btn-primary" }) @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-default" })</p>

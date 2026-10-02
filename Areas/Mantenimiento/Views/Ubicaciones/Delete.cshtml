@@ -1,0 +1,6 @@
+@model CasaGaillard.Models.ViewModels.UbicacionCatalogoViewModel
+@{ ViewBag.Title = "Eliminar ubicación"; }
+<h2>Eliminar ubicación</h2>
+@if (TempData["CatalogoError"] != null) { <div class="alert alert-warning">@TempData["CatalogoError"]</div> }
+<div class="alert alert-info">@Model.Codigo — @Model.Nombre<br />Instalaciones asociadas: @Model.InstalacionesAsociadas; accesorios asociados: @Model.AccesoriosAsociados</div>
+@if (Model.InstalacionesAsociadas == 0 && Model.AccesoriosAsociados == 0) { using (Html.BeginForm()) { @Html.AntiForgeryToken()<button class="btn btn-danger" type="submit">Eliminar</button> @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-default" }) } } else { @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-default" }) }

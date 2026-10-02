@@ -18,6 +18,7 @@ namespace CasaGaillard.Models
         public Persona()
         {
             this.TelefonosPersona = new HashSet<TelefonoPersona>();
+            this.PersonasEntidad = new HashSet<PersonasEntidad>();
         }
     
         public int ID { get; set; }
@@ -30,5 +31,6 @@ namespace CasaGaillard.Models
         public virtual Direccion Direccion { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<TelefonoPersona> TelefonosPersona { get; set; }
+        public virtual ICollection<PersonasEntidad> PersonasEntidad { get; set; }
     }
 }

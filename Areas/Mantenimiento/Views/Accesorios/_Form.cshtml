@@ -2,11 +2,34 @@
 
 <div class="row">
     <div class="col-lg-3 col-md-6">
+        <div class="form-group">
+            @Html.LabelFor(m => m.Nombre)
+            @Html.TextBoxFor(m => m.Nombre, new { @class = "form-control", maxlength = "150" })
+            @Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger" })
+        </div>
         <div class="row">
             <div class="form-group">
                 @Html.LabelFor(m => m.TipoAccesorioID)
-                @Html.DropDownListFor(m => m.TipoAccesorioID, Model.TiposAccesorio, "-- Seleccione --", new { @class = "form-control" })
+                <div class="input-group">
+                    @Html.DropDownListFor(m => m.TipoAccesorioID, Model.TiposAccesorio, "-- Seleccione --", new { @class = "form-control", id = "TipoAccesorioID" })
+                    <span class="input-group-btn">
+                        <button type="button" class="btn btn-default" id="mostrarTipoAccesorioRapido">Nuevo</button>
+                    </span>
+                </div>
                 @Html.ValidationMessageFor(m => m.TipoAccesorioID, "", new { @class = "text-danger" })
+                <div id="tipoAccesorioRapido" class="well well-sm" style="display:none; margin-top: 10px;">
+                    <div class="form-group">
+                        <label for="nuevoTipoAccesorioNombre">Nuevo tipo</label>
+                        <input type="text" id="nuevoTipoAccesorioNombre" class="form-control input-sm" maxlength="100" />
+                    </div>
+                    <div class="form-group">
+                        <label for="nuevoTipoAccesorioDescripcion">Descripción</label>
+                        <input type="text" id="nuevoTipoAccesorioDescripcion" class="form-control input-sm" maxlength="250" />
+                    </div>
+                    <button type="button" class="btn btn-success btn-sm" id="guardarTipoAccesorioRapido">Guardar tipo</button>
+                    <button type="button" class="btn btn-link btn-sm" id="cancelarTipoAccesorioRapido">Cancelar</button>
+                    <span id="tipoAccesorioRapidoMensaje" class="text-muted"></span>
+                </div>
             </div>
         </div>
         <div class="row">
@@ -16,6 +39,11 @@
                 @Html.ValidationMessageFor(m => m.FamiliaID, "", new { @class = "text-danger" })
             </div>
         </div> 
+        <div class="form-group">
+            @Html.LabelFor(m => m.FechaAlta)
+            @Html.TextBoxFor(m => m.FechaAlta, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })
+            @Html.ValidationMessageFor(m => m.FechaAlta, "", new { @class = "text-danger" })
+        </div>
         <div class="row">
             <div class="form-group">
                 @Html.LabelFor(m => m.FotosAdjuntas)
@@ -35,10 +63,22 @@
         <div class="row">
             <div class="form-group">
                 @Html.LabelFor(m => m.SubfamiliaID)
-                @Html.DropDownListFor(m => m.SubfamiliaID, Model.Subfamilias, "-- Sin subfamilia --", new { @class = "form-control", id = "SubfamiliaID", data_selected = Model.SubfamiliaID, data_url = Url.Action("SubfamiliasPorFamilia", "Accesorios", new { area = "Mantenimiento" }) })
+                <div class="input-group">
+                    @Html.DropDownListFor(m => m.SubfamiliaID, Model.Subfamilias, "-- Sin subfamilia --", new { @class = "form-control", id = "SubfamiliaID", data_selected = Model.SubfamiliaID, data_url = Url.Action("SubfamiliasPorFamilia", "Accesorios", new { area = "Mantenimiento" }) })
+                    <span class="input-group-btn"><button type="button" class="btn btn-default accesorio-crear-opcion" data-url="@Url.Action("CrearSubfamiliaRapida", "Accesorios", new { area = "Mantenimiento" })" data-target="SubfamiliaID" data-extra="familia">Nuevo</button></span>
+                </div>
                 @Html.ValidationMessageFor(m => m.SubfamiliaID, "", new { @class = "text-danger" })
+                <span id="SubfamiliaStatus" class="help-block text-muted" aria-live="polite"></span>
             </div>
         </div>     
+        <div class="form-group">
+            @Html.LabelFor(m => m.UbicacionId)
+            @Html.DropDownListFor(m => m.UbicacionId, Model.Ubicaciones, "-- Sin ubicación --", new { @class = "form-control" })
+            @Html.ValidationMessageFor(m => m.UbicacionId, "", new { @class = "text-danger" })
+        </div>
+        <div class="checkbox">
+            <label>@Html.CheckBoxFor(m => m.Activo) Activo</label>
+        </div>
     </div>
     <div class="col-lg-6">
         @if (Model.FotosExistentes != null && Model.FotosExistentes.Any())
@@ -70,8 +110,107 @@
     </div>
 </div>
 
+<div class="form-group">
+    @Html.LabelFor(m => m.Descripcion)
+    @Html.TextAreaFor(m => m.Descripcion, new { @class = "form-control", rows = "3", maxlength = "500" })
+    @Html.ValidationMessageFor(m => m.Descripcion, "", new { @class = "text-danger" })
+</div>
 
 <script src="~/Scripts/Accesorios/subfamilias.js"></script>
+<script>
+    (function () {
+        var panel = document.getElementById('tipoAccesorioRapido');
+        var abrir = document.getElementById('mostrarTipoAccesorioRapido');
+        var guardar = document.getElementById('guardarTipoAccesorioRapido');
+        var cancelar = document.getElementById('cancelarTipoAccesorioRapido');
+        var nombre = document.getElementById('nuevoTipoAccesorioNombre');
+        var descripcion = document.getElementById('nuevoTipoAccesorioDescripcion');
+        var mensaje = document.getElementById('tipoAccesorioRapidoMensaje');
+        var tipoSelect = document.getElementById('TipoAccesorioID');
+        var subfamiliaSelect = document.getElementById('SubfamiliaID');
+
+        if (!panel || !abrir || !guardar || !cancelar || !nombre || !tipoSelect) {
+            return;
+        }
+
+        abrir.addEventListener('click', function () {
+            panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+            if (panel.style.display === 'block') {
+                nombre.focus();
+            }
+        });
+
+        cancelar.addEventListener('click', function () {
+            panel.style.display = 'none';
+            nombre.value = '';
+            if (descripcion) {
+                descripcion.value = '';
+            }
+            mensaje.textContent = '';
+            mensaje.className = 'text-muted';
+        });
+
+        guardar.addEventListener('click', function () {
+            var valor = nombre.value.trim();
+            if (!valor) {
+                mensaje.textContent = 'Introduce el nombre.';
+                mensaje.className = 'text-danger';
+                nombre.focus();
+                return;
+            }
+
+            guardar.disabled = true;
+            mensaje.textContent = 'Guardando...';
+            mensaje.className = 'text-muted';
+
+            var token = document.querySelector('input[name="__RequestVerificationToken"]');
+            var datos = new FormData();
+            datos.append('__RequestVerificationToken', token ? token.value : '');
+            datos.append('nombre', valor);
+            datos.append('descripcion', descripcion ? descripcion.value.trim() : '');
+            datos.append('subfamiliaId', subfamiliaSelect && subfamiliaSelect.value ? subfamiliaSelect.value : '');
+
+            fetch('@Url.Action("CrearTipoAccesorioRapido", "Accesorios", new { area = "Mantenimiento" })', {
+                method: 'POST',
+                body: datos,
+                credentials: 'same-origin'
+            })
+                .then(function (response) { return response.json(); })
+                .then(function (data) {
+                    if (!data || !data.ok) {
+                        mensaje.textContent = data && data.message ? data.message : 'No se ha podido crear el tipo.';
+                        mensaje.className = 'text-danger';
+                        return;
+                    }
+
+                    var option = Array.prototype.slice.call(tipoSelect.options).filter(function (o) {
+                        return o.value === String(data.id);
+                    })[0];
+
+                    if (!option) {
+                        option = new Option(data.text, data.id);
+                        tipoSelect.add(option);
+                    }
+
+                    tipoSelect.value = String(data.id);
+                    mensaje.textContent = data.existing ? 'Ese tipo ya existía y se ha seleccionado.' : 'Tipo creado y seleccionado.';
+                    mensaje.className = 'text-success';
+                    nombre.value = '';
+                    if (descripcion) {
+                        descripcion.value = '';
+                    }
+                    panel.style.display = 'none';
+                })
+                .catch(function () {
+                    mensaje.textContent = 'No se ha podido crear el tipo.';
+                    mensaje.className = 'text-danger';
+                })
+                .finally(function () {
+                    guardar.disabled = false;
+                });
+        });
+    })();
+</script>
 
 @{
     // Mostrar los detalles dentro de la tabla editable más abajo; no duplicar lista
@@ -101,7 +240,10 @@
                         <tr>
                             <td>
                                 @Html.HiddenFor(m => m.Detalles[i].ID)
-                                @Html.DropDownListFor(m => m.Detalles[i].CaracteristicaAccesorioID, new SelectList(Model.Caracteristicas, "Value", "Text", Model.Detalles[i].CaracteristicaAccesorioID), "-- Sin característica --", new { @class = "form-control input-sm" })
+                                <div class="input-group">
+                                    @Html.DropDownListFor(m => m.Detalles[i].CaracteristicaAccesorioID, new SelectList(Model.Caracteristicas, "Value", "Text", Model.Detalles[i].CaracteristicaAccesorioID), "-- Sin característica --", new { @class = "form-control input-sm accesorio-caracteristica" })
+                                    <span class="input-group-btn"><button type="button" class="btn btn-default btn-sm accesorio-crear-opcion" data-url="@Url.Action("CrearCaracteristicaRapida", "Accesorios", new { area = "Mantenimiento" })" data-target="@Html.IdFor(m => m.Detalles[i].CaracteristicaAccesorioID)">Nuevo</button></span>
+                                </div>
                             </td>
                             <td style="width: 100px;">
                                 @Html.TextBoxFor(m => m.Detalles[i].Cantidad, new { @class = "form-control input-sm", type = "number", min = "0" })
@@ -110,7 +252,10 @@
                                 @Html.TextBoxFor(m => m.Detalles[i].Medida, new { @class = "form-control input-sm campo-numerico", type = "text", inputmode = "decimal", value = String.Format(new System.Globalization.CultureInfo("es-Es"), "{0:N2}", Model.Detalles[i].Medida), placeholder = "0.00" })
                             </td>
                             <td style="width: 160px;">
-                                @Html.DropDownListFor(m => m.Detalles[i].UnidadID, new SelectList(Model.Unidades, "Value", "Text", Model.Detalles[i].UnidadID), "-- Sin unidad --", new { @class = "form-control input-sm" })
+                                <div class="input-group">
+                                    @Html.DropDownListFor(m => m.Detalles[i].UnidadID, new SelectList(Model.Unidades, "Value", "Text", Model.Detalles[i].UnidadID), "-- Sin unidad --", new { @class = "form-control input-sm accesorio-unidad" })
+                                    <span class="input-group-btn"><button type="button" class="btn btn-default btn-sm accesorio-crear-opcion" data-url="@Url.Action("CrearUnidadRapida", "Accesorios", new { area = "Mantenimiento" })" data-target="@Html.IdFor(m => m.Detalles[i].UnidadID)">Nuevo</button></span>
+                                </div>
                             </td>
                             <td>
                                 @Html.TextBoxFor(m => m.Detalles[i].Tipo, new { @class = "form-control input-sm" })
@@ -125,6 +270,43 @@
         </div>
     </div>
 </div>
+
+<script>
+    (function () {
+        document.addEventListener('click', function (event) {
+            var button = event.target.closest('.accesorio-crear-opcion');
+            if (!button) return;
+            var nombre = window.prompt('Nombre de la nueva opción:');
+            if (nombre === null) return;
+            nombre = nombre.trim();
+            if (!nombre) { window.alert('Introduce un nombre.'); return; }
+
+            var token = document.querySelector('input[name="__RequestVerificationToken"]');
+            var datos = new FormData();
+            datos.append('__RequestVerificationToken', token ? token.value : '');
+            datos.append('nombre', nombre);
+            if (button.dataset.extra === 'familia') {
+                var familia = document.getElementById('FamiliaID');
+                if (!familia || !familia.value) { window.alert('Selecciona primero una familia.'); return; }
+                datos.append('familiaId', familia.value);
+            }
+
+            button.disabled = true;
+            fetch(button.dataset.url, {
+                method: 'POST', body: datos, credentials: 'same-origin'
+            }).then(function (response) { return response.json(); }).then(function (data) {
+                if (!data || !data.ok) { window.alert(data && data.message ? data.message : 'No se pudo crear la opción.'); return; }
+                var target = document.getElementById(button.dataset.target);
+                if (!target) return;
+                var option = Array.prototype.find.call(target.options, function (item) { return item.value === String(data.id); });
+                if (!option) { option = new Option(data.text, data.id); target.add(option); }
+                target.value = String(data.id);
+                target.dispatchEvent(new Event('change', { bubbles: true }));
+            }).catch(function () { window.alert('No se pudo crear la opción.'); })
+              .finally(function () { button.disabled = false; });
+        });
+    })();
+</script>
 
         
 

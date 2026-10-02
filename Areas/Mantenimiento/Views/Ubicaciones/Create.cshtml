@@ -1,0 +1,4 @@
+@model CasaGaillard.Models.ViewModels.UbicacionCatalogoViewModel
+@{ ViewBag.Title = "Nueva ubicación"; }
+<h2>Nueva ubicación</h2>
+@using (Html.BeginForm()) { @Html.AntiForgeryToken()<div class="form-horizontal"><hr />@Html.Partial("_Form", Model)<div class="form-group"><div class="col-md-offset-2 col-md-10"><button class="btn btn-success" type="submit">Crear</button> @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-default" })</div></div></div> }

@@ -242,6 +242,16 @@
     <Compile Include="Controllers\EntidadesController.cs" />
     <Compile Include="Areas\Mantenimiento\Controllers\GruposController.cs" />
     <Compile Include="Areas\Mantenimiento\Controllers\HomeController.cs" />
+    <Compile Include="Areas\Mantenimiento\Controllers\PlanMantenimientoController.cs" />
+    <Compile Include="Areas\Mantenimiento\Controllers\InstalacionesController.cs" />
+    <Compile Include="Areas\Mantenimiento\Controllers\TiposInstalacionController.cs" />
+    <Compile Include="Areas\Mantenimiento\Controllers\UbicacionesController.cs" />
+    <Compile Include="Areas\Mantenimiento\Controllers\FamiliasController.cs" />
+    <Compile Include="Areas\Mantenimiento\Controllers\InstalacionDocumentosController.cs" />
+    <Compile Include="Areas\Mantenimiento\Controllers\FotosActivosController.cs" />
+    <Compile Include="Areas\Mantenimiento\Controllers\EquiposController.cs" />
+    <Compile Include="Areas\Mantenimiento\Controllers\IntervencionesController.cs" />
+    <Compile Include="Areas\Mantenimiento\Controllers\CostesMantenimientoController.cs" />
     <Compile Include="Areas\Mantenimiento\Controllers\TareasMantenimientoController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\PersonasController.cs" />
@@ -252,11 +262,35 @@
     <Compile Include="Migrations\Configuration.cs" />
     <Content Include="Content\PagedList.css" />
     <Content Include="Migrations\20260828_AddBajaToVehiculosCubas.sql" />
+    <Content Include="Migrations\20260918_NormalizarAccesoriosPlanMantenimiento.sql" />
+    <Content Include="Migrations\20260929_InstalacionesEquipos.sql" />
+    <Content Include="Migrations\20260930_ReiniciarInstalaciones.sql" />
+    <Content Include="Migrations\20260930_EvolucionarPlanesMantenimientoInstalaciones.sql" />
+    <Content Include="Migrations\20260930_IntegrarTareasInstalaciones.sql" />
+    <Content Include="Migrations\20260930_IntervencionesMantenimiento.sql" />
+    <Content Include="Migrations\20260930_VincularUbicaciones.sql" />
     <Compile Include="Models\Accesorio.cs">
       <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AccesorioFoto.cs" />
+    <Compile Include="Models\InstalacionEquipoFoto.cs" />
+    <Compile Include="Models\InstalacionEquipoFotosContext.cs" />
     <Compile Include="Models\AccesorioGrupo.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\TipoInstalacion.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Instalacion.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\Equipo.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\EquipoAccesorio.cs">
+      <DependentUpon>GaillardModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Models\InstalacionDocumento.cs">
       <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\AccesoriosFotosContext.cs" />
@@ -388,6 +422,7 @@
     <Compile Include="Models\sysdiagram.cs">
       <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\TareaMantenimientoAccesorio.cs" />
     <Compile Include="Models\TareaMantenimiento.cs" />
     <Compile Include="Models\TareaMantenimientoFoto.cs" />
     <Compile Include="Models\TareasMantenimientoContext.cs" />
@@ -464,6 +499,13 @@
     <Compile Include="Models\ViewModels\PasswordRecoveryViewModels.cs" />
     <Compile Include="Models\ViewModels\AccesoriosViewModels.cs" />
     <Compile Include="Models\ViewModels\TareasMantenimientoViewModels.cs" />
+    <Compile Include="Models\ViewModels\InstalacionesViewModels.cs" />
+    <Compile Include="Models\ViewModels\CatalogosInstalacionViewModels.cs" />
+    <Compile Include="Models\ViewModels\InstalacionDocumentoViewModels.cs" />
+    <Compile Include="Models\ViewModels\InstalacionEquipoFotosViewModel.cs" />
+    <Compile Include="Models\ViewModels\IntervencionesViewModels.cs" />
+    <Compile Include="Models\ViewModels\FamiliasSubfamiliasViewModels.cs" />
+    <Compile Include="Models\ViewModels\CostesMantenimientoViewModels.cs" />
     <Compile Include="Models\ViewModels\VehiculosIndexViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -856,6 +898,7 @@
     <Content Include="Areas\Pagina\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Pagina\Views\Shared\_Layout.cshtml" />
     <Content Include="Areas\Pagina\Views\Pagina\Index.cshtml" />
+    <Content Include="Areas\Pagina\Views\Pagina\AcercaDe.cshtml" />
     <Content Include="Areas\Pagina\Views\Shared\_Menu_Lateral.cshtml" />
     <Content Include="Areas\Pagina\Views\Pagina\Tienda.cshtml" />
     <Content Include="Scripts\esm\popper-utils.js.map" />
@@ -937,6 +980,42 @@
     <Content Include="Areas\Mantenimiento\Views\Grupos\Details.cshtml" />
     <Content Include="Areas\Mantenimiento\Views\Grupos\Edit.cshtml" />
     <Content Include="Areas\Mantenimiento\Views\Grupos\Index.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\PlanMantenimiento\Create.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\PlanMantenimiento\Delete.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\PlanMantenimiento\Details.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\PlanMantenimiento\Edit.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\PlanMantenimiento\Index.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\PlanMantenimiento\_Form.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Instalaciones\Index.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Instalaciones\Create.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Instalaciones\Edit.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Instalaciones\_Form.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\TiposInstalacion\Index.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\TiposInstalacion\Create.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\TiposInstalacion\Edit.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\TiposInstalacion\Delete.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\TiposInstalacion\_Form.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Ubicaciones\Index.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Ubicaciones\Create.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Ubicaciones\Edit.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Ubicaciones\Delete.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Ubicaciones\_Form.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Familias\Index.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Familias\FamiliaForm.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Familias\SubfamiliaForm.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\InstalacionDocumentos\Index.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\FotosActivos\Index.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Equipos\Index.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Equipos\Create.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Equipos\Edit.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Equipos\_Form.cshtml" />
+    <Content Include="Migrations\20260930_AmpliarJerarquiaActivos.sql" />
+    <Content Include="Migrations\20260930_CargarTiposInstalacion.sql" />
+    <Content Include="Areas\Mantenimiento\Views\Intervenciones\Index.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Intervenciones\Create.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Intervenciones\Details.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\Intervenciones\Edit.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\CostesMantenimiento\Index.cshtml" />
     <Content Include="Views\Direcciones\Create.cshtml" />
     <Content Include="Views\Direcciones\Delete.cshtml" />
     <Content Include="Views\Direcciones\Details.cshtml" />

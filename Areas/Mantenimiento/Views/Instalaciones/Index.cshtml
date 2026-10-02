@@ -1,0 +1,46 @@
+@model IEnumerable<CasaGaillard.Models.ViewModels.InstalacionFilaViewModel>
+@{ ViewBag.Title = "Instalaciones"; }
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Instalaciones</h2>
+    @Html.ActionLink("Nueva instalación", "Create", null, new { @class = "btn btn-success" })
+</div>
+
+<p>
+    @if (ViewBag.IncluirBajas == true)
+    { @Html.ActionLink("Ocultar fuera de servicio", "Index", null, new { @class = "btn btn-default btn-sm" }) }
+    else
+    { @Html.ActionLink("Mostrar fuera de servicio", "Index", new { incluirBajas = true }, new { @class = "btn btn-default btn-sm" }) }
+    @Html.ActionLink("Ver equipos", "Index", "Equipos", new { area = "Mantenimiento" }, new { @class = "btn btn-default btn-sm" })
+</p>
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead><tr><th>Código</th><th>Nombre</th><th>Tipo</th><th>Ubicación</th><th>Estado</th><th>Criticidad</th><th>Equipos</th><th></th></tr></thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Codigo</td><td>@item.Nombre</td><td>@(item.TipoNombre ?? "Sin tipo")</td><td>@(item.UbicacionNombre ?? "Sin ubicación")</td>
+                <td>@item.Estado</td><td>@item.Criticidad / 5</td>
+                <td>@Html.ActionLink(item.NumeroEquipos.ToString(), "Index", "Equipos", new { area = "Mantenimiento", instalacionId = item.Id }, null)</td>
+                <td class="text-nowrap">
+                    @Html.ActionLink("Documentos", "Index", "InstalacionDocumentos", new { area = "Mantenimiento", instalacionId = item.Id }, null)
+                    |
+                    @Html.ActionLink("Fotos", "Index", "FotosActivos", new { area = "Mantenimiento", tipo = "Instalacion", id = item.Id }, null)
+                    |
+                    @Html.ActionLink("Editar", "Edit", new { id = item.Id })
+                    @if (item.Estado != "FUERA_SERVICIO")
+                    {
+                        using (Html.BeginForm("DarDeBaja", "Instalaciones", new { id = item.Id }, FormMethod.Post, new { @class = "d-inline" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-link" onclick="return confirm('¿Marcar esta instalación fuera de servicio?');">Dar de baja</button>
+                        }
+                    }
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+</div>

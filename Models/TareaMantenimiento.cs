@@ -8,6 +8,12 @@ namespace CasaGaillard.Models
     [Table("TareasMantenimiento")]
     public class TareaMantenimiento
     {
+        public TareaMantenimiento()
+        {
+            Fotos = new HashSet<TareaMantenimientoFoto>();
+            Accesorios = new HashSet<TareaMantenimientoAccesorio>();
+        }
+
         public int ID { get; set; }
 
         [Required]
@@ -31,6 +37,19 @@ namespace CasaGaillard.Models
         [StringLength(150)]
         [Display(Name = "Equipo / instalación")]
         public string Equipo { get; set; }
+
+        // Referencias normalizadas a los activos a los que afecta la tarea.
+        // Los campos de texto anteriores se conservan para no romper datos existentes.
+        public int? InstalacionId { get; set; }
+        public int? EquipoId { get; set; }
+        public int? CubaId { get; set; }
+        public int? GrupoId { get; set; }
+        public int? VehiculoId { get; set; }
+        public int? PlanMantenimientoId { get; set; }
+        public int? DetectadoPorPersonaID { get; set; }
+        public int? ContactoPersonaID { get; set; }
+        public int? AsignadaAPersonaID { get; set; }
+        public int? EmpresaExteriorEntidadID { get; set; }
 
         [StringLength(150)]
         [Display(Name = "Detectado por")]
@@ -79,5 +98,6 @@ namespace CasaGaillard.Models
         public DateTime? FechaActualizacion { get; set; }
 
         public virtual ICollection<TareaMantenimientoFoto> Fotos { get; set; }
+        public virtual ICollection<TareaMantenimientoAccesorio> Accesorios { get; set; }
     }
 }

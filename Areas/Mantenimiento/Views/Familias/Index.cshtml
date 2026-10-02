@@ -1,0 +1,17 @@
+@model CasaGaillard.Models.ViewModels.FamiliasSubfamiliasIndexViewModel
+@{ ViewBag.Title = "Familias y subfamilias"; }
+<h2>Familias y subfamilias</h2>
+<p class="text-muted">Cada subfamilia pertenece a una familia. Puedes cambiar esa relación al editarla.</p>
+@if (TempData["LoginMessage"] != null) { <div class="alert alert-success">@TempData["LoginMessage"]</div> }
+@if (TempData["CatalogoError"] != null) { <div class="alert alert-danger">@TempData["CatalogoError"]</div> }
+<h3>Familias <span class="pull-right">@Html.ActionLink("Nueva familia", "CreateFamilia", null, new { @class = "btn btn-success" })</span></h3>
+<div class="table-responsive"><table class="table table-striped table-bordered"><thead><tr><th>Nombre</th><th>Descripción</th><th>Subfamilias</th><th>Accesorios</th><th></th></tr></thead><tbody>
+@foreach (var item in Model.Familias) { <tr><td>@item.Nombre</td><td>@item.Descripcion</td><td>@item.NumeroSubfamilias</td><td>@item.NumeroAccesorios</td><td class="text-nowrap">@Html.ActionLink("Editar", "EditFamilia", new { id = item.FamiliaId }) @using (Html.BeginForm("DeleteFamilia", "Familias", new { id = item.FamiliaId }, FormMethod.Post, new { style = "display:inline" })) { @Html.AntiForgeryToken()<button type="submit" class="btn btn-link" onclick="return confirm('¿Eliminar esta familia?');">Eliminar</button> }</td></tr> }
+@if (!Model.Familias.Any()) { <tr><td colspan="5" class="text-muted">No hay familias.</td></tr> }
+</tbody></table></div>
+<h3>Subfamilias <span class="pull-right">@Html.ActionLink("Nueva subfamilia", "CreateSubfamilia", null, new { @class = "btn btn-success" })</span></h3>
+<div class="table-responsive"><table class="table table-striped table-bordered"><thead><tr><th>Familia</th><th>Subfamilia</th><th>Descripción</th><th>Accesorios</th><th>Tipos</th><th></th></tr></thead><tbody>
+@foreach (var item in Model.Subfamilias) { <tr><td>@item.FamiliaNombre</td><td>@item.Nombre</td><td>@item.Descripcion</td><td>@item.NumeroAccesorios</td><td>@item.NumeroTipos</td><td class="text-nowrap">@Html.ActionLink("Editar", "EditSubfamilia", new { id = item.SubfamiliaId }) @using (Html.BeginForm("DeleteSubfamilia", "Familias", new { id = item.SubfamiliaId }, FormMethod.Post, new { style = "display:inline" })) { @Html.AntiForgeryToken()<button type="submit" class="btn btn-link" onclick="return confirm('¿Eliminar esta subfamilia?');">Eliminar</button> }</td></tr> }
+@if (!Model.Subfamilias.Any()) { <tr><td colspan="6" class="text-muted">No hay subfamilias.</td></tr> }
+</tbody></table></div>
+<p>@Html.ActionLink("Volver a accesorios", "Index", "Accesorios", new { area = "Mantenimiento" }, new { @class = "btn btn-default" })</p>

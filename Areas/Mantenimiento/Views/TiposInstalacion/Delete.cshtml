@@ -1,0 +1,6 @@
+@model CasaGaillard.Models.ViewModels.TipoInstalacionCatalogoViewModel
+@{ ViewBag.Title = "Eliminar tipo de instalación"; }
+<h2>Eliminar tipo de instalación</h2>
+@if (TempData["CatalogoError"] != null) { <div class="alert alert-warning">@TempData["CatalogoError"]</div> }
+<div class="alert alert-info">@Model.Nombre — @Model.Descripcion<br />Instalaciones asociadas: @Model.InstalacionesAsociadas</div>
+@if (Model.InstalacionesAsociadas == 0) { using (Html.BeginForm()) { @Html.AntiForgeryToken()<button class="btn btn-danger" type="submit">Eliminar</button> @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-default" }) } } else { @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-default" }) }

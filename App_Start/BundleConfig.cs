@@ -16,7 +16,7 @@ namespace CasaGaillard
 
             bundles.Add(new Bundle("~/bundles/js").Include(
                         "~/Scripts/Site.js",
-                        "~/Scripts/bootstrap.js"));
+                        "~/Scripts/bootstrap.bundle.js"));
 
             // Utilice la versión de desarrollo de Modernizr para desarrollar y obtener información. De este modo, estará
             // para la producción, use la herramienta de compilación disponible en https://modernizr.com para seleccionar solo las pruebas que necesite.

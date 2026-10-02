@@ -30,34 +30,61 @@
                     @if (Request.IsAuthenticated)
                     {
                         <li>@Html.ActionLink("Panel", "Index", "Home", new { area = "Mantenimiento" }, htmlAttributes: new { @class = "maintenance-nav__link" })</li>
-                        if (User.IsInRole(AppRoles.Administrador) || User.IsInRole(AppRoles.Mantenimiento))
+                        if (User.IsInRole(AppRoles.Administrador) || User.IsInRole(AppRoles.Mantenimiento) || User.IsInRole(AppRoles.Consulta))
                         {
-                            <li>@Html.ActionLink("Tareas", "Index", "TareasMantenimiento", new { area = "Mantenimiento" }, htmlAttributes: new { @class = "maintenance-nav__link" })</li>
                             <li class="dropdown">
-                                <a class="maintenance-nav__link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    Cisternas
-                                </a>
+                                <a class="maintenance-nav__link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Mantenimiento</a>
                                 <ul class="dropdown-menu">
-                                    <li>@Html.ActionLink("Cubas", "Index", "Cubas", new { area = "Mantenimiento" }, htmlAttributes: new { @class = "dropdown-item maintenance-nav__link" })</li>
-                                    <li>@Html.ActionLink("Revisiones", "Index", "Revisiones", new { area = "Mantenimiento" }, htmlAttributes: new { @class = "dropdown-item maintenance-nav__link" })</li>
-
-                                    <li><a class="dropdown-item" href="#">Another action</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li><a class="dropdown-item" href="#">Something else here</a></li>
+                                    <li>@Html.ActionLink("Tareas de mantenimiento", "Index", "TareasMantenimiento", new { area = "Mantenimiento" }, new { @class = "dropdown-item" })</li>
+                                    <li>@Html.ActionLink("Intervenciones y repuestos", "Index", "Intervenciones", new { area = "Mantenimiento" }, new { @class = "dropdown-item" })</li>
+                                    <li>@Html.ActionLink("Plan de mantenimiento", "Index", "PlanMantenimiento", new { area = "Mantenimiento" }, new { @class = "dropdown-item" })</li>
+                                    <li>@Html.ActionLink("Historial y costes", "Index", "CostesMantenimiento", new { area = "Mantenimiento" }, new { @class = "dropdown-item" })</li>
                                 </ul>
                             </li>
-                            
-                            <li>@Html.ActionLink("Vehículos", "Index", "Vehiculos", new { area = "Mantenimiento" }, htmlAttributes: new { @class = "maintenance-nav__link" })</li>
-                            <li>@Html.ActionLink("Grupos", "Index", "Grupos", new { area = "Mantenimiento" }, htmlAttributes: new { @class = "maintenance-nav__link" })</li>
-                            <li>@Html.ActionLink("Accesorios", "Index", "Accesorios", new { area = "Mantenimiento" }, htmlAttributes: new { @class = "maintenance-nav__link" })</li>
+                            <li class="dropdown">
+                                <a class="maintenance-nav__link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Activos</a>
+                                <ul class="dropdown-menu">
+                                    <li>@Html.ActionLink("Instalaciones", "Index", "Instalaciones", new { area = "Mantenimiento" }, new { @class = "dropdown-item" })</li>
+                                    <li>@Html.ActionLink("Equipos de instalaciones", "Index", "Equipos", new { area = "Mantenimiento" }, new { @class = "dropdown-item" })</li>
+                                    @if (User.IsInRole(AppRoles.Administrador) || User.IsInRole(AppRoles.Mantenimiento))
+                                    {
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li>@Html.ActionLink("Cisternas", "Index", "Cubas", new { area = "Mantenimiento" }, new { @class = "dropdown-item" })</li>
+                                        <li>@Html.ActionLink("Vehículos", "Index", "Vehiculos", new { area = "Mantenimiento" }, new { @class = "dropdown-item" })</li>
+                                    }
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a class="maintenance-nav__link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Revisiones</a>
+                                <ul class="dropdown-menu">
+                                    <li>@Html.ActionLink("Revisiones de cisternas", "Index", "Revisiones", new { area = "Mantenimiento" }, new { @class = "dropdown-item" })</li>
+                                    <li>@Html.ActionLink("Revisiones de vehículos", "Index", "RevisionesVehiculos", new { area = "Mantenimiento" }, new { @class = "dropdown-item" })</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a class="maintenance-nav__link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Catálogos</a>
+                                <ul class="dropdown-menu">
+                                    <li>@Html.ActionLink("Accesorios", "Index", "Accesorios", new { area = "Mantenimiento" }, new { @class = "dropdown-item" })</li>
+                                    <li>@Html.ActionLink("Familias y subfamilias", "Index", "Familias", new { area = "Mantenimiento" }, new { @class = "dropdown-item" })</li>
+                                    <li>@Html.ActionLink("Grupos", "Index", "Grupos", new { area = "Mantenimiento" }, new { @class = "dropdown-item" })</li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li>@Html.ActionLink("Tipos de instalación", "Index", "TiposInstalacion", new { area = "Mantenimiento" }, new { @class = "dropdown-item" })</li>
+                                    <li>@Html.ActionLink("Ubicaciones", "Index", "Ubicaciones", new { area = "Mantenimiento" }, new { @class = "dropdown-item" })</li>
+                                </ul>
+                            </li>
+                            <li class="dropdown">
+                                <a class="maintenance-nav__link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Organización</a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="@Url.Content("~/Entidades")">Entidades</a></li>
+                                    <li>@Html.ActionLink("Personas", "Index", "Personas", new { area = "" }, new { @class = "dropdown-item" })</li>
+                                </ul>
+                            </li>
                         }
                         if (User.IsInRole(AppRoles.Administrador))
                         {
                             <li>@Html.ActionLink("Usuarios", "Index", "Usuarios", new { area = "Mantenimiento" }, htmlAttributes: new { @class = "maintenance-nav__link" })</li>
                         }
                     }
-                    <li>@Html.ActionLink("Acerca de", "About", "Home", routeValues: null, htmlAttributes: new { @class = "maintenance-nav__link" })</li>
-                    <li>@Html.ActionLink("Contacto", "Contact", "Home", routeValues: null, htmlAttributes: new { @class = "maintenance-nav__link" })</li>
                 </ul>
             </nav>
             <div class="maintenance-auth">

@@ -76,6 +76,11 @@ namespace CasaGaillard.Areas.Pagina.Controllers
             return View();
         }
 
+        public ActionResult AcercaDe()
+        {
+            return View();
+        }
+
         public ActionResult Imagen(string archivo)
         {
             if (string.IsNullOrWhiteSpace(archivo))

@@ -1,0 +1,4 @@
+@model CasaGaillard.Models.ViewModels.TipoInstalacionCatalogoViewModel
+@{ ViewBag.Title = "Editar tipo de instalación"; }
+<h2>Editar tipo de instalación</h2>
+@using (Html.BeginForm()) { @Html.AntiForgeryToken()@Html.HiddenFor(m => m.Id)<div class="form-horizontal"><hr />@Html.Partial("_Form", Model)<div class="form-group"><div class="col-md-offset-2 col-md-10"><button class="btn btn-primary" type="submit">Guardar</button> @Html.ActionLink("Volver", "Index", null, new { @class = "btn btn-default" })</div></div></div> }

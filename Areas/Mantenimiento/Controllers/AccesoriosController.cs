@@ -136,9 +136,10 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
 
         // GET: Accesorios/Create
         [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
-        public ActionResult Create()
+        public async Task<ActionResult> Create(int? intervencionId)
         {
-            return View(CreateFormModel());
+            if (intervencionId.HasValue && !await ExisteIntervencionAsync(intervencionId.Value)) return HttpNotFound();
+            return View(CreateFormModel(new AccesorioFormViewModel { IntervencionId = intervencionId }));
         }
 
         // POST: Accesorios/Create
@@ -147,6 +148,9 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public async Task<ActionResult> Create(AccesorioFormViewModel model)
         {
+            if (model.IntervencionId.HasValue && !await ExisteIntervencionAsync(model.IntervencionId.Value)) return HttpNotFound();
+            ValidarFamiliaSubfamilia(model);
+
             if (!ModelState.IsValid)
             {
                 // Eliminar valores problemáticos de ModelState para que los helpers usen el valor del modelo
@@ -187,8 +191,13 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             {
                 TipoAccesorioID = model.TipoAccesorioID.Value,
                 MaterialID = model.MaterialID.Value,
+                Nombre = Texto(model.Nombre),
+                Descripcion = Texto(model.Descripcion),
                 FamiliaId = model.FamiliaID,
-                SubfamiliaId = model.SubfamiliaID
+                SubfamiliaId = model.SubfamiliaID,
+                UbicacionId = model.UbicacionId,
+                FechaAlta = model.FechaAlta,
+                Activo = model.Activo
             };
 
             db.Accesorios.Add(accesorio);
@@ -196,6 +205,12 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
 
             GuardarDetalles(accesorio.ID, model.Detalles);
             GuardarFotos(accesorio.ID, Request.Files);
+
+            if (model.IntervencionId.HasValue)
+            {
+                TempData["LoginMessage"] = "Repuesto creado. Completa cantidad y coste para registrarlo en la intervención.";
+                return RedirectToAction("Details", "Intervenciones", new { area = "Mantenimiento", id = model.IntervencionId.Value, nuevoAccesorioId = accesorio.ID });
+            }
 
             TempData["LoginMessage"] = "El accesorio se ha creado correctamente.";
             return RedirectToAction("Details", new { id = accesorio.ID });
@@ -234,6 +249,8 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public async Task<ActionResult> Edit(AccesorioFormViewModel model, string returnUrl)
         {
+            ValidarFamiliaSubfamilia(model);
+
             if (!ModelState.IsValid)
             {
                 // Eliminar valores problemáticos de ModelState para que los helpers usen el valor del modelo
@@ -278,8 +295,13 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
 
             accesorio.TipoAccesorioID = model.TipoAccesorioID.Value;
             accesorio.MaterialID = model.MaterialID.Value;
+            accesorio.Nombre = Texto(model.Nombre);
+            accesorio.Descripcion = Texto(model.Descripcion);
             accesorio.FamiliaId = model.FamiliaID;
             accesorio.SubfamiliaId = model.SubfamiliaID;
+            accesorio.UbicacionId = model.UbicacionId;
+            accesorio.FechaAlta = model.FechaAlta;
+            accesorio.Activo = model.Activo;
 
             await db.SaveChangesAsync();
 
@@ -390,7 +412,18 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             source.TiposAccesorio = new SelectList(db.TiposAccesorio.OrderBy(t => t.TipoAccesorio1).ToList(), "ID", "TipoAccesorio1", source.TipoAccesorioID);
             source.Materiales = new SelectList(db.Materiales.OrderBy(m => m.Material1).ToList(), "ID", "Material1", source.MaterialID);
             source.Familias = new SelectList(db.Familia.OrderBy(f => f.Nombre).ToList(), "FamiliaId", "Nombre", source.FamiliaID);
-            source.Subfamilias = new SelectList(db.Subfamilia.OrderBy(s => s.Nombre).ToList(), "SubfamiliaId", "Nombre", source.SubfamiliaID);
+            source.Ubicaciones = new SelectList(db.Ubicacion.OrderBy(u => u.Nombre).ToList(), "UbicacionId", "Nombre", source.UbicacionId);
+            var subfamilias = db.Subfamilia.AsQueryable();
+            if (source.FamiliaID.HasValue)
+            {
+                subfamilias = subfamilias.Where(s => s.FamiliaId == source.FamiliaID.Value);
+            }
+            else
+            {
+                subfamilias = subfamilias.Where(s => false);
+            }
+
+            source.Subfamilias = new SelectList(subfamilias.OrderBy(s => s.Nombre).ToList(), "SubfamiliaId", "Nombre", source.SubfamiliaID);
             source.Caracteristicas = new SelectList(db.CaracteristicasAccesorio.OrderBy(c => c.CaracteristicaAccesorio1).ToList(), "ID", "CaracteristicaAccesorio1");
             source.Unidades = new SelectList(db.Unidades.OrderBy(u => u.Unidad1).ToList(), "ID", "Unidad1");
 
@@ -434,6 +467,36 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             return source;
         }
 
+        private static async Task<bool> ExisteIntervencionAsync(int id)
+        {
+            using (var tareasDb = new TareasMantenimientoContext())
+            {
+                return await tareasDb.Database.SqlQuery<int>("SELECT COUNT(1) FROM dbo.Intervencion WHERE Id=@p0", id).SingleAsync() > 0;
+            }
+        }
+
+        private static string Texto(string value) => string.IsNullOrWhiteSpace(value) ? null : value.Trim();
+
+        private void ValidarFamiliaSubfamilia(AccesorioFormViewModel model)
+        {
+            if (model == null || !model.SubfamiliaID.HasValue)
+            {
+                return;
+            }
+
+            if (!model.FamiliaID.HasValue)
+            {
+                ModelState.AddModelError("SubfamiliaID", "Selecciona primero una familia.");
+                return;
+            }
+
+            var pertenece = db.Subfamilia.Any(s => s.SubfamiliaId == model.SubfamiliaID.Value && s.FamiliaId == model.FamiliaID.Value);
+            if (!pertenece)
+            {
+                ModelState.AddModelError("SubfamiliaID", "La subfamilia seleccionada no pertenece a la familia indicada.");
+            }
+        }
+
         // GET: Accesorios/SubfamiliasPorFamilia/5
         [HttpGet]
         public ActionResult SubfamiliasPorFamilia(int familiaId)
@@ -445,6 +508,108 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                 .ToList();
 
             return Json(lista, JsonRequestBehavior.AllowGet);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
+        public async Task<ActionResult> CrearTipoAccesorioRapido(string nombre, string descripcion, int? subfamiliaId)
+        {
+            nombre = (nombre ?? string.Empty).Trim();
+            descripcion = (descripcion ?? string.Empty).Trim();
+
+            if (string.IsNullOrWhiteSpace(nombre))
+            {
+                return Json(new { ok = false, message = "Introduce el nombre del tipo de accesorio." });
+            }
+
+            var nombreNormalizado = nombre.ToLower();
+            var existente = await db.TiposAccesorio
+                .FirstOrDefaultAsync(t => t.TipoAccesorio1.ToLower() == nombreNormalizado);
+
+            if (existente != null)
+            {
+                return Json(new
+                {
+                    ok = true,
+                    id = existente.ID,
+                    text = existente.TipoAccesorio1,
+                    existing = true
+                });
+            }
+
+            if (subfamiliaId.HasValue)
+            {
+                var subfamiliaExiste = await db.Subfamilia.AnyAsync(s => s.SubfamiliaId == subfamiliaId.Value);
+                if (!subfamiliaExiste)
+                {
+                    subfamiliaId = null;
+                }
+            }
+
+            var tipo = new TipoAccesorio
+            {
+                TipoAccesorio1 = nombre,
+                Descripcion = string.IsNullOrWhiteSpace(descripcion) ? null : descripcion,
+                SubfamiliaId = subfamiliaId
+            };
+
+            db.TiposAccesorio.Add(tipo);
+            await db.SaveChangesAsync();
+
+            return Json(new
+            {
+                ok = true,
+                id = tipo.ID,
+                text = tipo.TipoAccesorio1,
+                existing = false
+            });
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
+        public async Task<ActionResult> CrearSubfamiliaRapida(string nombre, int? familiaId)
+        {
+            nombre = (nombre ?? string.Empty).Trim();
+            if (string.IsNullOrWhiteSpace(nombre)) return Json(new { ok = false, message = "Introduce el nombre de la subfamilia." });
+            if (!familiaId.HasValue || !await db.Familia.AnyAsync(f => f.FamiliaId == familiaId.Value))
+                return Json(new { ok = false, message = "Selecciona una familia válida." });
+
+            var existente = await db.Subfamilia.FirstOrDefaultAsync(s => s.FamiliaId == familiaId.Value && s.Nombre.ToLower() == nombre.ToLower());
+            if (existente != null) return Json(new { ok = true, id = existente.SubfamiliaId, text = existente.Nombre, existing = true });
+
+            var subfamilia = new Subfamilia { FamiliaId = familiaId.Value, Nombre = nombre };
+            db.Subfamilia.Add(subfamilia);
+            await db.SaveChangesAsync();
+            return Json(new { ok = true, id = subfamilia.SubfamiliaId, text = subfamilia.Nombre, existing = false });
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
+        public async Task<ActionResult> CrearCaracteristicaRapida(string nombre)
+        {
+            nombre = (nombre ?? string.Empty).Trim();
+            if (string.IsNullOrWhiteSpace(nombre)) return Json(new { ok = false, message = "Introduce el nombre de la característica." });
+            var existente = await db.CaracteristicasAccesorio.FirstOrDefaultAsync(c => c.CaracteristicaAccesorio1.ToLower() == nombre.ToLower());
+            if (existente != null) return Json(new { ok = true, id = existente.ID, text = existente.CaracteristicaAccesorio1, existing = true });
+            var caracteristica = new CaracteristicaAccesorio { CaracteristicaAccesorio1 = nombre };
+            db.CaracteristicasAccesorio.Add(caracteristica);
+            await db.SaveChangesAsync();
+            return Json(new { ok = true, id = caracteristica.ID, text = caracteristica.CaracteristicaAccesorio1, existing = false });
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
+        public async Task<ActionResult> CrearUnidadRapida(string nombre)
+        {
+            nombre = (nombre ?? string.Empty).Trim();
+            if (string.IsNullOrWhiteSpace(nombre)) return Json(new { ok = false, message = "Introduce el nombre de la unidad." });
+            var existente = await db.Unidades.FirstOrDefaultAsync(u => u.Unidad1.ToLower() == nombre.ToLower());
+            if (existente != null) return Json(new { ok = true, id = existente.ID, text = existente.Unidad1, existing = true });
+            var unidad = new Unidad { Unidad1 = nombre };
+            db.Unidades.Add(unidad);
+            await db.SaveChangesAsync();
+            return Json(new { ok = true, id = unidad.ID, text = unidad.Unidad1, existing = false });
         }
 
         private AccesorioFormViewModel MapToForm(Accesorio accesorio)
@@ -525,7 +690,12 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                 Detalles = detalles,
                 FotosExistentes = fotos,
                 FamiliaID = accesorio.FamiliaId,
-                SubfamiliaID = accesorio.SubfamiliaId
+                SubfamiliaID = accesorio.SubfamiliaId,
+                Nombre = accesorio.Nombre,
+                Descripcion = accesorio.Descripcion,
+                UbicacionId = accesorio.UbicacionId,
+                FechaAlta = accesorio.FechaAlta,
+                Activo = accesorio.Activo
             });
         }
 

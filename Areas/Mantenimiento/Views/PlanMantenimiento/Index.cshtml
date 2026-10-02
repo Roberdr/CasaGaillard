@@ -1,0 +1,56 @@
+@model IEnumerable<CasaGaillard.Models.PlanMantenimiento>
+
+@{
+    ViewBag.Title = "Plan de Mantenimiento";
+    var nombresEquipo = ViewBag.NombresEquipo as System.Collections.Generic.IDictionary<int, string>;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Plan de Mantenimiento</h2>
+    @Html.ActionLink("Crear plan", "Create", null, new { @class = "btn btn-success" })
+</div>
+
+<div class="table-responsive">
+    <table class="table table-sm table-striped table-bordered">
+        <thead class="thead-light">
+            <tr>
+                <th>Equipo / accesorio</th>
+                <th>Descripción</th>
+                <th>Próxima ejecución</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @if (item.EquipoId.HasValue)
+                        {
+                            var nombreEquipo = nombresEquipo != null && nombresEquipo.ContainsKey(item.EquipoId.Value)
+                                ? nombresEquipo[item.EquipoId.Value]
+                                : "Equipo " + item.EquipoId.Value;
+                            <span>@nombreEquipo</span>
+                        }
+                        @if (item.Accesorio != null)
+                        {
+                            var nombre = string.IsNullOrWhiteSpace(item.Accesorio.Nombre) ? "Accesorio " + item.Accesorio.ID : item.Accesorio.Nombre;
+                            <span>@nombre</span>
+                            if (item.Accesorio.TipoAccesorio != null)
+                            {
+                                <small class="text-muted d-block">@item.Accesorio.TipoAccesorio.TipoAccesorio1</small>
+                            }
+                        }
+                    </td>
+                    <td>@(string.IsNullOrWhiteSpace(item.Descripcion) ? "—" : item.Descripcion)</td>
+                    <td>@(item.ProximaEjecucion.HasValue ? item.ProximaEjecucion.Value.ToString("dd/MM/yyyy") : "")</td>
+                    <td class="text-nowrap">
+                        @Html.ActionLink("Editar", "Edit", new { id = item.PlanId }) |
+                        @Html.ActionLink("Detalles", "Details", new { id = item.PlanId }) |
+                        @Html.ActionLink("Eliminar", "Delete", new { id = item.PlanId })
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

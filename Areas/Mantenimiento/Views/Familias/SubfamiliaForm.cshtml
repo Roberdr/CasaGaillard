@@ -1,0 +1,8 @@
+@model CasaGaillard.Models.ViewModels.SubfamiliaFormViewModel
+@{ var editando = Model.SubfamiliaId > 0; ViewBag.Title = editando ? "Editar subfamilia" : "Nueva subfamilia"; }
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm()) { @Html.AntiForgeryToken() @Html.HiddenFor(m => m.SubfamiliaId) @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+<div class="form-group">@Html.LabelFor(m => m.FamiliaId)<div>@Html.DropDownListFor(m => m.FamiliaId, Model.Familias, "Selecciona una familia...", new { @class = "form-control" })@Html.ValidationMessageFor(m => m.FamiliaId, "", new { @class = "text-danger" })</div></div>
+<div class="form-group">@Html.LabelFor(m => m.Nombre)<div>@Html.TextBoxFor(m => m.Nombre, new { @class = "form-control", maxlength = "150" })@Html.ValidationMessageFor(m => m.Nombre, "", new { @class = "text-danger" })</div></div>
+<div class="form-group">@Html.LabelFor(m => m.Descripcion)<div>@Html.TextAreaFor(m => m.Descripcion, new { @class = "form-control", rows = "3", maxlength = "500" })@Html.ValidationMessageFor(m => m.Descripcion, "", new { @class = "text-danger" })</div></div>
+<button type="submit" class="btn btn-primary">Guardar</button> @Html.ActionLink("Cancelar", "Index", null, new { @class = "btn btn-default" }) }

@@ -10,6 +10,7 @@
         <p class="text-muted">Consulta completa de la incidencia registrada.</p>
         <p>
             @Html.ActionLink("Volver al listado", "Index", null, new { @class = "btn btn-default" })
+            @Html.ActionLink("Intervenciones y repuestos", "Index", "Intervenciones", new { area = "Mantenimiento", tareaId = Model.ID }, new { @class = "btn btn-info" })
             @if (User.IsInRole(CasaGaillard.Models.AppRoles.Administrador) || User.IsInRole(CasaGaillard.Models.AppRoles.Mantenimiento))
             {
                 @Html.ActionLink("Editar", "Edit", new { id = Model.ID }, new { @class = "btn btn-primary" })

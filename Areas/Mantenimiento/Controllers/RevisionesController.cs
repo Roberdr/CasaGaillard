@@ -114,6 +114,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         {
             var cubas = db.Cubas.Where(c => (c.Baja != true) || (cubaID.HasValue && c.ID == cubaID.Value));
             ViewBag.CubaID = new SelectList(cubas.OrderBy(o => o.MatriculaCuba), "ID", "MatriculaCuba", cubaID);
+            CargarPersonasEntidad(null);
             return View(new Revision
             {
                 CubaID = cubaID ?? 0,
@@ -127,10 +128,13 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
-        public async Task<ActionResult> Create([Bind(Include = "ID,CubaID,FechaRevision,Descripcion,ValidaHasta,DescripcionProxima,Autorizado")] Revision revision)
+        public async Task<ActionResult> Create([Bind(Include = "ID,CubaID,FechaRevision,Descripcion,ValidaHasta,DescripcionProxima,Autorizado,AutorizadoPersonasEntidadID")] Revision revision)
         {
+            if (!revision.AutorizadoPersonasEntidadID.HasValue || ObtenerEtiquetaPersonaEntidad(revision.AutorizadoPersonasEntidadID.Value, true) == null)
+                ModelState.AddModelError("AutorizadoPersonasEntidadID", "Selecciona una persona perteneciente a una entidad.");
             if (ModelState.IsValid)
             {
+                revision.Autorizado = ObtenerEtiquetaPersonaEntidad(revision.AutorizadoPersonasEntidadID.Value, true);
                 revision.ValidaHasta = ObtenerValidaHasta(revision.ValidaHasta, revision.FechaRevision);
                 db.Revisiones.Add(revision);
                 await db.SaveChangesAsync();
@@ -139,6 +143,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
 
             var cubas = db.Cubas.Where(c => (c.Baja != true) || c.ID == revision.CubaID);
             ViewBag.CubaID = new SelectList(cubas.OrderBy(o => o.MatriculaCuba), "ID", "MatriculaCuba", revision.CubaID);
+            CargarPersonasEntidad(revision.AutorizadoPersonasEntidadID);
             return View(revision);
         }
 
@@ -157,6 +162,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             }
             var cubas = db.Cubas.Where(c => (c.Baja != true) || c.ID == revision.CubaID);
             ViewBag.CubaID = new SelectList(cubas.OrderBy(o => o.MatriculaCuba), "ID", "MatriculaCuba", revision.CubaID);
+            CargarPersonasEntidad(revision.AutorizadoPersonasEntidadID);
             return View(revision);
         }
 
@@ -166,8 +172,14 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
-        public async Task<ActionResult> Edit([Bind(Include = "ID,CubaID,FechaRevision,Descripcion,ValidaHasta,DescripcionProxima,Autorizado")] Revision revision)
+        public async Task<ActionResult> Edit([Bind(Include = "ID,CubaID,FechaRevision,Descripcion,ValidaHasta,DescripcionProxima,Autorizado,AutorizadoPersonasEntidadID")] Revision revision)
         {
+            if (revision.AutorizadoPersonasEntidadID.HasValue)
+            {
+                var etiqueta = ObtenerEtiquetaPersonaEntidad(revision.AutorizadoPersonasEntidadID.Value);
+                if (etiqueta == null) ModelState.AddModelError("AutorizadoPersonasEntidadID", "Selecciona una relación persona-entidad válida.");
+                else revision.Autorizado = etiqueta;
+            }
             if (ModelState.IsValid)
             {
                 db.Entry(revision).State = EntityState.Modified;
@@ -176,6 +188,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             }
             var cubas = db.Cubas.Where(c => (c.Baja != true) || c.ID == revision.CubaID);
             ViewBag.CubaID = new SelectList(cubas.OrderBy(o => o.MatriculaCuba), "ID", "MatriculaCuba", revision.CubaID);
+            CargarPersonasEntidad(revision.AutorizadoPersonasEntidadID);
             return View(revision);
         }
 
@@ -214,6 +227,28 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private void CargarPersonasEntidad(int? selected)
+        {
+            var opciones = (from pe in db.PersonasEntidads
+                            join p in db.Personas on pe.PersonaID equals p.ID
+                            join e in db.Entidads on pe.EntidadID equals e.ID
+                            where !pe.FechaBaja.HasValue || pe.ID == selected
+                            orderby p.Apellido1, p.Apellido2, p.NombrePersona, e.NombreEntidad
+                            select new { pe.ID, p.NombrePersona, p.Apellido1, p.Apellido2, e.NombreEntidad }).ToList()
+                .Select(x => new { x.ID, Etiqueta = (x.NombrePersona + " " + x.Apellido1 + " " + (x.Apellido2 ?? "")).Trim() + " — " + x.NombreEntidad.Trim() });
+            ViewBag.AutorizadoPersonasEntidadID = new SelectList(opciones, "ID", "Etiqueta", selected);
+        }
+
+        private string ObtenerEtiquetaPersonaEntidad(int id, bool soloActiva = false)
+        {
+            var x = (from pe in db.PersonasEntidads
+                     join p in db.Personas on pe.PersonaID equals p.ID
+                     join e in db.Entidads on pe.EntidadID equals e.ID
+                     where pe.ID == id && (!soloActiva || !pe.FechaBaja.HasValue)
+                     select new { p.NombrePersona, p.Apellido1, p.Apellido2, e.NombreEntidad }).FirstOrDefault();
+            return x == null ? null : (x.NombrePersona + " " + x.Apellido1 + " " + (x.Apellido2 ?? "")).Trim() + " — " + x.NombreEntidad.Trim();
         }
 
         [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]

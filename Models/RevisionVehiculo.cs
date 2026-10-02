@@ -20,6 +20,7 @@ namespace CasaGaillard.Models
         public Nullable<System.DateTime> FechaRevision { get; set; }
         public string Detalles { get; set; }
         public string Ejecutor { get; set; }
+        public Nullable<int> EjecutorPersonasEntidadID { get; set; }
         public Nullable<System.DateTime> Caducidad { get; set; }
     
         public virtual Vehiculo Vehiculo { get; set; }

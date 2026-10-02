@@ -40,6 +40,22 @@ namespace CasaGaillard.Models.ViewModels
     public class AccesorioFormViewModel
     {
         public int ID { get; set; }
+        public int? IntervencionId { get; set; }
+
+        [StringLength(150), Display(Name = "Nombre")]
+        public string Nombre { get; set; }
+
+        [StringLength(500), Display(Name = "Descripción")]
+        public string Descripcion { get; set; }
+
+        [Display(Name = "Ubicación")]
+        public int? UbicacionId { get; set; }
+
+        [Display(Name = "Fecha de alta"), DataType(DataType.Date)]
+        public DateTime? FechaAlta { get; set; }
+
+        [Display(Name = "Activo")]
+        public bool Activo { get; set; } = true;
 
         [Required]
         [Display(Name = "Tipo de accesorio")]
@@ -59,6 +75,7 @@ namespace CasaGaillard.Models.ViewModels
         public IEnumerable<SelectListItem> Materiales { get; set; }
         public IEnumerable<SelectListItem> Familias { get; set; }
         public IEnumerable<SelectListItem> Subfamilias { get; set; }
+        public IEnumerable<SelectListItem> Ubicaciones { get; set; }
         public IEnumerable<SelectListItem> Caracteristicas { get; set; }
         public IEnumerable<SelectListItem> Unidades { get; set; }
         public IEnumerable<AccesorioFotoViewModel> FotosExistentes { get; set; }

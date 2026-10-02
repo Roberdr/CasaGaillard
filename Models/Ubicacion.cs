@@ -18,6 +18,7 @@ namespace CasaGaillard.Models
         public Ubicacion()
         {
             this.Accesorio = new HashSet<Accesorio>();
+            this.Instalacion = new HashSet<Instalacion>();
         }
     
         public int UbicacionId { get; set; }
@@ -26,5 +27,6 @@ namespace CasaGaillard.Models
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Accesorio> Accesorio { get; set; }
+        public virtual ICollection<Instalacion> Instalacion { get; set; }
     }
 }

@@ -1,0 +1,17 @@
+@{
+    ViewBag.Title = "Acerca de";
+}
+
+<div class="container pagina-home-frame">
+    <div class="pagina-home-frame__header">
+        <div class="pagina-home-frame__title">
+            <h1>Casa Gaillard S.A.</h1>
+            <h3>Información pública, servicios y seguridad</h3>
+        </div>
+    </div>
+    <div class="pagina-home-frame__copy">
+        <h2>Acerca de Casa Gaillard</h2>
+        <p>Este espacio reúne información sobre nuestros productos, servicios y recomendaciones de seguridad.</p>
+        <p>@Html.ActionLink("Conoce nuestros servicios", "Servicios", "Pagina", new { area = "Pagina" }, new { @class = "btn btn-primary" })</p>
+    </div>
+</div>

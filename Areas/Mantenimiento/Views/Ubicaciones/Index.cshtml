@@ -1,0 +1,8 @@
+@model IEnumerable<CasaGaillard.Models.ViewModels.UbicacionCatalogoViewModel>
+@{ ViewBag.Title = "Ubicaciones"; }
+<div class="d-flex justify-content-between align-items-center mb-3"><h2>Ubicaciones</h2>@Html.ActionLink("Nueva ubicación", "Create", null, new { @class = "btn btn-success" })</div>
+@if (TempData["LoginMessage"] != null) { <div class="alert alert-success">@TempData["LoginMessage"]</div> }
+<div class="table-responsive"><table class="table table-striped table-bordered">
+<thead><tr><th>Código</th><th>Nombre</th><th>Descripción</th><th>Instalaciones</th><th>Accesorios</th><th></th></tr></thead><tbody>
+@foreach (var item in Model) { <tr><td>@item.Codigo</td><td>@item.Nombre</td><td>@item.Descripcion</td><td>@item.InstalacionesAsociadas</td><td>@item.AccesoriosAsociados</td><td class="text-nowrap">@Html.ActionLink("Editar", "Edit", new { id = item.UbicacionId }) | @Html.ActionLink("Eliminar", "Delete", new { id = item.UbicacionId })</td></tr> }
+</tbody></table></div>

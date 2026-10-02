@@ -7,21 +7,23 @@
 <h2><i class="fa fa-home"></i>Accesorios</h2> 
 <p>
     @Html.ActionLink("Create New", "Create")
+    @Html.ActionLink("Gestionar familias y subfamilias", "Index", "Familias", new { area = "Mantenimiento" }, new { @class = "btn btn-default" })
 </p>
 
 @using (Html.BeginForm("Index", "Accesorios", FormMethod.Get, new { @class = "form-inline filter-bar", role = "form" }))
 {
+    <input type="hidden" name="pageSize" value="@Model.PageSize" />
     <div class="filter-group">
-        @Html.DropDownList("tipoAccesorioId", Model.TiposAccesorio, "-- Tipo --", new { @class = "form-control" })
+        @Html.DropDownList("tipoAccesorioId", Model.TiposAccesorio, "-- Tipo --", new { @class = "form-control", onchange = "this.form.submit()" })
     </div>
     <div class="filter-group">
-        @Html.DropDownList("materialId", Model.Materiales, "-- Material --", new { @class = "form-control" })
+        @Html.DropDownList("materialId", Model.Materiales, "-- Material --", new { @class = "form-control", onchange = "this.form.submit()" })
     </div>
     <div class="filter-group">
-        @Html.DropDownList("familiaId", Model.Familias, "-- Familia --", new { @class = "form-control", id = "filterFamilia" })
+        @Html.DropDownList("familiaId", Model.Familias, "-- Familia --", new { @class = "form-control", id = "filterFamilia", onchange = "this.form.submit()" })
     </div>
     <div class="filter-group">
-        @Html.DropDownList("subfamiliaId", Model.Subfamilias, "-- Subfamilia --", new { @class = "form-control", id = "filterSubfamilia" })
+        @Html.DropDownList("subfamiliaId", Model.Subfamilias, "-- Subfamilia --", new { @class = "form-control", id = "filterSubfamilia", onchange = "this.form.submit()" })
     </div>
     <div class="filter-group flex-grow">
         <input type="text" name="q" value="@Model.Query" class="form-control" placeholder="Buscar nombre o descripción" />

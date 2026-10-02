@@ -29,7 +29,7 @@
                     foreach (var c in ViewBag.Revis)
                     {
                         DateTime? validaHasta = c.ValidaHasta;
-                        <tr class="revision-cuba-panel-row" data-revisiones-url="@Url.Action("Index", "Revisiones", new { area = "Mantenimiento", matriculaCuba = c.MatriculaCuba })">
+                        <tr class="revision-cuba-panel-row" data-revisiones-url="@Url.Action("Index", "Revisiones", new { area = "Mantenimiento", matriculaCuba = c.MatriculaCuba })" ondblclick="window.location.href=this.getAttribute('data-revisiones-url')">
                             <td class="col-md-4">@c.MatriculaCuba</td>
                             <td class="col-md-5">@(validaHasta.HasValue ? validaHasta.Value.ToString("d") : "N/D")</td>
                             <td class="col-md-3">@c.DescripcionProxima</td>
@@ -65,7 +65,7 @@
                     foreach (var c in ViewBag.RevisV)
                     {
                         DateTime? caducidad = c.Caducidad;
-                        <tr class="revision-vehiculo-panel-row" data-revisiones-url="@Url.Action("Index", "RevisionesVehiculos", new { area = "Mantenimiento", matriculaVehiculo = c.MatriculaVehiculo })">
+                        <tr class="revision-vehiculo-panel-row" data-revisiones-url="@Url.Action("Index", "RevisionesVehiculos", new { area = "Mantenimiento", matriculaVehiculo = c.MatriculaVehiculo })" ondblclick="window.location.href=this.getAttribute('data-revisiones-url')">
                             <td class="col-md-4">@c.MatriculaVehiculo</td>
                             <td class="col-md-5">@(caducidad.HasValue ? caducidad.Value.ToString("d") : "N/D")</td>
                             <td class="col-md-3">@c.TipoRevision</td>
@@ -97,7 +97,7 @@
                 {
                     foreach (var t in ViewBag.Tareas)
                     {
-                        <tr class="tarea-panel-row" data-tarea-url="@Url.Action("Index", "TareasMantenimiento", new { area = "Mantenimiento", codigo = t.Codigo })">
+                        <tr class="tarea-panel-row" data-tarea-url="@Url.Action("Index", "TareasMantenimiento", new { area = "Mantenimiento", codigo = t.Codigo })" ondblclick="window.location.href=this.getAttribute('data-tarea-url')">
                             <td>@t.Equipo</td>
                             <td>@t.Estado</td>
                             <td>@t.Prioridad</td>
@@ -124,4 +124,4 @@
     }
 </style>
 
-<script src="~/Scripts/mantenimiento-home-panel.js"></script>
+<script src="@Url.Content("~/Scripts/mantenimiento-home-panel.js?v=2")"></script>

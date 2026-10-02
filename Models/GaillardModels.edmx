@@ -254,6 +254,7 @@
           <Property Name="ValidaHasta" Type="date" />
           <Property Name="DescripcionProxima" Type="nvarchar(max)" />
           <Property Name="Autorizado" Type="nvarchar" MaxLength="45" />
+          <Property Name="AutorizadoPersonasEntidadID" Type="int" />
         </EntityType>
         <EntityType Name="RevisionVehiculo">
           <Key>
@@ -265,6 +266,7 @@
           <Property Name="FechaRevision" Type="date" />
           <Property Name="Detalles" Type="nvarchar(max)" />
           <Property Name="Ejecutor" Type="nvarchar" MaxLength="45" />
+          <Property Name="EjecutorPersonasEntidadID" Type="int" />
         </EntityType>
         <EntityType Name="Situacion">
           <Key>
@@ -872,6 +874,7 @@
           <Property Name="ValidaHasta" Type="DateTime" Precision="0" />
           <Property Name="DescripcionProxima" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Autorizado" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="AutorizadoPersonasEntidadID" Type="Int32" />
           <NavigationProperty Name="Cuba" Relationship="GaillardModel.RevisionCuba" FromRole="Revision" ToRole="Cuba" />
         </EntityType>
         <EntityType Name="RevisionVehiculo">
@@ -884,6 +887,7 @@
           <Property Name="FechaRevision" Type="DateTime" Precision="0" />
           <Property Name="Detalles" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
           <Property Name="Ejecutor" Type="String" MaxLength="45" FixedLength="false" Unicode="true" />
+          <Property Name="EjecutorPersonasEntidadID" Type="Int32" />
           <NavigationProperty Name="Vehiculo" Relationship="GaillardModel.RevisionVehiculoVehiculo" FromRole="RevisionVehiculo" ToRole="Vehiculo" />
           <NavigationProperty Name="TipoRevision" Relationship="GaillardModel.TipoRevisionRevisionVehiculo" FromRole="RevisionVehiculo" ToRole="TipoRevision" />
         </EntityType>
@@ -1867,6 +1871,7 @@
                 <ScalarProperty Name="ValidaHasta" ColumnName="ValidaHasta" />
                 <ScalarProperty Name="DescripcionProxima" ColumnName="DescripcionProxima" />
                 <ScalarProperty Name="Autorizado" ColumnName="Autorizado" />
+                <ScalarProperty Name="AutorizadoPersonasEntidadID" ColumnName="AutorizadoPersonasEntidadID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1879,6 +1884,7 @@
                 <ScalarProperty Name="FechaRevision" ColumnName="FechaRevision" />
                 <ScalarProperty Name="Detalles" ColumnName="Detalles" />
                 <ScalarProperty Name="Ejecutor" ColumnName="Ejecutor" />
+                <ScalarProperty Name="EjecutorPersonasEntidadID" ColumnName="EjecutorPersonasEntidadID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

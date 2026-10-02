@@ -1,0 +1,61 @@
+@model CasaGaillard.Models.ViewModels.InstalacionDocumentoFormViewModel
+@{ ViewBag.Title = "Documentación de instalación"; }
+
+<h2>Documentación de instalación</h2>
+<p class="text-muted">@Model.InstalacionCodigo — @Model.InstalacionNombre</p>
+<p>@Html.ActionLink("Volver a instalaciones", "Index", "Instalaciones", new { area = "Mantenimiento" }, new { @class = "btn btn-default" })</p>
+
+@if (User.IsInRole(CasaGaillard.Models.AppRoles.Administrador) || User.IsInRole(CasaGaillard.Models.AppRoles.Mantenimiento))
+{
+    <div class="panel panel-default">
+        <div class="panel-heading"><strong>Subir plano, manual o certificado</strong></div>
+        <div class="panel-body">
+            @using (Html.BeginForm("Subir", "InstalacionDocumentos", FormMethod.Post, new { enctype = "multipart/form-data" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.HiddenFor(m => m.InstalacionId)
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    <label for="Archivo">Archivo (máximo 20 MB)</label>
+                    <input id="Archivo" name="Archivo" type="file" class="form-control" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.xls,.xlsx,.dwg" required />
+                    @Html.ValidationMessageFor(m => m.Archivo, "", new { @class = "text-danger" })
+                </div>
+                <div class="form-group">@Html.LabelFor(m => m.TipoDocumento) @Html.TextBoxFor(m => m.TipoDocumento, new { @class = "form-control", placeholder = "Plano, manual, certificado..." }) @Html.ValidationMessageFor(m => m.TipoDocumento, "", new { @class = "text-danger" })</div>
+                <div class="form-group">@Html.LabelFor(m => m.CodigoPlano) @Html.TextBoxFor(m => m.CodigoPlano, new { @class = "form-control" }) @Html.ValidationMessageFor(m => m.CodigoPlano, "", new { @class = "text-danger" })</div>
+                <div class="form-group">@Html.LabelFor(m => m.FechaDocumento) @Html.TextBoxFor(m => m.FechaDocumento, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" }) @Html.ValidationMessageFor(m => m.FechaDocumento, "", new { @class = "text-danger" })</div>
+                <button type="submit" class="btn btn-primary">Guardar documento</button>
+            }
+        </div>
+    </div>
+}
+
+<h3>Documentos guardados</h3>
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead><tr><th>Nombre</th><th>Tipo</th><th>Código de plano</th><th>Fecha del documento</th><th>Fecha de alta</th><th></th></tr></thead>
+        <tbody>
+        @if (Model.Documentos != null)
+        {
+            foreach (var documento in Model.Documentos)
+            {
+                <tr>
+                    <td>@documento.Nombre</td><td>@(documento.TipoDocumento ?? "—")</td><td>@(documento.CodigoPlano ?? "—")</td>
+                    <td>@(documento.FechaDocumento.HasValue ? documento.FechaDocumento.Value.ToString("dd/MM/yyyy") : "—")</td>
+                    <td>@documento.FechaAlta.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td class="text-nowrap">
+                        @Html.ActionLink("Descargar", "Archivo", new { id = documento.Id }, new { @class = "btn btn-link" })
+                        @if (User.IsInRole(CasaGaillard.Models.AppRoles.Administrador) || User.IsInRole(CasaGaillard.Models.AppRoles.Mantenimiento))
+                        {
+                            using (Html.BeginForm("Eliminar", "InstalacionDocumentos", new { id = documento.Id }, FormMethod.Post, new { @class = "d-inline" }))
+                            {
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-link" onclick="return confirm('¿Eliminar este documento?');">Eliminar</button>
+                            }
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>

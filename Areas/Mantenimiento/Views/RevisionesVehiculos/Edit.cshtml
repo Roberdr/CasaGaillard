@@ -59,7 +59,10 @@
     <div class="form-group">
         @Html.LabelFor(model => model.Ejecutor, htmlAttributes: new { @class = "control-label col-md-2" })
         <div class="col-md-10">
-            @Html.EditorFor(model => model.Ejecutor, new { htmlAttributes = new { @class = "form-control" } })
+            @Html.DropDownList("EjecutorPersonasEntidadID", null, "Seleccionar persona y entidad...", htmlAttributes: new { @class = "form-control" })
+            @Html.ValidationMessage("EjecutorPersonasEntidadID", "", new { @class = "text-danger" })
+            @Html.EditorFor(model => model.Ejecutor, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            <p class="help-block">La etiqueta se genera a partir de la persona y la entidad seleccionadas; si es un registro antiguo, se conserva el texto original.</p>
             @Html.ValidationMessageFor(model => model.Ejecutor, "", new { @class = "text-danger" })
         </div>
     </div>

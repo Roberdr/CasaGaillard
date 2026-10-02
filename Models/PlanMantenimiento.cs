@@ -15,11 +15,21 @@ namespace CasaGaillard.Models
     public partial class PlanMantenimiento
     {
         public int PlanId { get; set; }
-        public int AccesorioId { get; set; }
+        public Nullable<int> AccesorioId { get; set; }
         public int PeriodicidadDias { get; set; }
         public Nullable<System.DateTime> UltimaEjecucion { get; set; }
         public Nullable<System.DateTime> ProximaEjecucion { get; set; }
+        public Nullable<int> AccesorioGrupoID { get; set; }
+        public Nullable<int> EquipoId { get; set; }
+        public string Nombre { get; set; }
+        public string Descripcion { get; set; }
+        public string Tipo { get; set; }
+        public Nullable<int> FrecuenciaValor { get; set; }
+        public string FrecuenciaUnidad { get; set; }
+        public Nullable<int> DuracionEstimadaMinutos { get; set; }
+        public bool Activo { get; set; }
     
         public virtual Accesorio Accesorio { get; set; }
+        public virtual AccesorioGrupo AccesorioGrupo { get; set; }
     }
 }

@@ -55,14 +55,16 @@
                         <div class="col-md-4">
                             <div class="form-group">
                                 @Html.LabelFor(m => m.AsignadaA)
-                                @Html.DropDownListFor(m => m.AsignadaA, Model.Empleados, "-- Sin asignar --", new { @class = "form-control" })
+                                @Html.DropDownListFor(m => m.AsignadaAPersonaID, Model.PersonasAsignadaA, "-- Sin asignar --", new { @class = "form-control" })
+                                @Html.TextBoxFor(m => m.AsignadaA, new { @class = "form-control", @readonly = "readonly" })
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group">
                         @Html.LabelFor(m => m.EmpresaExterior)
-                        @Html.TextBoxFor(m => m.EmpresaExterior, new { @class = "form-control" })
+                        @Html.DropDownListFor(m => m.EmpresaExteriorEntidadID, Model.Entidades, "-- Sin vincular --", new { @class = "form-control" })
+                        @Html.TextBoxFor(m => m.EmpresaExterior, new { @class = "form-control", @readonly = "readonly" })
                     </div>
 
                     <div class="form-group">

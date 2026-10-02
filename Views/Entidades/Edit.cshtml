@@ -48,6 +48,43 @@
     </div>
 }
 
+<hr />
+<h3>Teléfonos</h3>
+@if (TempData["EntidadError"] != null) { <div class="alert alert-danger">@TempData["EntidadError"]</div> }
+<div class="entidad-telefonos" style="display:flex; flex-wrap:wrap; align-items:center; gap:10px; margin-bottom:12px;">
+    @foreach (var telefono in Model.TelefonosEntidad)
+    {
+        <div style="position:relative; display:inline-flex; align-items:center; padding:6px 18px 6px 6px; border:1px solid #ccc; border-radius:4px;">
+            @using (Html.BeginForm("ActualizarTelefono", "Entidades", FormMethod.Post, new { style = "margin:0;" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("entidadID", Model.ID)
+                @Html.Hidden("id", telefono.ID)
+                @Html.Hidden("returnTo", "Edit")
+                @Html.TextBox("telefono", telefono.Telefono.Trim(), new { @class = "form-control", maxlength = "10", size = "10", style = "width:12ch; border:0; box-shadow:none; padding:0;", onkeydown = "if(event.key === 'Enter'){event.preventDefault(); this.form.submit();}" })
+            }
+            @using (Html.BeginForm("EliminarTelefono", "Entidades", FormMethod.Post, new { style = "position:absolute; top:-8px; right:-8px; margin:0;" }))
+            {
+                @Html.AntiForgeryToken()
+                @Html.Hidden("entidadID", Model.ID)
+                @Html.Hidden("id", telefono.ID)
+                @Html.Hidden("returnTo", "Edit")
+                <button type="submit" aria-label="Eliminar teléfono" title="Eliminar teléfono" class="btn btn-danger btn-xs" style="width:20px; height:20px; padding:0; border-radius:50%; line-height:18px;">×</button>
+            }
+        </div>
+    }
+    @using (Html.BeginForm("AgregarTelefono", "Entidades", FormMethod.Post, new { style = "margin:0;" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.Hidden("entidadID", Model.ID)
+        @Html.Hidden("returnTo", "Edit")
+        <div style="display:flex; align-items:center; gap:4px;">
+            <input name="telefono" maxlength="10" size="10" class="form-control" style="width:12ch;" placeholder="Nuevo teléfono" aria-label="Nuevo teléfono" />
+            <button type="submit" aria-label="Añadir teléfono" title="Añadir teléfono" class="btn btn-success" style="width:34px; height:34px; padding:0; font-size:22px;">+</button>
+        </div>
+    }
+</div>
+
 <div>
     @Html.ActionLink("Back to List", "Index")
 </div>

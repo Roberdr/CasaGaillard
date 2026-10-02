@@ -51,6 +51,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         {
             var fechaInicio = DateTime.Now.AddMonths(-2);
             var fechaFinal = DateTime.Now.AddMonths(2);
+            var fechaLimiteITV = DateTime.Today.AddMonths(2);
             var revisionesCubas = new List<UltimasRevisiones>();
             var revisionesVehiculos = new List<UltimasRevisionesVehiculos>();
             var tareasRecientes = new List<TareaMantenimientoResumenViewModel>();
@@ -91,9 +92,9 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                     MatriculaVehiculo = s.Key.MatriculaVehiculo,
                     Caducidad = s.Max(m => m.Caducidad),
                     TipoRevision = s.Select(m => m.TipoRevision != null ? m.TipoRevision.Revision : string.Empty).FirstOrDefault(),
-                 })
+                })
                 .OrderBy(r => r.Caducidad)
-                .Where(r => r.Caducidad > fechaInicio && r.Caducidad < fechaFinal);
+                .Where(r => r.Caducidad.HasValue && r.Caducidad <= fechaLimiteITV);
 
             
 
