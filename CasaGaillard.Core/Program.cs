@@ -1,4 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using System.Reflection;
+using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -56,3 +58,34 @@ try
 catch { }
 
 app.Run();
+
+// Optional: try to integrate Aspire at runtime if the Aspire assembly is present.
+// This uses reflection so the project does not need a compile-time dependency on Aspire.
+try
+{
+    var aspireAssembly = AppDomain.CurrentDomain.GetAssemblies()
+        .FirstOrDefault(a => a.GetName().Name.IndexOf("Aspire", System.StringComparison.OrdinalIgnoreCase) >= 0);
+    if (aspireAssembly == null)
+    {
+        try { aspireAssembly = Assembly.Load("Aspire.Hosting"); } catch { }
+    }
+
+    if (aspireAssembly != null)
+    {
+        // Common pattern: a static "UseAspire(WebApplication app)" method on any Aspire type
+        var aspireType = aspireAssembly.GetTypes()
+            .FirstOrDefault(t => t.GetMethods(BindingFlags.Public | BindingFlags.Static)
+                .Any(m => m.Name.Equals("UseAspire") || m.Name.Equals("UseAspireHost") || m.Name.Equals("StartAspire")));
+
+        if (aspireType != null)
+        {
+            var method = aspireType.GetMethods(BindingFlags.Public | BindingFlags.Static)
+                .FirstOrDefault(m => m.GetParameters().Any(p => p.ParameterType == typeof(Microsoft.AspNetCore.Builder.WebApplication)));
+            if (method != null)
+            {
+                try { method.Invoke(null, new object[] { app }); } catch { }
+            }
+        }
+    }
+}
+catch { }
