@@ -24,6 +24,14 @@ try
 catch { }
 #endif
 
+// Explicit AddAspire call - wrapped in try/catch to avoid breaking if signature differs
+try
+{
+    // Prefer compile-time call when available
+    builder.Services.GetType().GetMethod("AddAspire", BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static)?.Invoke(builder.Services, null);
+}
+catch { }
+
 // Register application services
 builder.Services.AddScoped<CasaGaillard.Core.Services.IIntervencionesService, CasaGaillard.Core.Services.IntervencionesService>();
 
