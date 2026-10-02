@@ -1,47 +1,55 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using CasaGaillard.Core.Models;
+using CasaGaillard.Core.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace CasaGaillard.Core.Services
 {
     public class IntervencionesService : IIntervencionesService
     {
-        public IntervencionesService()
+        private readonly AppDbContext _db;
+
+        public IntervencionesService(AppDbContext db)
         {
-            // TODO: inject DbContext or repository when available
+            _db = db;
         }
 
-        public Task<IEnumerable<IntervencionViewModel>> GetAllAsync()
+        public async Task<IEnumerable<IntervencionViewModel>> GetAllAsync()
         {
-            // return empty list for now
-            IEnumerable<IntervencionViewModel> empty = new List<IntervencionViewModel>();
-            return Task.FromResult(empty);
+            return await _db.Intervenciones.AsNoTracking().ToListAsync();
         }
 
-        public Task<IntervencionViewModel?> GetByIdAsync(int id)
+        public async Task<IntervencionViewModel?> GetByIdAsync(int id)
         {
-            return Task.FromResult<IntervencionViewModel?>(null);
+            return await _db.Intervenciones.AsNoTracking().FirstOrDefaultAsync(e => e.Id == id);
         }
 
-        public Task CreateAsync(IntervencionViewModel model)
+        public async Task CreateAsync(IntervencionViewModel model)
         {
-            // stub: do nothing
-            return Task.CompletedTask;
+            await _db.Intervenciones.AddAsync(model);
+            await _db.SaveChangesAsync();
         }
 
-        public Task UpdateAsync(int id, IntervencionViewModel model)
+        public async Task UpdateAsync(int id, IntervencionViewModel model)
         {
-            // stub: do nothing
-            return Task.CompletedTask;
+            // map changes
+            var existing = await _db.Intervenciones.FindAsync(id);
+            if (existing == null) return;
+            existing.Titulo = model.Titulo;
+            existing.Descripcion = model.Descripcion;
+            await _db.SaveChangesAsync();
         }
 
         public Task AddRepuestoAsync(int intervenId, int repuestoId)
         {
+            // TODO: implement relation with Repuestos entity
             return Task.CompletedTask;
         }
 
         public Task RemoveRepuestoAsync(int id)
         {
+            // TODO: implement removal logic
             return Task.CompletedTask;
         }
     }
