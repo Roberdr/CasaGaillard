@@ -10,6 +10,9 @@
 - **Commit Strategy**: After Each Task
 - **Branch Sync**: Auto (Merge)
 
+## User Preferences
+- **Schema ownership**: EF Core será el propietario de los cambios en el esquema durante la ventana side-by-side (confirmado por el usuario).
+
 ## Notes
 - Inicio de la migración solicitado por el usuario desde la rama `Tienda`.
 - Repositorio remoto: origin -> https://github.com/Roberdr/CasaGaillard

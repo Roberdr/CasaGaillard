@@ -1,7 +1,37 @@
+@model IEnumerable<CasaGaillard.Core.Models.IntervencionViewModel>
+
 @{
     ViewData["Title"] = "Intervenciones";
 }
 
-<h1>Intervenciones - Placeholder</h1>
+<h1>Intervenciones</h1>
 
-<p>Esta vista es un stub temporal. Migrar la lógica y diseño desde la vista legacy.</p>
+<p>
+    <a asp-area="Mantenimiento" asp-controller="Intervenciones" asp-action="Create" class="btn btn-primary">Crear nueva intervención</a>
+</p>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Id</th>
+            <th>Título</th>
+            <th>Descripción</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>@item.Id</td>
+            <td>@item.Titulo</td>
+            <td>@item.Descripcion</td>
+            <td>
+                <a asp-area="Mantenimiento" asp-controller="Intervenciones" asp-action="Details" asp-route-id="@item.Id">Detalles</a>
+                |
+                <a asp-area="Mantenimiento" asp-controller="Intervenciones" asp-action="Edit" asp-route-id="@item.Id">Editar</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
