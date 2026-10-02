@@ -1,0 +1,21 @@
+feat(migration): migrar vistas Intervenciones (Index/Details/Create)
+
+Migración side-by-side de las vistas del módulo Mantenimiento → Intervenciones al proyecto CasaGaillard.Core (net10.0).
+
+Cambios principales:
+- Añadidas/convertidas vistas: Areas/Mantenimiento/Views/Intervenciones/Index.cshtml, Details.cshtml, Create.cshtml
+- Añadidos _ViewImports.cshtml en Views y en el área para habilitar Tag Helpers y @using del modelo
+- Program.cs: habilitados ControllersWithViews y rutas de áreas
+- appsettings.Development.json actualizado (DefaultConnection)
+- Script de prueba automática: scripts/post_create_intervencion.ps1
+- Actualizaciones del flujo de migración (.github/upgrades/*)
+
+Pruebas realizadas:
+- Build del proyecto Core exitoso
+- dotnet ef database update aplicado; tabla Intervenciones creada
+- Prueba automática POST: creación de intervención y verificación de Index/Details en local (http://localhost:5200)
+
+Notas:
+- EF Core ahora es propietario del esquema; confirmar base de datos objetivo antes de aplicar migraciones en otros entornos.
+- Revisar y, si procede, eliminar el script de prueba antes de merge.
+- Reviewer sugerido: equipo backend / responsable de migración.
