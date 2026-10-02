@@ -12,6 +12,7 @@
 
 ## User Preferences
 - **Schema ownership**: EF Core será el propietario de los cambios en el esquema durante la ventana side-by-side (confirmado por el usuario).
+- **Preserve test scripts**: Mantener scripts de prueba locales para validaciones rápidas (scripts/test_edit_intervencion.ps1, scripts/stop_local_server.ps1). Serán revisados y/o eliminados antes del merge si procede.
 
 ## Notes
 - Inicio de la migración solicitado por el usuario desde la rama `Tienda`.
