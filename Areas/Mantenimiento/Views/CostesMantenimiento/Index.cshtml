@@ -15,14 +15,14 @@
 @using (Html.BeginForm("Index", "CostesMantenimiento", FormMethod.Get, new { @class = "form-horizontal" }))
 {
     <div class="row">
-        <div class="col-md-3 form-group">@Html.LabelFor(m => m.FechaDesde)<div class="col-md-12">@Html.TextBoxFor(m => m.FechaDesde, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })</div></div>
-        <div class="col-md-3 form-group">@Html.LabelFor(m => m.FechaHasta)<div class="col-md-12">@Html.TextBoxFor(m => m.FechaHasta, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date" })@Html.ValidationMessageFor(m => m.FechaHasta, "", new { @class = "text-danger" })</div></div>
+        <div class="col-md-3 form-group">@Html.LabelFor(m => m.FechaDesde)<div class="col-md-12">@Html.TextBoxFor(m => m.FechaDesde, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date", onchange = "this.form.submit()" })</div></div>
+        <div class="col-md-3 form-group">@Html.LabelFor(m => m.FechaHasta)<div class="col-md-12">@Html.TextBoxFor(m => m.FechaHasta, "{0:yyyy-MM-dd}", new { @class = "form-control", type = "date", onchange = "this.form.submit()" })@Html.ValidationMessageFor(m => m.FechaHasta, "", new { @class = "text-danger" })</div></div>
         <div class="col-md-3 form-group">@Html.LabelFor(m => m.InstalacionId)<div class="col-md-12">@Html.DropDownListFor(m => m.InstalacionId, Model.Instalaciones, "Todas las instalaciones", new { @class = "form-control", onchange = "this.form.submit()" })</div></div>
-        <div class="col-md-3 form-group">@Html.LabelFor(m => m.EquipoId)<div class="col-md-12">@Html.DropDownListFor(m => m.EquipoId, Model.Equipos, "Todos los equipos", new { @class = "form-control" })</div></div>
+        <div class="col-md-3 form-group">@Html.LabelFor(m => m.EquipoId)<div class="col-md-12">@Html.DropDownListFor(m => m.EquipoId, Model.Equipos, "Todos los equipos", new { @class = "form-control", onchange = "this.form.submit()" })</div></div>
     </div>
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     <button type="submit" class="btn btn-primary">Aplicar filtros</button>
-    @Html.ActionLink("Limpiar", "Index", null, new { @class = "btn btn-default" })
+    @Html.ActionLink("Limpiar", "Index", null, new { @class = "btn btn-secondary" })
 }
 
 <h3>Resumen por instalación y equipo</h3>

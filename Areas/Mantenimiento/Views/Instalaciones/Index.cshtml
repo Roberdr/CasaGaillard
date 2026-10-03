@@ -8,10 +8,10 @@
 
 <p>
     @if (ViewBag.IncluirBajas == true)
-    { @Html.ActionLink("Ocultar fuera de servicio", "Index", null, new { @class = "btn btn-default btn-sm" }) }
+    { @Html.ActionLink("Ocultar fuera de servicio", "Index", null, new { @class = "btn btn-primary btn-sm" }) }
     else
-    { @Html.ActionLink("Mostrar fuera de servicio", "Index", new { incluirBajas = true }, new { @class = "btn btn-default btn-sm" }) }
-    @Html.ActionLink("Ver equipos", "Index", "Equipos", new { area = "Mantenimiento" }, new { @class = "btn btn-default btn-sm" })
+    { @Html.ActionLink("Mostrar fuera de servicio", "Index", new { incluirBajas = true }, new { @class = "btn btn-outline-primary btn-sm" }) }
+    @Html.ActionLink("Ver equipos", "Index", "Equipos", new { area = "Mantenimiento" }, new { @class = "btn btn-outline-secondary btn-sm" })
 </p>
 
 <div class="table-responsive">

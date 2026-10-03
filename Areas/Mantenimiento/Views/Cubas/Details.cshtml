@@ -55,7 +55,11 @@
 @section scripts {
     <script>
         (function ($) {
-            function activateTab($tabLinks, $tabPanes, target) {
+            var $tabLinks = $();
+            var $tabPanes = $();
+            var target = '';
+
+            function activateTab() {
                 $tabLinks.removeClass('active').attr('aria-selected', 'false');
                 $tabPanes.removeClass('active show');
 
@@ -69,17 +73,18 @@
             }
 
             $(function () {
-                var $tabLinks = $('#cubasTab .nav-link');
-                var $tabPanes = $('#cubasTabContent .tab-pane');
+                $tabLinks = $('#cubasTab .nav-link');
+                $tabPanes = $('#cubasTabContent .tab-pane');
 
                 $tabLinks.on('click', function (e) {
                     e.preventDefault();
-                    activateTab($tabLinks, $tabPanes, $(this).attr('href'));
+                    target = $(this).attr('href') || '';
+                    activateTab();
                 });
 
-                var initialHash = window.location.hash;
-                if (initialHash && $(initialHash).length) {
-                    activateTab($tabLinks, $tabPanes, initialHash);
+                target = window.location.hash;
+                if (target && $(target).length) {
+                    activateTab();
                 }
             });
         })(jQuery);

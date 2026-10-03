@@ -805,6 +805,12 @@
     <Content Include="Content\bootstrap-grid.min.css.map" />
     <Content Include="Content\bootstrap-grid.css.map" />
     <Content Include="appsettings.json" />
+    <Content Include="Areas\Mantenimiento\Views\TareasMantenimiento\Create.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\TareasMantenimiento\Details.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\TareasMantenimiento\Edit.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\TareasMantenimiento\Gestion.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\TareasMantenimiento\Index.cshtml" />
+    <Content Include="Areas\Mantenimiento\Views\TareasMantenimiento\_Form.cshtml" />
     <None Include="Scripts\jquery-3.6.3.intellisense.js" />
     <Content Include="Scripts\jquery-3.6.3.js" />
     <Content Include="Scripts\jquery-3.6.3.min.js" />

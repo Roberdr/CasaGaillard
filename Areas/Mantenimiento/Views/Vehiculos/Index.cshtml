@@ -1,8 +1,12 @@
 @model CasaGaillard.Models.ViewModels.VehiculosIndexViewModel
+@using System.Collections.Generic
 
 @{
     ViewBag.Title = "Vehículos";
     bool incluirBajas = ViewBag.IncluirBajas == true;
+    var matriculas = ViewBag.Matriculas as IEnumerable<string> ?? new string[0];
+    var marcas = ViewBag.Marcas as IEnumerable<string> ?? new string[0];
+    var modelos = ViewBag.Modelos as IEnumerable<string> ?? new string[0];
 }
 
 <div class="d-flex justify-content-between align-items-center mb-3">
@@ -25,17 +29,35 @@
 
         <div class="col-md-2">
             @Html.Label("Matrícula")
-            @Html.TextBox("matricula", Request["matricula"], new { @class = "form-control" })
+            @Html.TextBox("matricula", Request["matricula"], new { @class = "form-control", list = "matriculas-disponibles", autocomplete = "off", onchange = "this.form.submit()" })
+            <datalist id="matriculas-disponibles">
+                @foreach (string matricula in matriculas)
+                {
+                    <option value="@matricula"></option>
+                }
+            </datalist>
         </div>
 
         <div class="col-md-2">
             @Html.Label("Marca")
-            @Html.TextBox("marca", Request["marca"], new { @class = "form-control" })
+            @Html.TextBox("marca", Request["marca"], new { @class = "form-control", list = "marcas-disponibles", autocomplete = "off", onchange = "this.form.submit()" })
+            <datalist id="marcas-disponibles">
+                @foreach (string marca in marcas)
+                {
+                    <option value="@marca"></option>
+                }
+            </datalist>
         </div>
 
         <div class="col-md-2">
             @Html.Label("Modelo")
-            @Html.TextBox("modelo", Request["modelo"], new { @class = "form-control" })
+            @Html.TextBox("modelo", Request["modelo"], new { @class = "form-control", list = "modelos-disponibles", autocomplete = "off", onchange = "this.form.submit()" })
+            <datalist id="modelos-disponibles">
+                @foreach (string modelo in modelos)
+                {
+                    <option value="@modelo"></option>
+                }
+            </datalist>
         </div>
 
         <div class="col-md-2">
@@ -43,15 +65,15 @@
             @Html.DropDownList("estado",
                 new SelectList(new[] { "Activo", "Inactivo", "Baja" }),
                 "Todos",
-                new { @class = "form-control" })
+                new { @class = "form-control", onchange = "this.form.submit()" })
         </div>
 
         <div class="col-md-2">
             @Html.Label("Tipo")
             @Html.DropDownList("tipo",
-                new SelectList(new[] { "Camión", "Furgón", "Turismo", "Remolque" }),
+                new SelectList(new[] { "Camión", "Furgón", "Turismo", "Remolque", "Plataforma", "Tractora" }),
                 "Todos",
-                new { @class = "form-control" })
+                new { @class = "form-control", onchange = "this.form.submit()" })
         </div>
 
         <div class="col-md-2 mt-4">

@@ -21,6 +21,16 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         // GET: Accesorios
         public async Task<ActionResult> Index(int? tipoAccesorioId, int? materialId, int? familiaId, int? subfamiliaId, string q, int page = 1, int pageSize = 4)
         {
+            var textosAccesorios = await db.Accesorios
+                .Select(a => new { a.Nombre, a.Descripcion })
+                .ToListAsync();
+            ViewBag.SugerenciasBusqueda = textosAccesorios
+                .SelectMany(a => new[] { a.Nombre, a.Descripcion })
+                .Where(texto => !string.IsNullOrWhiteSpace(texto))
+                .Distinct(StringComparer.CurrentCultureIgnoreCase)
+                .OrderBy(texto => texto)
+                .ToList();
+
             var query = db.Accesorios
                 .Include(a => a.Material)
                 .Include(a => a.TipoAccesorio)

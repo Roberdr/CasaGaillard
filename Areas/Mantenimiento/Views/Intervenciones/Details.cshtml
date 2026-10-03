@@ -1,9 +1,12 @@
 @model CasaGaillard.Models.ViewModels.IntervencionFilaViewModel
-@{ ViewBag.Title = "Detalle de intervención"; var repuestos = ViewBag.Repuestos as IEnumerable<CasaGaillard.Models.ViewModels.IntervencionRepuestoViewModel>; var form = ViewBag.RepuestoForm as CasaGaillard.Models.ViewModels.IntervencionRepuestoFormViewModel; }
+@{ ViewBag.Title = "Detalle de intervención"; 
+    var repuestos = ViewBag.Repuestos as IEnumerable<CasaGaillard.Models.ViewModels.IntervencionRepuestoViewModel>; 
+    var form = ViewBag.RepuestoForm as CasaGaillard.Models.ViewModels.IntervencionRepuestoFormViewModel; 
+}
 
 <h2>Intervención de @Model.TareaCodigo</h2>
 <p>
-    @Html.ActionLink("Volver a las intervenciones", "Index", new { tareaId = Model.TareaMantenimientoId }, new { @class = "btn btn-default" })
+    @Html.ActionLink("Volver a las intervenciones", "Index", new { tareaId = Model.TareaMantenimientoId }, new { @class = "btn btn-outline-secondary" })
     @if (User.IsInRole(CasaGaillard.Models.AppRoles.Administrador) || User.IsInRole(CasaGaillard.Models.AppRoles.Mantenimiento))
     { @Html.ActionLink("Editar intervención", "Edit", new { id = Model.Id }, new { @class = "btn btn-primary" }) }
 </p>
@@ -37,7 +40,7 @@
 @if (User.IsInRole(CasaGaillard.Models.AppRoles.Administrador) || User.IsInRole(CasaGaillard.Models.AppRoles.Mantenimiento))
 {
     <h4>Añadir repuesto consumido</h4>
-    <p>@Html.ActionLink("Crear repuesto nuevo", "Create", "Accesorios", new { area = "Mantenimiento", intervencionId = form.IntervencionId }, new { @class = "btn btn-default" })</p>
+    <p>@Html.ActionLink("Crear repuesto nuevo", "Create", "Accesorios", new { area = "Mantenimiento", intervencionId = form.IntervencionId }, new { @class = "btn btn-primary" })</p>
     using (Html.BeginForm("AddRepuesto", "Intervenciones", FormMethod.Post))
     {
         @Html.AntiForgeryToken()

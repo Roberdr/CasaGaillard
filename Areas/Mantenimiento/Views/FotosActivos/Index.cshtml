@@ -4,9 +4,9 @@
 <h2>Fotos: @Model.Titulo</h2>
 <p>
     @if (Model.Tipo == "Instalacion")
-    { @Html.ActionLink("Volver a instalaciones", "Index", "Instalaciones", new { area = "Mantenimiento" }, new { @class = "btn btn-default" }) }
+    { @Html.ActionLink("Volver a instalaciones", "Index", "Instalaciones", new { area = "Mantenimiento" }, new { @class = "btn btn-outline-primary" }) }
     else
-    { @Html.ActionLink("Volver a equipos", "Index", "Equipos", new { area = "Mantenimiento" }, new { @class = "btn btn-default" }) }
+    { @Html.ActionLink("Volver a equipos", "Index", "Equipos", new { area = "Mantenimiento" }, new { @class = "btn btn-outline-primary" }) }
 </p>
 
 @if (User.IsInRole(CasaGaillard.Models.AppRoles.Administrador) || User.IsInRole(CasaGaillard.Models.AppRoles.Mantenimiento))

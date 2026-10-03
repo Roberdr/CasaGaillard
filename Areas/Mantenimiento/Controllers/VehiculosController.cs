@@ -35,6 +35,25 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
         [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento + "," + AppRoles.Consulta)]
         public ActionResult Index(string matricula, string marca, string modelo, string tipo, int page = 1, bool incluirBajas = false)
         {
+            ViewBag.Matriculas = db.Vehiculos
+                .Where(v => v.MatriculaVehiculo != null && v.MatriculaVehiculo != "")
+                .Select(v => v.MatriculaVehiculo)
+                .Distinct()
+                .OrderBy(m => m)
+                .ToList();
+            ViewBag.Marcas = db.Vehiculos
+                .Where(v => v.Marca != null && v.Marca != "")
+                .Select(v => v.Marca)
+                .Distinct()
+                .OrderBy(m => m)
+                .ToList();
+            ViewBag.Modelos = db.Vehiculos
+                .Where(v => v.Modelo != null && v.Modelo != "")
+                .Select(v => v.Modelo)
+                .Distinct()
+                .OrderBy(m => m)
+                .ToList();
+
             var vehiculos = db.Vehiculos
                 .Include(v => v.TipoVehiculo)
                 .Include(v => v.Taller)

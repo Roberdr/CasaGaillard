@@ -2,6 +2,7 @@
 
 @{
     ViewBag.Title = "Accesorios";
+    var sugerenciasBusqueda = ViewBag.SugerenciasBusqueda ?? new string[0];
 }
 
 <h2><i class="fa fa-home"></i>Accesorios</h2> 
@@ -26,7 +27,13 @@
         @Html.DropDownList("subfamiliaId", Model.Subfamilias, "-- Subfamilia --", new { @class = "form-control", id = "filterSubfamilia", onchange = "this.form.submit()" })
     </div>
     <div class="filter-group flex-grow">
-        <input type="text" name="q" value="@Model.Query" class="form-control" placeholder="Buscar nombre o descripción" />
+        <input type="text" name="q" value="@Model.Query" class="form-control" list="sugerencias-accesorios" autocomplete="off" placeholder="Buscar nombre o descripción" onchange="this.form.submit()" />
+        <datalist id="sugerencias-accesorios">
+            @foreach (string sugerencia in sugerenciasBusqueda)
+            {
+                <option value="@sugerencia"></option>
+            }
+        </datalist>
     </div>
     <div class="filter-group">
         <button type="submit" class="btn btn-primary">Filtrar</button>

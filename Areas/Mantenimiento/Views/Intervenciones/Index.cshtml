@@ -13,9 +13,9 @@ else
 }
 <p>
     @if (esGlobal)
-    { @Html.ActionLink("Ver tareas", "Index", "TareasMantenimiento", new { area = "Mantenimiento" }, new { @class = "btn btn-default" }) }
+    { @Html.ActionLink("Ver tareas", "Index", "TareasMantenimiento", new { area = "Mantenimiento" }, new { @class = "btn btn-primary" }) }
     else
-    { @Html.ActionLink("Volver a la tarea", "Details", "TareasMantenimiento", new { area = "Mantenimiento", id = tarea.ID }, new { @class = "btn btn-default" }) }
+    { @Html.ActionLink("Volver a la tarea", "Details", "TareasMantenimiento", new { area = "Mantenimiento", id = tarea.ID }, new { @class = "btn btn-outline-primary" }) }
     @if (!esGlobal && (User.IsInRole(CasaGaillard.Models.AppRoles.Administrador) || User.IsInRole(CasaGaillard.Models.AppRoles.Mantenimiento)))
     { @Html.ActionLink("Registrar intervención", "Create", new { tareaId = tarea.ID }, new { @class = "btn btn-success" }) }
 </p>

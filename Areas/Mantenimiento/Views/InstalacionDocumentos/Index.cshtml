@@ -3,7 +3,7 @@
 
 <h2>Documentación de instalación</h2>
 <p class="text-muted">@Model.InstalacionCodigo — @Model.InstalacionNombre</p>
-<p>@Html.ActionLink("Volver a instalaciones", "Index", "Instalaciones", new { area = "Mantenimiento" }, new { @class = "btn btn-default" })</p>
+<p>@Html.ActionLink("Volver a instalaciones", "Index", "Instalaciones", new { area = "Mantenimiento" }, new { @class = "btn btn-outline-primary" })</p>
 
 @if (User.IsInRole(CasaGaillard.Models.AppRoles.Administrador) || User.IsInRole(CasaGaillard.Models.AppRoles.Mantenimiento))
 {

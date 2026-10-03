@@ -14,9 +14,9 @@
         { <input type="hidden" name="incluirBajas" value="true" /> }
         <noscript><button type="submit" class="btn btn-default">Filtrar</button></noscript>
         if (ViewBag.IncluirBajas == true)
-        { @Html.ActionLink("Ocultar inactivos", "Index", new { instalacionId = ViewBag.InstalacionId }, new { @class = "btn btn-default" }) }
+        { @Html.ActionLink("Ocultar inactivos", "Index", new { instalacionId = ViewBag.InstalacionId }, new { @class = "btn btn-primary" }) }
         else
-        { @Html.ActionLink("Mostrar inactivos", "Index", new { instalacionId = ViewBag.InstalacionId, incluirBajas = true }, new { @class = "btn btn-default" }) }
+        { @Html.ActionLink("Mostrar inactivos", "Index", new { instalacionId = ViewBag.InstalacionId, incluirBajas = true }, new { @class = "btn btn-outline-primary" }) }
     }
 </div>
 
