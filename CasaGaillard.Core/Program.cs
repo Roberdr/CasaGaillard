@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using System.Linq;
+using CasaGaillard.Core.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -34,6 +35,7 @@ catch { }
 
 // Register application services
 builder.Services.AddScoped<CasaGaillard.Core.Services.IIntervencionesService, CasaGaillard.Core.Services.IntervencionesService>();
+builder.Services.AddScoped<ICrudVehiculosService, VehiculosService>();
 
 // Register EF Core DbContext (DefaultConnection in appsettings.json expected)
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");

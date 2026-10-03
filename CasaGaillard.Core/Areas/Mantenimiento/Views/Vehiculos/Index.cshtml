@@ -1,0 +1,37 @@
+@model CasaGaillard.Core.Models.VehiculosIndexViewModel
+
+@{
+    ViewData["Title"] = "Vehículos";
+}
+
+<h1>Vehículos</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Matrícula</th>
+            <th>Marca</th>
+            <th>Modelo</th>
+            <th>Tipo</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach(var v in Model.PagedList)
+    {
+        <tr>
+            <td>@v.MatriculaVehiculo</td>
+            <td>@v.Marca</td>
+            <td>@v.Modelo</td>
+            <td>@v.TipoVehiculo?.Vehiculo</td>
+            <td>
+                <a asp-area="Mantenimiento" asp-controller="Vehiculos" asp-action="Details" asp-route-id="@v.ID">Details</a> |
+                <a asp-area="Mantenimiento" asp-controller="Vehiculos" asp-action="AddOrEdit" asp-route-id="@v.ID">Edit</a> |
+                <a asp-area="Mantenimiento" asp-controller="Vehiculos" asp-action="Delete" asp-route-id="@v.ID">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+<a asp-area="Mantenimiento" asp-controller="Vehiculos" asp-action="AddOrEdit">Create new</a>

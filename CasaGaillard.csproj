@@ -4,6 +4,9 @@
     <OutputType>Exe</OutputType>
     <TypeScriptToolsVersion>4.3</TypeScriptToolsVersion>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <!-- Disable SDK implicit default Content items to avoid duplicate content entries
+         when the project explicitly lists Views and other web content. -->
+    <EnableDefaultContentItems>false</EnableDefaultContentItems>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\</OutputPath>
@@ -237,6 +240,12 @@
     <Compile Update="Models\Vehiculo.cs">
       <DependentUpon>GaillardModel.tt</DependentUpon>
     </Compile>
+  </ItemGroup>
+
+  <!-- Exclude any source files that may exist under the CasaGaillard.Core folder
+       to avoid the legacy .NET Framework project compiling modern Core sources. -->
+  <ItemGroup>
+    <Compile Remove="CasaGaillard.Core\**\*.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\all.min.css" />
@@ -831,7 +840,13 @@
     <Compile Remove="Models\GaillardModels.Designer.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include=".github\upgrades\scenarios\dotnet-version-upgrade\tasks\03-mantenimiento\progress-details.md" />
     <None Include=".github\upgrades\scenarios\dotnet-version-upgrade\tasks\03.01-intervenciones\progress-details.md" />
+    <None Include=".github\upgrades\scenarios\dotnet-version-upgrade\tasks\03.02-scaffold-core\progress-details.md" />
+    <None Include=".github\upgrades\scenarios\dotnet-version-upgrade\tasks\03.02-scaffold-core\task.md" />
+    <None Include=".github\upgrades\scenarios\dotnet-version-upgrade\tasks\03.03-migrate-intervenciones-to-core\progress-details.md" />
+    <None Include=".github\upgrades\scenarios\dotnet-version-upgrade\tasks\03.04-register-di-stubs\progress-details.md" />
+    <None Include="tools\aspire\Inspector\AsmInspector.csproj" />
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>

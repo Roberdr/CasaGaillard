@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+	<OutputType>Exe</OutputType>
+	<TargetFramework>net10.0</TargetFramework>
+	<Nullable>enable</Nullable>
+	<ImplicitUsings>enable</ImplicitUsings>
+	  <!-- Ensure modern C# features (global usings) are available and avoid SDK auto-generating assembly attributes
+		 which may conflict with existing attributes in this repository. -->
+	<LangVersion>latest</LangVersion>
+	<!-- Disable generation only if the project doesn't rely on repo-level AssemblyInfo; otherwise leave enabled.
+		 Use a conservative approach: disable auto-generation for this tool to avoid duplicates with legacy AssemblyInfo. -->
+	<GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="Mono.Cecil" Version="0.11.5" />
+  </ItemGroup>
+</Project>
