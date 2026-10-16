@@ -11,13 +11,21 @@ namespace CasaGaillard.Core.Models
         [StringLength(100)]
         public string? Modelo { get; set; }
         [StringLength(20)]
+        [Display(Name = "Matrícula")]
         public string? MatriculaVehiculo { get; set; }
+        [Display(Name = "Tipo de vehículo")]
         public int? TipoVehiculoID { get; set; }
+        [Display(Name = "Modelo del tacógrafo")]
         public string? ModeloTacografo { get; set; }
+        [Display(Name = "P.M.A.")]
         public decimal? Pma { get; set; }
+        [Display(Name = "T.A.R.A.")]
         public decimal? Tara { get; set; }
+        [Display(Name = "Fecha de compra"), DataType(DataType.Date)]
         public DateTime? FechaCompra { get; set; }
+        [Display(Name = "Taller habitual")]
         public int? TallerHabitualID { get; set; }
+        [Display(Name = "Dado de baja")]
         public bool? Baja { get; set; }
 
         // Navigation props (minimal)

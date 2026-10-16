@@ -18,32 +18,38 @@ namespace CasaGaillard.Core.Areas.Mantenimiento.Controllers
 
         public async Task<IActionResult> Index(string matricula, string marca, string modelo, string tipo, int page = 1, bool incluirBajas = false)
         {
-            var items = await _service.GetAllAsync(incluirBajas, page);
-            var vm = new VehiculosIndexViewModel { PagedList = items };
-            ViewBag.IncluirBajas = incluirBajas;
-            return View(vm);
+            var model = await _service.GetAllAsync(matricula, marca, modelo, tipo, incluirBajas, page);
+            return View(model);
         }
 
         public async Task<IActionResult> AddOrEdit(int id = 0)
         {
+            Vehiculo vehiculo;
             if (id == 0)
             {
-                return View(new Vehiculo());
+                vehiculo = new Vehiculo();
+            }
+            else
+            {
+                var existingVehiculo = await _service.GetByIdAsync(id);
+                if (existingVehiculo == null)
+                    return NotFound();
+
+                vehiculo = existingVehiculo;
             }
 
-            var vehiculo = await _service.GetByIdAsync(id);
-            if (vehiculo == null)
-                return NotFound();
-
+            await CargarListasVehiculoAsync(vehiculo);
             return View(vehiculo);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> AddOrEdit(Vehiculo vehiculo)
+        public async Task<IActionResult> AddOrEdit(
+            [Bind("ID,Marca,Modelo,MatriculaVehiculo,TipoVehiculoID,ModeloTacografo,Pma,Tara,FechaCompra,TallerHabitualID,Baja")] Vehiculo vehiculo)
         {
             if (!ModelState.IsValid)
             {
+                await CargarListasVehiculoAsync(vehiculo);
                 return View(vehiculo);
             }
 
@@ -57,6 +63,20 @@ namespace CasaGaillard.Core.Areas.Mantenimiento.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+        private async Task CargarListasVehiculoAsync(Vehiculo vehiculo)
+        {
+            ViewBag.TipoVehiculoID = new SelectList(
+                await _service.GetTiposVehiculoAsync(),
+                "ID",
+                "Vehiculo",
+                vehiculo.TipoVehiculoID);
+            ViewBag.TallerHabitualID = new SelectList(
+                await _service.GetTalleresAsync(),
+                "ID",
+                "NombreEntidad",
+                vehiculo.TallerHabitualID);
         }
 
         public async Task<IActionResult> Details(int? id)

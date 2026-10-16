@@ -1,0 +1,33 @@
+@model CasaGaillard.Core.Models.Vehiculo
+
+@{
+    ViewData["Title"] = "Detalles del vehículo";
+}
+
+<h1>Detalles del vehículo</h1>
+
+<dl class="row">
+    <dt class="col-sm-3">Tipo de vehículo</dt>
+    <dd class="col-sm-9">@Model.TipoVehiculo?.Vehiculo</dd>
+    <dt class="col-sm-3">Marca</dt>
+    <dd class="col-sm-9">@Model.Marca</dd>
+    <dt class="col-sm-3">Modelo</dt>
+    <dd class="col-sm-9">@Model.Modelo</dd>
+    <dt class="col-sm-3">Matrícula</dt>
+    <dd class="col-sm-9">@Model.MatriculaVehiculo</dd>
+    <dt class="col-sm-3">Modelo del tacógrafo</dt>
+    <dd class="col-sm-9">@Model.ModeloTacografo</dd>
+    <dt class="col-sm-3">PMA</dt>
+    <dd class="col-sm-9">@Model.Pma</dd>
+    <dt class="col-sm-3">TARA</dt>
+    <dd class="col-sm-9">@Model.Tara</dd>
+    <dt class="col-sm-3">Fecha de compra</dt>
+    <dd class="col-sm-9">@Model.FechaCompra?.ToString("d")</dd>
+    <dt class="col-sm-3">Taller habitual</dt>
+    <dd class="col-sm-9">@Model.Taller?.NombreEntidad</dd>
+    <dt class="col-sm-3">Estado</dt>
+    <dd class="col-sm-9">@(Model.Baja == true ? "Baja" : "Activo")</dd>
+</dl>
+
+<a asp-area="Mantenimiento" asp-controller="Vehiculos" asp-action="AddOrEdit" asp-route-id="@Model.ID" class="btn btn-primary">Editar</a>
+<a asp-area="Mantenimiento" asp-controller="Vehiculos" asp-action="Index" class="btn btn-link">Volver a la lista</a>

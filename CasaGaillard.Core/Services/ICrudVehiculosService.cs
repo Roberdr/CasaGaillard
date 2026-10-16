@@ -6,8 +6,17 @@ namespace CasaGaillard.Core.Services
 {
     public interface ICrudVehiculosService
     {
-        Task<IEnumerable<Vehiculo>> GetAllAsync(bool incluirBajas = false, int page = 1);
+        Task<VehiculosIndexViewModel> GetAllAsync(
+            string? matricula,
+            string? marca,
+            string? modelo,
+            string? tipo,
+            bool incluirBajas,
+            int page,
+            int pageSize = 8);
         Task<Vehiculo?> GetByIdAsync(int id);
+        Task<IReadOnlyList<TipoVehiculo>> GetTiposVehiculoAsync();
+        Task<IReadOnlyList<Entidad>> GetTalleresAsync();
         Task AddAsync(Vehiculo vehiculo);
         Task UpdateAsync(Vehiculo vehiculo);
         Task DeleteAsync(int id);

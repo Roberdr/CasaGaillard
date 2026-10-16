@@ -1,0 +1,76 @@
+@model CasaGaillard.Core.Models.Vehiculo
+
+@{
+    ViewData["Title"] = Model.ID > 0 ? "Editar vehículo" : "Crear vehículo";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<form asp-area="Mantenimiento" asp-controller="Vehiculos" asp-action="AddOrEdit" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <input asp-for="ID" type="hidden" />
+
+    <div class="mb-3">
+        <label asp-for="TipoVehiculoID" class="form-label">Tipo de vehículo</label>
+        <select asp-for="TipoVehiculoID" asp-items="ViewBag.TipoVehiculoID" class="form-select">
+            <option value="">Selecciona un tipo...</option>
+        </select>
+        <span asp-validation-for="TipoVehiculoID" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Marca" class="form-label"></label>
+        <input asp-for="Marca" class="form-control" />
+        <span asp-validation-for="Marca" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="Modelo" class="form-label"></label>
+        <input asp-for="Modelo" class="form-control" />
+        <span asp-validation-for="Modelo" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="MatriculaVehiculo" class="form-label">Matrícula</label>
+        <input asp-for="MatriculaVehiculo" class="form-control" />
+        <span asp-validation-for="MatriculaVehiculo" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="ModeloTacografo" class="form-label">Modelo del tacógrafo</label>
+        <input asp-for="ModeloTacografo" class="form-control" />
+        <span asp-validation-for="ModeloTacografo" class="text-danger"></span>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label asp-for="Pma" class="form-label">PMA</label>
+            <input asp-for="Pma" class="form-control" />
+            <span asp-validation-for="Pma" class="text-danger"></span>
+        </div>
+        <div class="col-md-6 mb-3">
+            <label asp-for="Tara" class="form-label"></label>
+            <input asp-for="Tara" class="form-control" />
+            <span asp-validation-for="Tara" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="mb-3">
+        <label asp-for="FechaCompra" class="form-label">Fecha de compra</label>
+        <input asp-for="FechaCompra" type="date" class="form-control" />
+        <span asp-validation-for="FechaCompra" class="text-danger"></span>
+    </div>
+    <div class="mb-3">
+        <label asp-for="TallerHabitualID" class="form-label">Taller habitual</label>
+        <select asp-for="TallerHabitualID" asp-items="ViewBag.TallerHabitualID" class="form-select">
+            <option value="">Selecciona un taller...</option>
+        </select>
+        <span asp-validation-for="TallerHabitualID" class="text-danger"></span>
+    </div>
+    <div class="form-check mb-3">
+        <input asp-for="Baja" class="form-check-input" />
+        <label asp-for="Baja" class="form-check-label">Vehículo dado de baja</label>
+        <span asp-validation-for="Baja" class="text-danger"></span>
+    </div>
+
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a asp-area="Mantenimiento" asp-controller="Vehiculos" asp-action="Index" class="btn btn-link">Volver a la lista</a>
+</form>
+
+@section Scripts {
+    <partial name="~/Pages/Shared/_ValidationScriptsPartial.cshtml" />
+}
