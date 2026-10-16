@@ -13,6 +13,9 @@ namespace CasaGaillard.Core.Data
         public DbSet<Vehiculo> Vehiculos { get; set; } = null!;
         public DbSet<TipoVehiculo> TiposVehiculo { get; set; } = null!;
         public DbSet<Entidad> Entidads { get; set; } = null!;
+        public DbSet<Instalacion> Instalaciones { get; set; } = null!;
+        public DbSet<TipoInstalacion> TiposInstalacion { get; set; } = null!;
+        public DbSet<Ubicacion> Ubicaciones { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -44,6 +47,42 @@ namespace CasaGaillard.Core.Data
             {
                 eb.HasKey(e => e.ID);
                 eb.Property(e => e.NombreEntidad).HasMaxLength(200);
+            });
+
+            modelBuilder.Entity<TipoInstalacion>(eb =>
+            {
+                eb.ToTable("TipoInstalacion", "gaillard");
+                eb.HasKey(tipo => tipo.Id);
+                eb.Property(tipo => tipo.Nombre).HasMaxLength(100).IsRequired();
+            });
+
+            modelBuilder.Entity<Ubicacion>(eb =>
+            {
+                eb.ToTable("Ubicacion", "gaillard");
+                eb.HasKey(ubicacion => ubicacion.UbicacionId);
+                eb.Property(ubicacion => ubicacion.Nombre).HasMaxLength(150).IsRequired();
+                eb.Property(ubicacion => ubicacion.Descripcion).HasMaxLength(300);
+            });
+
+            modelBuilder.Entity<Instalacion>(eb =>
+            {
+                eb.ToTable("Instalacion", "gaillard");
+                eb.HasKey(instalacion => instalacion.ID);
+                eb.Property(instalacion => instalacion.ID).HasColumnName("Id");
+                eb.Property(instalacion => instalacion.Codigo).HasMaxLength(50).IsRequired();
+                eb.Property(instalacion => instalacion.Nombre).HasMaxLength(255).IsRequired();
+                eb.Property(instalacion => instalacion.Estado).HasMaxLength(20).IsRequired();
+                eb.Property(instalacion => instalacion.CodigoPlano).HasMaxLength(50);
+                eb.Property(instalacion => instalacion.FechaPuestaMarcha).HasColumnType("date");
+                eb.Property(instalacion => instalacion.FechaBaja).HasColumnType("date");
+                eb.HasOne(instalacion => instalacion.TipoInstalacion)
+                    .WithMany(tipo => tipo.Instalaciones)
+                    .HasForeignKey(instalacion => instalacion.TipoInstalacionId)
+                    .OnDelete(DeleteBehavior.Restrict);
+                eb.HasOne(instalacion => instalacion.Ubicacion)
+                    .WithMany(ubicacion => ubicacion.Instalaciones)
+                    .HasForeignKey(instalacion => instalacion.UbicacionId)
+                    .OnDelete(DeleteBehavior.Restrict);
             });
         }
     }
