@@ -18,9 +18,9 @@ namespace CasaGaillard.Core.Models
         [Display(Name = "Modelo del tacógrafo")]
         public string? ModeloTacografo { get; set; }
         [Display(Name = "P.M.A.")]
-        public decimal? Pma { get; set; }
+        public int? Pma { get; set; }
         [Display(Name = "T.A.R.A.")]
-        public decimal? Tara { get; set; }
+        public int? Tara { get; set; }
         [Display(Name = "Fecha de compra"), DataType(DataType.Date)]
         public DateTime? FechaCompra { get; set; }
         [Display(Name = "Taller habitual")]

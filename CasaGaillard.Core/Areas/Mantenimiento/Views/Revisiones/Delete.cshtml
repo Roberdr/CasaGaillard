@@ -1,0 +1,6 @@
+@model RevisionDetalleViewModel
+@{ViewData["Title"]="Eliminar revisión";}
+<h1>Eliminar revisión</h1>
+<div class="alert alert-warning">¿Seguro que quieres eliminar la revisión de la cuba <strong>@Model.MatriculaCuba</strong> realizada el <strong>@Model.FechaRevision.ToString("dd/MM/yyyy")</strong>?</div>
+<div class="card border-0 shadow-sm mb-3"><div class="card-body"><dl class="row mb-0"><dt class="col-sm-3">Descripción</dt><dd class="col-sm-9">@(Model.Descripcion??"—")</dd><dt class="col-sm-3">Válida hasta</dt><dd class="col-sm-9">@Model.ValidaHasta?.ToString("dd/MM/yyyy")</dd><dt class="col-sm-3">Autorizado</dt><dd class="col-sm-9">@(Model.Autorizado??"—")</dd></dl></div></div>
+<form asp-action="Delete" method="post"><input type="hidden" name="id" value="@Model.Id"/><button type="submit" class="btn btn-danger">Eliminar</button> <a asp-action="Index" asp-route-cubaId="@Model.CubaId" class="btn btn-outline-secondary">Cancelar</a></form>

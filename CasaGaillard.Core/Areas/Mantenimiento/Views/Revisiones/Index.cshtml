@@ -1,0 +1,35 @@
+@model RevisionesIndexViewModel
+@{
+    ViewData["Title"] = "Revisiones de cubas";
+    string CaducidadClass(DateTime? date) => !date.HasValue ? "text-bg-secondary" : date.Value.Date < DateTime.Today ? "text-bg-danger" : date.Value.Date <= DateTime.Today.AddDays(30) ? "text-bg-warning" : "text-bg-success";
+    string CaducidadText(DateTime? date) => !date.HasValue ? "Sin validez" : date.Value.Date < DateTime.Today ? "Caducada" : date.Value.Date <= DateTime.Today.AddDays(30) ? "Caduca pronto" : "En vigor";
+}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <div><h1 class="mb-1">Revisiones de cubas</h1><p class="text-body-secondary mb-0">Historial y estado de validez de las inspecciones.</p></div>
+    @if (User.IsInRole("Administrador") || User.IsInRole("Mantenimiento")) { <a asp-action="Create" asp-route-cubaId="@Model.CubaId" class="btn btn-primary">Nueva revisión</a> }
+</div>
+@if (TempData["LoginMessage"] is string message) { <div class="alert alert-success alert-dismissible fade show" role="alert">@message<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Cerrar"></button></div> }
+<form asp-action="Index" method="get" class="row g-3 mb-4">
+    <div class="col-md-5"><label for="cubaId" class="form-label">Cuba</label><select id="cubaId" name="cubaId" asp-items="Model.Cubas" class="form-select"><option value="">Todas las cubas</option></select></div>
+    <div class="col-md-4"><label for="matriculaCuba" class="form-label">Matrícula</label><input id="matriculaCuba" name="matriculaCuba" value="@Model.MatriculaCuba" class="form-control" placeholder="Buscar matrícula" /></div>
+    <div class="col-md-3 d-flex align-items-end gap-2"><button type="submit" class="btn btn-primary">Filtrar</button><a asp-action="Index" class="btn btn-outline-secondary">Limpiar</a></div>
+    <div class="col-12"><div class="form-check"><input type="checkbox" class="form-check-input" id="incluirBajas" name="incluirBajas" value="true" checked="@(Model.IncluirBajas ? "checked" : null)"/><label for="incluirBajas" class="form-check-label">Incluir cubas dadas de baja</label></div></div>
+</form>
+<div class="table-responsive"><table class="table table-hover align-middle"><thead><tr><th>Matrícula</th><th>Última revisión</th><th>Validez</th><th>Descripción</th><th>Autorizado</th><th>Acciones</th></tr></thead><tbody>
+@if (Model.Revisiones.Count == 0) { <tr><td colspan="6" class="text-center text-body-secondary py-4">No hay revisiones registradas con estos filtros.</td></tr> }
+@foreach (var cuba in Model.Revisiones)
+{
+    var ultima=cuba.UltimaRevision;
+    var historialId=$"historial-{cuba.CubaId}";
+    <tr>
+        <td><button class="btn btn-link link-body-emphasis fw-semibold p-0 text-decoration-none" type="button" data-bs-toggle="collapse" data-bs-target="#@historialId" aria-expanded="false" aria-controls="@historialId">@cuba.MatriculaCuba <span class="badge text-bg-secondary ms-1">@cuba.Historial.Count</span></button>@if(cuba.CubaBaja){<span class="badge text-bg-dark ms-1">Baja</span>}</td>
+        <td>@(ultima?.FechaRevision.ToString("dd/MM/yyyy")??"—")</td>
+        <td>@if(ultima is not null){<span class="badge @CaducidadClass(ultima.ValidaHasta)">@CaducidadText(ultima.ValidaHasta)</span><div class="small text-body-secondary mt-1">@(ultima.ValidaHasta?.ToString("dd/MM/yyyy")??"Sin fecha")</div>}else{<span class="badge text-bg-secondary">Sin revisiones</span>}</td>
+        <td>@(ultima?.Descripcion??"—")</td><td>@(string.IsNullOrWhiteSpace(ultima?.Autorizado)?"—":ultima.Autorizado)</td>
+        <td class="text-nowrap">@if(ultima is not null){<a asp-action="Details" asp-route-id="@ultima.Id">Detalles</a>@if(User.IsInRole("Administrador")||User.IsInRole("Mantenimiento")){<text> · </text><a asp-action="Edit" asp-route-id="@ultima.Id">Editar</a><text> · </text><a asp-action="Delete" asp-route-id="@ultima.Id">Eliminar</a>}}@if(ultima is null||ultima.ValidaHasta.HasValue&&ultima.ValidaHasta.Value.Date<=DateTime.Today.AddDays(30)){@if(User.IsInRole("Administrador")||User.IsInRole("Mantenimiento")){<text> · </text><a asp-action="Create" asp-route-cubaId="@cuba.CubaId">Nueva revisión</a>}}</td>
+    </tr>
+    <tr class="collapse" id="@historialId"><td colspan="6" class="p-0"><div class="p-3 bg-body-tertiary"><h2 class="h6 mb-3">Historial de @cuba.MatriculaCuba</h2><div class="list-group list-group-flush rounded-3 overflow-hidden">
+        @foreach(var revision in cuba.Historial){<div class="list-group-item d-flex flex-wrap justify-content-between align-items-center gap-2"><div><strong>@revision.FechaRevision.ToString("dd/MM/yyyy")</strong><div>@revision.Descripcion</div><small class="text-body-secondary">Válida hasta @(revision.ValidaHasta?.ToString("dd/MM/yyyy")??"sin fecha") · @(revision.Autorizado??"sin autorizante")</small></div><div class="text-nowrap"><a asp-action="Details" asp-route-id="@revision.Id">Detalles</a>@if(User.IsInRole("Administrador")||User.IsInRole("Mantenimiento")){<text> · </text><a asp-action="Edit" asp-route-id="@revision.Id">Editar</a><text> · </text><a asp-action="Delete" asp-route-id="@revision.Id">Eliminar</a>}</div></div>}
+    </div></div></td></tr>
+}
+</tbody></table></div>

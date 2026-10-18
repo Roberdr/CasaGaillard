@@ -1,0 +1,30 @@
+@model EquipoFormViewModel
+<input asp-for="Id" type="hidden" />
+<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+<div class="row">
+    <div class="col-md-6 mb-3"><label asp-for="InstalacionId" class="form-label"></label><select asp-for="InstalacionId" asp-items="Model.Instalaciones" class="form-select"><option value="">Selecciona instalación</option></select><span asp-validation-for="InstalacionId" class="text-danger"></span></div>
+    <div class="col-md-6 mb-3"><label asp-for="EquipoPadreId" class="form-label"></label><select asp-for="EquipoPadreId" asp-items="Model.EquiposPadre" class="form-select"><option value="">Equipo principal</option></select><span asp-validation-for="EquipoPadreId" class="text-danger"></span></div>
+</div>
+<div class="row">
+    <div class="col-md-4 mb-3"><label asp-for="TipoElemento" class="form-label"></label><select asp-for="TipoElemento" asp-items="Model.TiposElemento" class="form-select"></select><span asp-validation-for="TipoElemento" class="text-danger"></span></div>
+    <div class="col-md-4 mb-3"><label asp-for="Codigo" class="form-label"></label><input asp-for="Codigo" class="form-control" /><span asp-validation-for="Codigo" class="text-danger"></span></div>
+    <div class="col-md-4 mb-3"><label asp-for="Nombre" class="form-label"></label><input asp-for="Nombre" class="form-control" /><span asp-validation-for="Nombre" class="text-danger"></span></div>
+</div>
+<div class="mb-3"><label asp-for="Descripcion" class="form-label"></label><textarea asp-for="Descripcion" rows="3" class="form-control"></textarea><span asp-validation-for="Descripcion" class="text-danger"></span></div>
+<div class="row">
+    <div class="col-md-4 mb-3"><label asp-for="Fabricante" class="form-label"></label><input asp-for="Fabricante" class="form-control" /></div>
+    <div class="col-md-4 mb-3"><label asp-for="Modelo" class="form-label"></label><input asp-for="Modelo" class="form-control" /></div>
+    <div class="col-md-4 mb-3"><label asp-for="NumeroSerie" class="form-label"></label><input asp-for="NumeroSerie" class="form-control" /></div>
+</div>
+<div class="row">
+    <div class="col-md-3 mb-3"><label asp-for="Potencia" class="form-label"></label><input asp-for="Potencia" type="number" min="0" step="0.001" class="form-control" /><span asp-validation-for="Potencia" class="text-danger"></span></div>
+    <div class="col-md-3 mb-3"><label asp-for="Caudal" class="form-label"></label><input asp-for="Caudal" type="number" min="0" step="0.001" class="form-control" /><span asp-validation-for="Caudal" class="text-danger"></span></div>
+    <div class="col-md-3 mb-3"><label asp-for="Presion" class="form-label"></label><input asp-for="Presion" type="number" min="0" step="0.001" class="form-control" /><span asp-validation-for="Presion" class="text-danger"></span></div>
+    <div class="col-md-3 mb-3"><label asp-for="Voltaje" class="form-label"></label><input asp-for="Voltaje" type="number" min="0" step="0.001" class="form-control" /><span asp-validation-for="Voltaje" class="text-danger"></span></div>
+</div>
+<div class="row">
+    <div class="col-md-4 mb-3"><label asp-for="FechaInstalacion" class="form-label"></label><input asp-for="FechaInstalacion" type="date" class="form-control" /></div>
+    <div class="col-md-4 mb-3"><label asp-for="FechaBaja" class="form-label"></label><input asp-for="FechaBaja" type="date" class="form-control" /><span asp-validation-for="FechaBaja" class="text-danger"></span></div>
+    <div class="col-md-4 mb-3 form-check align-self-end"><input asp-for="Activo" class="form-check-input" /><label asp-for="Activo" class="form-check-label"></label></div>
+</div>
+<div class="mb-3"><label asp-for="Observaciones" class="form-label"></label><textarea asp-for="Observaciones" rows="3" class="form-control"></textarea></div>

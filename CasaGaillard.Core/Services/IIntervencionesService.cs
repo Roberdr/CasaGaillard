@@ -1,16 +1,18 @@
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using CasaGaillard.Core.Models;
 
-namespace CasaGaillard.Core.Services
+namespace CasaGaillard.Core.Services;
+
+public interface IIntervencionesService
 {
-    public interface IIntervencionesService
-    {
-        Task<IEnumerable<IntervencionViewModel>> GetAllAsync();
-        Task<IntervencionViewModel?> GetByIdAsync(int id);
-        Task CreateAsync(IntervencionViewModel model);
-        Task UpdateAsync(int id, IntervencionViewModel model);
-        Task AddRepuestoAsync(int intervenId, int repuestoId);
-        Task RemoveRepuestoAsync(int id);
-    }
+    Task<IntervencionesIndexViewModel?> GetIndexAsync(int? tareaId);
+    Task<TareaMantenimientoResumen?> GetTareaSummaryAsync(int id);
+    Task<IntervencionFormViewModel?> GetCreateAsync(int tareaId);
+    Task<IntervencionFormViewModel?> GetForEditAsync(int id);
+    Task<IntervencionDetailsViewModel?> GetDetailsAsync(int id, int? nuevoAccesorioId = null);
+    Task<IReadOnlyList<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>> GetPersonasAsync(int? selectedId);
+    Task<IReadOnlyList<Microsoft.AspNetCore.Mvc.Rendering.SelectListItem>> GetAccesoriosAsync(int selectedId);
+    Task<bool> SaveCreateAsync(IntervencionFormViewModel model, string? creadoPor);
+    Task<bool> SaveUpdateAsync(IntervencionFormViewModel model);
+    Task<bool> AddRepuestoAsync(IntervencionRepuestoFormViewModel model);
+    Task<int?> RemoveRepuestoAsync(int id);
 }

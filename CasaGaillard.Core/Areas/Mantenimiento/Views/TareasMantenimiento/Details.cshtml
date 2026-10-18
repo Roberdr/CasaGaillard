@@ -1,0 +1,71 @@
+@model TareaMantenimientoDetailsViewModel
+@{
+    ViewData["Title"] = "Detalle de tarea";
+    var tarea = Model.Tarea;
+}
+
+<h1>Detalle de tarea</h1>
+<p class="text-body-secondary">Consulta de la incidencia registrada.</p>
+@if (TempData["LoginMessage"] is string message)
+{
+    <div class="alert alert-info">@message</div>
+}
+<p>
+    <a asp-action="Index" class="btn btn-outline-secondary">Volver al listado</a>
+    <a asp-area="Mantenimiento" asp-controller="Intervenciones" asp-action="Index" asp-route-tareaId="@tarea.ID" class="btn btn-info">Intervenciones y repuestos</a>
+    @if (User.IsInRole("Administrador") || User.IsInRole("Mantenimiento"))
+    {
+        <a asp-action="Edit" asp-route-id="@tarea.ID" class="btn btn-primary">Editar</a>
+        <a asp-action="Gestion" asp-route-id="@tarea.ID" class="btn btn-success">Gestionar</a>
+    }
+</p>
+
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card mb-3">
+            <div class="card-header"><strong>@tarea.Codigo</strong> — @tarea.Titulo</div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">Ubicación</dt><dd class="col-sm-8">@(string.IsNullOrWhiteSpace(tarea.Ubicacion) ? "Sin indicar" : tarea.Ubicacion)</dd>
+                    <dt class="col-sm-4">Equipo</dt><dd class="col-sm-8">@(string.IsNullOrWhiteSpace(tarea.Equipo) ? "Sin indicar" : tarea.Equipo)</dd>
+                    <dt class="col-sm-4">Detectado por</dt><dd class="col-sm-8">@(string.IsNullOrWhiteSpace(tarea.DetectadoPor) ? "Sin indicar" : tarea.DetectadoPor)</dd>
+                    <dt class="col-sm-4">Contacto</dt><dd class="col-sm-8">@(string.IsNullOrWhiteSpace(tarea.Contacto) ? "Sin indicar" : tarea.Contacto)</dd>
+                    <dt class="col-sm-4">Prioridad</dt><dd class="col-sm-8">@(string.IsNullOrWhiteSpace(tarea.Prioridad) ? "Sin indicar" : tarea.Prioridad)</dd>
+                    <dt class="col-sm-4">Estado</dt><dd class="col-sm-8">@(string.IsNullOrWhiteSpace(tarea.Estado) ? "Sin indicar" : tarea.Estado)</dd>
+                    <dt class="col-sm-4">Asignada a</dt><dd class="col-sm-8">@(string.IsNullOrWhiteSpace(tarea.AsignadaA) ? "Sin asignar" : tarea.AsignadaA)</dd>
+                    <dt class="col-sm-4">Empresa exterior</dt><dd class="col-sm-8">@(string.IsNullOrWhiteSpace(tarea.EmpresaExterior) ? "Sin indicar" : tarea.EmpresaExterior)</dd>
+                </dl>
+            </div>
+        </div>
+        <div class="card mb-3"><div class="card-header"><strong>Descripción</strong></div><div class="card-body"><p style="white-space: pre-wrap">@tarea.Descripcion</p></div></div>
+        <div class="card mb-3"><div class="card-header"><strong>Acciones a realizar</strong></div><div class="card-body"><p style="white-space: pre-wrap">@(string.IsNullOrWhiteSpace(tarea.AccionesARealizar) ? "Sin acciones definidas." : tarea.AccionesARealizar)</p></div></div>
+        <div class="card mb-3">
+            <div class="card-header"><strong>Fotos de la avería</strong></div>
+            <div class="card-body">
+                @if (Model.Fotos.Count == 0)
+                {
+                    <p class="text-body-secondary mb-0">Todavía no hay fotos adjuntas.</p>
+                }
+                else
+                {
+                    <div class="row g-3">
+                    @foreach (var foto in Model.Fotos)
+                    {
+                        <div class="col-6 col-md-4">
+                            <a asp-action="Foto" asp-route-id="@foto.ID" target="_blank"><img src="@Url.Action("Foto", new { id = foto.ID })" alt="Foto de @(foto.NombreOriginal ?? foto.ID.ToString())" class="img-fluid rounded" /></a>
+                            @if (!string.IsNullOrWhiteSpace(foto.NombreOriginal)) { <div class="small text-body-secondary mt-1">@foto.NombreOriginal</div> }
+                        </div>
+                    }
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card mb-3"><div class="card-header"><strong>Resumen</strong></div><div class="card-body">
+            <dl><dt>Creada por</dt><dd>@(tarea.CreadoPor ?? "Desconocido")</dd><dt>Fecha detección</dt><dd>@tarea.FechaDeteccion.ToString("dd/MM/yyyy HH:mm")</dd><dt>Fecha creación</dt><dd>@tarea.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</dd><dt>Actualizada</dt><dd>@(tarea.FechaActualizacion?.ToString("dd/MM/yyyy HH:mm") ?? "No actualizada")</dd><dt>Actualizada por</dt><dd>@(tarea.ActualizadoPor ?? "Sin cambios")</dd></dl>
+        </div></div>
+        <div class="card mb-3"><div class="card-header"><strong>Accesorios necesarios</strong></div><div class="card-body"><p style="white-space: pre-wrap">@Model.AccesoriosTexto</p></div></div>
+        <div class="card mb-3"><div class="card-header"><strong>Observaciones</strong></div><div class="card-body"><p style="white-space: pre-wrap">@(string.IsNullOrWhiteSpace(tarea.Observaciones) ? "Sin observaciones." : tarea.Observaciones)</p></div></div>
+    </div>
+</div>

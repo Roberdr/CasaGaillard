@@ -1,0 +1,35 @@
+@model TareaMantenimientoFormViewModel
+
+<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+<div class="mb-3"><label asp-for="Titulo" class="form-label"></label><input asp-for="Titulo" class="form-control" /><span asp-validation-for="Titulo" class="text-danger"></span></div>
+<div class="mb-3"><label asp-for="Descripcion" class="form-label"></label><textarea asp-for="Descripcion" rows="5" class="form-control"></textarea><span asp-validation-for="Descripcion" class="text-danger"></span></div>
+<div class="row">
+    <div class="col-md-6 mb-3"><label asp-for="Ubicacion" class="form-label"></label><input asp-for="Ubicacion" class="form-control" /><span asp-validation-for="Ubicacion" class="text-danger"></span></div>
+    <div class="col-md-6 mb-3"><label asp-for="Equipo" class="form-label"></label><input asp-for="Equipo" class="form-control" /><span asp-validation-for="Equipo" class="text-danger"></span></div>
+</div>
+<h2 class="h5 mt-3">Activo relacionado</h2>
+<div class="row">
+    <div class="col-md-6 mb-3"><label asp-for="InstalacionId" class="form-label">Instalación</label><select asp-for="InstalacionId" asp-items="Model.Instalaciones" class="form-select"><option value="">Sin instalación</option></select></div>
+    <div class="col-md-6 mb-3"><label asp-for="EquipoId" class="form-label">Equipo</label><select asp-for="EquipoId" asp-items="Model.Equipos" class="form-select"><option value="">Sin equipo</option></select></div>
+    <div class="col-md-6 mb-3"><label asp-for="CubaId" class="form-label">Cisterna</label><select asp-for="CubaId" asp-items="Model.Cubas" class="form-select"><option value="">Sin cisterna</option></select></div>
+    <div class="col-md-6 mb-3"><label asp-for="GrupoId" class="form-label">Grupo</label><select asp-for="GrupoId" asp-items="Model.Grupos" class="form-select"><option value="">Sin grupo</option></select></div>
+    <div class="col-md-6 mb-3"><label asp-for="VehiculoId" class="form-label">Vehículo</label><select asp-for="VehiculoId" asp-items="Model.Vehiculos" class="form-select"><option value="">Sin vehículo</option></select></div>
+    <div class="col-md-6 mb-3"><label asp-for="PlanMantenimientoId" class="form-label">Plan de mantenimiento</label><select asp-for="PlanMantenimientoId" asp-items="Model.PlanesMantenimiento" class="form-select"><option value="">Sin plan</option></select></div>
+</div>
+<div class="row">
+    <div class="col-md-6 mb-3"><label asp-for="DetectadoPorPersonaID" class="form-label">Detectado por</label><select asp-for="DetectadoPorPersonaID" asp-items="Model.Personas" class="form-select"><option value="">Sin indicar</option></select></div>
+    <div class="col-md-6 mb-3"><label asp-for="ContactoPersonaID" class="form-label">Contacto</label><select asp-for="ContactoPersonaID" asp-items="Model.Contactos" class="form-select"><option value="">Sin indicar</option></select></div>
+</div>
+<div class="row">
+    <div class="col-md-6 mb-3"><label asp-for="Prioridad" class="form-label"></label><select asp-for="Prioridad" class="form-select"><option>Baja</option><option>Media</option><option>Alta</option><option>Urgente</option></select></div>
+    <div class="col-md-6 mb-3"><label asp-for="Estado" class="form-label"></label><select asp-for="Estado" class="form-select"><option>Nueva</option><option>En estudio</option><option>Asignada</option><option>En curso</option><option>Pendiente repuestos</option><option>Cerrada</option></select></div>
+</div>
+<div class="row">
+    <div class="col-md-6 mb-3"><label asp-for="AsignadaAPersonaID" class="form-label">Asignada a</label><select asp-for="AsignadaAPersonaID" asp-items="Model.Asignados" class="form-select"><option value="">Sin asignar</option></select></div>
+    <div class="col-md-6 mb-3"><label asp-for="EmpresaExteriorEntidadID" class="form-label">Empresa exterior</label><select asp-for="EmpresaExteriorEntidadID" asp-items="Model.Entidades" class="form-select"><option value="">Sin empresa</option></select></div>
+</div>
+<div class="mb-3"><label asp-for="FechaDeteccion" class="form-label"></label><input asp-for="FechaDeteccion" type="datetime-local" class="form-control" /><span asp-validation-for="FechaDeteccion" class="text-danger"></span></div>
+<div class="mb-3"><label asp-for="AccionesARealizar" class="form-label"></label><textarea asp-for="AccionesARealizar" rows="4" class="form-control"></textarea></div>
+<div class="mb-3"><label asp-for="AccesoriosNecesarios" class="form-label"></label><input asp-for="AccesoriosNecesarios" class="form-control" placeholder="Ejemplo: 12,18,24" /><span asp-validation-for="AccesoriosNecesarios" class="text-danger"></span></div>
+<div class="mb-3"><label asp-for="Observaciones" class="form-label"></label><textarea asp-for="Observaciones" rows="4" class="form-control"></textarea></div>
+<div class="mb-3"><label asp-for="FotosAdjuntas" class="form-label"></label><input asp-for="FotosAdjuntas" type="file" accept="image/*" multiple class="form-control" /><span asp-validation-for="FotosAdjuntas" class="text-danger"></span><div class="form-text">Imágenes de hasta 10 MB cada una.</div></div>

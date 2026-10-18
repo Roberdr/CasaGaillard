@@ -1,0 +1,13 @@
+@model TareaMantenimientoFormViewModel
+@{
+    ViewData["Title"] = "Nueva tarea";
+}
+
+<h1>Nueva tarea de mantenimiento</h1>
+<form asp-action="Create" method="post" enctype="multipart/form-data">
+    <partial name="_Form" model="Model" />
+    <button type="submit" class="btn btn-primary">Crear tarea</button>
+    <a asp-action="Index" class="btn btn-link">Volver</a>
+</form>
+
+@section Scripts { <partial name="~/Pages/Shared/_ValidationScriptsPartial.cshtml" /> }

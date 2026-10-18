@@ -2,11 +2,14 @@ using CasaGaillard.Core.Models;
 using CasaGaillard.Core.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Authorization;
+using CasaGaillard.Core.Security;
 using System.Threading.Tasks;
 
 namespace CasaGaillard.Core.Areas.Mantenimiento.Controllers
 {
     [Area("Mantenimiento")]
+    [Authorize(Roles = AppRoles.LecturaMantenimiento)]
     public class VehiculosController : Controller
     {
         private readonly ICrudVehiculosService _service;
@@ -22,6 +25,7 @@ namespace CasaGaillard.Core.Areas.Mantenimiento.Controllers
             return View(model);
         }
 
+        [Authorize(Roles = AppRoles.GestionMantenimiento)]
         public async Task<IActionResult> AddOrEdit(int id = 0)
         {
             Vehiculo vehiculo;
@@ -44,6 +48,7 @@ namespace CasaGaillard.Core.Areas.Mantenimiento.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = AppRoles.GestionMantenimiento)]
         public async Task<IActionResult> AddOrEdit(
             [Bind("ID,Marca,Modelo,MatriculaVehiculo,TipoVehiculoID,ModeloTacografo,Pma,Tara,FechaCompra,TallerHabitualID,Baja")] Vehiculo vehiculo)
         {
@@ -87,6 +92,7 @@ namespace CasaGaillard.Core.Areas.Mantenimiento.Controllers
             return View(v);
         }
 
+        [Authorize(Roles = AppRoles.GestionMantenimiento)]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null) return BadRequest();
@@ -97,6 +103,7 @@ namespace CasaGaillard.Core.Areas.Mantenimiento.Controllers
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = AppRoles.GestionMantenimiento)]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             await _service.DeleteAsync(id);

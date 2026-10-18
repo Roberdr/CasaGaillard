@@ -1,0 +1,42 @@
+@model IReadOnlyList<TareaMantenimientoResumenViewModel>
+@{
+    ViewData["Title"] = "Tareas de mantenimiento";
+    var codigo = ViewData["Codigo"] as string;
+}
+
+<h1>Tareas de mantenimiento</h1>
+<p class="text-body-secondary">Incidencias detectadas en cisternas, grupos, vehículos, instalaciones y equipos.</p>
+<p><a asp-action="Create" class="btn btn-primary">Nueva tarea</a></p>
+
+<form asp-action="Index" method="get" class="row g-2 mb-3">
+    <div class="col-auto"><label for="codigo" class="visually-hidden">Código</label><input id="codigo" name="codigo" value="@codigo" class="form-control" placeholder="Código de tarea" /></div>
+    <div class="col-auto"><button type="submit" class="btn btn-primary">Buscar</button></div>
+    @if (!string.IsNullOrWhiteSpace(codigo))
+    {
+        <div class="col-auto"><a asp-action="Index" class="btn btn-outline-secondary">Ver todas</a></div>
+    }
+</form>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead><tr><th>Código</th><th>Título</th><th>Ubicación</th><th>Equipo</th><th>Prioridad</th><th>Estado</th><th>Asignada a</th><th>Creada</th><th></th></tr></thead>
+        <tbody>
+        @if (Model.Count == 0)
+        {
+            <tr><td colspan="9" class="text-center text-body-secondary">No hay tareas registradas.</td></tr>
+        }
+        else
+        {
+            @foreach (var tarea in Model)
+            {
+                <tr>
+                    <td>@tarea.Codigo</td><td>@tarea.Titulo</td><td>@tarea.Ubicacion</td><td>@tarea.Equipo</td>
+                    <td>@tarea.Prioridad</td><td>@tarea.Estado</td><td>@tarea.AsignadaA</td>
+                    <td>@tarea.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td><a asp-action="Details" asp-route-id="@tarea.ID">Ver</a></td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>

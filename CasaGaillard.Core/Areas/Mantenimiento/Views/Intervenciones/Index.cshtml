@@ -1,37 +1,52 @@
-@model IEnumerable<CasaGaillard.Core.Models.IntervencionViewModel>
-
+@model IntervencionesIndexViewModel
 @{
     ViewData["Title"] = "Intervenciones";
 }
 
-<h1>Intervenciones</h1>
-
-<p>
-    <a asp-area="Mantenimiento" asp-controller="Intervenciones" asp-action="Create" class="btn btn-primary">Crear nueva intervención</a>
-</p>
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Id</th>
-            <th>Título</th>
-            <th>Descripción</th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-    @foreach (var item in Model)
+<h1>@(Model.EsGlobal ? "Intervenciones" : $"Intervenciones de {Model.Tarea!.Codigo}")</h1>
+@if (Model.Tarea is not null)
+{
+    <p class="text-body-secondary">@Model.Tarea.Titulo</p>
+    <a asp-action="Index" class="btn btn-outline-secondary mb-3">Todas las intervenciones</a>
+    @if (User.IsInRole("Administrador") || User.IsInRole("Mantenimiento"))
     {
-        <tr>
-            <td>@item.Id</td>
-            <td>@item.Titulo</td>
-            <td>@item.Descripcion</td>
-            <td>
-                <a asp-area="Mantenimiento" asp-controller="Intervenciones" asp-action="Details" asp-route-id="@item.Id">Detalles</a>
-                |
-                <a asp-area="Mantenimiento" asp-controller="Intervenciones" asp-action="Edit" asp-route-id="@item.Id">Editar</a>
-            </td>
-        </tr>
+        <a asp-area="Mantenimiento" asp-controller="Intervenciones" asp-action="Create" asp-route-tareaId="@Model.Tarea.Id" class="btn btn-success mb-3">Registrar intervención</a>
     }
-    </tbody>
-</table>
+}
+
+@if (TempData["LoginMessage"] is string message)
+{
+    <div class="alert alert-info">@message</div>
+}
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                @if (Model.EsGlobal) { <th>Tarea</th> }
+                <th>Inicio</th><th>Técnico</th><th>Descripción</th><th>Horas</th><th>Coste mano de obra</th><th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.Intervenciones)
+        {
+            <tr>
+                @if (Model.EsGlobal)
+                {
+                    <td>@item.TareaCodigo — @item.TareaTitulo</td>
+                }
+                <td>@item.FechaInicio.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@item.Tecnico</td>
+                <td>@item.Descripcion</td>
+                <td>@(item.HorasEmpleadas?.ToString("0.##") ?? "—")</td>
+                <td>@(item.CosteManoObra?.ToString("C") ?? "—")</td>
+                <td><a asp-action="Details" asp-route-id="@item.Id">Detalle y repuestos</a></td>
+            </tr>
+        }
+        @if (Model.Intervenciones.Count == 0)
+        {
+            <tr><td colspan="@(Model.EsGlobal ? 7 : 6)" class="text-center text-body-secondary">No hay intervenciones registradas.</td></tr>
+        }
+        </tbody>
+    </table>
+</div>

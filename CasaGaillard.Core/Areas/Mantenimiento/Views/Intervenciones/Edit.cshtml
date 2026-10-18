@@ -1,27 +1,24 @@
-@model CasaGaillard.Core.Models.IntervencionViewModel
-
+@model IntervencionFormViewModel
 @{
-    ViewData["Title"] = "Editar Intervención";
+    ViewData["Title"] = "Editar intervención";
 }
 
-<h1>Editar Intervención</h1>
-
-<form asp-area="Mantenimiento" asp-controller="Intervenciones" asp-action="Edit" method="post">
+<h1>Editar intervención</h1>
+<p class="text-body-secondary">Tarea @Model.TareaCodigo — @Model.TareaTitulo</p>
+<form asp-action="Edit" method="post">
     <input asp-for="Id" type="hidden" />
-    <div class="form-group">
-        <label asp-for="Titulo" class="control-label"></label>
-        <input asp-for="Titulo" class="form-control" />
-        <span asp-validation-for="Titulo" class="text-danger"></span>
-    </div>
-    <div class="form-group">
-        <label asp-for="Descripcion" class="control-label"></label>
-        <textarea asp-for="Descripcion" class="form-control"></textarea>
-        <span asp-validation-for="Descripcion" class="text-danger"></span>
-    </div>
-    <button type="submit" class="btn btn-primary">Guardar</button>
-    <a asp-area="Mantenimiento" asp-controller="Intervenciones" asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    <input asp-for="TareaMantenimientoId" type="hidden" />
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <div class="mb-3"><label asp-for="TecnicoPersonaID" class="form-label">Técnico</label><select asp-for="TecnicoPersonaID" asp-items="Model.Personas" class="form-select"><option value="">Seleccionar persona...</option></select><span asp-validation-for="TecnicoPersonaID" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="FechaInicio" class="form-label"></label><input asp-for="FechaInicio" type="datetime-local" class="form-control" /><span asp-validation-for="FechaInicio" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="FechaFin" class="form-label"></label><input asp-for="FechaFin" type="datetime-local" class="form-control" /><span asp-validation-for="FechaFin" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Descripcion" class="form-label"></label><textarea asp-for="Descripcion" rows="5" class="form-control"></textarea><span asp-validation-for="Descripcion" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="HorasEmpleadas" class="form-label"></label><input asp-for="HorasEmpleadas" class="form-control" inputmode="decimal" /><span asp-validation-for="HorasEmpleadas" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="CosteManoObra" class="form-label"></label><input asp-for="CosteManoObra" class="form-control" inputmode="decimal" /><span asp-validation-for="CosteManoObra" class="text-danger"></span></div>
+    <button type="submit" class="btn btn-primary">Guardar cambios</button>
+    <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-link">Cancelar</a>
 </form>
 
 @section Scripts {
-    <partial name="_ValidationScriptsPartial" />
+    <partial name="~/Pages/Shared/_ValidationScriptsPartial.cshtml" />
 }

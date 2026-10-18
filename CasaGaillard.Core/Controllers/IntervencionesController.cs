@@ -1,100 +1,117 @@
-using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using CasaGaillard.Core.Services;
 using CasaGaillard.Core.Models;
+using CasaGaillard.Core.Security;
+using CasaGaillard.Core.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
-namespace CasaGaillard.Core.Controllers
+namespace CasaGaillard.Core.Controllers;
+
+[Area("Mantenimiento")]
+[Authorize(Roles = AppRoles.LecturaMantenimiento)]
+public class IntervencionesController : Controller
 {
-    [Area("Mantenimiento")]
-    public class IntervencionesController : Controller
+    private readonly IIntervencionesService _service;
+
+    public IntervencionesController(IIntervencionesService service) => _service = service;
+
+    public async Task<IActionResult> Index(int? tareaId)
     {
-        private readonly IIntervencionesService _service;
+        var model = await _service.GetIndexAsync(tareaId);
+        return model is null ? NotFound() : View(model);
+    }
 
-        public IntervencionesController(IIntervencionesService service)
+    [Authorize(Roles = AppRoles.GestionMantenimiento)]
+    public async Task<IActionResult> Create(int? tareaId)
+    {
+        if (!tareaId.HasValue) return BadRequest();
+        var model = await _service.GetCreateAsync(tareaId.Value);
+        return model is null ? NotFound() : View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = AppRoles.GestionMantenimiento)]
+    public async Task<IActionResult> Create(IntervencionFormViewModel model)
+    {
+        if (model.FechaFin.HasValue && model.FechaFin.Value < model.FechaInicio)
+            ModelState.AddModelError(nameof(model.FechaFin), "La fecha de fin no puede ser anterior al inicio.");
+
+        if (ModelState.IsValid && await _service.SaveCreateAsync(model, User.Identity?.Name))
         {
-            _service = service;
+            TempData["LoginMessage"] = "La intervención se ha registrado.";
+            return RedirectToAction(nameof(Index), new { tareaId = model.TareaMantenimientoId });
         }
 
-        // GET: Mantenimiento/Intervenciones
-        public async Task<IActionResult> Index()
+        await RepopulateFormAsync(model);
+        if (ModelState.IsValid)
+            ModelState.AddModelError(nameof(model.TecnicoPersonaID), "La tarea o el técnico seleccionado ya no existe.");
+        return View(model);
+    }
+
+    public async Task<IActionResult> Details(int? id, int? nuevoAccesorioId)
+    {
+        if (!id.HasValue) return BadRequest();
+        var model = await _service.GetDetailsAsync(id.Value, nuevoAccesorioId);
+        return model is null ? NotFound() : View(model);
+    }
+
+    [Authorize(Roles = AppRoles.GestionMantenimiento)]
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (!id.HasValue) return BadRequest();
+        var model = await _service.GetForEditAsync(id.Value);
+        return model is null ? NotFound() : View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = AppRoles.GestionMantenimiento)]
+    public async Task<IActionResult> Edit(IntervencionFormViewModel model)
+    {
+        if (model.FechaFin.HasValue && model.FechaFin.Value < model.FechaInicio)
+            ModelState.AddModelError(nameof(model.FechaFin), "La fecha de fin no puede ser anterior al inicio.");
+
+        if (ModelState.IsValid && await _service.SaveUpdateAsync(model))
         {
-            var items = await _service.GetAllAsync();
-            return View(items);
+            TempData["LoginMessage"] = "La intervención se ha actualizado.";
+            return RedirectToAction(nameof(Details), new { id = model.Id });
         }
 
-        // GET: Mantenimiento/Intervenciones/Details/5
-        public async Task<IActionResult> Details(int? id)
+        await RepopulateFormAsync(model);
+        if (ModelState.IsValid)
+            ModelState.AddModelError(nameof(model.TecnicoPersonaID), "La tarea o el técnico seleccionado ya no existe.");
+        return View(model);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = AppRoles.GestionMantenimiento)]
+    public async Task<IActionResult> AddRepuesto(IntervencionRepuestoFormViewModel model)
+    {
+        if (ModelState.IsValid && await _service.AddRepuestoAsync(model))
+            TempData["LoginMessage"] = "El repuesto utilizado se ha añadido.";
+        else
+            TempData["LoginMessage"] = "No se pudo añadir el repuesto. Revisa la cantidad, el coste y el accesorio.";
+        return RedirectToAction(nameof(Details), new { id = model.IntervencionId });
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = AppRoles.GestionMantenimiento)]
+    public async Task<IActionResult> RemoveRepuesto(int id)
+    {
+        var interventionId = await _service.RemoveRepuestoAsync(id);
+        return interventionId.HasValue ? RedirectToAction(nameof(Details), new { id = interventionId.Value }) : NotFound();
+    }
+
+    private async Task RepopulateFormAsync(IntervencionFormViewModel model)
+    {
+        var task = await _service.GetTareaSummaryAsync(model.TareaMantenimientoId);
+        if (task is not null)
         {
-            if (id == null)
-                return NotFound();
-
-            var model = await _service.GetByIdAsync(id.Value);
-            if (model == null)
-                return NotFound();
-
-            return View(model);
+            model.TareaCodigo = task.Codigo;
+            model.TareaTitulo = task.Titulo;
         }
-
-        // GET: Mantenimiento/Intervenciones/Create
-        public IActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Mantenimiento/Intervenciones/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(IntervencionViewModel model)
-        {
-            if (!ModelState.IsValid)
-                return View(model);
-
-            await _service.CreateAsync(model);
-            return RedirectToAction(nameof(Index));
-        }
-
-        // GET: Mantenimiento/Intervenciones/Edit/5
-        public async Task<IActionResult> Edit(int? id)
-        {
-            if (id == null)
-                return NotFound();
-
-            var model = await _service.GetByIdAsync(id.Value);
-            if (model == null)
-                return NotFound();
-
-            return View(model);
-        }
-
-        // POST: Mantenimiento/Intervenciones/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, IntervencionViewModel model)
-        {
-            if (id == 0)
-                return BadRequest();
-
-            if (!ModelState.IsValid)
-                return View(model);
-
-            await _service.UpdateAsync(id, model);
-            return RedirectToAction(nameof(Index));
-        }
-
-        // POST: Mantenimiento/Intervenciones/AddRepuesto
-        [HttpPost]
-        public async Task<IActionResult> AddRepuesto(int intervenId, int repuestoId)
-        {
-            await _service.AddRepuestoAsync(intervenId, repuestoId);
-            return Ok();
-        }
-
-        // POST: Mantenimiento/Intervenciones/RemoveRepuesto/5
-        [HttpPost]
-        public async Task<IActionResult> RemoveRepuesto(int id)
-        {
-            await _service.RemoveRepuestoAsync(id);
-            return Ok();
-        }
+        model.Personas = await _service.GetPersonasAsync(model.TecnicoPersonaID);
     }
 }
