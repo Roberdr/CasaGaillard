@@ -1,0 +1,3 @@
+@model PersonaForm
+@{ ViewData["Title"] = "Eliminar persona"; }
+<h1>Eliminar persona</h1>@if (TempData["OrganizacionError"] is string error) { <div class="alert alert-danger">@error</div> }<p>¿Quieres eliminar a @Model.Nombre @Model.Apellido1 @Model.Apellido2?</p><form asp-action="Delete" method="post"><input asp-for="Id" type="hidden" /><button class="btn btn-danger">Eliminar</button> <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a></form>

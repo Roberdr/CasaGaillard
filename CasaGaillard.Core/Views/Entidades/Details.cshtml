@@ -1,0 +1,4 @@
+@model EntidadForm
+@{ ViewData["Title"] = "Entidad"; }
+<h1>@Model.Nombre</h1><dl class="row"><dt class="col-sm-3">CIF</dt><dd class="col-sm-9">@Model.Cif</dd><dt class="col-sm-3">Dirección</dt><dd class="col-sm-9">@Model.DireccionTexto</dd></dl><a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Editar</a> <a asp-action="Index" class="btn btn-outline-secondary">Volver</a>
+<partial name="_Contactos" model="Model" />

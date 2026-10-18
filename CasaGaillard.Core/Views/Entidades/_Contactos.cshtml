@@ -1,0 +1,34 @@
+@model EntidadForm
+@if (TempData["OrganizacionError"] is string error) { <div class="alert alert-danger">@error</div> }
+<h2 class="h4 mt-4">Teléfonos</h2>
+<div class="d-flex flex-wrap gap-2 align-items-center">
+@foreach (var telefono in Model.Telefonos)
+{
+    @if (User.IsInRole("Administrador") || User.IsInRole("Mantenimiento")) { <form asp-action="ActualizarTelefono" method="post" class="d-flex gap-1 align-items-center"><input type="hidden" name="entidadId" value="@Model.Id" /><input type="hidden" name="id" value="@telefono.Id" /><input name="telefono" value="@telefono.Numero?.Trim()" maxlength="10" class="form-control form-control-sm" aria-label="Teléfono" /><button class="btn btn-sm btn-outline-primary">Guardar</button></form><form asp-action="EliminarTelefono" method="post"><input type="hidden" name="entidadId" value="@Model.Id" /><input type="hidden" name="id" value="@telefono.Id" /><button class="btn btn-sm btn-outline-danger" aria-label="Eliminar teléfono">×</button></form> }
+    else { <span>@telefono.Numero</span> }
+}
+@if (User.IsInRole("Administrador") || User.IsInRole("Mantenimiento")) { <form asp-action="AgregarTelefono" method="post" class="d-flex gap-1"><input type="hidden" name="entidadId" value="@Model.Id" /><input name="telefono" maxlength="10" class="form-control form-control-sm" placeholder="Nuevo teléfono" /><button class="btn btn-sm btn-success">Añadir</button></form> }
+</div>
+<h2 class="h4 mt-4">Personas relacionadas</h2>
+<div class="table-responsive"><table class="table table-sm align-middle"><thead><tr><th>Persona</th><th>Cargo</th><th>Alta</th><th>Baja</th><th></th></tr></thead><tbody>
+@foreach (var relacion in Model.Relaciones)
+{
+    <tr><td>@relacion.Nombre</td><td>@relacion.Cargo</td><td>@relacion.FechaAlta?.ToString("dd/MM/yyyy")</td><td>@relacion.FechaBaja?.ToString("dd/MM/yyyy")</td><td>
+        @if (User.IsInRole("Administrador") || User.IsInRole("Mantenimiento")) { <form asp-action="EditarRelacion" method="post" class="d-flex flex-wrap gap-1">
+            <input type="hidden" name="entidadId" value="@Model.Id" /><input type="hidden" name="relacionId" value="@relacion.Id" />
+            <select name="cargoId" class="form-select form-select-sm" style="max-width:12rem"><option value="">Sin cargo</option>@foreach (var cargo in Model.Cargos) { <option value="@cargo.Value" selected="@(cargo.Value == relacion.CargoId?.ToString())">@cargo.Text</option> }</select>
+            <input type="date" name="fechaAlta" value="@relacion.FechaAlta?.ToString("yyyy-MM-dd")" class="form-control form-control-sm" />
+            <input type="date" name="fechaBaja" value="@relacion.FechaBaja?.ToString("yyyy-MM-dd")" class="form-control form-control-sm" />
+            <button class="btn btn-sm btn-outline-primary">Guardar</button>
+        </form>
+        @if (relacion.Activa) { <form asp-action="DarDeBajaPersona" method="post" class="mt-1"><input type="hidden" name="entidadId" value="@Model.Id" /><input type="hidden" name="relacionId" value="@relacion.Id" /><button class="btn btn-sm btn-outline-danger">Dar de baja hoy</button></form> } }
+    </td></tr>
+}
+</tbody></table></div>
+@if (User.IsInRole("Administrador") || User.IsInRole("Mantenimiento")) { <form asp-action="AgregarPersona" method="post" class="row g-2 align-items-end mt-2">
+    <input type="hidden" name="entidadId" value="@Model.Id" />
+    <div class="col-md-5"><label class="form-label" for="personaId">Añadir persona</label><select id="personaId" name="personaId" class="form-select"><option value="">Selecciona una persona</option>@foreach (var persona in Model.Personas) { <option value="@persona.Value">@persona.Text</option> }</select></div>
+    <div class="col-md-3"><label class="form-label" for="cargoId">Cargo</label><select id="cargoId" name="cargoId" class="form-select"><option value="">Sin cargo</option>@foreach (var cargo in Model.Cargos) { <option value="@cargo.Value">@cargo.Text</option> }</select></div>
+    <div class="col-md-2"><label class="form-label" for="fechaAlta">Fecha de alta</label><input id="fechaAlta" name="fechaAlta" type="date" class="form-control" /></div>
+    <div class="col-md-2"><button class="btn btn-primary">Vincular</button></div>
+</form> }

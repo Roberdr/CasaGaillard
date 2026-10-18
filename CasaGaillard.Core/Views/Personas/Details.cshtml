@@ -1,0 +1,5 @@
+@model PersonaForm
+@{ ViewData["Title"] = "Persona"; }
+<h1>@Model.Nombre @Model.Apellido1 @Model.Apellido2</h1><dl class="row"><dt class="col-sm-3">NIF</dt><dd class="col-sm-9">@Model.Nif</dd><dt class="col-sm-3">Dirección</dt><dd class="col-sm-9">@Model.DireccionTexto</dd></dl><a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Editar</a> <a asp-action="Index" class="btn btn-outline-secondary">Volver</a>
+@{ ViewData["ReturnTo"] = "Details"; }
+<partial name="_Contactos" model="Model" />

@@ -1,0 +1,5 @@
+@model EntidadForm
+<div asp-validation-summary="ModelOnly" class="text-danger"></div><input asp-for="Id" type="hidden" />
+<div class="mb-3"><label asp-for="Nombre" class="form-label"></label><input asp-for="Nombre" class="form-control" /></div>
+<div class="mb-3"><label asp-for="Cif" class="form-label"></label><input asp-for="Cif" class="form-control" /></div>
+<div class="mb-3"><label asp-for="DireccionId" class="form-label"></label><select asp-for="DireccionId" asp-items="Model.Direcciones" class="form-select"><option value="">Selecciona dirección</option></select></div>

@@ -1,0 +1,8 @@
+@model ManageIndexModel
+@{ ViewData["Title"] = "Mi cuenta"; }
+<h1>Mi cuenta</h1>
+@if (TempData["ManageMessage"] is string message) { <div class="alert alert-success">@message</div> }
+<div class="card"><div class="card-body"><h2 class="h5">Contraseña</h2>
+    @if (Model.HasPassword) { <p>Actualiza la contraseña de tu cuenta.</p><a asp-action="ChangePassword" class="btn btn-primary">Cambiar contraseña</a> }
+    else { <p>Configura una contraseña para tu cuenta.</p><a asp-action="SetPassword" class="btn btn-primary">Crear contraseña</a> }
+</div></div>

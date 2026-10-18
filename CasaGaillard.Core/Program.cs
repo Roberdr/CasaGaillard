@@ -63,6 +63,7 @@ builder.Services.AddScoped<IGruposService, GruposService>();
 builder.Services.AddScoped<ICubasService, CubasService>();
 builder.Services.AddScoped<IMantenimientoDashboardService, MantenimientoDashboardService>();
 builder.Services.AddScoped<IPaginaPublicaService, PaginaPublicaService>();
+builder.Services.AddScoped<IOrganizacionService, OrganizacionService>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 if (string.IsNullOrWhiteSpace(connectionString))

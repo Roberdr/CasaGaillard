@@ -1,0 +1,9 @@
+@model DireccionForm
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<input asp-for="Id" type="hidden" /><input asp-for="PersonaId" type="hidden" /><input asp-for="ParaEntidad" type="hidden" />
+<div class="mb-3"><label asp-for="TipoViaId" class="form-label"></label><select asp-for="TipoViaId" asp-items="Model.TiposVia" class="form-select"><option value="">Selecciona tipo de vía</option></select><span asp-validation-for="TipoViaId" class="text-danger"></span></div>
+<div class="mb-3"><label asp-for="NombreVia" class="form-label"></label><input asp-for="NombreVia" class="form-control" /><span asp-validation-for="NombreVia" class="text-danger"></span></div>
+<div class="mb-3"><label asp-for="Distrito" class="form-label"></label><input asp-for="Distrito" class="form-control" /></div>
+<div class="row"><div class="col-md-3 mb-3"><label asp-for="Numero" class="form-label"></label><input asp-for="Numero" class="form-control" /></div><div class="col-md-3 mb-3"><label asp-for="Escalera" class="form-label"></label><input asp-for="Escalera" class="form-control" /></div><div class="col-md-3 mb-3"><label asp-for="Piso" class="form-label"></label><input asp-for="Piso" class="form-control" /></div><div class="col-md-3 mb-3"><label asp-for="Puerta" class="form-label"></label><input asp-for="Puerta" class="form-control" /></div></div>
+<div class="mb-3"><label asp-for="PoblacionId" class="form-label"></label><select asp-for="PoblacionId" asp-items="Model.Poblaciones" class="form-select"><option value="">Selecciona población</option></select></div>
+<div class="row"><div class="col-md-6 mb-3"><label asp-for="CodigoPostal" class="form-label"></label><input asp-for="CodigoPostal" class="form-control" /></div><div class="col-md-6 mb-3"><label asp-for="Pais" class="form-label"></label><input asp-for="Pais" class="form-control" /></div></div>
