@@ -26,6 +26,8 @@ bld/
 [Bb]in/
 [Oo]bj/
 [Cc]asaGaillard.Core/App_Data/DataProtection-Keys/
+[Cc]asaGaillard.Core/appsettings.Lan.json
+[Cc]asaGaillard.Core/certs/
 [Ll]og/
 
 # Visual Studio 2015/2017 cache/options directory
@@ -174,6 +176,7 @@ publish/
 # Note: Comment the next line if you want to checkin your web deploy settings,
 # but database connection strings (with potential passwords) will be unencrypted
 *.pubxml
+!CasaGaillard.Core/Properties/PublishProfiles/Folder.pubxml
 *.publishproj
 
 # Microsoft Azure Web App publish settings. Comment the next line if you want to

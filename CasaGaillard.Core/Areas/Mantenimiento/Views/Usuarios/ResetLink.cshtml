@@ -1,0 +1,7 @@
+@model PasswordResetLinkViewModel
+@{ ViewData["Title"] = "Enlace de restablecimiento"; }
+<h1>Enlace de restablecimiento</h1>
+<p>Cuenta: <strong>@Model.Email</strong></p>
+<div class="alert alert-info">Copia y entrega este enlace al usuario para que elija una nueva contraseña. El enlace incluye un token de un solo uso.</div>
+<div class="input-group mb-3"><input id="resetUrl" class="form-control" value="@Model.ResetUrl" readonly /><button type="button" class="btn btn-outline-secondary" onclick="navigator.clipboard.writeText(document.getElementById('resetUrl').value)">Copiar</button></div>
+<a asp-action="Index" class="btn btn-link">Volver a usuarios</a>

@@ -1,0 +1,11 @@
+@model RevisionVehiculoFormViewModel
+@{ ViewData["Title"] = Model.Id == 0 ? "Nueva revisión de vehículo" : "Editar revisión de vehículo"; var action = Model.Id == 0 ? "Create" : "Edit"; }
+<h1>@ViewData["Title"]</h1>
+<form asp-action="@action" method="post"><div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div><input asp-for="Id" type="hidden" />
+<div class="mb-3"><label asp-for="VehiculoId" class="form-label"></label><select asp-for="VehiculoId" asp-items="Model.Vehiculos" class="form-select"><option value="">Selecciona vehículo</option></select><span asp-validation-for="VehiculoId" class="text-danger"></span></div>
+<div class="mb-3"><label asp-for="TipoRevisionId" class="form-label"></label><select asp-for="TipoRevisionId" asp-items="Model.Tipos" class="form-select"><option value="">Selecciona tipo</option></select><span asp-validation-for="TipoRevisionId" class="text-danger"></span></div>
+<div class="mb-3"><label asp-for="FechaRevision" class="form-label"></label><input asp-for="FechaRevision" type="date" class="form-control" /><span asp-validation-for="FechaRevision" class="text-danger"></span></div>
+<div class="mb-3"><label asp-for="Caducidad" class="form-label"></label><input asp-for="Caducidad" type="date" class="form-control" /><span asp-validation-for="Caducidad" class="text-danger"></span><div class="form-text">Si se deja vacío, se calcula a 30 meses desde la fecha de revisión.</div></div>
+<div class="mb-3"><label asp-for="EjecutorPersonasEntidadId" class="form-label"></label><select asp-for="EjecutorPersonasEntidadId" asp-items="Model.Ejecutores" class="form-select"><option value="">Selecciona persona y entidad</option></select><span asp-validation-for="EjecutorPersonasEntidadId" class="text-danger"></span></div>
+<div class="mb-3"><label asp-for="Detalles" class="form-label"></label><textarea asp-for="Detalles" rows="4" class="form-control"></textarea><span asp-validation-for="Detalles" class="text-danger"></span></div>
+<button type="submit" class="btn btn-primary">Guardar</button> <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a></form>

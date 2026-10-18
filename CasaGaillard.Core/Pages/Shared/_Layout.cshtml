@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - CasaGaillard.Core</title>
+    <title>@ViewData["Title"] - Casa Gaillard</title>
     <script type="importmap"></script>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
@@ -11,41 +11,68 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-xl bg-body-tertiary border-bottom shadow-sm sticky-top mb-4" data-bs-theme="dark">
+        <nav class="navbar navbar-expand-xl bg-body-tertiary border-bottom shadow-sm sticky-top mb-4" data-bs-theme="dark" aria-label="Navegación del área interna">
             <div class="container">
-                <a class="navbar-brand fw-semibold" asp-area="" asp-page="/Index">Casa Gaillard</a>
+                <a class="navbar-brand fw-semibold" asp-area="Mantenimiento" asp-controller="Home" asp-action="Index">Casa Gaillard</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavigation" aria-controls="mainNavigation"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                        aria-expanded="false" aria-label="Abrir navegación">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse" id="mainNavigation">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-                            <a class="nav-link px-3" asp-area="Mantenimiento" asp-controller="Vehiculos" asp-action="Index">Vehículos</a>
+                            <a class="nav-link px-3" asp-area="Mantenimiento" asp-controller="Home" asp-action="Index">Panel</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3" asp-area="Mantenimiento" asp-controller="Intervenciones" asp-action="Index">Intervenciones</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle px-3" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Trabajo</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-area="Mantenimiento" asp-controller="TareasMantenimiento" asp-action="Index">Tareas de mantenimiento</a></li>
+                                <li><a class="dropdown-item" asp-area="Mantenimiento" asp-controller="Intervenciones" asp-action="Index">Intervenciones</a></li>
+                            </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3" asp-area="Mantenimiento" asp-controller="TareasMantenimiento" asp-action="Index">Tareas de mantenimiento</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle px-3" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Activos</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-area="Mantenimiento" asp-controller="Instalaciones" asp-action="Index">Instalaciones</a></li>
+                                <li><a class="dropdown-item" asp-area="Mantenimiento" asp-controller="Equipos" asp-action="Index">Equipos</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" asp-area="Mantenimiento" asp-controller="Cubas" asp-action="Index">Cubas</a></li>
+                                <li><a class="dropdown-item" asp-area="Mantenimiento" asp-controller="Vehiculos" asp-action="Index">Vehículos</a></li>
+                                <li><a class="dropdown-item" asp-area="Mantenimiento" asp-controller="Grupos" asp-action="Index">Grupos</a></li>
+                            </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3" asp-area="Mantenimiento" asp-controller="Instalaciones" asp-action="Index">Instalaciones</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle px-3" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Revisiones</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-area="Mantenimiento" asp-controller="Revisiones" asp-action="Index">Revisiones de cubas</a></li>
+                                <li><a class="dropdown-item" asp-area="Mantenimiento" asp-controller="RevisionesVehiculos" asp-action="Index">Revisiones de vehículos</a></li>
+                            </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3" asp-area="Mantenimiento" asp-controller="Equipos" asp-action="Index">Equipos</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle px-3" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Planificación</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-area="Mantenimiento" asp-controller="PlanesMantenimiento" asp-action="Index">Planes de mantenimiento</a></li>
+                                <li><a class="dropdown-item" asp-area="Mantenimiento" asp-controller="CostesMantenimiento" asp-action="Index">Historial y costes</a></li>
+                            </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3" asp-area="Mantenimiento" asp-controller="PlanesMantenimiento" asp-action="Index">Planes de mantenimiento</a>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle px-3" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Catálogos</a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-area="Mantenimiento" asp-controller="Accesorios" asp-action="Index">Accesorios</a></li>
+                                <li><a class="dropdown-item" asp-area="Mantenimiento" asp-controller="Familias" asp-action="Index">Familias y subfamilias</a></li>
+                                <li><a class="dropdown-item" asp-area="Mantenimiento" asp-controller="TiposAccesorio" asp-action="Index">Tipos de accesorio</a></li>
+                                <li><hr class="dropdown-divider" /></li>
+                                <li><a class="dropdown-item" asp-area="Mantenimiento" asp-controller="Ubicaciones" asp-action="Index">Ubicaciones</a></li>
+                                <li><a class="dropdown-item" asp-area="Mantenimiento" asp-controller="TiposInstalacion" asp-action="Index">Tipos de instalación</a></li>
+                            </ul>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3" asp-area="Mantenimiento" asp-controller="CostesMantenimiento" asp-action="Index">Historial y costes</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link px-3" asp-area="Mantenimiento" asp-controller="Revisiones" asp-action="Index">Revisiones de cubas</a>
-                        </li>
+                        @if (User.IsInRole("Administrador"))
+                        {
+                            <li class="nav-item"><a class="nav-link px-3" asp-area="Mantenimiento" asp-controller="Usuarios" asp-action="Index">Usuarios</a></li>
+                        }
                     </ul>
-                    <ul class="navbar-nav">
+                    <ul class="navbar-nav align-items-xl-center">
+                        <li class="nav-item"><a class="nav-link px-3" asp-area="Pagina" asp-controller="Pagina" asp-action="Index">Sitio público</a></li>
                         @if (User.Identity?.IsAuthenticated == true)
                         {
                             <li class="nav-item"><span class="nav-link text-white-50">@User.Identity.Name</span></li>
@@ -72,7 +99,7 @@
 
     <footer class="border-top footer text-body-secondary">
         <div class="container">
-        &copy; 2026 - Casa Gaillard
+            &copy; @DateTime.Now.Year - Casa Gaillard
         </div>
     </footer>
 

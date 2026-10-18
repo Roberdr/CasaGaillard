@@ -79,6 +79,7 @@ namespace CasaGaillard.Core.Data
             {
                 eb.ToTable("Ubicacion", "gaillard");
                 eb.HasKey(ubicacion => ubicacion.UbicacionId);
+                eb.Property(ubicacion => ubicacion.Codigo).HasMaxLength(50);
                 eb.Property(ubicacion => ubicacion.Nombre).HasMaxLength(150).IsRequired();
                 eb.Property(ubicacion => ubicacion.Descripcion).HasMaxLength(300);
             });

@@ -1,0 +1,4 @@
+@model IReadOnlyList<RevisionVehiculoFilaViewModel>
+@{ ViewData["Title"] = "Próximas revisiones de vehículos"; }
+<div class="d-flex justify-content-between align-items-center mb-3"><h1>Próximas caducidades</h1><a asp-action="Index" class="btn btn-outline-secondary">Volver</a></div>
+<div class="table-responsive"><table class="table table-striped"><thead><tr><th>Caducidad</th><th>Matrícula</th><th>Revisión</th><th>Ejecutor</th></tr></thead><tbody>@foreach(var r in Model){<tr class="@(r.Caducidad?.Date < DateTime.Today ? "table-danger" : r.Caducidad?.Date <= DateTime.Today.AddDays(30) ? "table-warning" : "")"><td>@r.Caducidad?.ToString("d")</td><td>@r.Matricula</td><td>@r.TipoRevision</td><td>@r.Ejecutor</td></tr>}</tbody></table></div>

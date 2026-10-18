@@ -1,0 +1,8 @@
+@model TipoInstalacionCatalogoViewModel
+@{ ViewData["Title"] = "Nuevo tipo de instalación"; }
+<h1>Nuevo tipo de instalación</h1>
+<form asp-action="Create" method="post" class="col-lg-8">
+    <partial name="_Form" model="Model" />
+    <button type="submit" class="btn btn-success">Crear</button>
+    <a asp-action="Index" class="btn btn-link">Volver</a>
+</form>

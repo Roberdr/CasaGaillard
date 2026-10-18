@@ -1,0 +1,14 @@
+@model TipoInstalacionCatalogoViewModel
+@{ ViewData["Title"] = "Eliminar tipo de instalación"; }
+<h1>Eliminar tipo de instalación</h1>
+@if (TempData["CatalogoError"] is string error) { <div class="alert alert-warning">@error</div> }
+<div class="alert alert-info">@Model.Nombre — @Model.Descripcion<br />Instalaciones asociadas: @Model.InstalacionesAsociadas</div>
+@if (Model.InstalacionesAsociadas == 0)
+{
+    <form asp-action="Delete" method="post">
+        <input asp-for="Id" type="hidden" />
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a asp-action="Index" class="btn btn-link">Cancelar</a>
+    </form>
+}
+else { <a asp-action="Index" class="btn btn-link">Volver</a> }

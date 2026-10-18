@@ -1,0 +1,5 @@
+@model GrupoFilaViewModel
+@{ ViewData["Title"]="Detalle de grupo"; }
+<h1>Grupo: @Model.Tipo</h1><dl class="row"><dt class="col-sm-3">Cuba</dt><dd class="col-sm-9">@Model.Cuba</dd><dt class="col-sm-3">Compartimento</dt><dd class="col-sm-9">@Model.Compartimento</dd><dt class="col-sm-3">Tipo de grupo</dt><dd class="col-sm-9">@Model.Tipo</dd><dt class="col-sm-3">Situación</dt><dd class="col-sm-9">@Model.Situacion</dd></dl>
+<h2 class="h5">Accesorios asociados</h2><div class="table-responsive"><table class="table table-striped"><thead><tr><th>Cantidad</th><th>Accesorio</th><th>Material</th></tr></thead><tbody>@if(Model.Accesorios.Count==0){<tr><td colspan="3" class="text-body-secondary">No hay accesorios asociados.</td></tr>}@foreach(var a in Model.Accesorios){<tr><td>@a.Cantidad</td><td>@a.TipoAccesorio</td><td>@a.Material</td></tr>}</tbody></table></div>
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Editar</a> <a asp-action="Index" class="btn btn-outline-secondary">Volver</a>

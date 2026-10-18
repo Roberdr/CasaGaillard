@@ -28,6 +28,8 @@
                 <td>@item.Estado</td><td>@item.Criticidad / 5</td>
                 <td>@item.NumeroEquipos</td>
                 <td class="text-nowrap">
+                    <a asp-area="Mantenimiento" asp-controller="InstalacionDocumentos" asp-action="Index" asp-route-instalacionId="@item.Id">Documentos</a>
+                    <a asp-area="Mantenimiento" asp-controller="FotosActivos" asp-action="Index" asp-route-tipo="Instalacion" asp-route-id="@item.Id">Fotos</a>
                     @if (User.IsInRole("Administrador") || User.IsInRole("Mantenimiento"))
                     {
                         <a asp-action="Edit" asp-route-id="@item.Id">Editar</a>

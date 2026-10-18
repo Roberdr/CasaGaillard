@@ -13,6 +13,7 @@
            asp-route-incluirBajas="@(!Model.IncluirBajas)" class="btn btn-outline-secondary">
             @(Model.IncluirBajas ? "Ocultar bajas" : "Ver bajas")
         </a>
+        <a asp-area="Mantenimiento" asp-controller="RevisionesVehiculos" asp-action="Index" asp-route-matriculaVehiculo="@Model.Matricula" class="btn btn-outline-primary">Revisiones</a>
         <a asp-area="Mantenimiento" asp-controller="Vehiculos" asp-action="AddOrEdit" class="btn btn-success">Crear vehículo</a>
     </div>
 </div>

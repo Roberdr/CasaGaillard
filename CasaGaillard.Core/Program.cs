@@ -16,6 +16,17 @@ if (builder.Environment.IsDevelopment())
     if (OperatingSystem.IsWindows())
         dataProtection.ProtectKeysWithDpapi();
 }
+else if (!string.IsNullOrWhiteSpace(builder.Configuration["DataProtection:KeysPath"]))
+{
+    var configuredKeyPath = builder.Configuration["DataProtection:KeysPath"]!;
+    var keyDirectory = new DirectoryInfo(Path.GetFullPath(configuredKeyPath, builder.Environment.ContentRootPath));
+    keyDirectory.Create();
+    var dataProtection = builder.Services.AddDataProtection()
+        .PersistKeysToFileSystem(keyDirectory)
+        .SetApplicationName("CasaGaillard.Core");
+    if (OperatingSystem.IsWindows())
+        dataProtection.ProtectKeysWithDpapi();
+}
 
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
@@ -39,13 +50,25 @@ builder.Services.AddScoped<IEquiposService, EquiposService>();
 builder.Services.AddScoped<IPlanesMantenimientoService, PlanesMantenimientoService>();
 builder.Services.AddScoped<ICostesMantenimientoService, CostesMantenimientoService>();
 builder.Services.AddScoped<IRevisionesService, RevisionesService>();
+builder.Services.AddScoped<IUbicacionesService, UbicacionesService>();
+builder.Services.AddScoped<ITiposInstalacionService, TiposInstalacionService>();
+builder.Services.AddScoped<IInstalacionDocumentosService, InstalacionDocumentosService>();
+builder.Services.AddScoped<IFamiliasService, FamiliasService>();
+builder.Services.AddScoped<ITiposAccesorioService, TiposAccesorioService>();
+builder.Services.AddScoped<IAccesoriosService, AccesoriosService>();
 builder.Services.AddScoped<ICrudVehiculosService, VehiculosService>();
+builder.Services.AddScoped<IFotosActivosService, FotosActivosService>();
+builder.Services.AddScoped<IRevisionesVehiculosService, RevisionesVehiculosService>();
+builder.Services.AddScoped<IGruposService, GruposService>();
+builder.Services.AddScoped<ICubasService, CubasService>();
+builder.Services.AddScoped<IMantenimientoDashboardService, MantenimientoDashboardService>();
+builder.Services.AddScoped<IPaginaPublicaService, PaginaPublicaService>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
-if (!string.IsNullOrWhiteSpace(connectionString))
-{
-    builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
-}
+if (string.IsNullOrWhiteSpace(connectionString))
+    throw new InvalidOperationException("Falta configurar ConnectionStrings:DefaultConnection para conectar con la base de datos de Casa Gaillard.");
+
+builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
 var app = builder.Build();
 

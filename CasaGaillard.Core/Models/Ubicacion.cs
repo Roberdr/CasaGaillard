@@ -6,6 +6,9 @@ public class Ubicacion
 {
     public int UbicacionId { get; set; }
 
+    [StringLength(50)]
+    public string? Codigo { get; set; }
+
     [StringLength(150)]
     public string Nombre { get; set; } = string.Empty;
 

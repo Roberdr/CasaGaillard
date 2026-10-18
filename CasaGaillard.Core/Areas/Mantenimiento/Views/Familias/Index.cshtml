@@ -1,0 +1,25 @@
+@model FamiliasSubfamiliasIndexViewModel
+@{ ViewData["Title"] = "Familias y subfamilias"; }
+<h1>Familias y subfamilias</h1>
+<p class="text-muted">Cada subfamilia pertenece a una familia. Puedes cambiar esa relación al editarla.</p>
+@if (TempData["LoginMessage"] is string message) { <div class="alert alert-success">@message</div> }
+@if (TempData["CatalogoError"] is string error) { <div class="alert alert-danger">@error</div> }
+<div class="d-flex justify-content-between align-items-center mb-2"><h2 class="h4">Familias</h2><a asp-action="CreateFamilia" class="btn btn-success">Nueva familia</a></div>
+<div class="table-responsive"><table class="table table-striped table-bordered align-middle"><thead><tr><th>Nombre</th><th>Descripción</th><th>Subfamilias</th><th>Accesorios</th><th></th></tr></thead><tbody>
+@foreach (var item in Model.Familias)
+{
+    <tr><td>@item.Nombre</td><td>@item.Descripcion</td><td>@item.NumeroSubfamilias</td><td>@item.NumeroAccesorios</td><td class="text-nowrap"><a asp-action="EditFamilia" asp-route-id="@item.FamiliaId">Editar</a>
+        <form asp-action="DeleteFamilia" asp-route-id="@item.FamiliaId" method="post" class="d-inline"><button type="submit" class="btn btn-link" onclick="return confirm('¿Eliminar esta familia?')">Eliminar</button></form></td></tr>
+}
+@if (Model.Familias.Count == 0) { <tr><td colspan="5" class="text-muted">No hay familias.</td></tr> }
+</tbody></table></div>
+<div class="d-flex justify-content-between align-items-center mb-2 mt-4"><h2 class="h4">Subfamilias</h2><a asp-action="CreateSubfamilia" class="btn btn-success">Nueva subfamilia</a></div>
+<div class="table-responsive"><table class="table table-striped table-bordered align-middle"><thead><tr><th>Familia</th><th>Subfamilia</th><th>Descripción</th><th>Accesorios</th><th>Tipos</th><th></th></tr></thead><tbody>
+@foreach (var item in Model.Subfamilias)
+{
+    <tr><td>@item.FamiliaNombre</td><td>@item.Nombre</td><td>@item.Descripcion</td><td>@item.NumeroAccesorios</td><td>@item.NumeroTipos</td><td class="text-nowrap"><a asp-action="EditSubfamilia" asp-route-id="@item.SubfamiliaId">Editar</a>
+        <form asp-action="DeleteSubfamilia" asp-route-id="@item.SubfamiliaId" method="post" class="d-inline"><button type="submit" class="btn btn-link" onclick="return confirm('¿Eliminar esta subfamilia?')">Eliminar</button></form></td></tr>
+}
+@if (Model.Subfamilias.Count == 0) { <tr><td colspan="6" class="text-muted">No hay subfamilias.</td></tr> }
+</tbody></table></div>
+<p class="mt-3"><a asp-area="Mantenimiento" asp-controller="Accesorios" asp-action="Index" class="btn btn-outline-secondary">Volver a accesorios</a></p>

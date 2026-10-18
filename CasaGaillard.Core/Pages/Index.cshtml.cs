@@ -5,8 +5,8 @@ namespace CasaGaillard.Core.Pages;
 
 public class IndexModel : PageModel
 {
-    public void OnGet()
+    public IActionResult OnGet()
     {
-
+        return Redirect("/Pagina/Pagina/Index");
     }
 }

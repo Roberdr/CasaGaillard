@@ -8,10 +8,12 @@ namespace CasaGaillard.Core.Controllers;
 public sealed class AccountController : Controller
 {
     private readonly SignInManager<IdentityUser> _signInManager;
+    private readonly UserManager<IdentityUser> _userManager;
 
-    public AccountController(SignInManager<IdentityUser> signInManager)
+    public AccountController(SignInManager<IdentityUser> signInManager, UserManager<IdentityUser> userManager)
     {
         _signInManager = signInManager;
+        _userManager = userManager;
     }
 
     [AllowAnonymous]
@@ -51,4 +53,30 @@ public sealed class AccountController : Controller
 
     [AllowAnonymous]
     public IActionResult AccessDenied() => View();
+
+    [AllowAnonymous]
+    [HttpGet]
+    public IActionResult ResetPassword(string? code, string? email) =>
+        string.IsNullOrWhiteSpace(code) ? BadRequest() : View(new ResetPasswordCoreViewModel { Code = code, Email = email });
+
+    [AllowAnonymous]
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> ResetPassword(ResetPasswordCoreViewModel model)
+    {
+        if (!ModelState.IsValid) return View(model);
+        var user = await _userManager.FindByEmailAsync(model.Email!);
+        if (user is null)
+        {
+            ModelState.AddModelError(string.Empty, "No se ha podido restablecer la contraseña.");
+            return View(model);
+        }
+        var result = await _userManager.ResetPasswordAsync(user, model.Code!, model.Password!);
+        if (result.Succeeded) return RedirectToAction(nameof(ResetPasswordConfirmation));
+        foreach (var error in result.Errors) ModelState.AddModelError(string.Empty, error.Description);
+        return View(model);
+    }
+
+    [AllowAnonymous]
+    public IActionResult ResetPasswordConfirmation() => View();
 }

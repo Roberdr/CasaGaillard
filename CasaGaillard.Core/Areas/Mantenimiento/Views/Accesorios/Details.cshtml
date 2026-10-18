@@ -1,0 +1,23 @@
+@model AccesorioDetailsViewModel
+@{ ViewData["Title"] = "Detalle del accesorio"; var item = Model.Accesorio; }
+<nav aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a asp-action="Index">Accesorios</a></li><li class="breadcrumb-item active">@item.TipoNombre</li></ol></nav>
+<div class="d-flex justify-content-between align-items-center mb-3"><h1>@item.TipoNombre <small class="text-muted">@item.Nombre</small></h1><div>@if (User.IsInRole("Administrador") || User.IsInRole("Mantenimiento")) { <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-primary">Editar</a> <a asp-action="Delete" asp-route-id="@item.Id" class="btn btn-danger">Eliminar</a> } <a asp-action="Index" class="btn btn-outline-secondary">Volver</a></div></div>
+<div class="row g-4">
+    <div class="col-lg-8"><div class="card"><div class="card-body">
+        <h2 class="h4">@(string.IsNullOrWhiteSpace(item.Nombre) ? item.TipoNombre : item.Nombre)</h2><p class="text-muted">@(item.Descripcion ?? "Sin descripción")</p>
+        <h3 class="h5 mt-4">Detalles</h3>
+        @if (Model.Detalles.Count == 0) { <p class="text-muted">No se han definido detalles.</p> }
+        else { <div class="table-responsive"><table class="table table-sm table-striped"><thead><tr><th>Característica</th><th>Cantidad</th><th>Medida</th><th>Unidad</th><th>Tipo</th></tr></thead><tbody>
+            @foreach (var detail in Model.Detalles) { <tr><td>@(detail.Caracteristica ?? "—")</td><td>@(detail.Cantidad?.ToString() ?? "—")</td><td>@(detail.Medida?.ToString("0.##") ?? "—")</td><td>@(detail.Unidad ?? "—")</td><td>@(detail.Tipo ?? "—")</td></tr> }
+        </tbody></table></div> }
+    </div></div></div>
+    <div class="col-lg-4"><div class="card mb-3"><div class="card-header">Metadatos</div><div class="card-body"><dl class="row mb-0">
+        <dt class="col-5">Material</dt><dd class="col-7">@item.MaterialNombre</dd><dt class="col-5">Familia</dt><dd class="col-7">@(item.FamiliaNombre ?? "—")</dd>
+        <dt class="col-5">Subfamilia</dt><dd class="col-7">@(item.SubfamiliaNombre ?? "—")</dd><dt class="col-5">Ubicación</dt><dd class="col-7">@(item.UbicacionNombre ?? "—")</dd>
+        <dt class="col-5">Fecha alta</dt><dd class="col-7">@item.FechaAlta?.ToString("d")</dd><dt class="col-5">Activo</dt><dd class="col-7">@(item.Activo ? "Sí" : "No")</dd>
+    </dl></div></div>
+    <div class="card"><div class="card-header">Fotos</div><div class="card-body">
+        @if (Model.Fotos.Count == 0) { <p class="text-muted mb-0">Todavía no hay fotos adjuntas.</p> }
+        else { <div class="row g-2">@foreach (var foto in Model.Fotos) { <div class="col-6"><a asp-action="Foto" asp-route-id="@foto.Id" target="_blank"><img src="@Url.Action("Foto", new { id = foto.Id })" alt="@(foto.NombreOriginal ?? "Foto del accesorio")" class="img-fluid rounded" /></a><small class="d-block text-muted">@foto.NombreOriginal</small></div> }</div> }
+    </div></div></div>
+</div>

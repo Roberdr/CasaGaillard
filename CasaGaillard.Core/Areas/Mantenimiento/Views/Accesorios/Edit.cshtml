@@ -1,0 +1,7 @@
+@model AccesorioFormViewModel
+@{ ViewData["Title"] = "Editar accesorio"; }
+<h1>Editar accesorio</h1>
+<form asp-action="Edit" asp-route-id="@Model.Id" method="post" enctype="multipart/form-data" class="col-12">
+    <partial name="_Form" model="Model" />
+    <button type="submit" class="btn btn-primary">Guardar cambios</button> <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-link">Cancelar</a>
+</form>
