@@ -29,6 +29,7 @@
                 <td><span style="padding-left:@(item.Nivel * 20)px">@(item.Nivel > 0 ? "└ " : "")@item.Nombre</span>@if (!string.IsNullOrWhiteSpace(item.PadreNombre)) { <small class="text-body-secondary"><br />Padre: @item.PadreNombre</small> }</td>
                 <td>@item.Fabricante @item.Modelo</td><td>@item.NumeroSerie</td><td>@(item.Activo ? "Activo" : "Inactivo")</td>
                 <td class="text-nowrap">
+                    <a asp-action="Details" asp-route-id="@item.Id">Ficha</a>
                     <a asp-area="Mantenimiento" asp-controller="FotosActivos" asp-action="Index" asp-route-tipo="Equipo" asp-route-id="@item.Id">Fotos</a>
                     @if (User.IsInRole("Administrador") || User.IsInRole("Mantenimiento"))
                     {

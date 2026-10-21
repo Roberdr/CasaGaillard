@@ -1,8 +1,58 @@
 @model MantenimientoDashboardViewModel
-@{ ViewData["Title"]="Mantenimiento"; }
-<div class="mb-4"><h1>CASA GAILLARD S.A.</h1><p class="lead">Control del mantenimiento de la empresa</p></div>
+@{
+    ViewData["Title"] = "Mantenimiento";
+    var hoy = DateTime.Today;
+    var limiteAviso = hoy.AddDays(14);
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4"><div><h1>CASA GAILLARD S.A.</h1><p class="lead mb-0">Control del mantenimiento de la empresa</p></div><a class="btn btn-outline-primary" asp-action="Calendario">Abrir calendario</a></div>
+<div class="row g-3 mb-4">
+    <div class="col-6 col-lg"><div class="card h-100"><div class="card-body"><div class="text-body-secondary">Pendientes</div><strong class="fs-3">@Model.TareasPendientes</strong></div></div></div>
+    <div class="col-6 col-lg"><div class="card h-100 border-danger"><div class="card-body"><div class="text-body-secondary">Vencidas</div><strong class="fs-3 text-danger">@Model.TareasVencidas</strong></div></div></div>
+    <div class="col-6 col-lg"><div class="card h-100"><div class="card-body"><div class="text-body-secondary">Cerradas este mes</div><strong class="fs-3">@Model.TareasCompletadasMes</strong></div></div></div>
+    <div class="col-6 col-lg"><div class="card h-100"><div class="card-body"><div class="text-body-secondary">Coste este mes</div><strong class="fs-5">@Model.CosteMes.ToString("C")</strong></div></div></div>
+    <div class="col-12 col-lg"><div class="card h-100"><div class="card-body"><div class="text-body-secondary">Coste este año</div><strong class="fs-5">@Model.CosteAnio.ToString("C")</strong></div></div></div>
+</div>
+<div class="alert alert-info" role="status"><strong>Avisos de mantenimiento:</strong> rojo indica vencido y amarillo indica vencimiento en los próximos 14 días.</div>
 <div class="row g-4">
-    <section class="col-xl-4"><div class="card h-100"><div class="card-header d-flex justify-content-between"><h2 class="h5 mb-0">Revisiones de cubas</h2><a asp-controller="Revisiones" asp-action="Index">Ver todas</a></div><div class="table-responsive"><table class="table table-sm table-hover mb-0"><thead><tr><th>Matrícula</th><th>Validez</th><th>Tipo próximo</th></tr></thead><tbody>@if(Model.RevisionesCubas.Count==0){<tr><td colspan="3" class="text-body-secondary">No hay caducidades próximas.</td></tr>}@foreach(var r in Model.RevisionesCubas){<tr><td><a asp-controller="Revisiones" asp-action="Index" asp-route-cubaId="@r.CubaId">@r.MatriculaCuba</a></td><td>@r.ValidaHasta?.ToString("d")</td><td>@r.DescripcionProxima</td></tr>}</tbody></table></div></div></section>
-    <section class="col-xl-4"><div class="card h-100"><div class="card-header d-flex justify-content-between"><h2 class="h5 mb-0">Próximas ITV</h2><a asp-controller="RevisionesVehiculos" asp-action="Index">Ver todas</a></div><div class="table-responsive"><table class="table table-sm table-hover mb-0"><thead><tr><th>Matrícula</th><th>Validez</th><th>Tipo</th></tr></thead><tbody>@if(Model.RevisionesVehiculos.Count==0){<tr><td colspan="3" class="text-body-secondary">No hay ITV próximas.</td></tr>}@foreach(var r in Model.RevisionesVehiculos){<tr><td><a asp-controller="RevisionesVehiculos" asp-action="Index" asp-route-matriculaVehiculo="@r.MatriculaVehiculo">@r.MatriculaVehiculo</a></td><td>@r.Caducidad?.ToString("d")</td><td>@r.TipoRevision</td></tr>}</tbody></table></div></div></section>
-    <section class="col-xl-4"><div class="card h-100"><div class="card-header d-flex justify-content-between"><h2 class="h5 mb-0">Tareas recientes</h2><a asp-controller="TareasMantenimiento" asp-action="Index">Ver tareas</a></div><div class="table-responsive"><table class="table table-sm table-hover mb-0"><thead><tr><th>Equipo</th><th>Estado</th><th>Prioridad</th></tr></thead><tbody>@if(Model.Tareas.Count==0){<tr><td colspan="3" class="text-body-secondary">No hay tareas registradas.</td></tr>}@foreach(var t in Model.Tareas){<tr><td><a asp-controller="TareasMantenimiento" asp-action="Index" asp-route-codigo="@t.Codigo">@(t.Equipo??t.Titulo)</a></td><td>@t.Estado</td><td>@t.Prioridad</td></tr>}</tbody></table></div></div></section>
+    <section class="col-xl-4">
+        <div class="card h-100"><div class="card-header d-flex justify-content-between"><h2 class="h5 mb-0">Revisiones de cubas</h2><a asp-controller="Revisiones" asp-action="Index">Ver todas</a></div>
+            <div class="table-responsive"><table class="table table-sm table-hover mb-0"><thead><tr><th>Matrícula</th><th>Validez</th><th>Tipo próximo</th></tr></thead><tbody>
+            @if (Model.RevisionesCubas.Count == 0) { <tr><td colspan="3" class="text-body-secondary">No hay caducidades próximas.</td></tr> }
+            @foreach (var revision in Model.RevisionesCubas)
+            {
+                var vencida = revision.ValidaHasta.HasValue && revision.ValidaHasta.Value.Date < hoy;
+                var proxima = revision.ValidaHasta.HasValue && revision.ValidaHasta.Value.Date <= limiteAviso;
+                <tr class="@(vencida ? "table-danger" : proxima ? "table-warning" : "")"><td><a asp-controller="Revisiones" asp-action="Index" asp-route-cubaId="@revision.CubaId">@revision.MatriculaCuba</a></td><td>@revision.ValidaHasta?.ToString("dd/MM/yyyy")</td><td>@revision.DescripcionProxima</td></tr>
+            }
+            </tbody></table></div>
+        </div>
+    </section>
+    <section class="col-xl-4">
+        <div class="card h-100"><div class="card-header d-flex justify-content-between"><h2 class="h5 mb-0">Próximas ITV</h2><a asp-controller="RevisionesVehiculos" asp-action="Index">Ver todas</a></div>
+            <div class="table-responsive"><table class="table table-sm table-hover mb-0"><thead><tr><th>Matrícula</th><th>Validez</th><th>Tipo</th></tr></thead><tbody>
+            @if (Model.RevisionesVehiculos.Count == 0) { <tr><td colspan="3" class="text-body-secondary">No hay ITV próximas.</td></tr> }
+            @foreach (var revision in Model.RevisionesVehiculos)
+            {
+                var vencida = revision.Caducidad.HasValue && revision.Caducidad.Value.Date < hoy;
+                var proxima = revision.Caducidad.HasValue && revision.Caducidad.Value.Date <= limiteAviso;
+                <tr class="@(vencida ? "table-danger" : proxima ? "table-warning" : "")"><td><a asp-controller="RevisionesVehiculos" asp-action="Index" asp-route-matriculaVehiculo="@revision.MatriculaVehiculo">@revision.MatriculaVehiculo</a></td><td>@revision.Caducidad?.ToString("dd/MM/yyyy")</td><td>@revision.TipoRevision</td></tr>
+            }
+            </tbody></table></div>
+        </div>
+    </section>
+    <section class="col-xl-4">
+        <div class="card h-100"><div class="card-header d-flex justify-content-between"><h2 class="h5 mb-0">Tareas previstas</h2><a asp-controller="TareasMantenimiento" asp-action="Index">Ver tareas</a></div>
+            <div class="table-responsive"><table class="table table-sm table-hover mb-0"><thead><tr><th>Equipo</th><th>Fecha</th><th>Estado</th></tr></thead><tbody>
+            @if (Model.Tareas.Count == 0) { <tr><td colspan="3" class="text-body-secondary">No hay tareas registradas.</td></tr> }
+            @foreach (var tarea in Model.Tareas)
+            {
+                var abierta = tarea.Estado != "Cerrada";
+                var vencida = abierta && tarea.FechaProgramada.HasValue && tarea.FechaProgramada.Value.Date < hoy;
+                var proxima = abierta && tarea.FechaProgramada.HasValue && tarea.FechaProgramada.Value.Date <= limiteAviso;
+                <tr class="@(vencida ? "table-danger" : proxima ? "table-warning" : "")"><td><a asp-controller="TareasMantenimiento" asp-action="Details" asp-route-id="@tarea.ID">@(tarea.Equipo ?? tarea.Titulo)</a><div class="small text-body-secondary">@tarea.AsignadaA</div></td><td>@tarea.FechaProgramada?.ToString("dd/MM/yyyy")</td><td>@(vencida ? "Vencida" : tarea.Estado) @if(string.IsNullOrWhiteSpace(tarea.AsignadaA)){<form asp-area="Mantenimiento" asp-controller="TareasMantenimiento" asp-action="AsumirAviso" method="post" class="d-inline"><input type="hidden" name="id" value="@tarea.ID"/><button type="submit" class="btn btn-sm btn-outline-primary">Hacerme cargo</button></form>}</td></tr>
+            }
+            </tbody></table></div>
+        </div>
+    </section>
 </div>

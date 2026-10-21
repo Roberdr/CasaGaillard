@@ -34,6 +34,7 @@ public sealed class TareaMantenimiento
     [StringLength(100)] public string? CreadoPor { get; set; }
     [StringLength(100)] public string? ActualizadoPor { get; set; }
     public DateTime FechaDeteccion { get; set; }
+    public DateTime? FechaProgramada { get; set; }
     public DateTime FechaCreacion { get; set; }
     public DateTime? FechaActualizacion { get; set; }
 }
@@ -44,8 +45,19 @@ public sealed class TareaMantenimientoFoto
     public int TareaMantenimientoID { get; set; }
     [StringLength(260)] public string RutaArchivo { get; set; } = string.Empty;
     [StringLength(255)] public string? NombreOriginal { get; set; }
+    [StringLength(500)] public string? Observacion { get; set; }
     [StringLength(100)] public string? ContentType { get; set; }
     public DateTime FechaCreacion { get; set; }
+}
+
+public sealed class TareaMantenimientoHistorial
+{
+    public long ID { get; set; }
+    public int TareaMantenimientoID { get; set; }
+    [StringLength(100)] public string? Usuario { get; set; }
+    [StringLength(20)] public string Accion { get; set; } = string.Empty;
+    public DateTime Fecha { get; set; }
+    public string CambiosJson { get; set; } = "{}";
 }
 
 public sealed class TareaMantenimientoAccesorio
@@ -68,6 +80,22 @@ public sealed class TareaMantenimientoResumenViewModel
     public string? Estado { get; set; }
     public string? AsignadaA { get; set; }
     public DateTime FechaCreacion { get; set; }
+    public DateTime? FechaProgramada { get; set; }
+}
+
+public sealed class TareasMantenimientoIndexViewModel
+{
+    public IReadOnlyList<TareaMantenimientoResumenViewModel> Tareas { get; set; } = [];
+    public string? Busqueda { get; set; }
+    public string? Estado { get; set; }
+    public string? Prioridad { get; set; }
+    public DateTime? FechaDesde { get; set; }
+    public DateTime? FechaHasta { get; set; }
+    public string? FiltroEquipo { get; set; }
+    public string? Responsable { get; set; }
+    public int Pagina { get; set; }
+    public int TotalPaginas { get; set; }
+    public int TotalResultados { get; set; }
 }
 
 public sealed class TareaMantenimientoDetailsViewModel
@@ -75,6 +103,8 @@ public sealed class TareaMantenimientoDetailsViewModel
     public TareaMantenimiento Tarea { get; set; } = new();
     public IReadOnlyList<TareaMantenimientoFoto> Fotos { get; set; } = [];
     public string AccesoriosTexto { get; set; } = "Sin accesorios indicados.";
+    public IReadOnlyList<TareaMantenimientoHistorial> Historial { get; set; } = [];
+    public IReadOnlyList<TareaMantenimientoResumenViewModel> TareasDelActivo { get; set; } = [];
 }
 
 public sealed class TareaMantenimientoFormViewModel
@@ -129,12 +159,15 @@ public sealed class TareaMantenimientoFormViewModel
     public string? Observaciones { get; set; }
     [Display(Name = "Fecha de detección"), DataType(DataType.DateTime)]
     public DateTime FechaDeteccion { get; set; }
+    [Display(Name = "Fecha prevista de realización"), DataType(DataType.Date)]
+    public DateTime? FechaProgramada { get; set; }
     public DateTime FechaCreacion { get; set; }
     public DateTime? FechaActualizacion { get; set; }
     public string? CreadoPor { get; set; }
     public string? ActualizadoPor { get; set; }
     [Display(Name = "Fotos de la avería")]
-    public List<IFormFile> FotosAdjuntas { get; set; } = [];
+    public List<IFormFile>? FotosAdjuntas { get; set; }
+    public List<string?> ObservacionesFotos { get; set; } = [];
 }
 
 public sealed class TareaMantenimientoGestionViewModel
@@ -153,6 +186,8 @@ public sealed class TareaMantenimientoGestionViewModel
     public string? Prioridad { get; set; }
     [Required, StringLength(30)]
     public string? Estado { get; set; }
+    [Display(Name = "Fecha prevista de realización"), DataType(DataType.Date)]
+    public DateTime? FechaProgramada { get; set; }
     [StringLength(150)]
     public string? AsignadaA { get; set; }
     [StringLength(150)]

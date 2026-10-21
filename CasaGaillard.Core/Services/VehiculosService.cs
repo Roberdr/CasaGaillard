@@ -77,10 +77,14 @@ namespace CasaGaillard.Core.Services
 
         public async Task<Vehiculo?> GetByIdAsync(int id)
         {
-            return await _db.Set<Vehiculo>()
+            var vehiculo = await _db.Set<Vehiculo>()
                 .Include(v => v.TipoVehiculo)
                 .Include(v => v.Taller)
                 .FirstOrDefaultAsync(v => v.ID == id);
+            if (vehiculo is null) return null;
+            vehiculo.Fotos = await _db.Database.SqlQueryRaw<InstalacionEquipoFotoFilaViewModel>(@"SELECT ID AS Id,NombreOriginal,Observacion,FechaCreacion
+                FROM dbo.InstalacionEquipoFotos WHERE TipoActivo=N'Vehiculo' AND ActivoID=@p0 ORDER BY FechaCreacion DESC,ID DESC", id).ToListAsync();
+            return vehiculo;
         }
 
         public async Task<IReadOnlyList<TipoVehiculo>> GetTiposVehiculoAsync()

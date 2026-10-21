@@ -29,8 +29,38 @@ public sealed class EquiposService : IEquiposService
             WHERE ({instalacionId} IS NULL OR a.InstalacionId={instalacionId}) AND ({incluirBajas}=1 OR a.Activo=1)
             ORDER BY i.Nombre,a.Orden OPTION (MAXRECURSION 100)").ToListAsync();
 
+    public async Task<EquipoDetailsViewModel?> GetDetailsAsync(int id)
+    {
+        var equipment = (await _db.Database.SqlQueryRaw<EquipoFormViewModel>(@"SELECT e.Id,e.InstalacionId,e.EquipoPadreId,e.TipoElemento,e.Codigo,e.Nombre,e.Descripcion,
+            e.Fabricante,e.Modelo,e.NumeroSerie,e.Potencia,e.Caudal,e.Presion,e.Voltaje,e.FechaInstalacion,e.FechaBaja,e.Activo,e.Observaciones
+            FROM gaillard.Equipo e WHERE e.Id=@p0", id).ToListAsync()).SingleOrDefault();
+        if (equipment is null) return null;
+        var installationName = await _db.Database.SqlQueryRaw<string>(@"SELECT CONCAT(Codigo,N' - ',Nombre) AS Value FROM gaillard.Instalacion WHERE Id=@p0", equipment.InstalacionId).SingleAsync();
+        var tasks = await _db.Database.SqlQueryRaw<EquipoTareaViewModel>(@"SELECT ID AS Id,Codigo,Titulo,Estado,Prioridad,AsignadaA,FechaCreacion,FechaProgramada
+            FROM dbo.TareasMantenimiento WHERE EquipoId=@p0 ORDER BY COALESCE(FechaProgramada,FechaCreacion) DESC,ID DESC", id).ToListAsync();
+        var plans = await _db.Database.SqlQueryRaw<EquipoPlanViewModel>(@"SELECT PlanId,Nombre,Tipo,PeriodicidadDias,UltimaEjecucion,ProximaEjecucion,Activo
+            FROM gaillard.PlanMantenimiento WHERE EquipoId=@p0 ORDER BY Activo DESC,ProximaEjecucion,Nombre", id).ToListAsync();
+        var interventions = await _db.Database.SqlQueryRaw<EquipoIntervencionViewModel>(@"SELECT v.Id,v.TareaMantenimientoId,t.Codigo AS TareaCodigo,t.Titulo AS TareaTitulo,v.Tecnico,v.FechaInicio,v.Descripcion,v.HorasEmpleadas,
+            COALESCE(v.CosteManoObra,0)+COALESCE((SELECT SUM(r.Cantidad*r.CosteUnitario) FROM dbo.IntervencionRepuesto r WHERE r.IntervencionId=v.Id),0) AS CosteTotal
+            FROM dbo.Intervencion v JOIN dbo.TareasMantenimiento t ON t.ID=v.TareaMantenimientoId
+            WHERE t.EquipoId=@p0 ORDER BY v.FechaInicio DESC,v.Id DESC", id).ToListAsync();
+        var photos = await _db.Database.SqlQueryRaw<InstalacionEquipoFotoFilaViewModel>(@"SELECT ID AS Id,NombreOriginal,Observacion,FechaCreacion
+            FROM dbo.InstalacionEquipoFotos WHERE TipoActivo=N'Equipo' AND ActivoID=@p0 ORDER BY FechaCreacion DESC,ID DESC", id).ToListAsync();
+        var documents = await _db.Database.SqlQueryRaw<InstalacionDocumentoFilaViewModel>(@"SELECT d.Id,d.InstalacionId,i.Codigo AS InstalacionCodigo,i.Nombre AS InstalacionNombre,
+            d.Nombre,d.TipoDocumento,d.CodigoPlano,d.FechaDocumento,d.FechaAlta FROM gaillard.InstalacionDocumento d
+            JOIN gaillard.Instalacion i ON i.Id=d.InstalacionId WHERE d.InstalacionId=@p0 ORDER BY d.FechaAlta DESC,d.Nombre", equipment.InstalacionId).ToListAsync();
+        equipment = await PrepareFormAsync(equipment);
+        return new EquipoDetailsViewModel { Equipo=equipment,InstalacionNombre=installationName,Tareas=tasks,Planes=plans,Intervenciones=interventions,Fotos=photos,Documentos=documents };
+    }
+
     public async Task<IReadOnlyList<SelectListItem>> GetInstalacionesAsync(int? selectedId) =>
         await GetOptionsAsync("SELECT Id,CONCAT(Codigo,N' - ',Nombre) AS Texto FROM gaillard.Instalacion WHERE Estado<>N'FUERA_SERVICIO' ORDER BY Nombre", selectedId);
+
+    public async Task<IReadOnlyList<SelectListItem>> GetEquiposPadreAsync(int instalacionId, int? equipoId, int? selectedId = null) =>
+        await GetOptionsAsync($@"SELECT e.Id AS Id,CONCAT(i.Nombre,N' / ',e.Codigo,N' - ',e.Nombre) AS Texto
+            FROM gaillard.Equipo e JOIN gaillard.Instalacion i ON i.Id=e.InstalacionId
+            WHERE e.Activo=1 AND e.InstalacionId={instalacionId} AND e.Id<>{equipoId ?? 0}
+            ORDER BY e.Nombre", selectedId);
 
     public async Task<EquipoFormViewModel?> GetFormAsync(int? id, int? instalacionId = null)
     {
@@ -52,7 +82,7 @@ public sealed class EquiposService : IEquiposService
     public async Task<EquipoFormViewModel> PrepareFormAsync(EquipoFormViewModel model)
     {
         model.Instalaciones = await GetInstalacionesAsync(model.InstalacionId == 0 ? null : model.InstalacionId);
-        model.EquiposPadre = await GetOptionsAsync($"SELECT Id,CONCAT(i.Nombre,N' / ',e.Codigo,N' - ',e.Nombre) AS Texto FROM gaillard.Equipo e JOIN gaillard.Instalacion i ON i.Id=e.InstalacionId WHERE e.Activo=1 AND e.InstalacionId={model.InstalacionId} AND e.Id<>{model.Id} ORDER BY e.Nombre", model.EquipoPadreId);
+        model.EquiposPadre = await GetEquiposPadreAsync(model.InstalacionId, model.Id, model.EquipoPadreId);
         model.TiposElemento = ElementTypes.Select(type => new SelectListItem(type.Replace('_',' '),type,type==model.TipoElemento)).ToList();
         return model;
     }

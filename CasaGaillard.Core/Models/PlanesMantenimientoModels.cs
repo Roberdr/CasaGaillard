@@ -29,12 +29,16 @@ public class PlanMantenimientoFormViewModel
     public int? AccesorioId { get; set; }
     public int? AccesorioGrupoID { get; set; }
     public int? EquipoId { get; set; }
+    public int? CubaId { get; set; }
+    public int? VehiculoId { get; set; }
     [Range(1, int.MaxValue, ErrorMessage = "La frecuencia debe ser mayor que cero.")] public int? FrecuenciaValor { get; set; }
     [StringLength(20)] public string? FrecuenciaUnidad { get; set; }
     [Range(0, int.MaxValue)] public int? DuracionEstimadaMinutos { get; set; }
     public bool Activo { get; set; } = true;
     public IReadOnlyList<SelectListItem> Accesorios { get; set; } = [];
     public IReadOnlyList<SelectListItem> Equipos { get; set; } = [];
+    public IReadOnlyList<SelectListItem> Cubas { get; set; } = [];
+    public IReadOnlyList<SelectListItem> Vehiculos { get; set; } = [];
     public IReadOnlyList<SelectListItem> GruposAccesorio { get; set; } = [];
 }
 

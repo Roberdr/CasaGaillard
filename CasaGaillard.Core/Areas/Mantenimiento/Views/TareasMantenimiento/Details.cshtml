@@ -20,6 +20,43 @@
     }
 </p>
 
+@if (User.IsInRole("Administrador") || User.IsInRole("Mantenimiento"))
+{
+    <section class="card border-primary mb-3" aria-label="Acciones rápidas de mantenimiento">
+        <div class="card-body">
+            <h2 class="h5">Acciones rápidas</h2>
+            <div class="d-grid gap-2 d-sm-flex">
+                <form asp-action="CambiarEstadoRapido" method="post" class="d-flex flex-column flex-sm-row flex-grow-1 gap-2">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@tarea.ID" />
+                    <label for="estado-rapido" class="visually-hidden">Cambiar estado</label>
+                    <select id="estado-rapido" name="estado" class="form-select form-select-lg" aria-label="Nuevo estado">
+                        <option value="Nueva" selected="@(tarea.Estado == "Nueva")">Nueva</option><option value="En estudio" selected="@(tarea.Estado == "En estudio")">En estudio</option><option value="Asignada" selected="@(tarea.Estado == "Asignada")">Asignada</option><option value="En curso" selected="@(tarea.Estado == "En curso")">En curso</option><option value="Pendiente repuestos" selected="@(tarea.Estado == "Pendiente repuestos")">Pendiente repuestos</option><option value="Cerrada" selected="@(tarea.Estado == "Cerrada")">Cerrada</option>
+                    </select>
+                    <button type="submit" class="btn btn-primary btn-lg text-nowrap">Cambiar estado</button>
+                </form>
+                @if (!string.Equals(tarea.Estado, "Cerrada", StringComparison.OrdinalIgnoreCase))
+                {
+                    <form asp-action="CambiarEstadoRapido" method="post">
+                        @Html.AntiForgeryToken()
+                        <input type="hidden" name="id" value="@tarea.ID" />
+                        <input type="hidden" name="estado" value="Cerrada" />
+                        <button type="submit" class="btn btn-success btn-lg w-100" onclick="return confirm('¿Cerrar esta tarea?');">Cerrar tarea</button>
+                    </form>
+                }
+                <form asp-action="AdjuntarFotoRapida" method="post" enctype="multipart/form-data" class="d-flex flex-column flex-sm-row flex-grow-1 gap-2">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" value="@tarea.ID" />
+                    <label for="foto-rapida" class="visually-hidden">Hacer o seleccionar una foto</label>
+                    <input id="foto-rapida" name="foto" type="file" accept="image/*" capture="environment" class="form-control form-control-lg" />
+                    <input name="observacion" maxlength="500" class="form-control form-control-lg" placeholder="Pie de foto u observación" aria-label="Pie de foto u observación" />
+                    <button type="submit" class="btn btn-outline-primary btn-lg text-nowrap">Añadir foto</button>
+                </form>
+            </div>
+        </div>
+    </section>
+}
+
 <div class="row">
     <div class="col-lg-8">
         <div class="card mb-3">
@@ -33,12 +70,18 @@
                     <dt class="col-sm-4">Prioridad</dt><dd class="col-sm-8">@(string.IsNullOrWhiteSpace(tarea.Prioridad) ? "Sin indicar" : tarea.Prioridad)</dd>
                     <dt class="col-sm-4">Estado</dt><dd class="col-sm-8">@(string.IsNullOrWhiteSpace(tarea.Estado) ? "Sin indicar" : tarea.Estado)</dd>
                     <dt class="col-sm-4">Asignada a</dt><dd class="col-sm-8">@(string.IsNullOrWhiteSpace(tarea.AsignadaA) ? "Sin asignar" : tarea.AsignadaA)</dd>
+                    <dt class="col-sm-4">Fecha prevista</dt><dd class="col-sm-8">@(tarea.FechaProgramada?.ToString("dd/MM/yyyy") ?? "Sin programar")</dd>
                     <dt class="col-sm-4">Empresa exterior</dt><dd class="col-sm-8">@(string.IsNullOrWhiteSpace(tarea.EmpresaExterior) ? "Sin indicar" : tarea.EmpresaExterior)</dd>
                 </dl>
             </div>
         </div>
         <div class="card mb-3"><div class="card-header"><strong>Descripción</strong></div><div class="card-body"><p style="white-space: pre-wrap">@tarea.Descripcion</p></div></div>
         <div class="card mb-3"><div class="card-header"><strong>Acciones a realizar</strong></div><div class="card-body"><p style="white-space: pre-wrap">@(string.IsNullOrWhiteSpace(tarea.AccionesARealizar) ? "Sin acciones definidas." : tarea.AccionesARealizar)</p></div></div>
+        <div class="card mb-3"><div class="card-header"><strong>Historial de cambios</strong></div><div class="card-body">
+            @if(Model.Historial.Count==0){<p class="text-body-secondary mb-0">No hay cambios registrados todavía.</p>}
+            else{<ul class="list-group list-group-flush">@foreach(var cambio in Model.Historial){<li class="list-group-item px-0"><div class="d-flex justify-content-between gap-2"><strong>@cambio.Accion</strong><small class="text-body-secondary">@cambio.Fecha.ToLocalTime().ToString("dd/MM/yyyy HH:mm")</small></div><div class="small">@(cambio.Usuario??"Usuario desconocido")</div><details class="small mt-1"><summary>Ver campos modificados</summary><pre class="text-wrap mt-2 mb-0">@cambio.CambiosJson</pre></details></li>}</ul>}
+        </div></div>
+        @if(Model.TareasDelActivo.Count>0){<div class="card mb-3"><div class="card-header"><strong>Historial del activo relacionado</strong></div><div class="list-group list-group-flush">@foreach(var relacionada in Model.TareasDelActivo){<a class="list-group-item list-group-item-action" asp-action="Details" asp-route-id="@relacionada.ID"><span class="fw-semibold">@relacionada.Codigo</span> · @relacionada.Titulo <span class="badge text-bg-light">@relacionada.Estado</span><small class="d-block text-body-secondary">@relacionada.FechaCreacion.ToString("dd/MM/yyyy")</small></a>}</div></div>}
         <div class="card mb-3">
             <div class="card-header"><strong>Fotos de la avería</strong></div>
             <div class="card-body">
@@ -52,8 +95,8 @@
                     @foreach (var foto in Model.Fotos)
                     {
                         <div class="col-6 col-md-4">
-                            <a asp-action="Foto" asp-route-id="@foto.ID" target="_blank"><img src="@Url.Action("Foto", new { id = foto.ID })" alt="Foto de @(foto.NombreOriginal ?? foto.ID.ToString())" class="img-fluid rounded" /></a>
-                            @if (!string.IsNullOrWhiteSpace(foto.NombreOriginal)) { <div class="small text-body-secondary mt-1">@foto.NombreOriginal</div> }
+                            <a asp-action="Foto" asp-route-id="@foto.ID" target="_blank"><img src="@Url.Action("Foto", new { id = foto.ID })" alt="@(foto.Observacion ?? "Foto de la avería")" class="img-fluid rounded" /></a>
+                            @if (!string.IsNullOrWhiteSpace(foto.Observacion)) { <div class="mt-1">@foto.Observacion</div> }
                         </div>
                     }
                     </div>

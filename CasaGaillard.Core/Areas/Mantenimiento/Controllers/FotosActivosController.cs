@@ -32,6 +32,7 @@ public sealed class FotosActivosController : Controller
         var files = model.Archivos.Where(f => f.Length > 0).ToList();
         if (files.Count == 0) ModelState.AddModelError(nameof(model.Archivos), "Selecciona al menos una imagen.");
         if (files.Count > 10) ModelState.AddModelError(nameof(model.Archivos), "Puedes subir un máximo de 10 imágenes cada vez.");
+        if (model.Observaciones.Any(text => text?.Length > 500)) ModelState.AddModelError(nameof(model.Observaciones), "El pie de foto no puede superar los 500 caracteres.");
         foreach (var file in files)
         {
             var extension = Path.GetExtension(Path.GetFileName(file.FileName));
@@ -44,10 +45,11 @@ public sealed class FotosActivosController : Controller
         if (!ModelState.IsValid)
         {
             current.Archivos = model.Archivos;
+            current.Observaciones = model.Observaciones;
             foreach (var error in ModelState.Values.SelectMany(v => v.Errors)) ModelState.AddModelError(string.Empty, error.ErrorMessage);
             return View("Index", current);
         }
-        await _service.UploadAsync(model.Tipo, model.ActivoId, files, cancellationToken);
+        await _service.UploadAsync(model.Tipo, model.ActivoId, files, model.Observaciones, cancellationToken);
         TempData["Success"] = "Las imágenes se han subido correctamente.";
         return RedirectToAction(nameof(Index), new { tipo = model.Tipo, id = model.ActivoId });
     }
@@ -73,6 +75,8 @@ public sealed class FotosActivosController : Controller
     {
         "instalacion" => "Instalacion",
         "equipo" => "Equipo",
+        "vehiculo" => "Vehiculo",
+        "cuba" => "Cuba",
         _ => null
     };
 }

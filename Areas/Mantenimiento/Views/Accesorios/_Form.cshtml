@@ -268,8 +268,37 @@
                 </tbody>
             </table>
         </div>
+        <button type="button" class="btn btn-default btn-sm" id="anadirDetalleAccesorio">Añadir detalle técnico</button>
     </div>
 </div>
+
+<script>
+    (function () {
+        var button = document.getElementById('anadirDetalleAccesorio');
+        var tbody = document.querySelector('.accesorio-detalles-table tbody');
+        if (!button || !tbody) return;
+
+        button.addEventListener('click', function () {
+            var rows = tbody.querySelectorAll('tr');
+            if (!rows.length) return;
+
+            var row = rows[rows.length - 1].cloneNode(true);
+            var index = rows.length;
+            row.querySelectorAll('[name], [id], label[for]').forEach(function (element) {
+                ['name', 'id', 'for'].forEach(function (attribute) {
+                    var value = element.getAttribute(attribute);
+                    if (value) element.setAttribute(attribute, value.replace(/Detalles_\d+__/g, 'Detalles_' + index + '__').replace(/Detalles\[\d+\]/g, 'Detalles[' + index + ']'));
+                });
+            });
+            row.querySelectorAll('input').forEach(function (input) {
+                if (input.type === 'checkbox') input.checked = false;
+                else input.value = '';
+            });
+            row.querySelectorAll('select').forEach(function (select) { select.selectedIndex = 0; });
+            tbody.appendChild(row);
+        });
+    })();
+</script>
 
 <script>
     (function () {

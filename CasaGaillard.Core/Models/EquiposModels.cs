@@ -19,6 +19,38 @@ public sealed class EquipoFilaViewModel
     public bool Activo { get; set; }
 }
 
+public sealed class EquipoDetailsViewModel
+{
+    public EquipoFormViewModel Equipo { get; set; } = new();
+    public string InstalacionNombre { get; set; } = string.Empty;
+    public IReadOnlyList<EquipoTareaViewModel> Tareas { get; set; } = [];
+    public IReadOnlyList<EquipoPlanViewModel> Planes { get; set; } = [];
+    public IReadOnlyList<EquipoIntervencionViewModel> Intervenciones { get; set; } = [];
+    public IReadOnlyList<InstalacionEquipoFotoFilaViewModel> Fotos { get; set; } = [];
+    public IReadOnlyList<InstalacionDocumentoFilaViewModel> Documentos { get; set; } = [];
+}
+
+public sealed class EquipoTareaViewModel
+{
+    public int Id { get; set; } public string Codigo { get; set; } = string.Empty; public string Titulo { get; set; } = string.Empty;
+    public string? Estado { get; set; } public string? Prioridad { get; set; } public string? AsignadaA { get; set; }
+    public DateTime FechaCreacion { get; set; } public DateTime? FechaProgramada { get; set; }
+}
+
+public sealed class EquipoPlanViewModel
+{
+    public int PlanId { get; set; } public string Nombre { get; set; } = string.Empty; public string? Tipo { get; set; }
+    public int PeriodicidadDias { get; set; } public DateTime? UltimaEjecucion { get; set; } public DateTime? ProximaEjecucion { get; set; }
+    public bool Activo { get; set; }
+}
+
+public sealed class EquipoIntervencionViewModel
+{
+    public int Id { get; set; } public int TareaMantenimientoId { get; set; } public string TareaCodigo { get; set; } = string.Empty;
+    public string TareaTitulo { get; set; } = string.Empty; public string? Tecnico { get; set; } public DateTime FechaInicio { get; set; }
+    public string Descripcion { get; set; } = string.Empty; public decimal? HorasEmpleadas { get; set; } public decimal CosteTotal { get; set; }
+}
+
 public sealed class EquipoFormViewModel
 {
     public int Id { get; set; }

@@ -2,7 +2,7 @@
 @{ViewData["Title"]="Eliminar plan";}
 <h2>Eliminar plan</h2><h3>¿Seguro que quieres eliminar este plan?</h3>
 <div><h4>Plan de Mantenimiento</h4><hr /><dl class="row">
-<dt class="col-sm-2">Accesorio</dt><dd class="col-sm-10">@(Model.AccesorioNombre??Model.EquipoNombre)</dd>
+<dt class="col-sm-2">Equipo / activo</dt><dd class="col-sm-10">@(Model.EquipoNombre??Model.AccesorioNombre)</dd>
 <dt class="col-sm-2">Ubicación / grupo</dt><dd class="col-sm-10">@(string.IsNullOrWhiteSpace(Model.AccesorioGrupoTexto)?"Sin grupo asignado":Model.AccesorioGrupoTexto)</dd>
 <dt class="col-sm-2">Periodicidad</dt><dd class="col-sm-10">@Model.PeriodicidadDias días</dd></dl>
 <form asp-action="Delete" method="post"><input type="hidden" name="id" value="@Model.PlanId" /><div class="form-actions"><button type="submit" class="btn btn-danger">Eliminar</button> <a asp-action="Index" class="btn btn-outline-secondary">Volver</a></div></form></div>

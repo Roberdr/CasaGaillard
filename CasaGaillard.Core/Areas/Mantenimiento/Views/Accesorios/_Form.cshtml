@@ -4,18 +4,18 @@
 <div class="row g-3">
     <div class="col-md-6"><label asp-for="Nombre" class="form-label"></label><input asp-for="Nombre" class="form-control" maxlength="150" /><span asp-validation-for="Nombre" class="text-danger"></span></div>
     <div class="col-md-6"><label asp-for="TipoAccesorioId" class="form-label"></label><select asp-for="TipoAccesorioId" asp-items="Model.TiposAccesorio" class="form-select"><option value="">Selecciona tipo</option></select><span asp-validation-for="TipoAccesorioId" class="text-danger"></span></div>
-    <div class="col-md-6"><label asp-for="MaterialId" class="form-label"></label><select asp-for="MaterialId" asp-items="Model.Materiales" class="form-select"><option value="">Selecciona material</option></select><span asp-validation-for="MaterialId" class="text-danger"></span></div>
+    <div class="col-md-6" data-material-rapido data-url="@Url.Action("Crear", "Materiales", new { area = "Mantenimiento" })"><label asp-for="MaterialId" class="form-label"></label><select asp-for="MaterialId" asp-items="Model.Materiales" class="form-select"><option value="">Selecciona material</option></select><span asp-validation-for="MaterialId" class="text-danger"></span><div class="input-group input-group-sm mt-2"><input data-material-nombre class="form-control" maxlength="150" placeholder="Nuevo material" aria-label="Nombre del nuevo material"/><button type="button" data-material-crear class="btn btn-outline-secondary">Crear y seleccionar</button></div>@Html.AntiForgeryToken()<small data-material-estado class="form-text" role="status"></small></div>
     <div class="col-md-6"><label asp-for="UbicacionId" class="form-label"></label><select asp-for="UbicacionId" asp-items="Model.Ubicaciones" class="form-select"><option value="">Sin ubicación</option></select><span asp-validation-for="UbicacionId" class="text-danger"></span></div>
     <div class="col-md-6"><label asp-for="FamiliaId" class="form-label"></label><select asp-for="FamiliaId" asp-items="Model.Familias" class="form-select" id="FamiliaId"><option value="">Sin familia</option></select><span asp-validation-for="FamiliaId" class="text-danger"></span></div>
     <div class="col-md-6"><label asp-for="SubfamiliaId" class="form-label"></label><select asp-for="SubfamiliaId" asp-items="Model.Subfamilias" class="form-select" id="SubfamiliaId"><option value="">Sin subfamilia</option></select><span asp-validation-for="SubfamiliaId" class="text-danger"></span></div>
     <div class="col-md-6"><label asp-for="FechaAlta" class="form-label"></label><input asp-for="FechaAlta" type="date" class="form-control" /></div>
     <div class="col-md-6 form-check align-self-end ms-2"><input asp-for="Activo" class="form-check-input" /><label asp-for="Activo" class="form-check-label"></label></div>
     <div class="col-12"><label asp-for="Descripcion" class="form-label"></label><textarea asp-for="Descripcion" rows="3" class="form-control" maxlength="500"></textarea><span asp-validation-for="Descripcion" class="text-danger"></span></div>
-    <div class="col-12"><label asp-for="FotosAdjuntas" class="form-label"></label><input asp-for="FotosAdjuntas" type="file" class="form-control" accept=".jpg,.jpeg,.png,.gif,.webp" multiple /><span asp-validation-for="FotosAdjuntas" class="text-danger"></span><div class="form-text">JPG, PNG, GIF o WEBP. Máximo 10 MB por imagen.</div></div>
+    <div class="col-12" data-foto-pies data-campo="ObservacionesFotos"><label asp-for="FotosAdjuntas" class="form-label"></label><input asp-for="FotosAdjuntas" type="file" class="form-control" accept=".jpg,.jpeg,.png,.gif,.webp" multiple /><div data-foto-pies-lista class="mt-2"></div><span asp-validation-for="FotosAdjuntas" class="text-danger"></span><div class="form-text">JPG, PNG, GIF o WEBP. Máximo 10 MB por imagen.</div></div>
 </div>
 @if (Model.FotosExistentes.Count > 0)
 {
-    <h2 class="h5 mt-4">Fotos existentes</h2><div class="row g-2 mb-3">@foreach (var foto in Model.FotosExistentes) { <div class="col-4 col-md-2"><img src="@Url.Action("Foto", new { id = foto.Id })" alt="@(foto.NombreOriginal ?? "Foto")" class="img-fluid rounded" /><small class="d-block text-muted">@foto.NombreOriginal</small></div> }</div>
+    <h2 class="h5 mt-4">Fotos existentes</h2><div class="row g-2 mb-3">@foreach (var foto in Model.FotosExistentes) { <div class="col-4 col-md-2"><img src="@Url.Action("Foto", new { id = foto.Id })" alt="@(foto.Observacion ?? "Foto")" class="img-fluid rounded" />@if (!string.IsNullOrWhiteSpace(foto.Observacion)) { <span class="d-block mt-1">@foto.Observacion</span> }</div> }</div>
 }
 <h2 class="h5 mt-4">Detalles técnicos</h2>
 <div class="table-responsive"><table class="table table-sm table-bordered align-middle"><thead><tr><th>Característica</th><th>Cantidad</th><th>Medida</th><th>Unidad</th><th>Tipo</th><th>Quitar</th></tr></thead><tbody>
@@ -31,3 +31,32 @@
     </tr>
 }
 </tbody></table></div>
+<button type="button" class="btn btn-outline-secondary btn-sm" id="anadirDetalleAccesorio">Añadir detalle técnico</button>
+<script>
+    (function () {
+        var button = document.getElementById('anadirDetalleAccesorio');
+        var tbody = document.querySelector('table.table-bordered tbody');
+        if (!button || !tbody) return;
+
+        button.addEventListener('click', function () {
+            var rows = tbody.querySelectorAll('tr');
+            if (!rows.length) return;
+            var row = rows[rows.length - 1].cloneNode(true);
+            var index = rows.length;
+            row.querySelectorAll('[name], [id]').forEach(function (element) {
+                ['name', 'id'].forEach(function (attribute) {
+                    var value = element.getAttribute(attribute);
+                    if (value) element.setAttribute(attribute, value.replace(/Detalles_\d+__/g, 'Detalles_' + index + '__').replace(/Detalles\[\d+\]/g, 'Detalles[' + index + ']'));
+                });
+            });
+            row.querySelectorAll('input').forEach(function (input) {
+                if (input.type === 'checkbox') input.checked = false;
+                else input.value = '';
+            });
+            row.querySelectorAll('select').forEach(function (select) { select.selectedIndex = 0; });
+            tbody.appendChild(row);
+        });
+    })();
+</script>
+<script src="~/js/material-rapido.js" asp-append-version="true"></script>
+<script src="~/js/foto-pies.js" asp-append-version="true"></script>

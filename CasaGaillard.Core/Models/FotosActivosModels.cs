@@ -10,11 +10,13 @@ public sealed class InstalacionEquipoFotosViewModel
     public string Titulo { get; set; } = string.Empty;
     public IReadOnlyList<InstalacionEquipoFotoFilaViewModel> Fotos { get; set; } = [];
     [Display(Name = "Fotos")] public List<IFormFile> Archivos { get; set; } = [];
+    public List<string?> Observaciones { get; set; } = [];
 }
 
 public sealed class InstalacionEquipoFotoFilaViewModel
 {
     public int Id { get; set; }
     public string? NombreOriginal { get; set; }
+    public string? Observacion { get; set; }
     public DateTime FechaCreacion { get; set; }
 }

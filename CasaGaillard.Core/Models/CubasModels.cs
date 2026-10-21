@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CasaGaillard.Core.Models;
@@ -29,8 +30,10 @@ public sealed class CubaFormViewModel : CubaDetalleViewModel
 
 public class CubaDetalleViewModel : CubaFilaViewModel
 {
+    [NotMapped]
     public IReadOnlyList<CubaCompartimentoViewModel> Compartimentos { get; set; } = [];
-    public IReadOnlyList<string> Fotos { get; set; } = [];
+    [NotMapped]
+    public IReadOnlyList<InstalacionEquipoFotoFilaViewModel> Fotos { get; set; } = [];
     [Display(Name="Constructor"),StringLength(100)] public string? Constructor { get; set; }
     [Display(Name="Número de fabricación"),StringLength(12)] public string? NumFabricacion { get; set; }
     [Display(Name="Número de homologación"),StringLength(15)] public string? NumHomologacion { get; set; }
@@ -41,20 +44,20 @@ public class CubaDetalleViewModel : CubaFilaViewModel
     [Display(Name="Autoridad"),StringLength(45)] public string? Autoridad { get; set; }
     [Display(Name="Código de diseño"),StringLength(25)] public string? CodigoDiseno { get; set; }
     [Display(Name="Prueba hidráulica"),DataType(DataType.Date)] public DateTime? PruebaHidraulica { get; set; }
-    [Display(Name="Presión de servicio ADR"),Range(typeof(decimal),"-99.99","99.99")] public decimal? PresionServicioADR { get; set; }
-    [Display(Name="Presión de servicio IMO"),Range(typeof(decimal),"-99.99","99.99")] public decimal? PresionServicioIMO { get; set; }
-    [Display(Name="Presión exterior"),Range(typeof(decimal),"-99.99","99.99")] public decimal? PresionExterior { get; set; }
-    [Display(Name="Presión tarado válvulas"),Range(typeof(decimal),"-99.99","99.99")] public decimal? PresionTaradoValvulas { get; set; }
+    [Display(Name="Presión de servicio ADR"),Range(typeof(decimal),"-99.99","99.99", ParseLimitsInInvariantCulture = true)] public decimal? PresionServicioADR { get; set; }
+    [Display(Name="Presión de servicio IMO"),Range(typeof(decimal),"-99.99","99.99", ParseLimitsInInvariantCulture = true)] public decimal? PresionServicioIMO { get; set; }
+    [Display(Name="Presión exterior"),Range(typeof(decimal),"-99.99","99.99", ParseLimitsInInvariantCulture = true)] public decimal? PresionExterior { get; set; }
+    [Display(Name="Presión tarado válvulas"),Range(typeof(decimal),"-99.99","99.99", ParseLimitsInInvariantCulture = true)] public decimal? PresionTaradoValvulas { get; set; }
     [Display(Name="Temperatura de cálculo de referencia"),StringLength(12)] public string? TemperaturaCalculoReferencia { get; set; }
-    [Display(Name="Espesor cuerpo"),Range(typeof(decimal),"-99.99","99.99")] public decimal? EspesorCuerpo { get; set; }
-    [Display(Name="Espesor fondo"),Range(typeof(decimal),"-99.99","99.99")] public decimal? EspesorFondo { get; set; }
+    [Display(Name="Espesor cuerpo"),Range(typeof(decimal),"-99.99","99.99", ParseLimitsInInvariantCulture = true)] public decimal? EspesorCuerpo { get; set; }
+    [Display(Name="Espesor fondo"),Range(typeof(decimal),"-99.99","99.99", ParseLimitsInInvariantCulture = true)] public decimal? EspesorFondo { get; set; }
     [Display(Name="Espesor equivalente"),StringLength(15)] public string? EspesorEquivalente { get; set; }
     [Display(Name="Tipo de forro"),StringLength(15)] public string? TipoForro { get; set; }
     [Display(Name="Número aprobación CSC"),StringLength(15)] public string? NumAprobacionCSC { get; set; }
     [Display(Name="Modelo"),StringLength(25)] public string? Modelo { get; set; }
     [Display(Name="Peso máximo apilamiento")] public int? PesoMaxApilamiento { get; set; }
     [Display(Name="Carga rigidez")] public int? CargaRigidez { get; set; }
-    [Display(Name="Presión de prueba"),Range(typeof(decimal),"-99.99","99.99")] public decimal? PresionPrueba { get; set; }
+    [Display(Name="Presión de prueba"),Range(typeof(decimal),"-99.99","99.99", ParseLimitsInInvariantCulture = true)] public decimal? PresionPrueba { get; set; }
     [Display(Name="Temperatura mínima de carga"),StringLength(5)] public string? TemperaturaMinCarga { get; set; }
     [Display(Name="Longitud")] public int? Longitud { get; set; }
     [Display(Name="Ancho")] public int? Ancho { get; set; }
@@ -64,6 +67,7 @@ public class CubaDetalleViewModel : CubaFilaViewModel
     [Display(Name="UN Portable Tank"),StringLength(15)] public string? UNPortableTank { get; set; }
     [Display(Name="Número de aprobación"),StringLength(20)] public string? NumAprobacion { get; set; }
 }
+
 
 public sealed class CubaCompartimentoViewModel
 {

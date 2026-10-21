@@ -37,6 +37,22 @@ public sealed class CostesMantenimientoService : ICostesMantenimientoService
         model.Intervenciones=await _db.Database.SqlQueryRaw<CosteIntervencionViewModel>(Cte+@"SELECT Id,TareaMantenimientoId,TareaCodigo,TareaTitulo,COALESCE(InstalacionNombre,N'(Sin instalación)') InstalacionNombre,
           EquipoCodigo,EquipoNombre,Tecnico,FechaInicio,FechaFin,Descripcion,HorasEmpleadas,CosteManoObra,CosteRepuestos,RepuestosSinCoste,CosteManoObra+CosteRepuestos CosteTotal
           FROM Costes ORDER BY FechaInicio DESC,Id DESC",args).ToListAsync();
+        model.CostePorMes=model.Intervenciones
+            .GroupBy(x=>new {x.FechaInicio.Year,x.FechaInicio.Month})
+            .OrderBy(x=>x.Key.Year).ThenBy(x=>x.Key.Month)
+            .Select(x=>new CosteGraficoItemViewModel
+            {
+                Etiqueta=new DateTime(x.Key.Year,x.Key.Month,1).ToString("MMM yyyy",System.Globalization.CultureInfo.CurrentCulture),
+                Total=x.Sum(item=>item.CosteTotal)
+            }).ToList();
+        model.CostePorInstalacion=model.Intervenciones
+            .GroupBy(x=>x.InstalacionNombre)
+            .Select(x=>new CosteGraficoItemViewModel{Etiqueta=x.Key,Total=x.Sum(item=>item.CosteTotal)})
+            .OrderByDescending(x=>x.Total).ThenBy(x=>x.Etiqueta).Take(8).ToList();
+        model.CostePorEquipo=model.Intervenciones
+            .GroupBy(x=>string.IsNullOrWhiteSpace(x.EquipoCodigo)?(x.EquipoNombre??"(Sin equipo)"):$"{x.EquipoCodigo} - {x.EquipoNombre}")
+            .Select(x=>new CosteGraficoItemViewModel{Etiqueta=x.Key,Total=x.Sum(item=>item.CosteTotal)})
+            .OrderByDescending(x=>x.Total).ThenBy(x=>x.Etiqueta).Take(8).ToList();
         return model;
     }
     private sealed class Option{public int Valor{get;set;}public string Texto{get;set;}=string.Empty;}

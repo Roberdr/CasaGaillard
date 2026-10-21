@@ -18,6 +18,6 @@
     </dl></div></div>
     <div class="card"><div class="card-header">Fotos</div><div class="card-body">
         @if (Model.Fotos.Count == 0) { <p class="text-muted mb-0">Todavía no hay fotos adjuntas.</p> }
-        else { <div class="row g-2">@foreach (var foto in Model.Fotos) { <div class="col-6"><a asp-action="Foto" asp-route-id="@foto.Id" target="_blank"><img src="@Url.Action("Foto", new { id = foto.Id })" alt="@(foto.NombreOriginal ?? "Foto del accesorio")" class="img-fluid rounded" /></a><small class="d-block text-muted">@foto.NombreOriginal</small></div> }</div> }
+        else { <div class="row g-2">@foreach (var foto in Model.Fotos) { <div class="col-6"><a asp-action="Foto" asp-route-id="@foto.Id" target="_blank"><img src="@Url.Action("Foto", new { id = foto.Id })" alt="@(foto.Observacion ?? "Foto del accesorio")" class="img-fluid rounded" /></a>@if (!string.IsNullOrWhiteSpace(foto.Observacion)) { <div class="mt-1">@foto.Observacion</div> }</div> }</div> }
     </div></div></div>
 </div>

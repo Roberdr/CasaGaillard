@@ -35,6 +35,7 @@ public sealed class AccesoriosController : Controller
     {
         await ValidateFormAsync(model);
         ValidatePhotos(model.FotosAdjuntas);
+        ValidatePhotoCaptions(model);
         if (!ModelState.IsValid)
         {
             var prepared = await _service.GetFormAsync(null);
@@ -63,6 +64,7 @@ public sealed class AccesoriosController : Controller
         model.Id = id;
         await ValidateFormAsync(model);
         ValidatePhotos(model.FotosAdjuntas);
+        ValidatePhotoCaptions(model);
         if (!ModelState.IsValid)
         {
             var prepared = await _service.GetFormAsync(model.Id);
@@ -132,6 +134,12 @@ public sealed class AccesoriosController : Controller
                 string.IsNullOrWhiteSpace(photo.ContentType) || !photo.ContentType.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
                 ModelState.AddModelError(nameof(AccesorioFormViewModel.FotosAdjuntas), "Adjunta imágenes JPG, PNG, GIF o WEBP de hasta 10 MB cada una.");
         }
+    }
+
+    private void ValidatePhotoCaptions(AccesorioFormViewModel model)
+    {
+        if (model.ObservacionesFotos.Any(text => text?.Length > 500))
+            ModelState.AddModelError(nameof(model.ObservacionesFotos), "El pie de foto no puede superar los 500 caracteres.");
     }
 
     private static AccesorioFormViewModel MergeForm(AccesorioFormViewModel posted, AccesorioFormViewModel prepared)

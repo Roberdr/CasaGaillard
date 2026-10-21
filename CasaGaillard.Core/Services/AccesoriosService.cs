@@ -1,7 +1,9 @@
 using CasaGaillard.Core.Data;
 using CasaGaillard.Core.Models;
+using Microsoft.Data.SqlClient;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using System.Data;
 
 namespace CasaGaillard.Core.Services;
 
@@ -60,7 +62,7 @@ public sealed class AccesoriosService : IAccesoriosService
             Detalles = await _db.Database.SqlQueryRaw<DetalleAccesorioFilaViewModel>(@"SELECT d.ID AS Id,c.CaracteristicaAccesorio AS Caracteristica,d.Cantidad,d.Medida,u.Unidad AS Unidad,d.Tipo
                 FROM gaillard.DetalleAccesorio d LEFT JOIN gaillard.CaracteristicaAccesorio c ON c.ID=d.CaracteristicaAccesorioID
                 LEFT JOIN gaillard.Unidad u ON u.ID=d.UnidadID WHERE d.AccesorioID=@p0 ORDER BY d.ID", id).ToListAsync(),
-            Fotos = await _db.Database.SqlQueryRaw<AccesorioFotoViewModel>(@"SELECT ID,NombreOriginal,ContentType,FechaCreacion FROM dbo.AccesorioFotos WHERE AccesorioID=@p0 ORDER BY FechaCreacion DESC,ID DESC", id).ToListAsync()
+            Fotos = await _db.Database.SqlQueryRaw<AccesorioFotoViewModel>(@"SELECT ID,NombreOriginal,Observacion,ContentType,FechaCreacion FROM dbo.AccesorioFotos WHERE AccesorioID=@p0 ORDER BY FechaCreacion DESC,ID DESC", id).ToListAsync()
         };
     }
 
@@ -76,7 +78,7 @@ public sealed class AccesoriosService : IAccesoriosService
                 MaterialId = row.MaterialId, FamiliaId = row.FamiliaId, SubfamiliaId = row.SubfamiliaId, UbicacionId = row.UbicacionId, FechaAlta = row.FechaAlta, Activo = row.Activo };
             model.Detalles = await _db.Database.SqlQueryRaw<DetalleAccesorioFormViewModel>(@"SELECT ID,CaracteristicaAccesorioID AS CaracteristicaId,Cantidad,Medida,
                 UnidadID AS UnidadId,Tipo,CAST(0 AS bit) AS Eliminar FROM gaillard.DetalleAccesorio WHERE AccesorioID=@p0 ORDER BY ID", id.Value).ToListAsync();
-            model.FotosExistentes = await _db.Database.SqlQueryRaw<AccesorioFotoViewModel>(@"SELECT ID AS Id,NombreOriginal,ContentType,FechaCreacion FROM dbo.AccesorioFotos WHERE AccesorioID=@p0 ORDER BY FechaCreacion DESC", id.Value).ToListAsync();
+            model.FotosExistentes = await _db.Database.SqlQueryRaw<AccesorioFotoViewModel>(@"SELECT ID AS Id,NombreOriginal,Observacion,ContentType,FechaCreacion FROM dbo.AccesorioFotos WHERE AccesorioID=@p0 ORDER BY FechaCreacion DESC", id.Value).ToListAsync();
         }
         else model = new AccesorioFormViewModel { FechaAlta = DateTime.Today, IntervencionId = intervencionId };
 
@@ -96,7 +98,7 @@ public sealed class AccesoriosService : IAccesoriosService
 
     public async Task<int> SaveAsync(AccesorioFormViewModel model, CancellationToken cancellationToken = default)
     {
-        List<PreparedPhoto> preparedFiles = await StorePhotosAsync(model.Id, model.FotosAdjuntas, cancellationToken);
+        List<PreparedPhoto> preparedFiles = await StorePhotosAsync(model.Id, model.FotosAdjuntas, model.ObservacionesFotos, cancellationToken);
         try
         {
             await using var tx = await _db.Database.BeginTransactionAsync(cancellationToken);
@@ -122,8 +124,8 @@ public sealed class AccesoriosService : IAccesoriosService
             if (preparedFiles.Count > 0) preparedFiles = MovePhotosToAccessoryFolder(preparedFiles, model.Id);
             await SaveDetailsAsync(model.Id, model.Detalles, cancellationToken);
             foreach (var file in preparedFiles)
-                await _db.Database.ExecuteSqlRawAsync(@"INSERT INTO dbo.AccesorioFotos (AccesorioID,RutaArchivo,NombreOriginal,ContentType,FechaCreacion)
-                    VALUES (@p0,@p1,@p2,@p3,@p4)", [model.Id, file.StoredPath, file.Name, file.ContentType, DateTime.Now], cancellationToken);
+                await _db.Database.ExecuteSqlRawAsync(@"INSERT INTO dbo.AccesorioFotos (AccesorioID,RutaArchivo,NombreOriginal,ContentType,FechaCreacion,Observacion)
+                    VALUES (@p0,@p1,@p2,@p3,@p4,@p5)", [model.Id, file.StoredPath, file.Name, file.ContentType, DateTime.Now, ObservationParameter(file.Observacion)], cancellationToken);
             await tx.CommitAsync(cancellationToken);
             return model.Id;
         }
@@ -174,7 +176,7 @@ public sealed class AccesoriosService : IAccesoriosService
         }
     }
 
-    private async Task<List<PreparedPhoto>> StorePhotosAsync(int accesorioId, IReadOnlyList<Microsoft.AspNetCore.Http.IFormFile> files, CancellationToken cancellationToken)
+    private async Task<List<PreparedPhoto>> StorePhotosAsync(int accesorioId, IReadOnlyList<Microsoft.AspNetCore.Http.IFormFile> files, IReadOnlyList<string?> observations, CancellationToken cancellationToken)
     {
         var prepared = new List<PreparedPhoto>();
         if (files.Count == 0) return prepared;
@@ -182,14 +184,17 @@ public sealed class AccesoriosService : IAccesoriosService
         Directory.CreateDirectory(folder);
         try
         {
-            foreach (var file in files.Where(f => f.Length > 0))
+            for (var index = 0; index < files.Count; index++)
             {
+                var file = files[index];
+                if (file.Length == 0) continue;
                 var extension = Path.GetExtension(Path.GetFileName(file.FileName));
                 var name = Guid.NewGuid().ToString("N") + extension.ToLowerInvariant();
                 var path = Path.Combine(folder, name);
                 await using (var stream = new FileStream(path, FileMode.CreateNew, FileAccess.Write, FileShare.None)) await file.CopyToAsync(stream, cancellationToken);
                 var relative = $"~/App_Data/AccesoriosFotos/{(accesorioId > 0 ? accesorioId.ToString() : Path.GetFileName(folder))}/{name}";
-                prepared.Add(new PreparedPhoto(path, relative, Path.GetFileName(file.FileName), file.ContentType));
+                var observation = index < observations.Count ? observations[index]?.Trim() : null;
+                prepared.Add(new PreparedPhoto(path, relative, Path.GetFileName(file.FileName), file.ContentType, string.IsNullOrWhiteSpace(observation) ? null : observation));
             }
             return prepared;
         }
@@ -197,7 +202,11 @@ public sealed class AccesoriosService : IAccesoriosService
     }
 
     private static object Db(object? value) => value switch { null => DBNull.Value, string text when string.IsNullOrWhiteSpace(text) => DBNull.Value, string text => text.Trim(), _ => value };
-    private sealed record PreparedPhoto(string PhysicalPath, string StoredPath, string Name, string ContentType);
+    private static SqlParameter ObservationParameter(string? value) => new("@p5", SqlDbType.NVarChar, 500)
+    {
+        Value = string.IsNullOrWhiteSpace(value) ? DBNull.Value : value.Trim()
+    };
+    private sealed record PreparedPhoto(string PhysicalPath, string StoredPath, string Name, string ContentType, string? Observacion);
 
     private List<PreparedPhoto> MovePhotosToAccessoryFolder(List<PreparedPhoto> files, int accesorioId)
     {
@@ -224,10 +233,14 @@ public sealed class AccesoriosService : IAccesoriosService
     {
         const string prefix = "~/App_Data/AccesoriosFotos/";
         if (string.IsNullOrWhiteSpace(rutaArchivo) || !rutaArchivo.StartsWith(prefix, StringComparison.OrdinalIgnoreCase)) return null;
+        var relativePath = rutaArchivo[prefix.Length..].Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar);
         var root = Path.GetFullPath(Path.Combine(_environment.ContentRootPath, "App_Data", "AccesoriosFotos"));
-        var path = Path.GetFullPath(Path.Combine(root, rutaArchivo[prefix.Length..].Replace('/', Path.DirectorySeparatorChar).Replace('\\', Path.DirectorySeparatorChar)));
-        return path.StartsWith(root + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) ? path : null;
+        var path = Path.GetFullPath(Path.Combine(root, relativePath));
+        return IsUnderRoot(root, path) ? path : null;
     }
+
+    private static bool IsUnderRoot(string root, string path) =>
+        path.StartsWith(root + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase);
 
     private async Task<IReadOnlyList<SelectListItem>> OptionsAsync(string sql, int? selected, params object[] args)
     {

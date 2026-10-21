@@ -22,6 +22,20 @@ public sealed class EquiposController : Controller
         return View(await _service.GetAllAsync(instalacionId, incluirBajas));
     }
 
+    [HttpGet]
+    public async Task<IActionResult> EquiposPadre(int instalacionId)
+    {
+        var options = await _service.GetEquiposPadreAsync(instalacionId, null);
+        return Json(options.Select(option => new { value = option.Value, text = option.Text }));
+    }
+
+    public async Task<IActionResult> Details(int? id)
+    {
+        if (!id.HasValue) return BadRequest();
+        var model = await _service.GetDetailsAsync(id.Value);
+        return model is null ? NotFound() : View(model);
+    }
+
     [Authorize(Roles = AppRoles.GestionMantenimiento)]
     public async Task<IActionResult> Create(int? instalacionId) => View(await _service.GetFormAsync(null, instalacionId));
 

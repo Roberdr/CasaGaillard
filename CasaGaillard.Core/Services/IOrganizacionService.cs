@@ -25,8 +25,8 @@ public interface IOrganizacionService
     Task PrepareEntidadAsync(EntidadForm model);
     Task<int?> SaveEntidadAsync(EntidadForm model);
     Task<bool> DeleteEntidadAsync(int id);
-    Task<bool> AddEntidadTelefonoAsync(int entidadId, string telefono);
-    Task<bool> UpdateEntidadTelefonoAsync(int entidadId, int id, string telefono);
+    Task<bool> AddEntidadTelefonoAsync(int entidadId, int personaId, string telefono);
+    Task<bool> UpdateEntidadTelefonoAsync(int entidadId, int id, int? personaId, string telefono);
     Task<bool> DeleteEntidadTelefonoAsync(int entidadId, int id);
     Task<bool> AddEntidadPersonaAsync(int entidadId, int personaId, int? cargoId, DateTime? fechaAlta);
     Task<bool> UpdateEntidadPersonaAsync(int entidadId, int id, int? cargoId, DateTime? fechaAlta, DateTime? fechaBaja);

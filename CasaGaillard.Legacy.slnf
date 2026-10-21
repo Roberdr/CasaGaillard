@@ -1,0 +1,8 @@
+{
+  "solution": {
+    "path": "CasaGaillard.sln",
+    "projects": [
+      "CasaGaillard.csproj"
+    ]
+  }
+}

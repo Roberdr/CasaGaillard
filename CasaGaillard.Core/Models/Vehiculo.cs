@@ -1,5 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Collections.Generic;
 
 namespace CasaGaillard.Core.Models
 {
@@ -31,5 +33,7 @@ namespace CasaGaillard.Core.Models
         // Navigation props (minimal)
         public TipoVehiculo? TipoVehiculo { get; set; }
         public Entidad? Taller { get; set; }
+        [NotMapped]
+        public IReadOnlyList<InstalacionEquipoFotoFilaViewModel> Fotos { get; set; } = new List<InstalacionEquipoFotoFilaViewModel>();
     }
 }

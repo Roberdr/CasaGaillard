@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CasaGaillard.Core.Models;
@@ -10,6 +11,7 @@ public sealed class GrupoFilaViewModel
     public int Compartimento { get; set; }
     public string Tipo { get; set; } = "";
     public string Situacion { get; set; } = "";
+    [NotMapped]
     public IReadOnlyList<GrupoAccesorioViewModel> Accesorios { get; set; } = [];
 }
 

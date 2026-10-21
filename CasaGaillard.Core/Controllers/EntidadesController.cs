@@ -65,15 +65,15 @@ public sealed class EntidadesController : Controller
     }
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = AppRoles.GestionMantenimiento)]
-    public async Task<IActionResult> AgregarTelefono(int entidadId, string telefono)
+    public async Task<IActionResult> AgregarTelefono(int entidadId, int personaId, string telefono)
     {
-        if (!await _service.AddEntidadTelefonoAsync(entidadId, telefono ?? "")) TempData["OrganizacionError"] = "El teléfono no es válido o la entidad ya no existe.";
+        if (!await _service.AddEntidadTelefonoAsync(entidadId, personaId, telefono ?? "")) TempData["OrganizacionError"] = "Selecciona una persona válida e indica un teléfono de hasta 10 caracteres.";
         return RedirectToAction(nameof(Details), new { id = entidadId });
     }
     [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = AppRoles.GestionMantenimiento)]
-    public async Task<IActionResult> ActualizarTelefono(int entidadId, int id, string telefono)
+    public async Task<IActionResult> ActualizarTelefono(int entidadId, int id, int? personaId, string telefono)
     {
-        if (!await _service.UpdateEntidadTelefonoAsync(entidadId, id, telefono ?? "")) TempData["OrganizacionError"] = "No se pudo actualizar el teléfono.";
+        if (!await _service.UpdateEntidadTelefonoAsync(entidadId, id, personaId, telefono ?? "")) TempData["OrganizacionError"] = "Selecciona una persona válida para el teléfono de trabajo.";
         return RedirectToAction(nameof(Details), new { id = entidadId });
     }
     [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = AppRoles.GestionMantenimiento)]

@@ -79,7 +79,10 @@ public sealed class OrganizacionService : IOrganizacionService
         var row = rows.FirstOrDefault();
         if (row is null) return null;
         var model = new PersonaForm { Id = row.Id, Nombre = row.Nombre, Apellido1 = row.Apellido1, Apellido2 = row.Apellido2, Nif = row.Nif, DireccionId = row.DireccionId, DireccionTexto = row.DireccionTexto };
-        model.Telefonos = await _db.Database.SqlQueryRaw<OrganizacionTelefono>("SELECT ID Id,TelefonoPersona Numero FROM gaillard.TelefonoPersona WHERE PersonaID={0} ORDER BY ID", id.Value).ToListAsync();
+        model.Telefonos = await _db.Database.SqlQueryRaw<OrganizacionTelefono>(@"SELECT t.ID Id,t.Telefono Numero,t.PersonaID PersonaId,t.EntidadID EntidadId,
+            CAST(NULL AS nvarchar(200)) PersonaNombre,e.NombreEntidad EntidadNombre
+            FROM gaillard.Telefono t LEFT JOIN gaillard.Entidad e ON e.ID=t.EntidadID
+            WHERE t.PersonaID={0} ORDER BY t.ID", id.Value).ToListAsync();
         model.Relaciones = await _db.Database.SqlQueryRaw<PersonaRelacion>(@"SELECT pe.ID Id,pe.PersonaID PersonaId,pe.EntidadID EntidadId,
             e.NombreEntidad Nombre,c.Cargo Cargo,pe.CargoID CargoId,pe.FechaAlta,pe.FechaBaja FROM gaillard.PersonasEntidad pe
             JOIN gaillard.Entidad e ON e.ID=pe.EntidadID LEFT JOIN gaillard.Cargo c ON c.ID=pe.CargoID
@@ -124,12 +127,12 @@ public sealed class OrganizacionService : IOrganizacionService
 
     public async Task<bool> DeletePersonaAsync(int id) => await _db.Database.ExecuteSqlInterpolatedAsync($"DELETE FROM gaillard.Persona WHERE ID={id}") > 0;
 
-    public Task<bool> AddPersonaTelefonoAsync(int personaId, string telefono) => AddPhoneAsync("gaillard.TelefonoPersona", personaId, telefono);
-    public Task<bool> UpdatePersonaTelefonoAsync(int personaId, int id, string telefono) => UpdatePhoneAsync("gaillard.TelefonoPersona", personaId, id, telefono);
-    public Task<bool> DeletePersonaTelefonoAsync(int personaId, int id) => DeletePhoneAsync("gaillard.TelefonoPersona", personaId, id);
-    public Task<bool> AddEntidadTelefonoAsync(int entidadId, string telefono) => AddPhoneAsync("gaillard.TelefonoEntidad", entidadId, telefono);
-    public Task<bool> UpdateEntidadTelefonoAsync(int entidadId, int id, string telefono) => UpdatePhoneAsync("gaillard.TelefonoEntidad", entidadId, id, telefono);
-    public Task<bool> DeleteEntidadTelefonoAsync(int entidadId, int id) => DeletePhoneAsync("gaillard.TelefonoEntidad", entidadId, id);
+    public Task<bool> AddPersonaTelefonoAsync(int personaId, string telefono) => AddPhoneAsync(personaId, telefono, persona: true);
+    public Task<bool> UpdatePersonaTelefonoAsync(int personaId, int id, string telefono) => UpdatePhoneAsync(personaId, id, telefono, persona: true);
+    public Task<bool> DeletePersonaTelefonoAsync(int personaId, int id) => DeletePhoneAsync(personaId, id, persona: true);
+    public Task<bool> AddEntidadTelefonoAsync(int entidadId, int personaId, string telefono) => AddWorkPhoneAsync(entidadId, personaId, telefono);
+    public Task<bool> UpdateEntidadTelefonoAsync(int entidadId, int id, int? personaId, string telefono) => UpdateWorkPhoneAsync(entidadId, id, personaId, telefono);
+    public Task<bool> DeleteEntidadTelefonoAsync(int entidadId, int id) => DeletePhoneAsync(entidadId, id, persona: false);
 
     public Task<bool> AddPersonaEntidadAsync(int personaId, int entidadId, int? cargoId, DateTime? fechaAlta) =>
         AddRelationAsync(personaId, entidadId, cargoId, fechaAlta);
@@ -159,7 +162,11 @@ public sealed class OrganizacionService : IOrganizacionService
         var row = rows.FirstOrDefault();
         if (row is null) return null;
         var model = new EntidadForm { Id = row.Id, Nombre = row.Nombre, Cif = row.Cif, DireccionId = row.DireccionId, DireccionTexto = row.DireccionTexto };
-        model.Telefonos = await _db.Database.SqlQueryRaw<OrganizacionTelefono>("SELECT ID Id,Telefono Numero FROM gaillard.TelefonoEntidad WHERE EntidadID={0} ORDER BY ID", id.Value).ToListAsync();
+        model.Telefonos = await _db.Database.SqlQueryRaw<OrganizacionTelefono>(@"SELECT t.ID Id,t.Telefono Numero,t.PersonaID PersonaId,t.EntidadID EntidadId,
+            LTRIM(RTRIM(CONCAT(COALESCE(p.NombrePersona,N''),N' ',COALESCE(p.Apellido1,N''),N' ',COALESCE(p.Apellido2,N'')))) PersonaNombre,
+            CAST(NULL AS nvarchar(200)) EntidadNombre
+            FROM gaillard.Telefono t LEFT JOIN gaillard.Persona p ON p.ID=t.PersonaID
+            WHERE t.EntidadID={0} ORDER BY t.ID", id.Value).ToListAsync();
         model.Relaciones = await _db.Database.SqlQueryRaw<PersonaRelacion>(@"SELECT pe.ID Id,pe.PersonaID PersonaId,pe.EntidadID EntidadId,
             LTRIM(RTRIM(CONCAT(COALESCE(p.NombrePersona,N''),N' ',COALESCE(p.Apellido1,N''),N' ',COALESCE(p.Apellido2,N'')))) Nombre,
             c.Cargo Cargo,pe.CargoID CargoId,pe.FechaAlta,pe.FechaBaja FROM gaillard.PersonasEntidad pe
@@ -211,43 +218,56 @@ public sealed class OrganizacionService : IOrganizacionService
         (await _db.Database.SqlQueryRaw<OptionRow>("SELECT ID Id,Cargo Texto FROM gaillard.Cargo ORDER BY Cargo").ToListAsync())
             .Select(x => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem(x.Texto, x.Id.ToString())).ToList();
 
-    private async Task<bool> AddPhoneAsync(string table, int ownerId, string phone)
+    private async Task<bool> AddPhoneAsync(int ownerId, string phone, bool persona)
     {
         phone = phone.Trim();
         if (phone.Length is 0 or > 10) return false;
-        var ownerExists = table switch
-        {
-            "gaillard.TelefonoPersona" => await _db.Database.SqlQueryRaw<int>("SELECT 1 Value FROM gaillard.Persona WHERE ID={0}", ownerId).AnyAsync(),
-            "gaillard.TelefonoEntidad" => await _db.Database.SqlQueryRaw<int>("SELECT 1 Value FROM gaillard.Entidad WHERE ID={0}", ownerId).AnyAsync(),
-            _ => false
-        };
+        var ownerExists = persona
+            ? await _db.Database.SqlQueryRaw<int>("SELECT 1 Value FROM gaillard.Persona WHERE ID={0}", ownerId).AnyAsync()
+            : await _db.Database.SqlQueryRaw<int>("SELECT 1 Value FROM gaillard.Entidad WHERE ID={0}", ownerId).AnyAsync();
         if (!ownerExists) return false;
-        await using var transaction = await _db.Database.BeginTransactionAsync(System.Data.IsolationLevel.Serializable);
-        var ids = table == "gaillard.TelefonoPersona"
-            ? await _db.Database.SqlQueryRaw<int>("SELECT ISNULL(MAX(ID),0)+1 Id FROM gaillard.TelefonoPersona WITH (UPDLOCK,HOLDLOCK)").ToListAsync()
-            : await _db.Database.SqlQueryRaw<int>("SELECT ISNULL(MAX(ID),0)+1 Id FROM gaillard.TelefonoEntidad WITH (UPDLOCK,HOLDLOCK)").ToListAsync();
-        var id = ids.Single();
-        var affected = table == "gaillard.TelefonoPersona"
-            ? await _db.Database.ExecuteSqlInterpolatedAsync($"INSERT INTO gaillard.TelefonoPersona(ID,TelefonoPersona,PersonaID) VALUES({id},{phone},{ownerId})")
-            : await _db.Database.ExecuteSqlInterpolatedAsync($"INSERT INTO gaillard.TelefonoEntidad(ID,Telefono,EntidadID) VALUES({id},{phone},{ownerId})");
-        await transaction.CommitAsync();
+        var affected = persona
+            ? await _db.Database.ExecuteSqlInterpolatedAsync($"INSERT INTO gaillard.Telefono(Telefono,PersonaID,EntidadID) VALUES({phone},{ownerId},NULL)")
+            : await _db.Database.ExecuteSqlInterpolatedAsync($"INSERT INTO gaillard.Telefono(Telefono,PersonaID,EntidadID) VALUES({phone},NULL,{ownerId})");
         return affected > 0;
     }
 
-    private async Task<bool> UpdatePhoneAsync(string table, int ownerId, int id, string phone)
+    private async Task<bool> AddWorkPhoneAsync(int entidadId, int personaId, string phone)
     {
         phone = phone.Trim();
         if (phone.Length is 0 or > 10) return false;
-        var affected = table == "gaillard.TelefonoPersona"
-            ? await _db.Database.ExecuteSqlInterpolatedAsync($"UPDATE gaillard.TelefonoPersona SET TelefonoPersona={phone} WHERE ID={id} AND PersonaID={ownerId}")
-            : await _db.Database.ExecuteSqlInterpolatedAsync($"UPDATE gaillard.TelefonoEntidad SET Telefono={phone} WHERE ID={id} AND EntidadID={ownerId}");
+        var ownersExist = await _db.Database.SqlQueryRaw<int>(@"SELECT 1 Value
+            WHERE EXISTS (SELECT 1 FROM gaillard.Entidad WHERE ID={0})
+              AND EXISTS (SELECT 1 FROM gaillard.Persona WHERE ID={1})", entidadId, personaId).AnyAsync();
+        if (!ownersExist) return false;
+        return await _db.Database.ExecuteSqlInterpolatedAsync($@"INSERT INTO gaillard.Telefono(Telefono,PersonaID,EntidadID)
+            VALUES({phone},{personaId},{entidadId})") > 0;
+    }
+
+    private async Task<bool> UpdatePhoneAsync(int ownerId, int id, string phone, bool persona)
+    {
+        phone = phone.Trim();
+        if (phone.Length is 0 or > 10) return false;
+        var affected = persona
+            ? await _db.Database.ExecuteSqlInterpolatedAsync($"UPDATE gaillard.Telefono SET Telefono={phone} WHERE ID={id} AND PersonaID={ownerId}")
+            : await _db.Database.ExecuteSqlInterpolatedAsync($"UPDATE gaillard.Telefono SET Telefono={phone} WHERE ID={id} AND EntidadID={ownerId}");
         return affected > 0;
     }
 
-    private async Task<bool> DeletePhoneAsync(string table, int ownerId, int id) =>
-        await (table == "gaillard.TelefonoPersona"
-            ? _db.Database.ExecuteSqlInterpolatedAsync($"DELETE FROM gaillard.TelefonoPersona WHERE ID={id} AND PersonaID={ownerId}")
-            : _db.Database.ExecuteSqlInterpolatedAsync($"DELETE FROM gaillard.TelefonoEntidad WHERE ID={id} AND EntidadID={ownerId}")) > 0;
+    private async Task<bool> UpdateWorkPhoneAsync(int entidadId, int id, int? personaId, string phone)
+    {
+        phone = phone.Trim();
+        if (phone.Length is 0 or > 10 || !personaId.HasValue) return false;
+        var personExists = await _db.Database.SqlQueryRaw<int>("SELECT 1 Value FROM gaillard.Persona WHERE ID={0}", personaId.Value).AnyAsync();
+        if (!personExists) return false;
+        return await _db.Database.ExecuteSqlInterpolatedAsync($@"UPDATE gaillard.Telefono SET Telefono={phone},PersonaID={personaId.Value}
+            WHERE ID={id} AND EntidadID={entidadId}") > 0;
+    }
+
+    private async Task<bool> DeletePhoneAsync(int ownerId, int id, bool persona) =>
+        await (persona
+            ? _db.Database.ExecuteSqlInterpolatedAsync($"DELETE FROM gaillard.Telefono WHERE ID={id} AND PersonaID={ownerId}")
+            : _db.Database.ExecuteSqlInterpolatedAsync($"DELETE FROM gaillard.Telefono WHERE ID={id} AND EntidadID={ownerId}")) > 0;
 
     private async Task<bool> AddRelationAsync(int personId, int entityId, int? cargoId, DateTime? date)
     {

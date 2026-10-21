@@ -28,3 +28,24 @@
     <div class="col-md-4 mb-3 form-check align-self-end"><input asp-for="Activo" class="form-check-input" /><label asp-for="Activo" class="form-check-label"></label></div>
 </div>
 <div class="mb-3"><label asp-for="Observaciones" class="form-label"></label><textarea asp-for="Observaciones" rows="3" class="form-control"></textarea></div>
+
+<script>
+    (() => {
+        const instalacion = document.getElementById('InstalacionId');
+        const equipoPadre = document.getElementById('EquipoPadreId');
+        if (!instalacion || !equipoPadre) return;
+
+        instalacion.addEventListener('change', async () => {
+            const selectedInstallation = instalacion.value;
+            equipoPadre.replaceChildren(new Option('Equipo principal', ''));
+            if (!selectedInstallation) return;
+
+            const url = new URL('@Url.Action("EquiposPadre", "Equipos", new { area = "Mantenimiento" })', window.location.origin);
+            url.searchParams.set('instalacionId', selectedInstallation);
+            const response = await fetch(url);
+            if (!response.ok) return;
+            const options = await response.json();
+            for (const option of options) equipoPadre.add(new Option(option.text, option.value));
+        });
+    })();
+</script>

@@ -26,6 +26,10 @@ bld/
 [Bb]in/
 [Oo]bj/
 [Cc]asaGaillard.Core/App_Data/DataProtection-Keys/
+[Cc]asaGaillard.Core/App_Data/AccesoriosFotos/
+[Cc]asaGaillard.Core/App_Data/InstalacionEquipoFotos/
+[Cc]asaGaillard.Core/App_Data/InstalacionesDocumentos/
+[Cc]asaGaillard.Core/App_Data/TareasMantenimientoFotos/
 [Cc]asaGaillard.Core/appsettings.Lan.json
 [Cc]asaGaillard.Core/certs/
 [Ll]og/

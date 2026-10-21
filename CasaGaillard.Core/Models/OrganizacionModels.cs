@@ -87,6 +87,10 @@ public sealed class OrganizacionTelefono
 {
     public int Id { get; set; }
     public string? Numero { get; set; }
+    public int? PersonaId { get; set; }
+    public int? EntidadId { get; set; }
+    public string? PersonaNombre { get; set; }
+    public string? EntidadNombre { get; set; }
 }
 
 public sealed class PersonaRelacion

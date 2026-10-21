@@ -9,19 +9,20 @@ public sealed class CubasService : ICubasService
 {
     private readonly AppDbContext _db;
     private readonly IWebHostEnvironment _environment;
+    private readonly IFotosActivosService _fotosActivos;
     private static readonly FileExtensionContentTypeProvider ContentTypes = new();
     private static readonly HashSet<string> ImageExtensions = new(StringComparer.OrdinalIgnoreCase) { ".jpg", ".jpeg", ".png", ".gif", ".webp" };
-    public CubasService(AppDbContext db, IWebHostEnvironment environment) { _db = db; _environment = environment; }
+    public CubasService(AppDbContext db, IWebHostEnvironment environment, IFotosActivosService fotosActivos) { _db = db; _environment = environment; _fotosActivos = fotosActivos; }
 
     public async Task<IReadOnlyList<CubaFilaViewModel>> GetAllAsync(bool incluirBajas) => await _db.Database.SqlQueryRaw<CubaFilaViewModel>(@"SELECT c.ID Id,c.MatriculaCuba Matricula,c.NumCuadro,c.Codigo,
-        v.MatriculaVehiculo Vehiculo,m.Material1 Material,c.PesoBruto,c.Tara,COALESCE(NULLIF(c.PesoMaxProducto,0),c.PesoBruto-c.Tara) PesoMaxProducto,
+        v.MatriculaVehiculo Vehiculo,m.Material Material,c.PesoBruto,c.Tara,COALESCE(NULLIF(c.PesoMaxProducto,0),c.PesoBruto-c.Tara) PesoMaxProducto,
         c.UpdatedAt,CAST(COALESCE(c.Baja,0) AS bit) Baja FROM gaillard.Cuba c
         LEFT JOIN gaillard.Vehiculo v ON v.ID=c.PlataformaID LEFT JOIN gaillard.Material m ON m.ID=c.MaterialExteriorID
         WHERE @p0=1 OR COALESCE(c.Baja,0)=0 ORDER BY c.MatriculaCuba", incluirBajas ? 1 : 0).ToListAsync();
 
     public async Task<CubaDetalleViewModel?> GetByIdAsync(int id)
     {
-        var rows = await _db.Database.SqlQueryRaw<CubaDetalleViewModel>(@"SELECT c.ID Id,c.MatriculaCuba Matricula,c.NumCuadro,c.Codigo,v.MatriculaVehiculo Vehiculo,m.Material1 Material,
+        var rows = await _db.Database.SqlQueryRaw<CubaDetalleViewModel>(@"SELECT c.ID Id,c.MatriculaCuba Matricula,c.NumCuadro,c.Codigo,v.MatriculaVehiculo Vehiculo,m.Material Material,
             c.PesoBruto,c.Tara,COALESCE(NULLIF(c.PesoMaxProducto,0),c.PesoBruto-c.Tara) PesoMaxProducto,c.UpdatedAt,CAST(COALESCE(c.Baja,0) AS bit) Baja,
             c.Constructor,c.NumFabricacion,c.NumHomologacion,c.FechaConstruccion,c.PaisFabricacion,c.NumTipoIMO,c.PaisAprobacion,c.Autoridad,c.CodigoDiseno,c.PruebaHidraulica,
             c.PresionServicioADR,c.PresionServicioIMO,c.PresionExterior,c.PresionTaradoValvulas,c.TemperaturaCalculoReferencia,c.EspesorCuerpo,c.EspesorFondo,c.EspesorEquivalente,
@@ -33,10 +34,8 @@ public sealed class CubasService : ICubasService
         detail.Compartimentos = await _db.Database.SqlQueryRaw<CubaCompartimentoViewModel>(@"SELECT co.Numero,co.Capacidad,m.Descripcion Material
             FROM gaillard.Compartimento co LEFT JOIN gaillard.Material m ON m.ID=co.MaterialInteriorID
             WHERE co.CubaID=@p0 ORDER BY co.Numero", id).ToListAsync();
-        var imageDirectory = GetImageDirectory(detail.Matricula);
-        if (Directory.Exists(imageDirectory))
-            detail.Fotos = Directory.EnumerateFiles(imageDirectory).Where(path => ImageExtensions.Contains(Path.GetExtension(path)))
-                .Select(Path.GetFileName).Where(name => !string.IsNullOrWhiteSpace(name)).OrderBy(name => name, StringComparer.OrdinalIgnoreCase).ToList()!;
+        var photos = await _fotosActivos.GetAsync("Cuba", id);
+        detail.Fotos = photos?.Fotos ?? [];
         return detail;
     }
 
@@ -67,7 +66,7 @@ public sealed class CubasService : ICubasService
         var m = new CubaFormViewModel();
         if (id.HasValue)
         {
-            var rows = await _db.Database.SqlQueryRaw<CubaFormRow>(@"SELECT c.ID Id,c.MatriculaCuba Matricula,c.NumCuadro,c.Codigo,v.MatriculaVehiculo Vehiculo,m.Material1 Material,
+            var rows = await _db.Database.SqlQueryRaw<CubaFormRow>(@"SELECT c.ID Id,c.MatriculaCuba Matricula,c.NumCuadro,c.Codigo,v.MatriculaVehiculo Vehiculo,m.Material Material,
                 c.PesoBruto,c.Tara,c.PesoMaxProducto,c.UpdatedAt,CAST(COALESCE(c.Baja,0) AS bit) Baja,c.MaterialExteriorID MaterialId,c.PlataformaID PlataformaId,
                 c.Constructor,c.NumFabricacion,c.NumHomologacion,c.FechaConstruccion,c.PaisFabricacion,c.NumTipoIMO,c.PaisAprobacion,c.Autoridad,c.CodigoDiseno,c.PruebaHidraulica,
                 c.PresionServicioADR,c.PresionServicioIMO,c.PresionExterior,c.PresionTaradoValvulas,c.TemperaturaCalculoReferencia,c.EspesorCuerpo,c.EspesorFondo,c.EspesorEquivalente,
@@ -79,7 +78,7 @@ public sealed class CubasService : ICubasService
             m.MaterialId = rows[0].MaterialId;
             m.PlataformaId = rows[0].PlataformaId;
         }
-        var materials = await _db.Database.SqlQueryRaw<OptionRow>("SELECT ID,Material1 Texto FROM gaillard.Material ORDER BY Material1").ToListAsync();
+        var materials = await _db.Database.SqlQueryRaw<OptionRow>("SELECT ID,Material Texto FROM gaillard.Material ORDER BY Material").ToListAsync();
         var vehicles = await _db.Database.SqlQueryRaw<OptionRow>("SELECT ID,MatriculaVehiculo Texto FROM gaillard.Vehiculo WHERE (Baja IS NULL OR Baja=0) OR ID=@p0 ORDER BY MatriculaVehiculo", (object?)m.PlataformaId ?? DBNull.Value).ToListAsync();
         m.Materiales = materials.Select(x => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem(x.Texto ?? "", x.Id.ToString(), x.Id == m.MaterialId)).ToList();
         m.Vehiculos = vehicles.Select(x => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem(x.Texto ?? "", x.Id.ToString(), x.Id == m.PlataformaId)).ToList();

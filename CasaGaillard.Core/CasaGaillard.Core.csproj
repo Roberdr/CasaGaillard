@@ -24,6 +24,7 @@
   <ItemGroup>
     <Content Update="appsettings.Development.json" CopyToPublishDirectory="Never" />
     <Content Update="appsettings.Lan.json" CopyToPublishDirectory="Never" />
+    <Content Update="App_Data\**\*" CopyToPublishDirectory="Never" />
     <Content Update="certs\**" CopyToPublishDirectory="Never" />
   </ItemGroup>
 

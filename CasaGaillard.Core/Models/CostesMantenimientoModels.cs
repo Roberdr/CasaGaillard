@@ -13,6 +13,15 @@ public sealed class CostesMantenimientoViewModel
     public IReadOnlyList<SelectListItem> Equipos { get; set; }=[];
     public IReadOnlyList<CosteActivoResumenViewModel> Resumen { get; set; }=[];
     public IReadOnlyList<CosteIntervencionViewModel> Intervenciones { get; set; }=[];
+    public IReadOnlyList<CosteGraficoItemViewModel> CostePorMes { get; set; }=[];
+    public IReadOnlyList<CosteGraficoItemViewModel> CostePorInstalacion { get; set; }=[];
+    public IReadOnlyList<CosteGraficoItemViewModel> CostePorEquipo { get; set; }=[];
+}
+
+public sealed class CosteGraficoItemViewModel
+{
+    public string Etiqueta { get; set; }=string.Empty;
+    public decimal Total { get; set; }
 }
 
 public sealed class CosteActivoResumenViewModel

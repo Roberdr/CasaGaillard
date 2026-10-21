@@ -98,8 +98,22 @@ public sealed class IntervencionesService : IIntervencionesService
                 IntervencionId = id,
                 AccesorioId = nuevoAccesorioId ?? 0,
                 Accesorios = await GetAccesoriosAsync(nuevoAccesorioId ?? 0)
-            }
+            },
+            TiposAccesorio = await GetOptionsAsync("SELECT ID AS Id, TipoAccesorio AS Nombre FROM gaillard.TipoAccesorio ORDER BY TipoAccesorio"),
+            Materiales = await GetOptionsAsync("SELECT ID AS Id, Material AS Nombre FROM gaillard.Material ORDER BY Material")
         };
+    }
+
+    public async Task<int?> CreateRepuestoRapidoAsync(RepuestoRapidoFormViewModel model)
+    {
+        var intervention = await _db.Database.SqlQuery<CountRow>($"SELECT COUNT(1) AS Value FROM dbo.Intervencion WHERE Id={model.IntervencionId}").SingleAsync();
+        var type = await _db.Database.SqlQuery<CountRow>($"SELECT COUNT(1) AS Value FROM gaillard.TipoAccesorio WHERE ID={model.TipoAccesorioId}").SingleAsync();
+        var material = await _db.Database.SqlQuery<CountRow>($"SELECT COUNT(1) AS Value FROM gaillard.Material WHERE ID={model.MaterialId}").SingleAsync();
+        if (intervention.Value == 0 || type.Value == 0 || material.Value == 0) return null;
+        var rows = await _db.Database.SqlQueryRaw<int>(@"INSERT INTO gaillard.Accesorio
+            (TipoAccesorioID, MaterialID, Nombre, Activo) VALUES (@p0,@p1,@p2,1); SELECT CAST(SCOPE_IDENTITY() AS int)",
+            [model.TipoAccesorioId!.Value, model.MaterialId!.Value, model.Nombre.Trim()]).ToListAsync();
+        return rows.Single();
     }
 
     public async Task<IReadOnlyList<SelectListItem>> GetPersonasAsync(int? selectedId)
@@ -127,6 +141,12 @@ public sealed class IntervencionesService : IIntervencionesService
         {
             Value = a.Id.ToString(), Text = a.Texto, Selected = a.Id == selectedId
         }).ToList();
+    }
+
+    private async Task<IReadOnlyList<SelectListItem>> GetOptionsAsync(string sql)
+    {
+        var rows = await _db.Database.SqlQueryRaw<NamedOption>(sql).ToListAsync();
+        return rows.Select(x => new SelectListItem { Value = x.Id.ToString(), Text = x.Nombre }).ToList();
     }
 
     public async Task<bool> SaveCreateAsync(IntervencionFormViewModel model, string? creadoPor)
@@ -203,6 +223,7 @@ public sealed class IntervencionesService : IIntervencionesService
 
     private sealed class PersonaOption { public int Id { get; set; } public string Nombre { get; set; } = string.Empty; }
     private sealed class AccesorioOption { public int Id { get; set; } public string Texto { get; set; } = string.Empty; }
+    private sealed class NamedOption { public int Id { get; set; } public string Nombre { get; set; } = string.Empty; }
     private sealed class TechnicianName { public string Nombre { get; set; } = string.Empty; }
     private sealed class CountRow { public int Value { get; set; } }
     private sealed class IntervencionRepuestoId { public int IntervencionId { get; set; } }

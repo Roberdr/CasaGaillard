@@ -59,6 +59,7 @@ public sealed class AccesorioFormViewModel
     [Display(Name = "Activo")] public bool Activo { get; set; } = true;
     public List<DetalleAccesorioFormViewModel> Detalles { get; set; } = [];
     [Display(Name = "Fotos del accesorio")] public List<IFormFile> FotosAdjuntas { get; set; } = [];
+    public List<string?> ObservacionesFotos { get; set; } = [];
     public IReadOnlyList<SelectListItem> TiposAccesorio { get; set; } = [];
     public IReadOnlyList<SelectListItem> Materiales { get; set; } = [];
     public IReadOnlyList<SelectListItem> Familias { get; set; } = [];
@@ -94,6 +95,7 @@ public sealed class AccesorioFotoViewModel
 {
     public int Id { get; set; }
     public string? NombreOriginal { get; set; }
+    public string? Observacion { get; set; }
     public string? ContentType { get; set; }
     public DateTime FechaCreacion { get; set; }
 }

@@ -50,6 +50,15 @@
 @if (User.IsInRole("Administrador") || User.IsInRole("Mantenimiento"))
 {
     <h3>Añadir repuesto consumido</h3>
+    <div class="card mb-3"><div class="card-header">¿No aparece el repuesto? Créalo aquí rápidamente</div><div class="card-body">
+        <form asp-action="CrearRepuestoRapido" method="post" class="row g-3">
+            <input type="hidden" name="IntervencionId" value="@Model.Id" />
+            <div class="col-md-4"><label for="Nombre" class="form-label">Nombre</label><input id="Nombre" name="Nombre" maxlength="150" required class="form-control" /></div>
+            <div class="col-md-4"><label for="TipoAccesorioId" class="form-label">Tipo</label><select id="TipoAccesorioId" name="TipoAccesorioId" asp-items="Model.TiposAccesorio" required class="form-select"><option value="">Selecciona un tipo...</option></select></div>
+            <div class="col-md-4" data-material-rapido data-url="@Url.Action("Crear", "Materiales", new { area = "Mantenimiento" })"><label for="MaterialId" class="form-label">Material</label><select id="MaterialId" name="MaterialId" asp-items="Model.Materiales" required class="form-select"><option value="">Selecciona un material...</option></select><div class="input-group input-group-sm mt-2"><input data-material-nombre class="form-control" maxlength="150" placeholder="Nuevo material" aria-label="Nombre del nuevo material"/><button type="button" data-material-crear class="btn btn-outline-secondary">Crear y seleccionar</button></div>@Html.AntiForgeryToken()<small data-material-estado class="form-text" role="status"></small></div>
+            <div class="col-12"><button type="submit" class="btn btn-outline-primary">Crear y seleccionar</button></div>
+        </form>
+    </div></div>
     <form asp-action="AddRepuesto" method="post" class="col-lg-6">
         <input asp-for="RepuestoForm.IntervencionId" type="hidden" />
         <div class="mb-3"><label asp-for="RepuestoForm.AccesorioId" class="form-label"></label><select asp-for="RepuestoForm.AccesorioId" asp-items="Model.RepuestoForm.Accesorios" class="form-select"><option value="">Selecciona un repuesto...</option></select></div>
@@ -59,3 +68,4 @@
         <button type="submit" class="btn btn-primary">Añadir repuesto</button>
     </form>
 }
+<script src="~/js/material-rapido.js" asp-append-version="true"></script>

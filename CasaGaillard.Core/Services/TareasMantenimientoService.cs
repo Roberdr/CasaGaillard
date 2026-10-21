@@ -11,13 +11,27 @@ public sealed class TareasMantenimientoService : ITareasMantenimientoService
 
     public TareasMantenimientoService(AppDbContext db) => _db = db;
 
-    public async Task<IReadOnlyList<TareaMantenimientoResumenViewModel>> GetAllAsync(string? codigo)
+    public async Task<TareasMantenimientoIndexViewModel> GetAllAsync(string? busqueda, string? estado, string? prioridad, int pagina, DateTime? fechaDesde = null, DateTime? fechaHasta = null, string? equipo = null, string? responsable = null)
     {
         var query = _db.TareasMantenimiento.AsNoTracking().AsQueryable();
-        if (!string.IsNullOrWhiteSpace(codigo))
-            query = query.Where(tarea => tarea.Codigo == codigo.Trim());
+        if (!string.IsNullOrWhiteSpace(busqueda))
+        {
+            var termino = busqueda.Trim();
+            query = query.Where(tarea => tarea.Codigo.Contains(termino) || tarea.Titulo.Contains(termino) ||
+                (tarea.Equipo != null && tarea.Equipo.Contains(termino)) || (tarea.Ubicacion != null && tarea.Ubicacion.Contains(termino)));
+        }
+        if (!string.IsNullOrWhiteSpace(estado)) query = query.Where(tarea => tarea.Estado == estado);
+        if (!string.IsNullOrWhiteSpace(prioridad)) query = query.Where(tarea => tarea.Prioridad == prioridad);
+        if (fechaDesde.HasValue) query = query.Where(tarea => tarea.FechaProgramada >= fechaDesde.Value.Date);
+        if (fechaHasta.HasValue) query = query.Where(tarea => tarea.FechaProgramada < fechaHasta.Value.Date.AddDays(1));
+        if (!string.IsNullOrWhiteSpace(equipo)) query = query.Where(tarea => tarea.Equipo != null && tarea.Equipo.Contains(equipo.Trim()));
+        if (!string.IsNullOrWhiteSpace(responsable)) query = query.Where(tarea => tarea.AsignadaA != null && tarea.AsignadaA.Contains(responsable.Trim()));
 
-        return await query.OrderByDescending(tarea => tarea.FechaCreacion)
+        const int pageSize = 20;
+        var total = await query.CountAsync();
+        var totalPages = Math.Max(1, (int)Math.Ceiling(total / (double)pageSize));
+        pagina = Math.Clamp(pagina, 1, totalPages);
+        var tasks = await query.OrderByDescending(tarea => tarea.FechaCreacion).Skip((pagina - 1) * pageSize).Take(pageSize)
             .Select(tarea => new TareaMantenimientoResumenViewModel
             {
                 ID = tarea.ID,
@@ -28,8 +42,10 @@ public sealed class TareasMantenimientoService : ITareasMantenimientoService
                 Prioridad = tarea.Prioridad,
                 Estado = tarea.Estado,
                 AsignadaA = tarea.AsignadaA,
-                FechaCreacion = tarea.FechaCreacion
+                FechaCreacion = tarea.FechaCreacion,
+                FechaProgramada = tarea.FechaProgramada
             }).ToListAsync();
+        return new TareasMantenimientoIndexViewModel { Tareas = tasks, Busqueda = busqueda, Estado = estado, Prioridad = prioridad, FechaDesde=fechaDesde,FechaHasta=fechaHasta,FiltroEquipo=equipo,Responsable=responsable,Pagina = pagina, TotalPaginas = totalPages, TotalResultados = total };
     }
 
     public async Task<TareaMantenimientoDetailsViewModel?> GetDetailsAsync(int id)
@@ -59,11 +75,26 @@ public sealed class TareasMantenimientoService : ITareasMantenimientoService
             if (accessories.Count > 0) accessoriesText = string.Join(", ", accessories.Select(item => item.Nombre));
         }
 
+        var historial = await _db.TareaMantenimientoHistorial.AsNoTracking()
+            .Where(entry => entry.TareaMantenimientoID == id).OrderByDescending(entry => entry.Fecha).Take(50).ToListAsync();
+        var tareasDelActivo = await _db.TareasMantenimiento.AsNoTracking()
+            .Where(otra => otra.ID != id &&
+                ((tarea.EquipoId.HasValue && otra.EquipoId == tarea.EquipoId) ||
+                 (tarea.InstalacionId.HasValue && otra.InstalacionId == tarea.InstalacionId) ||
+                 (tarea.CubaId.HasValue && otra.CubaId == tarea.CubaId) ||
+                 (tarea.GrupoId.HasValue && otra.GrupoId == tarea.GrupoId) ||
+                 (tarea.VehiculoId.HasValue && otra.VehiculoId == tarea.VehiculoId)))
+            .OrderByDescending(otra => otra.FechaCreacion).Take(20)
+            .Select(otra => new TareaMantenimientoResumenViewModel { ID=otra.ID,Codigo=otra.Codigo,Titulo=otra.Titulo,Estado=otra.Estado,FechaCreacion=otra.FechaCreacion,FechaProgramada=otra.FechaProgramada })
+            .ToListAsync();
+
         return new TareaMantenimientoDetailsViewModel
         {
             Tarea = tarea,
             Fotos = fotos,
-            AccesoriosTexto = accessoriesText
+            AccesoriosTexto = accessoriesText,
+            Historial = historial,
+            TareasDelActivo = tareasDelActivo
         };
     }
 
@@ -97,6 +128,7 @@ public sealed class TareasMantenimientoService : ITareasMantenimientoService
             AccesoriosNecesarios = tarea.AccesoriosNecesarios,
             Observaciones = tarea.Observaciones,
             FechaDeteccion = tarea.FechaDeteccion,
+            FechaProgramada = tarea.FechaProgramada,
             FechaCreacion = tarea.FechaCreacion,
             FechaActualizacion = tarea.FechaActualizacion,
             CreadoPor = tarea.CreadoPor,
@@ -131,10 +163,16 @@ public sealed class TareasMantenimientoService : ITareasMantenimientoService
             Observaciones = NormalizeText(model.Observaciones),
             CreadoPor = NormalizeText(userName),
             FechaDeteccion = model.FechaDeteccion == default ? now : model.FechaDeteccion,
+            FechaProgramada = model.FechaProgramada,
             FechaCreacion = now
         };
         _db.TareasMantenimiento.Add(tarea);
         await _db.SaveChangesAsync();
+        _db.TareaMantenimientoHistorial.Add(new TareaMantenimientoHistorial
+        {
+            TareaMantenimientoID=tarea.ID, Usuario=NormalizeText(userName), Accion="Creada", Fecha=DateTime.UtcNow,
+            CambiosJson=System.Text.Json.JsonSerializer.Serialize(new { Codigo=tarea.Codigo, Titulo=tarea.Titulo, Estado=tarea.Estado, FechaProgramada=tarea.FechaProgramada })
+        });
         await SaveAccessoryLinksAsync(tarea.ID, model.AccesoriosNecesarios);
         return tarea.ID;
     }
@@ -165,6 +203,7 @@ public sealed class TareasMantenimientoService : ITareasMantenimientoService
         tarea.AccesoriosNecesarios = NormalizeAccessoryIds(model.AccesoriosNecesarios);
         tarea.Observaciones = NormalizeText(model.Observaciones);
         tarea.FechaDeteccion = model.FechaDeteccion;
+        tarea.FechaProgramada = model.FechaProgramada;
         tarea.ActualizadoPor = NormalizeText(userName);
         tarea.FechaActualizacion = DateTime.Now;
         await _db.SaveChangesAsync();
@@ -187,6 +226,7 @@ public sealed class TareasMantenimientoService : ITareasMantenimientoService
             EmpresaExteriorEntidadID = tarea.EmpresaExteriorEntidadID,
             Prioridad = tarea.Prioridad,
             Estado = tarea.Estado,
+            FechaProgramada = tarea.FechaProgramada,
             AsignadaA = tarea.AsignadaA,
             EmpresaExterior = tarea.EmpresaExterior,
             AccionesARealizar = tarea.AccionesARealizar,
@@ -204,6 +244,7 @@ public sealed class TareasMantenimientoService : ITareasMantenimientoService
         if (tarea is null) return false;
         tarea.Prioridad = NormalizeText(model.Prioridad);
         tarea.Estado = NormalizeText(model.Estado);
+        tarea.FechaProgramada = model.FechaProgramada;
         tarea.AsignadaA = NormalizeText(model.AsignadaA);
         tarea.EmpresaExterior = NormalizeText(model.EmpresaExterior);
         tarea.AsignadaAPersonaID = model.AsignadaAPersonaID;
@@ -219,13 +260,26 @@ public sealed class TareasMantenimientoService : ITareasMantenimientoService
 
     public Task<TareaMantenimientoGestionViewModel> PrepareGestionAsync(TareaMantenimientoGestionViewModel model) => PopulateLookupsAsync(model);
 
-    public async Task AddFotoAsync(int tareaId, string fileName, string originalName, string contentType, DateTime uploadedAt)
+    public async Task<bool> ClaimAsync(int id, string userName)
+    {
+        var tarea = await _db.TareasMantenimiento.SingleOrDefaultAsync(t => t.ID == id);
+        if (tarea is null || string.Equals(tarea.Estado, "Cerrada", StringComparison.OrdinalIgnoreCase)) return false;
+        if (!string.IsNullOrWhiteSpace(tarea.AsignadaA)) return false;
+        tarea.AsignadaA = NormalizeText(userName);
+        tarea.ActualizadoPor = NormalizeText(userName);
+        tarea.FechaActualizacion = DateTime.Now;
+        await _db.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task AddFotoAsync(int tareaId, string fileName, string originalName, string contentType, string? observacion, DateTime uploadedAt)
     {
         _db.TareaMantenimientoFotos.Add(new TareaMantenimientoFoto
         {
             TareaMantenimientoID = tareaId,
             RutaArchivo = "~/App_Data/TareasMantenimientoFotos/" + tareaId + "/" + fileName,
             NombreOriginal = Path.GetFileName(originalName),
+            Observacion = string.IsNullOrWhiteSpace(observacion) ? null : observacion.Trim(),
             ContentType = contentType,
             FechaCreacion = uploadedAt
         });

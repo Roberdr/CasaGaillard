@@ -14,5 +14,6 @@ public interface IIntervencionesService
     Task<bool> SaveCreateAsync(IntervencionFormViewModel model, string? creadoPor);
     Task<bool> SaveUpdateAsync(IntervencionFormViewModel model);
     Task<bool> AddRepuestoAsync(IntervencionRepuestoFormViewModel model);
+    Task<int?> CreateRepuestoRapidoAsync(RepuestoRapidoFormViewModel model);
     Task<int?> RemoveRepuestoAsync(int id);
 }

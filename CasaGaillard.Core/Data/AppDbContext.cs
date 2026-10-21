@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using CasaGaillard.Core.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace CasaGaillard.Core.Data
 {
@@ -21,6 +22,7 @@ namespace CasaGaillard.Core.Data
         public DbSet<TareaMantenimiento> TareasMantenimiento { get; set; } = null!;
         public DbSet<TareaMantenimientoFoto> TareaMantenimientoFotos { get; set; } = null!;
         public DbSet<TareaMantenimientoAccesorio> TareaMantenimientoAccesorios { get; set; } = null!;
+        public DbSet<TareaMantenimientoHistorial> TareaMantenimientoHistorial { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -119,6 +121,7 @@ namespace CasaGaillard.Core.Data
                 eb.Property(tarea => tarea.Contacto).HasMaxLength(150);
                 eb.Property(tarea => tarea.Prioridad).HasMaxLength(20);
                 eb.Property(tarea => tarea.Estado).HasMaxLength(30);
+                eb.Property(tarea => tarea.FechaProgramada).HasColumnType("date");
                 eb.Property(tarea => tarea.AsignadaA).HasMaxLength(150);
                 eb.Property(tarea => tarea.EmpresaExterior).HasMaxLength(150);
                 eb.Property(tarea => tarea.AccionesARealizar).HasMaxLength(2000);
@@ -134,6 +137,7 @@ namespace CasaGaillard.Core.Data
                 eb.HasKey(foto => foto.ID);
                 eb.Property(foto => foto.RutaArchivo).HasMaxLength(260).IsRequired();
                 eb.Property(foto => foto.NombreOriginal).HasMaxLength(255);
+                eb.Property(foto => foto.Observacion).HasMaxLength(500);
                 eb.Property(foto => foto.ContentType).HasMaxLength(100);
                 eb.HasOne<TareaMantenimiento>().WithMany().HasForeignKey(foto => foto.TareaMantenimientoID)
                     .OnDelete(DeleteBehavior.Cascade);
@@ -147,6 +151,50 @@ namespace CasaGaillard.Core.Data
                 eb.HasOne<TareaMantenimiento>().WithMany().HasForeignKey(accesorio => accesorio.TareaMantenimientoID)
                     .OnDelete(DeleteBehavior.Cascade);
             });
+
+            modelBuilder.Entity<TareaMantenimientoHistorial>(eb =>
+            {
+                eb.ToTable("TareaMantenimientoHistorial", "dbo");
+                eb.HasKey(x => x.ID);
+                eb.Property(x => x.Usuario).HasMaxLength(100);
+                eb.Property(x => x.Accion).HasMaxLength(20).IsRequired();
+                eb.Property(x => x.CambiosJson).HasColumnType("nvarchar(max)").IsRequired();
+                eb.HasIndex(x => new { x.TareaMantenimientoID, x.Fecha });
+            });
+        }
+
+        public override int SaveChanges(bool acceptAllChangesOnSuccess)
+        {
+            CaptureTaskChanges();
+            return base.SaveChanges(acceptAllChangesOnSuccess);
+        }
+
+        public override Task<int> SaveChangesAsync(bool acceptAllChangesOnSuccess, CancellationToken cancellationToken = default)
+        {
+            CaptureTaskChanges();
+            return base.SaveChangesAsync(acceptAllChangesOnSuccess, cancellationToken);
+        }
+
+        private void CaptureTaskChanges()
+        {
+            var records = ChangeTracker.Entries<TareaMantenimiento>()
+                .Where(entry => entry.State is EntityState.Modified or EntityState.Deleted)
+                .Select(entry =>
+                {
+                    var changes = new Dictionary<string, object?>();
+                    foreach (var property in entry.Properties)
+                    {
+                        if (entry.State == EntityState.Modified && !property.IsModified) continue;
+                        changes[property.Metadata.Name] = new { Anterior=property.OriginalValue, Nuevo=entry.State == EntityState.Deleted ? null : property.CurrentValue };
+                    }
+                    return new TareaMantenimientoHistorial
+                    {
+                        TareaMantenimientoID=entry.Entity.ID, Usuario=entry.Entity.ActualizadoPor ?? entry.Entity.CreadoPor,
+                        Accion=entry.State == EntityState.Deleted ? "Eliminada" : "Modificada", Fecha=DateTime.UtcNow,
+                        CambiosJson=JsonSerializer.Serialize(changes)
+                    };
+                }).ToList();
+            if (records.Count > 0) TareaMantenimientoHistorial.AddRange(records);
         }
     }
 }

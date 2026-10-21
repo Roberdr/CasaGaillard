@@ -134,7 +134,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
             return RedirectToAction("Details", new { id = tarea.ID });
         }
 
-        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento + "," + AppRoles.Consulta)]
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public ActionResult Create()
         {
             var model = CreateFormModel();
@@ -146,7 +146,7 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento + "," + AppRoles.Consulta)]
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
         public async Task<ActionResult> Create(TareaMantenimientoFormViewModel model)
         {
             await ValidarReferenciasActivoAsync(model);

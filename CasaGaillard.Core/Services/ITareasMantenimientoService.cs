@@ -4,7 +4,7 @@ namespace CasaGaillard.Core.Services;
 
 public interface ITareasMantenimientoService
 {
-    Task<IReadOnlyList<TareaMantenimientoResumenViewModel>> GetAllAsync(string? codigo);
+    Task<TareasMantenimientoIndexViewModel> GetAllAsync(string? busqueda, string? estado, string? prioridad, int pagina, DateTime? fechaDesde = null, DateTime? fechaHasta = null, string? equipo = null, string? responsable = null);
     Task<TareaMantenimientoDetailsViewModel?> GetDetailsAsync(int id);
     Task<TareaMantenimientoFoto?> GetFotoAsync(int id);
     Task<TareaMantenimientoFormViewModel?> GetFormAsync(int? id);
@@ -14,5 +14,6 @@ public interface ITareasMantenimientoService
     Task<TareaMantenimientoGestionViewModel?> GetGestionAsync(int id);
     Task<TareaMantenimientoGestionViewModel> PrepareGestionAsync(TareaMantenimientoGestionViewModel model);
     Task<bool> UpdateGestionAsync(TareaMantenimientoGestionViewModel model, string? userName);
-    Task AddFotoAsync(int tareaId, string fileName, string originalName, string contentType, DateTime uploadedAt);
+    Task<bool> ClaimAsync(int id, string userName);
+    Task AddFotoAsync(int tareaId, string fileName, string originalName, string contentType, string? observacion, DateTime uploadedAt);
 }

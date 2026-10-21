@@ -29,5 +29,28 @@
     <dd class="col-sm-9">@(Model.Baja == true ? "Baja" : "Activo")</dd>
 </dl>
 
+<section class="card mb-3">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <strong>Fotos del vehículo</strong>
+        <a asp-area="Mantenimiento" asp-controller="FotosActivos" asp-action="Index" asp-route-tipo="Vehiculo" asp-route-id="@Model.ID">Gestionar fotos</a>
+    </div>
+    @if (Model.Fotos.Count == 0)
+    {
+        <div class="card-body text-body-secondary">No hay fotos del vehículo.</div>
+    }
+    else
+    {
+        <div class="card-body"><div class="d-flex flex-wrap gap-3">
+            @foreach (var foto in Model.Fotos)
+            {
+                <a asp-area="Mantenimiento" asp-controller="FotosActivos" asp-action="Foto" asp-route-id="@foto.Id" target="_blank" class="text-center">
+                    <img src="@Url.Action("Foto", "FotosActivos", new { area = "Mantenimiento", id = foto.Id })" alt="@(foto.Observacion ?? "Foto del vehículo")" class="rounded border" style="width:160px;height:120px;object-fit:cover" loading="lazy" />
+                    @if (!string.IsNullOrWhiteSpace(foto.Observacion)) { <small class="d-block mt-1">@foto.Observacion</small> }
+                </a>
+            }
+        </div></div>
+    }
+</section>
+
 <a asp-area="Mantenimiento" asp-controller="Vehiculos" asp-action="AddOrEdit" asp-route-id="@Model.ID" class="btn btn-primary">Editar</a>
 <a asp-area="Mantenimiento" asp-controller="Vehiculos" asp-action="Index" class="btn btn-link">Volver a la lista</a>

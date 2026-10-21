@@ -3,6 +3,8 @@ using CasaGaillard.Core.Services;
 using CasaGaillard.Core.Security;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Localization;
+using System.Globalization;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -30,6 +32,7 @@ else if (!string.IsNullOrWhiteSpace(builder.Configuration["DataProtection:KeysPa
 
 builder.Services.AddRazorPages();
 builder.Services.AddControllersWithViews();
+builder.Services.AddHttpClient();
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddUserStore<LegacyIdentityUserStore>()
     .AddRoleStore<LegacyIdentityRoleStore>()
@@ -64,6 +67,8 @@ builder.Services.AddScoped<ICubasService, CubasService>();
 builder.Services.AddScoped<IMantenimientoDashboardService, MantenimientoDashboardService>();
 builder.Services.AddScoped<IPaginaPublicaService, PaginaPublicaService>();
 builder.Services.AddScoped<IOrganizacionService, OrganizacionService>();
+builder.Services.AddHostedService<AvisosMantenimientoEmailService>();
+builder.Services.AddHostedService<MantenimientoPreventivoService>();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
 if (string.IsNullOrWhiteSpace(connectionString))
@@ -81,6 +86,13 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();
+var es = CultureInfo.GetCultureInfo("es-ES");
+app.UseRequestLocalization(new RequestLocalizationOptions
+{
+    DefaultRequestCulture = new RequestCulture(es),
+    SupportedCultures = [es],
+    SupportedUICultures = [es]
+});
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();

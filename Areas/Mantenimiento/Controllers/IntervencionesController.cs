@@ -128,7 +128,35 @@ namespace CasaGaillard.Areas.Mantenimiento.Controllers
                 FROM dbo.IntervencionRepuesto r INNER JOIN gaillard.Accesorio a ON a.ID=r.AccesorioId
                 WHERE r.IntervencionId=@p0 ORDER BY a.Nombre", id.Value).ToListAsync();
             ViewBag.RepuestoForm = PrepararRepuesto(new IntervencionRepuestoFormViewModel { IntervencionId = id.Value, AccesorioId = nuevoAccesorioId ?? 0 });
+            ViewBag.TiposAccesorio = (await catalogoDb.Database.SqlQuery<Opcion>("SELECT ID AS Valor, TipoAccesorio1 AS Texto FROM gaillard.TipoAccesorio ORDER BY TipoAccesorio1").ToListAsync())
+                .Select(x => new SelectListItem { Value = x.Valor.ToString(), Text = x.Texto });
+            ViewBag.Materiales = (await catalogoDb.Database.SqlQuery<Opcion>("SELECT ID AS Valor, Material1 AS Texto FROM gaillard.Material ORDER BY Material1").ToListAsync())
+                .Select(x => new SelectListItem { Value = x.Valor.ToString(), Text = x.Texto });
             return View(model);
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        [Authorize(Roles = AppRoles.Administrador + "," + AppRoles.Mantenimiento)]
+        public async Task<ActionResult> QuickCreateRepuesto(int intervencionId, string nombre, int? tipoAccesorioId, int? materialId)
+        {
+            var existeIntervencion = await tareasDb.Database.SqlQuery<int>("SELECT COUNT(1) FROM dbo.Intervencion WHERE Id=@p0", intervencionId).SingleAsync();
+            if (existeIntervencion == 0) return HttpNotFound();
+            nombre = Texto(nombre);
+            var errores = nombre == null || nombre.Length > 150
+                || !tipoAccesorioId.HasValue || !materialId.HasValue;
+            var tipoValido = tipoAccesorioId.HasValue && await catalogoDb.Database.SqlQuery<int>("SELECT COUNT(1) FROM gaillard.TipoAccesorio WHERE ID=@p0", tipoAccesorioId.Value).SingleAsync() > 0;
+            var materialValido = materialId.HasValue && await catalogoDb.Database.SqlQuery<int>("SELECT COUNT(1) FROM gaillard.Material WHERE ID=@p0", materialId.Value).SingleAsync() > 0;
+            if (errores || !tipoValido || !materialValido)
+            {
+                TempData["LoginMessage"] = "Indica un nombre, tipo y material válidos para crear el repuesto.";
+                return RedirectToAction("Details", new { id = intervencionId });
+            }
+
+            var accesorioId = await catalogoDb.Database.SqlQuery<int>(@"INSERT INTO gaillard.Accesorio
+                (TipoAccesorioID, MaterialID, Nombre, Activo) VALUES (@p0,@p1,@p2,1); SELECT CAST(SCOPE_IDENTITY() AS int)",
+                tipoAccesorioId.Value, materialId.Value, nombre).SingleAsync();
+            TempData["LoginMessage"] = "Repuesto creado. Ya está seleccionado para añadirlo a la intervención.";
+            return RedirectToAction("Details", new { id = intervencionId, nuevoAccesorioId = accesorioId });
         }
 
         [HttpPost, ValidateAntiForgeryToken]

@@ -86,12 +86,30 @@ public class IntervencionesController : Controller
     [HttpPost]
     [ValidateAntiForgeryToken]
     [Authorize(Roles = AppRoles.GestionMantenimiento)]
-    public async Task<IActionResult> AddRepuesto(IntervencionRepuestoFormViewModel model)
+    public async Task<IActionResult> AddRepuesto([Bind(Prefix = "RepuestoForm")] IntervencionRepuestoFormViewModel model)
     {
         if (ModelState.IsValid && await _service.AddRepuestoAsync(model))
             TempData["LoginMessage"] = "El repuesto utilizado se ha añadido.";
         else
             TempData["LoginMessage"] = "No se pudo añadir el repuesto. Revisa la cantidad, el coste y el accesorio.";
+        return RedirectToAction(nameof(Details), new { id = model.IntervencionId });
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    [Authorize(Roles = AppRoles.GestionMantenimiento)]
+    public async Task<IActionResult> CrearRepuestoRapido(RepuestoRapidoFormViewModel model)
+    {
+        if (ModelState.IsValid)
+        {
+            var id = await _service.CreateRepuestoRapidoAsync(model);
+            if (id.HasValue)
+            {
+                TempData["LoginMessage"] = "Repuesto creado. Ya está seleccionado para añadirlo a la intervención.";
+                return RedirectToAction(nameof(Details), new { id = model.IntervencionId, nuevoAccesorioId = id.Value });
+            }
+        }
+        TempData["LoginMessage"] = "No se pudo crear el repuesto. Comprueba el nombre, el tipo y el material.";
         return RedirectToAction(nameof(Details), new { id = model.IntervencionId });
     }
 

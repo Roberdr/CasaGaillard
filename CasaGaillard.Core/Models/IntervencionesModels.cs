@@ -59,6 +59,16 @@ public sealed class IntervencionDetailsViewModel : IntervencionFilaViewModel
 {
     public IReadOnlyList<IntervencionRepuestoViewModel> Repuestos { get; set; } = [];
     public IntervencionRepuestoFormViewModel RepuestoForm { get; set; } = new();
+    public IReadOnlyList<SelectListItem> TiposAccesorio { get; set; } = [];
+    public IReadOnlyList<SelectListItem> Materiales { get; set; } = [];
+}
+
+public sealed class RepuestoRapidoFormViewModel
+{
+    [Required] public int IntervencionId { get; set; }
+    [Required, StringLength(150)] public string Nombre { get; set; } = string.Empty;
+    [Required, Range(1, int.MaxValue)] public int? TipoAccesorioId { get; set; }
+    [Required, Range(1, int.MaxValue)] public int? MaterialId { get; set; }
 }
 
 public sealed class IntervencionRepuestoViewModel
