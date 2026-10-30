@@ -14,6 +14,7 @@ public sealed class RevisionVehiculoFilaViewModel
     public DateTime? Caducidad { get; set; }
     public string? Detalles { get; set; }
     public string? Ejecutor { get; set; }
+    public DateTime? FechaReservada { get; set; }
 }
 
 public sealed class RevisionVehiculoFormViewModel

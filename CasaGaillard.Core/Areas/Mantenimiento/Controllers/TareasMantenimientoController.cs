@@ -165,6 +165,29 @@ public sealed class TareasMantenimientoController : Controller
         return RedirectToAction(nameof(Details), new { id = model.ID });
     }
 
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = AppRoles.GestionMantenimiento)]
+    public async Task<IActionResult> ActualizarPieFoto(int id, int fotoId, string? observacion)
+    {
+        if (observacion?.Length > 500)
+        {
+            TempData["LoginMessage"] = "El pie de foto no puede superar los 500 caracteres.";
+            return RedirectToAction(nameof(Edit), new { id });
+        }
+        if (!await _service.UpdateFotoObservacionAsync(id, fotoId, observacion)) return NotFound();
+        TempData["LoginMessage"] = "El pie de foto se ha actualizado.";
+        return RedirectToAction(nameof(Edit), new { id });
+    }
+
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = AppRoles.GestionMantenimiento)]
+    public async Task<IActionResult> EliminarFoto(int id, int fotoId)
+    {
+        var foto = await _service.DeleteFotoAsync(id, fotoId);
+        if (foto is null) return NotFound();
+        DeletePhotoFile(foto);
+        TempData["LoginMessage"] = "La foto se ha eliminado.";
+        return RedirectToAction(nameof(Edit), new { id });
+    }
+
     [Authorize(Roles = AppRoles.GestionMantenimiento)]
     public async Task<IActionResult> Gestion(int? id)
     {
@@ -200,6 +223,16 @@ public sealed class TareasMantenimientoController : Controller
 
         return PhysicalFile(physicalPath,
             string.IsNullOrWhiteSpace(foto.ContentType) ? "application/octet-stream" : foto.ContentType);
+    }
+
+    private void DeletePhotoFile(TareaMantenimientoFoto foto)
+    {
+        var photoRoot = Path.GetFullPath(Path.Combine(_environment.ContentRootPath, "App_Data", "TareasMantenimientoFotos"));
+        var relativePath = (foto.RutaArchivo ?? string.Empty).TrimStart('~', '/', '\\')
+            .Replace('/', Path.DirectorySeparatorChar);
+        var physicalPath = Path.GetFullPath(Path.Combine(_environment.ContentRootPath, relativePath));
+        if (physicalPath.StartsWith(photoRoot + Path.DirectorySeparatorChar, StringComparison.OrdinalIgnoreCase) && System.IO.File.Exists(physicalPath))
+            System.IO.File.Delete(physicalPath);
     }
 
     private void ValidatePhotos(IEnumerable<IFormFile>? files, IEnumerable<string?>? captions = null)

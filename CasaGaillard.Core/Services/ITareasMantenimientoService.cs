@@ -7,6 +7,9 @@ public interface ITareasMantenimientoService
     Task<TareasMantenimientoIndexViewModel> GetAllAsync(string? busqueda, string? estado, string? prioridad, int pagina, DateTime? fechaDesde = null, DateTime? fechaHasta = null, string? equipo = null, string? responsable = null);
     Task<TareaMantenimientoDetailsViewModel?> GetDetailsAsync(int id);
     Task<TareaMantenimientoFoto?> GetFotoAsync(int id);
+    Task<IReadOnlyList<TareaMantenimientoFoto>> GetFotosAsync(int tareaId);
+    Task<bool> UpdateFotoObservacionAsync(int tareaId, int fotoId, string? observacion);
+    Task<TareaMantenimientoFoto?> DeleteFotoAsync(int tareaId, int fotoId);
     Task<TareaMantenimientoFormViewModel?> GetFormAsync(int? id);
     Task<TareaMantenimientoFormViewModel> PrepareFormAsync(TareaMantenimientoFormViewModel model);
     Task<int> CreateAsync(TareaMantenimientoFormViewModel model, string? userName);

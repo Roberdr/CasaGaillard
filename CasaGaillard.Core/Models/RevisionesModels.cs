@@ -13,6 +13,7 @@ public class RevisionHistorialItemViewModel
     public DateTime? ValidaHasta { get; set; }
     public string? DescripcionProxima { get; set; }
     public string? Autorizado { get; set; }
+    public DateTime? FechaReservada { get; set; }
 }
 
 public sealed class RevisionCubaFilaViewModel

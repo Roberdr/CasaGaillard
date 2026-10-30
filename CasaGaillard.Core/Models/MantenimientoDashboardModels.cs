@@ -26,15 +26,19 @@ public sealed class MantenimientoDashboardViewModel
 
 public sealed class DashboardRevisionCubaViewModel
 {
+    public int RevisionId { get; set; }
     public int CubaId { get; set; }
     public string MatriculaCuba { get; set; } = "";
     public DateTime? ValidaHasta { get; set; }
     public string? DescripcionProxima { get; set; }
+    public DateTime? FechaReservada { get; set; }
 }
 
 public sealed class DashboardRevisionVehiculoViewModel
 {
+    public int RevisionId { get; set; }
     public string MatriculaVehiculo { get; set; } = "";
     public string TipoRevision { get; set; } = "";
     public DateTime? Caducidad { get; set; }
+    public DateTime? FechaReservada { get; set; }
 }

@@ -14,12 +14,14 @@ public sealed class EquiposController : Controller
     private readonly IEquiposService _service;
     public EquiposController(IEquiposService service) => _service = service;
 
-    public async Task<IActionResult> Index(int? instalacionId, bool incluirBajas = false)
+    public async Task<IActionResult> Index(int? instalacionId, int? vehiculoId, bool incluirBajas = false)
     {
         ViewData["InstalacionId"] = instalacionId;
+        ViewData["VehiculoId"] = vehiculoId;
         ViewData["IncluirBajas"] = incluirBajas;
         ViewData["Instalaciones"] = new SelectList(await _service.GetInstalacionesAsync(instalacionId), "Value", "Text", instalacionId);
-        return View(await _service.GetAllAsync(instalacionId, incluirBajas));
+        ViewData["Vehiculos"] = new SelectList(await _service.GetVehiculosAsync(vehiculoId), "Value", "Text", vehiculoId);
+        return View(await _service.GetAllAsync(instalacionId, vehiculoId, incluirBajas));
     }
 
     [HttpGet]
@@ -46,7 +48,7 @@ public sealed class EquiposController : Controller
         if (!ModelState.IsValid) return View(await _service.PrepareFormAsync(model));
         await _service.SaveAsync(model);
         TempData["LoginMessage"] = "El equipo se ha creado.";
-        return RedirectToAction(nameof(Index), new { instalacionId = model.InstalacionId });
+        return RedirectToAction(nameof(Index), new { instalacionId = model.InstalacionId, vehiculoId = model.VehiculoId });
     }
 
     [Authorize(Roles = AppRoles.GestionMantenimiento)]
@@ -64,7 +66,7 @@ public sealed class EquiposController : Controller
         if (!ModelState.IsValid) return View(await _service.PrepareFormAsync(model));
         if (!await _service.SaveAsync(model)) return NotFound();
         TempData["LoginMessage"] = "El equipo se ha actualizado.";
-        return RedirectToAction(nameof(Index), new { instalacionId = model.InstalacionId });
+        return RedirectToAction(nameof(Index), new { instalacionId = model.InstalacionId, vehiculoId = model.VehiculoId });
     }
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = AppRoles.GestionMantenimiento)]

@@ -9,5 +9,8 @@ public interface ITiposAccesorioService
     Task<IReadOnlyList<SelectListItem>> GetSubfamiliasAsync(int? selectedId);
     Task<bool> SubfamiliaExisteAsync(int id);
     Task<TipoAccesorioFilaViewModel?> FindByNameAsync(string nombre);
+    Task<TipoAccesorioFormViewModel?> GetByIdAsync(int id);
     Task<int> CreateAsync(TipoAccesorioFormViewModel model);
+    Task<bool> UpdateAsync(TipoAccesorioFormViewModel model);
+    Task<bool> NameExistsAsync(string nombre, int excludingId);
 }

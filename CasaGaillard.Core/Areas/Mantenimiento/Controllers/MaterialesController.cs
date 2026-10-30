@@ -27,8 +27,9 @@ public sealed class MaterialesController : Controller
         if (existentes.Count > 0) return Ok(existentes[0]);
 
         var creados = await _db.Database.SqlQueryRaw<MaterialCreado>(@"
-            INSERT INTO gaillard.Material (Material) VALUES (@p0);
-            SELECT CAST(SCOPE_IDENTITY() AS int) AS Id, @p0 AS Nombre", material)
+            INSERT INTO gaillard.Material (Material)
+            OUTPUT INSERTED.ID AS Id, INSERTED.Material AS Nombre
+            VALUES (@p0)", material)
             .ToListAsync(cancellationToken);
         return creados.Count == 0 ? StatusCode(500, new { mensaje = "No se pudo crear el material." }) : Ok(creados[0]);
     }

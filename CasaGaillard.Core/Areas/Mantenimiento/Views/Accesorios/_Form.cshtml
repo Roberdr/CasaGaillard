@@ -34,6 +34,91 @@
 <button type="button" class="btn btn-outline-secondary btn-sm" id="anadirDetalleAccesorio">Añadir detalle técnico</button>
 <script>
     (function () {
+        var materialRoot = document.querySelector('[data-material-rapido]');
+        if (materialRoot) {
+            var materialSelect = materialRoot.querySelector('select');
+            var materialInput = materialRoot.querySelector('[data-material-nombre]');
+            var materialButton = materialRoot.querySelector('[data-material-crear]');
+            var materialStatus = materialRoot.querySelector('[data-material-estado]');
+            if (materialButton && materialStatus) {
+                materialButton.addEventListener('click', async function () {
+                    var materialToken = materialRoot.querySelector('input[name="__RequestVerificationToken"]');
+                    if (!materialToken) {
+                        var materialForm = materialRoot.closest('form');
+                        if (materialForm) materialToken = materialForm.querySelector('input[name="__RequestVerificationToken"]');
+                    }
+                    if (!materialSelect || !materialInput || !materialToken || !materialRoot.dataset.url) {
+                        materialStatus.textContent = 'No se pudo inicializar la creación de materiales. Recarga el formulario.';
+                        return;
+                    }
+                    var nombre = materialInput.value.trim();
+                    if (!nombre) {
+                        materialStatus.textContent = 'Escribe el nombre del material.';
+                        materialInput.focus();
+                        return;
+                    }
+
+                    materialButton.disabled = true;
+                    materialStatus.textContent = 'Guardando material…';
+                    try {
+                        var body = new URLSearchParams();
+                        body.set('nombre', nombre);
+                        body.set('__RequestVerificationToken', materialToken.value);
+                        var response = await fetch(materialRoot.dataset.url, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+                            body: body
+                        });
+                        var result = await response.json();
+                        if (!response.ok) throw new Error(result.mensaje || result.message || 'No se pudo crear el material.');
+
+                        var id = result.id !== undefined ? result.id : result.Id;
+                        var nombreCreado = result.nombre || result.Nombre || nombre;
+                        if (id == null) throw new Error('El servidor no devolvió el material creado.');
+                        var option = Array.from(materialSelect.options).find(function (item) { return item.value === String(id); });
+                        if (!option) {
+                            option = new Option(nombreCreado, id);
+                            materialSelect.add(option);
+                        }
+                        materialSelect.value = String(id);
+                        materialInput.value = '';
+                        materialStatus.textContent = 'Material seleccionado.';
+                    } catch (error) {
+                        materialStatus.textContent = error.message || 'No se pudo crear el material.';
+                    } finally {
+                        materialButton.disabled = false;
+                    }
+                });
+            }
+        }
+
+        var familia = document.getElementById('FamiliaId');
+        var subfamilia = document.getElementById('SubfamiliaId');
+        if (familia && subfamilia) {
+            var requestId = 0;
+            familia.addEventListener('change', async function () {
+                var selectedFamily = familia.value;
+                var currentRequest = ++requestId;
+                subfamilia.replaceChildren(new Option('Sin subfamilia', ''));
+                subfamilia.disabled = !selectedFamily;
+                if (!selectedFamily) return;
+
+                var url = new URL('@Url.Action("Subfamilias", "Accesorios", new { area = "Mantenimiento" })', window.location.origin);
+                url.searchParams.set('familiaId', selectedFamily);
+                try {
+                    var response = await fetch(url);
+                    if (!response.ok || currentRequest !== requestId) return;
+                    var options = await response.json();
+                    if (currentRequest !== requestId) return;
+                    for (var option of options) subfamilia.add(new Option(option.text, option.value));
+                    subfamilia.disabled = false;
+                } catch {
+                    subfamilia.disabled = false;
+                }
+            });
+            subfamilia.disabled = !familia.value;
+        }
+
         var button = document.getElementById('anadirDetalleAccesorio');
         var tbody = document.querySelector('table.table-bordered tbody');
         if (!button || !tbody) return;
@@ -58,5 +143,4 @@
         });
     })();
 </script>
-<script src="~/js/material-rapido.js" asp-append-version="true"></script>
 <script src="~/js/foto-pies.js" asp-append-version="true"></script>

@@ -1,10 +1,11 @@
 @model TipoAccesorioFormViewModel
-@{ ViewData["Title"] = "Nuevo tipo de accesorio"; }
-<h1>Nuevo tipo de accesorio</h1>
-<form asp-action="Create" method="post" class="col-lg-8">
+@{ var editando = Model.Id > 0; ViewData["Title"] = editando ? "Editar tipo de accesorio" : "Nuevo tipo de accesorio"; }
+<h1>@ViewData["Title"]</h1>
+<form asp-action="@(editando ? "Edit" : "Create")" asp-route-id="@(editando ? Model.Id : null)" method="post" class="col-lg-8">
+    <input asp-for="Id" type="hidden" />
     <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
     <div class="mb-3"><label asp-for="Nombre" class="form-label"></label><input asp-for="Nombre" class="form-control" maxlength="45" /><span asp-validation-for="Nombre" class="text-danger"></span></div>
     <div class="mb-3"><label asp-for="SubfamiliaId" class="form-label"></label><select asp-for="SubfamiliaId" asp-items="Model.Subfamilias" class="form-select"><option value="">Sin subfamilia</option></select><span asp-validation-for="SubfamiliaId" class="text-danger"></span></div>
     <div class="mb-3"><label asp-for="Descripcion" class="form-label"></label><textarea asp-for="Descripcion" class="form-control" rows="3" maxlength="300"></textarea><span asp-validation-for="Descripcion" class="text-danger"></span></div>
-    <button type="submit" class="btn btn-success">Crear</button> <a asp-action="Index" class="btn btn-link">Cancelar</a>
+    <button type="submit" class="btn btn-success">@(editando ? "Guardar cambios" : "Crear")</button> <a asp-action="Index" class="btn btn-link">Cancelar</a>
 </form>

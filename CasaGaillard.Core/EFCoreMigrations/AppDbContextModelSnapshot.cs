@@ -21,6 +21,28 @@ namespace CasaGaillard.Core.EFCoreMigrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("CasaGaillard.Core.Models.PlanificadorEstado", b =>
+                {
+                    b.Property<string>("Clave")
+                        .HasMaxLength(120)
+                        .HasColumnType("nvarchar(120)");
+
+                    b.Property<DateTime>("ActualizadoUtc")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ActualizadoPor")
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
+
+                    b.Property<string>("Json")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Clave");
+
+                    b.ToTable("PlanificadorEstados", "dbo");
+                });
+
             modelBuilder.Entity("CasaGaillard.Core.Models.IntervencionViewModel", b =>
                 {
                     b.Property<int>("Id")

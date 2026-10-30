@@ -7,6 +7,7 @@ public interface IOrganizacionService
     Task<IReadOnlyList<DireccionRow>> GetDireccionesAsync();
     Task<DireccionForm?> GetDireccionAsync(int? id);
     Task PrepareDireccionAsync(DireccionForm model);
+    Task<int> GetOrCreatePoblacionAsync(string nombre);
     Task<int?> SaveDireccionAsync(DireccionForm model);
     Task<bool> DeleteDireccionAsync(int id);
     Task<IReadOnlyList<PersonaRow>> GetPersonasAsync();
@@ -25,7 +26,7 @@ public interface IOrganizacionService
     Task PrepareEntidadAsync(EntidadForm model);
     Task<int?> SaveEntidadAsync(EntidadForm model);
     Task<bool> DeleteEntidadAsync(int id);
-    Task<bool> AddEntidadTelefonoAsync(int entidadId, int personaId, string telefono);
+    Task<bool> AddEntidadTelefonoAsync(int entidadId, int? personaId, string telefono);
     Task<bool> UpdateEntidadTelefonoAsync(int entidadId, int id, int? personaId, string telefono);
     Task<bool> DeleteEntidadTelefonoAsync(int entidadId, int id);
     Task<bool> AddEntidadPersonaAsync(int entidadId, int personaId, int? cargoId, DateTime? fechaAlta);

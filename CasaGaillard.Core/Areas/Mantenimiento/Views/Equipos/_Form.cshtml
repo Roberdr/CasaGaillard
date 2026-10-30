@@ -2,7 +2,8 @@
 <input asp-for="Id" type="hidden" />
 <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 <div class="row">
-    <div class="col-md-6 mb-3"><label asp-for="InstalacionId" class="form-label"></label><select asp-for="InstalacionId" asp-items="Model.Instalaciones" class="form-select"><option value="">Selecciona instalación</option></select><span asp-validation-for="InstalacionId" class="text-danger"></span></div>
+    <div class="col-md-6 mb-3"><label asp-for="InstalacionId" class="form-label"></label><select asp-for="InstalacionId" asp-items="Model.Instalaciones" class="form-select"><option value="">Sin instalación</option></select><span asp-validation-for="InstalacionId" class="text-danger"></span></div>
+    <div class="col-md-6 mb-3"><label asp-for="VehiculoId" class="form-label"></label><select asp-for="VehiculoId" asp-items="Model.Vehiculos" class="form-select"><option value="">Sin vehículo</option></select><span asp-validation-for="VehiculoId" class="text-danger"></span></div>
     <div class="col-md-6 mb-3"><label asp-for="EquipoPadreId" class="form-label"></label><select asp-for="EquipoPadreId" asp-items="Model.EquiposPadre" class="form-select"><option value="">Equipo principal</option></select><span asp-validation-for="EquipoPadreId" class="text-danger"></span></div>
 </div>
 <div class="row">
@@ -33,9 +34,12 @@
     (() => {
         const instalacion = document.getElementById('InstalacionId');
         const equipoPadre = document.getElementById('EquipoPadreId');
+        const vehiculo = document.getElementById('VehiculoId');
         if (!instalacion || !equipoPadre) return;
 
         instalacion.addEventListener('change', async () => {
+            if (instalacion.value) vehiculo.value = '';
+            equipoPadre.disabled = false;
             const selectedInstallation = instalacion.value;
             equipoPadre.replaceChildren(new Option('Equipo principal', ''));
             if (!selectedInstallation) return;
@@ -47,5 +51,10 @@
             const options = await response.json();
             for (const option of options) equipoPadre.add(new Option(option.text, option.value));
         });
+        vehiculo?.addEventListener('change', () => {
+            if (vehiculo.value) { instalacion.value = ''; equipoPadre.value = ''; equipoPadre.disabled = true; }
+            else equipoPadre.disabled = false;
+        });
+        if (vehiculo?.value) equipoPadre.disabled = true;
     })();
 </script>

@@ -101,12 +101,35 @@ public sealed class TareasMantenimientoService : ITareasMantenimientoService
     public Task<TareaMantenimientoFoto?> GetFotoAsync(int id) => _db.TareaMantenimientoFotos
         .AsNoTracking().SingleOrDefaultAsync(foto => foto.ID == id);
 
+    public async Task<IReadOnlyList<TareaMantenimientoFoto>> GetFotosAsync(int tareaId) => await _db.TareaMantenimientoFotos
+        .AsNoTracking().Where(foto => foto.TareaMantenimientoID == tareaId)
+        .OrderByDescending(foto => foto.FechaCreacion).ThenByDescending(foto => foto.ID).ToListAsync();
+
+    public async Task<bool> UpdateFotoObservacionAsync(int tareaId, int fotoId, string? observacion)
+    {
+        var foto = await _db.TareaMantenimientoFotos.SingleOrDefaultAsync(item => item.ID == fotoId && item.TareaMantenimientoID == tareaId);
+        if (foto is null) return false;
+        foto.Observacion = string.IsNullOrWhiteSpace(observacion) ? null : observacion.Trim();
+        await _db.SaveChangesAsync();
+        return true;
+    }
+
+    public async Task<TareaMantenimientoFoto?> DeleteFotoAsync(int tareaId, int fotoId)
+    {
+        var foto = await _db.TareaMantenimientoFotos.SingleOrDefaultAsync(item => item.ID == fotoId && item.TareaMantenimientoID == tareaId);
+        if (foto is null) return null;
+        _db.TareaMantenimientoFotos.Remove(foto);
+        await _db.SaveChangesAsync();
+        return foto;
+    }
+
     public async Task<TareaMantenimientoFormViewModel?> GetFormAsync(int? id)
     {
         if (!id.HasValue)
             return await PopulateLookupsAsync(new TareaMantenimientoFormViewModel { FechaDeteccion = DateTime.Now, Prioridad = "Media", Estado = "Nueva" });
         var tarea = await _db.TareasMantenimiento.AsNoTracking().SingleOrDefaultAsync(t => t.ID == id.Value);
-        return tarea is null ? null : await PopulateLookupsAsync(new TareaMantenimientoFormViewModel
+        if (tarea is null) return null;
+        var model = await PopulateLookupsAsync(new TareaMantenimientoFormViewModel
         {
             ID = tarea.ID,
             Codigo = tarea.Codigo,
@@ -134,6 +157,8 @@ public sealed class TareasMantenimientoService : ITareasMantenimientoService
             CreadoPor = tarea.CreadoPor,
             ActualizadoPor = tarea.ActualizadoPor
         });
+        model.FotosExistentes = await GetFotosAsync(tarea.ID);
+        return model;
     }
 
     public async Task<int> CreateAsync(TareaMantenimientoFormViewModel model, string? userName)
@@ -177,7 +202,11 @@ public sealed class TareasMantenimientoService : ITareasMantenimientoService
         return tarea.ID;
     }
 
-    public Task<TareaMantenimientoFormViewModel> PrepareFormAsync(TareaMantenimientoFormViewModel model) => PopulateLookupsAsync(model);
+    public async Task<TareaMantenimientoFormViewModel> PrepareFormAsync(TareaMantenimientoFormViewModel model)
+    {
+        if (model.ID > 0) model.FotosExistentes = await GetFotosAsync(model.ID);
+        return await PopulateLookupsAsync(model);
+    }
 
     public async Task<bool> UpdateAsync(TareaMantenimientoFormViewModel model, string? userName)
     {
@@ -293,7 +322,7 @@ public sealed class TareasMantenimientoService : ITareasMantenimientoService
         model.Personas = await GetOptionsAsync("SELECT ID AS Id, LTRIM(RTRIM(CONCAT(COALESCE(NombrePersona,N''), N' ', COALESCE(Apellido1,N''), N' ', COALESCE(Apellido2,N'')))) AS Nombre FROM gaillard.Persona ORDER BY Nombre", model.DetectadoPorPersonaID);
         model.Entidades = await GetOptionsAsync("SELECT ID AS Id, NombreEntidad AS Nombre FROM gaillard.Entidad ORDER BY NombreEntidad", model.EmpresaExteriorEntidadID);
         model.Instalaciones = await GetOptionsAsync("SELECT Id, CONCAT(Codigo, N' - ', Nombre) AS Nombre FROM gaillard.Instalacion WHERE Estado <> N'FUERA_SERVICIO' ORDER BY Nombre", model.InstalacionId);
-        model.Equipos = await GetOptionsAsync("SELECT e.Id, CONCAT(i.Nombre, N' - ', e.Nombre) AS Nombre FROM gaillard.Equipo e JOIN gaillard.Instalacion i ON i.Id=e.InstalacionId WHERE e.Activo=1 AND i.Estado <> N'FUERA_SERVICIO' ORDER BY Nombre", model.EquipoId);
+        model.Equipos = await GetOptionsAsync("SELECT e.Id, CONCAT(COALESCE(i.Nombre,CONCAT(COALESCE(v.MatriculaVehiculo,N'Vehículo'),N' (vehículo)')), N' - ', e.Nombre) AS Nombre FROM gaillard.Equipo e LEFT JOIN gaillard.Instalacion i ON i.Id=e.InstalacionId LEFT JOIN gaillard.Vehiculo v ON v.ID=e.VehiculoId WHERE e.Activo=1 AND (i.Id IS NULL OR i.Estado <> N'FUERA_SERVICIO') ORDER BY Nombre", model.EquipoId);
         model.Cubas = await GetOptionsAsync("SELECT ID AS Id, COALESCE(NULLIF(MatriculaCuba,N''),Codigo) AS Nombre FROM gaillard.Cuba WHERE ISNULL(Baja,0)=0 ORDER BY Nombre", model.CubaId);
         model.Grupos = await GetOptionsAsync("SELECT g.ID AS Id, CONCAT(COALESCE(NULLIF(c.MatriculaCuba,N''),c.Codigo), N' / ', COALESCE(tg.NombreGrupo,N'Grupo')) AS Nombre FROM gaillard.Grupo g JOIN gaillard.Cuba c ON c.ID=g.CubaID LEFT JOIN gaillard.TipoGrupo tg ON tg.ID=g.TipoGrupoID WHERE ISNULL(c.Baja,0)=0 ORDER BY Nombre", model.GrupoId);
         model.Vehiculos = await GetOptionsAsync("SELECT ID AS Id, CONCAT(MatriculaVehiculo, N' - ', Marca, N' ', Modelo) AS Nombre FROM gaillard.Vehiculo WHERE ISNULL(Baja,0)=0 ORDER BY MatriculaVehiculo", model.VehiculoId);

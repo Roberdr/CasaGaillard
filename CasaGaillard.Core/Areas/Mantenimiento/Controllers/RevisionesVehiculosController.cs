@@ -19,6 +19,14 @@ public sealed class RevisionesVehiculosController : Controller
         return View(await _service.GetAllAsync(string.IsNullOrWhiteSpace(matriculaVehiculo) ? null : matriculaVehiculo.Trim(), incluirBajas));
     }
 
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = AppRoles.GestionMantenimiento)]
+    public async Task<IActionResult> ActualizarReserva(int id, DateTime? fechaReservada, string? matriculaVehiculo, bool incluirBajas = false, bool volverPanel = false)
+    {
+        if (!await _service.UpdateReservaAsync(id, fechaReservada)) return NotFound();
+        TempData["Success"] = "La reserva de la revisión se ha actualizado.";
+        return volverPanel ? RedirectToAction("Index", "Home") : RedirectToAction(nameof(Index), new { matriculaVehiculo, incluirBajas });
+    }
+
     [Authorize(Roles = AppRoles.GestionMantenimiento)]
     public async Task<IActionResult> Proximas() => View("ProximasRevisiones", await _service.GetProximasAsync());
 

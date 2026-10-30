@@ -14,7 +14,7 @@ public sealed class RevisionesService : IRevisionesService
     {
         var selectedRegistration=string.IsNullOrWhiteSpace(matriculaCuba)?null:matriculaCuba.Trim();
         var rows=await _db.Database.SqlQuery<RevisionIndexRow>($@"SELECT c.ID CubaId,c.MatriculaCuba,CAST(ISNULL(c.Baja,0) AS bit) CubaBaja,
-            r.ID RevisionId,r.FechaRevision,r.Descripcion,r.ValidaHasta,r.DescripcionProxima,r.Autorizado
+            r.ID RevisionId,r.FechaRevision,r.Descripcion,r.ValidaHasta,r.DescripcionProxima,r.Autorizado,r.FechaReservada
             FROM gaillard.Cuba c LEFT JOIN gaillard.Revision r ON r.CubaID=c.ID
             WHERE ({cubaId} IS NULL OR c.ID={cubaId}) AND ({selectedRegistration} IS NULL OR c.MatriculaCuba={selectedRegistration})
               AND ({incluirBajas}=1 OR COALESCE(c.Baja,0)=0)
@@ -22,7 +22,8 @@ public sealed class RevisionesService : IRevisionesService
         var grupos=rows.GroupBy(x=>new{x.CubaId,x.MatriculaCuba,x.CubaBaja}).Select(g=>
         {
             var history=g.Where(x=>x.RevisionId.HasValue).Select(x=>new RevisionHistorialItemViewModel{Id=x.RevisionId!.Value,CubaId=g.Key.CubaId,MatriculaCuba=g.Key.MatriculaCuba,
-                FechaRevision=x.FechaRevision!.Value,Descripcion=x.Descripcion,ValidaHasta=x.ValidaHasta,DescripcionProxima=x.DescripcionProxima,Autorizado=x.Autorizado}).ToList();
+                FechaRevision=x.FechaRevision!.Value,Descripcion=x.Descripcion,ValidaHasta=x.ValidaHasta,DescripcionProxima=x.DescripcionProxima,Autorizado=x.Autorizado,
+                FechaReservada=x.FechaReservada}).ToList();
             return new RevisionCubaFilaViewModel{CubaId=g.Key.CubaId,MatriculaCuba=g.Key.MatriculaCuba,CubaBaja=g.Key.CubaBaja,UltimaRevision=history.FirstOrDefault(),Historial=history};
         }).OrderBy(x=>x.MatriculaCuba).ToList();
         return new RevisionesIndexViewModel{CubaId=cubaId,MatriculaCuba=selectedRegistration,IncluirBajas=incluirBajas,Revisiones=grupos,
@@ -90,6 +91,10 @@ public sealed class RevisionesService : IRevisionesService
     }
 
     public async Task<bool> DeleteAsync(int id)=>await _db.Database.ExecuteSqlInterpolatedAsync($"DELETE FROM gaillard.Revision WHERE ID={id}")>0;
+    public async Task<bool> UpdateReservaAsync(int id,DateTime? fechaReservada)
+    {
+        return await _db.Database.ExecuteSqlInterpolatedAsync($"UPDATE gaillard.Revision SET DiaReservado={fechaReservada.HasValue},FechaReservada={fechaReservada?.Date} WHERE ID={id}")>0;
+    }
     private async Task<IReadOnlyList<SelectListItem>> GetCubaOptionsAsync(int? selected)
     {
         var rows=await _db.Database.SqlQuery<CubaOption>($@"SELECT ID,MatriculaCuba Texto FROM gaillard.Cuba WHERE COALESCE(Baja,0)=0 OR ID={selected} ORDER BY MatriculaCuba").ToListAsync();
@@ -104,7 +109,7 @@ public sealed class RevisionesService : IRevisionesService
         return rows.SingleOrDefault()?.Texto;
     }
     private static string? Normalize(string? value)=>string.IsNullOrWhiteSpace(value)?null:value.Trim();
-    private sealed class RevisionIndexRow { public int CubaId{get;set;} public string MatriculaCuba{get;set;}=string.Empty;public bool CubaBaja{get;set;}public int? RevisionId{get;set;}public DateTime? FechaRevision{get;set;}public string? Descripcion{get;set;}public DateTime? ValidaHasta{get;set;}public string? DescripcionProxima{get;set;}public string? Autorizado{get;set;} }
+    private sealed class RevisionIndexRow { public int CubaId{get;set;} public string MatriculaCuba{get;set;}=string.Empty;public bool CubaBaja{get;set;}public int? RevisionId{get;set;}public DateTime? FechaRevision{get;set;}public string? Descripcion{get;set;}public DateTime? ValidaHasta{get;set;}public string? DescripcionProxima{get;set;}public string? Autorizado{get;set;}public DateTime? FechaReservada{get;set;} }
     private sealed class RevisionFormRow { public int Id{get;set;}public int CubaId{get;set;}public DateTime FechaRevision{get;set;}public string? Descripcion{get;set;}public DateTime? ValidaHasta{get;set;}public string? DescripcionProxima{get;set;}public string? Autorizado{get;set;}public int? AutorizadoPersonasEntidadId{get;set;} }
     private sealed class CubaOption { public int Id{get;set;}public string Texto{get;set;}=string.Empty; }
     private sealed class PersonOption { public int Id{get;set;}public string Texto{get;set;}=string.Empty; }

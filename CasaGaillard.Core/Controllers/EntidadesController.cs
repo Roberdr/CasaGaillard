@@ -65,15 +65,15 @@ public sealed class EntidadesController : Controller
     }
 
     [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = AppRoles.GestionMantenimiento)]
-    public async Task<IActionResult> AgregarTelefono(int entidadId, int personaId, string telefono)
+    public async Task<IActionResult> AgregarTelefono(int entidadId, int? personaId, string telefono)
     {
-        if (!await _service.AddEntidadTelefonoAsync(entidadId, personaId, telefono ?? "")) TempData["OrganizacionError"] = "Selecciona una persona válida e indica un teléfono de hasta 10 caracteres.";
+        if (!await _service.AddEntidadTelefonoAsync(entidadId, personaId, telefono ?? "")) TempData["OrganizacionError"] = "Indica un teléfono de hasta 10 caracteres y, si asignas una persona, selecciona una persona válida.";
         return RedirectToAction(nameof(Details), new { id = entidadId });
     }
     [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = AppRoles.GestionMantenimiento)]
     public async Task<IActionResult> ActualizarTelefono(int entidadId, int id, int? personaId, string telefono)
     {
-        if (!await _service.UpdateEntidadTelefonoAsync(entidadId, id, personaId, telefono ?? "")) TempData["OrganizacionError"] = "Selecciona una persona válida para el teléfono de trabajo.";
+        if (!await _service.UpdateEntidadTelefonoAsync(entidadId, id, personaId, telefono ?? "")) TempData["OrganizacionError"] = "Indica un teléfono de hasta 10 caracteres y, si asignas una persona, selecciona una persona válida.";
         return RedirectToAction(nameof(Details), new { id = entidadId });
     }
     [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = AppRoles.GestionMantenimiento)]

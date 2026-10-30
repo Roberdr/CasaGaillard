@@ -14,6 +14,14 @@ public sealed class RevisionesController : Controller
 
     public async Task<IActionResult> Index(int? cubaId,string? matriculaCuba,bool incluirBajas=false)
         =>View(await _service.GetIndexAsync(cubaId,matriculaCuba,incluirBajas));
+
+    [HttpPost,ValidateAntiForgeryToken,Authorize(Roles=AppRoles.GestionMantenimiento)]
+    public async Task<IActionResult> ActualizarReserva(int id,DateTime? fechaReservada,int? cubaId,string? matriculaCuba,bool incluirBajas=false,bool volverPanel=false)
+    {
+        if(!await _service.UpdateReservaAsync(id,fechaReservada)) return NotFound();
+        TempData["LoginMessage"]="La reserva de la revisión se ha actualizado.";
+        return volverPanel ? RedirectToAction("Index", "Home") : RedirectToAction(nameof(Index),new{cubaId,matriculaCuba,incluirBajas});
+    }
     public async Task<IActionResult> Details(int? id){if(!id.HasValue)return BadRequest();var model=await _service.GetDetailsAsync(id.Value);return model is null?NotFound():View(model);}
 
     [Authorize(Roles=AppRoles.GestionMantenimiento)]

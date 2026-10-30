@@ -12,20 +12,21 @@ public sealed class MantenimientoDashboardService : IMantenimientoDashboardServi
     public async Task<MantenimientoDashboardViewModel> GetAsync()
     {
         var cubas = await _db.Database.SqlQueryRaw<DashboardRevisionCubaViewModel>(@"WITH RevisionesOrdenadas AS
-            (SELECT c.ID CubaId,c.MatriculaCuba,r.ValidaHasta,r.DescripcionProxima,
+            (SELECT r.ID RevisionId,c.ID CubaId,c.MatriculaCuba,r.ValidaHasta,r.DescripcionProxima,
+            r.FechaReservada,
             ROW_NUMBER() OVER(PARTITION BY c.ID ORDER BY r.ValidaHasta DESC,r.ID DESC) AS Orden
             FROM gaillard.Cuba c JOIN gaillard.Revision r ON r.CubaID=c.ID
             WHERE COALESCE(c.Baja,0)=0 AND r.ValidaHasta IS NOT NULL)
-            SELECT CubaId,MatriculaCuba,ValidaHasta,DescripcionProxima FROM RevisionesOrdenadas
+            SELECT RevisionId,CubaId,MatriculaCuba,ValidaHasta,DescripcionProxima,FechaReservada FROM RevisionesOrdenadas
             WHERE Orden=1 AND ValidaHasta>DATEADD(month,-2,GETDATE()) AND ValidaHasta<DATEADD(month,2,GETDATE())
             ORDER BY ValidaHasta").ToListAsync();
         var vehiculos = await _db.Database.SqlQueryRaw<DashboardRevisionVehiculoViewModel>(@"WITH Ultimas AS
-            (SELECT r.VehiculoID,r.TipoRevisionID,MAX(r.Caducidad) Caducidad FROM gaillard.RevisionVehiculo r
-            JOIN gaillard.Vehiculo v ON v.ID=r.VehiculoID WHERE COALESCE(v.Baja,0)=0
-            GROUP BY r.VehiculoID,r.TipoRevisionID)
-            SELECT COALESCE(v.MatriculaVehiculo,'') MatriculaVehiculo,COALESCE(t.Revision,'') TipoRevision,u.Caducidad
+            (SELECT r.ID RevisionId,r.VehiculoID,r.TipoRevisionID,r.Caducidad,r.FechaReservada,
+            ROW_NUMBER() OVER(PARTITION BY r.VehiculoID,r.TipoRevisionID ORDER BY r.Caducidad DESC,r.FechaRevision DESC,r.ID DESC) AS Orden
+            FROM gaillard.RevisionVehiculo r JOIN gaillard.Vehiculo v ON v.ID=r.VehiculoID WHERE COALESCE(v.Baja,0)=0)
+            SELECT u.RevisionId,COALESCE(v.MatriculaVehiculo,'') MatriculaVehiculo,COALESCE(t.Revision,'') TipoRevision,u.Caducidad,u.FechaReservada
             FROM Ultimas u JOIN gaillard.Vehiculo v ON v.ID=u.VehiculoID JOIN gaillard.TipoRevision t ON t.ID=u.TipoRevisionID
-            WHERE u.Caducidad IS NOT NULL AND u.Caducidad>=DATEADD(month,-2,CONVERT(date,GETDATE()))
+            WHERE u.Orden=1 AND u.Caducidad IS NOT NULL AND u.Caducidad>=DATEADD(month,-2,CONVERT(date,GETDATE()))
               AND u.Caducidad<=DATEADD(month,2,CONVERT(date,GETDATE())) ORDER BY u.Caducidad").ToListAsync();
         var tareas = await _db.Database.SqlQueryRaw<TareaMantenimientoResumenViewModel>(@"SELECT TOP(8) ID,Codigo,Titulo,Ubicacion,Equipo,Prioridad,Estado,AsignadaA,FechaCreacion,FechaProgramada
             FROM dbo.TareasMantenimiento WHERE Estado IS NULL OR Estado<>N'Cerrada'

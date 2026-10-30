@@ -51,6 +51,11 @@
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle px-3" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Planificación</a>
                             <ul class="dropdown-menu">
+                                @if (User.IsInRole("Administrador") || User.IsInRole("Mantenimiento"))
+                                {
+                                    <li><a class="dropdown-item" asp-area="Repartos" asp-controller="Planificador" asp-action="Index">Planificador de reparto</a></li>
+                                    <li><hr class="dropdown-divider" /></li>
+                                }
                                 <li><a class="dropdown-item" asp-area="Mantenimiento" asp-controller="PlanesMantenimiento" asp-action="Index">Planes de mantenimiento</a></li>
                                 <li><a class="dropdown-item" asp-area="Mantenimiento" asp-controller="CostesMantenimiento" asp-action="Index">Historial y costes</a></li>
                             </ul>

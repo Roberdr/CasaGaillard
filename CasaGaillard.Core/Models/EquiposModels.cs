@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace CasaGaillard.Core.Models;
@@ -6,8 +7,9 @@ namespace CasaGaillard.Core.Models;
 public sealed class EquipoFilaViewModel
 {
     public int Id { get; set; }
-    public int InstalacionId { get; set; }
+    public int? InstalacionId { get; set; }
     public string InstalacionNombre { get; set; } = string.Empty;
+    public string VehiculoNombre { get; set; } = string.Empty;
     public int Nivel { get; set; }
     public string TipoElemento { get; set; } = string.Empty;
     public string? PadreNombre { get; set; }
@@ -23,6 +25,7 @@ public sealed class EquipoDetailsViewModel
 {
     public EquipoFormViewModel Equipo { get; set; } = new();
     public string InstalacionNombre { get; set; } = string.Empty;
+    public string VehiculoNombre { get; set; } = string.Empty;
     public IReadOnlyList<EquipoTareaViewModel> Tareas { get; set; } = [];
     public IReadOnlyList<EquipoPlanViewModel> Planes { get; set; } = [];
     public IReadOnlyList<EquipoIntervencionViewModel> Intervenciones { get; set; } = [];
@@ -54,8 +57,10 @@ public sealed class EquipoIntervencionViewModel
 public sealed class EquipoFormViewModel
 {
     public int Id { get; set; }
-    [Required, Display(Name = "Instalación")]
-    public int InstalacionId { get; set; }
+    [Display(Name = "Instalación")]
+    public int? InstalacionId { get; set; }
+    [Display(Name = "Vehículo asociado")]
+    public int? VehiculoId { get; set; }
     [Display(Name = "Equipo padre")]
     public int? EquipoPadreId { get; set; }
     [Required, StringLength(30), Display(Name = "Tipo de elemento")]
@@ -77,7 +82,8 @@ public sealed class EquipoFormViewModel
     [Display(Name = "Fecha de baja"), DataType(DataType.Date)] public DateTime? FechaBaja { get; set; }
     [Display(Name = "Activo")] public bool Activo { get; set; } = true;
     [StringLength(4000), Display(Name = "Observaciones")] public string? Observaciones { get; set; }
-    public IReadOnlyList<SelectListItem> Instalaciones { get; set; } = [];
-    public IReadOnlyList<SelectListItem> EquiposPadre { get; set; } = [];
-    public IReadOnlyList<SelectListItem> TiposElemento { get; set; } = [];
+    [NotMapped] public IReadOnlyList<SelectListItem> Instalaciones { get; set; } = [];
+    [NotMapped] public IReadOnlyList<SelectListItem> Vehiculos { get; set; } = [];
+    [NotMapped] public IReadOnlyList<SelectListItem> EquiposPadre { get; set; } = [];
+    [NotMapped] public IReadOnlyList<SelectListItem> TiposElemento { get; set; } = [];
 }

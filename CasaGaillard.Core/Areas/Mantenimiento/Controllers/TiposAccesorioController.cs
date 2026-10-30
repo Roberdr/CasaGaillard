@@ -34,6 +34,27 @@ public sealed class TiposAccesorioController : Controller
         return RedirectToAction(nameof(Index));
     }
 
+    [Authorize(Roles = AppRoles.GestionMantenimiento)]
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (!id.HasValue) return BadRequest();
+        var model = await _service.GetByIdAsync(id.Value);
+        return model is null ? NotFound() : View("Create", await PrepareAsync(model));
+    }
+
+    [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = AppRoles.GestionMantenimiento)]
+    public async Task<IActionResult> Edit(int id, TipoAccesorioFormViewModel model)
+    {
+        model.Id = id;
+        await ValidateAsync(model);
+        if (!string.IsNullOrWhiteSpace(model.Nombre) && await _service.NameExistsAsync(model.Nombre, model.Id))
+            ModelState.AddModelError(nameof(model.Nombre), "Ya existe un tipo de accesorio con ese nombre.");
+        if (!ModelState.IsValid) return View("Create", await PrepareAsync(model));
+        if (!await _service.UpdateAsync(model)) return NotFound();
+        TempData["LoginMessage"] = "El tipo de accesorio se ha actualizado.";
+        return RedirectToAction(nameof(Index));
+    }
+
     [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = AppRoles.GestionMantenimiento)]
     public async Task<IActionResult> CrearRapido(TipoAccesorioQuickCreateRequest request)
     {

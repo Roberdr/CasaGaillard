@@ -168,6 +168,7 @@ public sealed class TareaMantenimientoFormViewModel
     [Display(Name = "Fotos de la avería")]
     public List<IFormFile>? FotosAdjuntas { get; set; }
     public List<string?> ObservacionesFotos { get; set; } = [];
+    public IReadOnlyList<TareaMantenimientoFoto> FotosExistentes { get; set; } = [];
 }
 
 public sealed class TareaMantenimientoGestionViewModel

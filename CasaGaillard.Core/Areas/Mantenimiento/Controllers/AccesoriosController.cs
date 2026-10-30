@@ -29,6 +29,13 @@ public sealed class AccesoriosController : Controller
     [Authorize(Roles = AppRoles.GestionMantenimiento)]
     public async Task<IActionResult> Create(int? intervencionId) => View(await _service.GetFormAsync(null, intervencionId));
 
+    [HttpGet]
+    public async Task<IActionResult> Subfamilias(int familiaId)
+    {
+        var options = await _service.GetSubfamiliasAsync(familiaId, null);
+        return Json(options.Select(option => new { value = option.Value, text = option.Text }));
+    }
+
     [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = AppRoles.GestionMantenimiento)]
     [RequestSizeLimit(MaxPhotosRequestBytes)]
     public async Task<IActionResult> Create(AccesorioFormViewModel model, CancellationToken cancellationToken)

@@ -14,7 +14,7 @@ public sealed class RevisionesVehiculosService : IRevisionesVehiculosService
     {
         var result = await _db.Database.SqlQueryRaw<RevisionVehiculoFilaViewModel>(@"SELECT r.ID Id, r.VehiculoID VehiculoId,
             COALESCE(v.MatriculaVehiculo,'') Matricula, r.TipoRevisionID TipoRevisionId, COALESCE(t.Revision,'') TipoRevision,
-            r.FechaRevision, r.Caducidad, r.Detalles, r.Ejecutor FROM gaillard.RevisionVehiculo r
+            r.FechaRevision, r.Caducidad, r.Detalles, r.Ejecutor,r.FechaReservada FROM gaillard.RevisionVehiculo r
             LEFT JOIN gaillard.Vehiculo v ON v.ID=r.VehiculoID LEFT JOIN gaillard.TipoRevision t ON t.ID=r.TipoRevisionID
             WHERE (@p0 IS NULL OR v.MatriculaVehiculo=@p0) AND (@p1=1 OR v.Baja IS NULL OR v.Baja=0)
             ORDER BY v.MatriculaVehiculo,t.Revision,r.FechaRevision DESC", (object?)matricula ?? DBNull.Value, incluirBajas ? 1 : 0).ToListAsync();
@@ -23,7 +23,7 @@ public sealed class RevisionesVehiculosService : IRevisionesVehiculosService
 
     public async Task<IReadOnlyList<RevisionVehiculoFilaViewModel>> GetProximasAsync() =>
         await _db.Database.SqlQueryRaw<RevisionVehiculoFilaViewModel>(@"SELECT r.ID Id,r.VehiculoID VehiculoId,COALESCE(v.MatriculaVehiculo,'') Matricula,
-            r.TipoRevisionID TipoRevisionId,COALESCE(t.Revision,'') TipoRevision,r.FechaRevision,r.Caducidad,r.Detalles,r.Ejecutor
+            r.TipoRevisionID TipoRevisionId,COALESCE(t.Revision,'') TipoRevision,r.FechaRevision,r.Caducidad,r.Detalles,r.Ejecutor,r.FechaReservada
             FROM gaillard.RevisionVehiculo r LEFT JOIN gaillard.Vehiculo v ON v.ID=r.VehiculoID
             LEFT JOIN gaillard.TipoRevision t ON t.ID=r.TipoRevisionID WHERE r.Caducidad IS NOT NULL ORDER BY r.Caducidad").ToListAsync();
 
@@ -73,6 +73,10 @@ public sealed class RevisionesVehiculosService : IRevisionesVehiculosService
     }
 
     public async Task<bool> DeleteAsync(int id) => await _db.Database.ExecuteSqlInterpolatedAsync($"DELETE FROM gaillard.RevisionVehiculo WHERE ID={id}") > 0;
+    public async Task<bool> UpdateReservaAsync(int id, DateTime? fechaReservada)
+    {
+        return await _db.Database.ExecuteSqlInterpolatedAsync($"UPDATE gaillard.RevisionVehiculo SET DiaReservado={fechaReservada.HasValue},FechaReservada={fechaReservada?.Date} WHERE ID={id}") > 0;
+    }
     private sealed class OptionRow { public int Id { get; set; } public string? Texto { get; set; } }
     private sealed class ScalarText { public string? Value { get; set; } }
     private sealed class FormRow { public int Id { get; set; } public int? VehiculoId { get; set; } public int? TipoRevisionId { get; set; }

@@ -30,7 +30,12 @@ public sealed class DireccionesController : Controller
     [HttpPost, ValidateAntiForgeryToken, Authorize(Roles = AppRoles.GestionMantenimiento)]
     public async Task<IActionResult> Create(DireccionForm model)
     {
+        var nuevaPoblacion = model.NuevaPoblacion?.Trim();
+        if (!string.IsNullOrWhiteSpace(nuevaPoblacion))
+            ModelState.Remove(nameof(model.PoblacionId));
         if (!ModelState.IsValid) { await _service.PrepareDireccionAsync(model); return View(model); }
+        if (!string.IsNullOrWhiteSpace(nuevaPoblacion))
+            model.PoblacionId = await _service.GetOrCreatePoblacionAsync(nuevaPoblacion);
         var id = await _service.SaveDireccionAsync(model);
         if (model.ParaEntidad) return RedirectToAction("Create", "Entidades", new { direccionId = id });
         if (model.PersonaId.HasValue) return RedirectToAction("Edit", "Personas", new { id = model.PersonaId, direccionId = id });

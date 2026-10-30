@@ -11,4 +11,5 @@ public interface IRevisionesService
     Task<IReadOnlyDictionary<string, string>> ValidateAsync(RevisionFormViewModel model, bool creating);
     Task<bool> SaveAsync(RevisionFormViewModel model);
     Task<bool> DeleteAsync(int id);
+    Task<bool> UpdateReservaAsync(int id, DateTime? fechaReservada);
 }

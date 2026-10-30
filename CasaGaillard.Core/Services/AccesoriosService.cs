@@ -107,13 +107,21 @@ public sealed class AccesoriosService : IAccesoriosService
                 model.Id = (await _db.Database.SqlQueryRaw<int>(@"INSERT INTO gaillard.Accesorio
                     (TipoAccesorioID,MaterialID,Nombre,Descripcion,FamiliaId,SubfamiliaId,UbicacionId,FechaAlta,Activo)
                     OUTPUT INSERTED.ID AS Value VALUES (@p0,@p1,@p2,@p3,@p4,@p5,@p6,@p7,@p8)",
-                    [model.TipoAccesorioId!.Value, model.MaterialId!.Value, Db(model.Nombre), Db(model.Descripcion), Db(model.FamiliaId), Db(model.SubfamiliaId), Db(model.UbicacionId), Db(model.FechaAlta), model.Activo]).ToListAsync(cancellationToken)).Single();
+                    [SqlValue("@p0", model.TipoAccesorioId!.Value, SqlDbType.Int), SqlValue("@p1", model.MaterialId!.Value, SqlDbType.Int),
+                     SqlValue("@p2", model.Nombre, SqlDbType.NVarChar, 150), SqlValue("@p3", model.Descripcion, SqlDbType.NVarChar, 500),
+                     SqlValue("@p4", model.FamiliaId, SqlDbType.Int), SqlValue("@p5", model.SubfamiliaId, SqlDbType.Int),
+                     SqlValue("@p6", model.UbicacionId, SqlDbType.Int), SqlValue("@p7", model.FechaAlta, SqlDbType.DateTime),
+                     SqlValue("@p8", model.Activo, SqlDbType.Bit)]).ToListAsync(cancellationToken)).Single();
             }
             else
             {
                 var changed = await _db.Database.ExecuteSqlRawAsync(@"UPDATE gaillard.Accesorio SET TipoAccesorioID=@p0,MaterialID=@p1,Nombre=@p2,Descripcion=@p3,
                     FamiliaId=@p4,SubfamiliaId=@p5,UbicacionId=@p6,FechaAlta=@p7,Activo=@p8 WHERE ID=@p9",
-                    [model.TipoAccesorioId!.Value, model.MaterialId!.Value, Db(model.Nombre), Db(model.Descripcion), Db(model.FamiliaId), Db(model.SubfamiliaId), Db(model.UbicacionId), Db(model.FechaAlta), model.Activo, model.Id], cancellationToken);
+                    [SqlValue("@p0", model.TipoAccesorioId!.Value, SqlDbType.Int), SqlValue("@p1", model.MaterialId!.Value, SqlDbType.Int),
+                     SqlValue("@p2", model.Nombre, SqlDbType.NVarChar, 150), SqlValue("@p3", model.Descripcion, SqlDbType.NVarChar, 500),
+                     SqlValue("@p4", model.FamiliaId, SqlDbType.Int), SqlValue("@p5", model.SubfamiliaId, SqlDbType.Int),
+                     SqlValue("@p6", model.UbicacionId, SqlDbType.Int), SqlValue("@p7", model.FechaAlta, SqlDbType.DateTime),
+                     SqlValue("@p8", model.Activo, SqlDbType.Bit), SqlValue("@p9", model.Id, SqlDbType.Int)], cancellationToken);
                 if (changed == 0)
                 {
                     await tx.RollbackAsync(cancellationToken);
@@ -125,7 +133,10 @@ public sealed class AccesoriosService : IAccesoriosService
             await SaveDetailsAsync(model.Id, model.Detalles, cancellationToken);
             foreach (var file in preparedFiles)
                 await _db.Database.ExecuteSqlRawAsync(@"INSERT INTO dbo.AccesorioFotos (AccesorioID,RutaArchivo,NombreOriginal,ContentType,FechaCreacion,Observacion)
-                    VALUES (@p0,@p1,@p2,@p3,@p4,@p5)", [model.Id, file.StoredPath, file.Name, file.ContentType, DateTime.Now, ObservationParameter(file.Observacion)], cancellationToken);
+                    VALUES (@p0,@p1,@p2,@p3,@p4,@p5)", [SqlValue("@p0", model.Id, SqlDbType.Int),
+                    SqlValue("@p1", file.StoredPath, SqlDbType.NVarChar), SqlValue("@p2", file.Name, SqlDbType.NVarChar),
+                    SqlValue("@p3", file.ContentType, SqlDbType.NVarChar), SqlValue("@p4", DateTime.Now, SqlDbType.DateTime),
+                    SqlValue("@p5", file.Observacion, SqlDbType.NVarChar, 500)], cancellationToken);
             await tx.CommitAsync(cancellationToken);
             return model.Id;
         }
@@ -168,11 +179,17 @@ public sealed class AccesoriosService : IAccesoriosService
                     await _db.Database.ExecuteSqlRawAsync("DELETE FROM gaillard.DetalleAccesorio WHERE ID=@p0 AND AccesorioID=@p1", [detail.Id, accesorioId], cancellationToken);
                 else if (!empty)
                     await _db.Database.ExecuteSqlRawAsync(@"UPDATE gaillard.DetalleAccesorio SET CaracteristicaAccesorioID=@p0,Cantidad=@p1,Medida=@p2,UnidadID=@p3,Tipo=@p4 WHERE ID=@p5 AND AccesorioID=@p6",
-                        [Db(detail.CaracteristicaId), Db(detail.Cantidad), Db(detail.Medida), Db(detail.UnidadId), Db(detail.Tipo), detail.Id, accesorioId], cancellationToken);
+                        [SqlValue("@p0", detail.CaracteristicaId, SqlDbType.Int), SqlValue("@p1", detail.Cantidad, SqlDbType.Int),
+                         SqlValue("@p2", detail.Medida, SqlDbType.Decimal), SqlValue("@p3", detail.UnidadId, SqlDbType.Int),
+                         SqlValue("@p4", detail.Tipo, SqlDbType.NVarChar, 100), SqlValue("@p5", detail.Id, SqlDbType.Int),
+                         SqlValue("@p6", accesorioId, SqlDbType.Int)], cancellationToken);
             }
             else if (!empty)
                 await _db.Database.ExecuteSqlRawAsync(@"INSERT INTO gaillard.DetalleAccesorio (AccesorioID,CaracteristicaAccesorioID,Cantidad,Medida,UnidadID,Tipo)
-                    VALUES (@p0,@p1,@p2,@p3,@p4,@p5)", [accesorioId, Db(detail.CaracteristicaId), Db(detail.Cantidad), Db(detail.Medida), Db(detail.UnidadId), Db(detail.Tipo)], cancellationToken);
+                    VALUES (@p0,@p1,@p2,@p3,@p4,@p5)", [SqlValue("@p0", accesorioId, SqlDbType.Int),
+                    SqlValue("@p1", detail.CaracteristicaId, SqlDbType.Int), SqlValue("@p2", detail.Cantidad, SqlDbType.Int),
+                    SqlValue("@p3", detail.Medida, SqlDbType.Decimal), SqlValue("@p4", detail.UnidadId, SqlDbType.Int),
+                    SqlValue("@p5", detail.Tipo, SqlDbType.NVarChar, 100)], cancellationToken);
         }
     }
 
@@ -202,10 +219,18 @@ public sealed class AccesoriosService : IAccesoriosService
     }
 
     private static object Db(object? value) => value switch { null => DBNull.Value, string text when string.IsNullOrWhiteSpace(text) => DBNull.Value, string text => text.Trim(), _ => value };
-    private static SqlParameter ObservationParameter(string? value) => new("@p5", SqlDbType.NVarChar, 500)
+    private static SqlParameter SqlValue(string name, object? value, SqlDbType type, int? size = null)
     {
-        Value = string.IsNullOrWhiteSpace(value) ? DBNull.Value : value.Trim()
-    };
+        var parameter = size.HasValue ? new SqlParameter(name, type, size.Value) : new SqlParameter(name, type);
+        parameter.Value = value switch
+        {
+            null => DBNull.Value,
+            string text when string.IsNullOrWhiteSpace(text) => DBNull.Value,
+            string text => text.Trim(),
+            _ => value
+        };
+        return parameter;
+    }
     private sealed record PreparedPhoto(string PhysicalPath, string StoredPath, string Name, string ContentType, string? Observacion);
 
     private List<PreparedPhoto> MovePhotosToAccessoryFolder(List<PreparedPhoto> files, int accesorioId)

@@ -1,8 +1,10 @@
 using CasaGaillard.Core.Data;
 using CasaGaillard.Core.Models;
+using Microsoft.Data.SqlClient;
 using System.Data;
 using System.Data.Common;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace CasaGaillard.Core.Services;
 
@@ -42,6 +44,23 @@ public sealed class OrganizacionService : IOrganizacionService
             .SelectAsync(x => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem(x.Texto, x.Id.ToString(), x.Id == model.TipoViaId));
         model.Poblaciones = await _db.Database.SqlQueryRaw<OptionRow>("SELECT ID Id,NombrePoblacion Texto FROM gaillard.Poblacion ORDER BY NombrePoblacion")
             .SelectAsync(x => new Microsoft.AspNetCore.Mvc.Rendering.SelectListItem(x.Texto, x.Id.ToString(), x.Id == model.PoblacionId));
+    }
+
+    public async Task<int> GetOrCreatePoblacionAsync(string nombre)
+    {
+        await using var transaction = await _db.Database.BeginTransactionAsync(IsolationLevel.Serializable);
+        var id = await ExecuteScalarAsync<int>(@"
+            DECLARE @id int;
+            SELECT @id=ID FROM gaillard.Poblacion WITH (UPDLOCK,HOLDLOCK)
+            WHERE LOWER(LTRIM(RTRIM(NombrePoblacion)))=LOWER(@nombre);
+            IF @id IS NULL
+            BEGIN
+                SELECT @id=ISNULL(MAX(ID),0)+1 FROM gaillard.Poblacion WITH (UPDLOCK,HOLDLOCK);
+                INSERT INTO gaillard.Poblacion (ID,NombrePoblacion) VALUES (@id,@nombre);
+            END;
+            SELECT @id;", ("@nombre", nombre.Trim()));
+        await transaction.CommitAsync();
+        return id;
     }
 
     public async Task<int?> SaveDireccionAsync(DireccionForm model)
@@ -130,7 +149,7 @@ public sealed class OrganizacionService : IOrganizacionService
     public Task<bool> AddPersonaTelefonoAsync(int personaId, string telefono) => AddPhoneAsync(personaId, telefono, persona: true);
     public Task<bool> UpdatePersonaTelefonoAsync(int personaId, int id, string telefono) => UpdatePhoneAsync(personaId, id, telefono, persona: true);
     public Task<bool> DeletePersonaTelefonoAsync(int personaId, int id) => DeletePhoneAsync(personaId, id, persona: true);
-    public Task<bool> AddEntidadTelefonoAsync(int entidadId, int personaId, string telefono) => AddWorkPhoneAsync(entidadId, personaId, telefono);
+    public Task<bool> AddEntidadTelefonoAsync(int entidadId, int? personaId, string telefono) => AddWorkPhoneAsync(entidadId, personaId, telefono);
     public Task<bool> UpdateEntidadTelefonoAsync(int entidadId, int id, int? personaId, string telefono) => UpdateWorkPhoneAsync(entidadId, id, personaId, telefono);
     public Task<bool> DeleteEntidadTelefonoAsync(int entidadId, int id) => DeletePhoneAsync(entidadId, id, persona: false);
 
@@ -232,13 +251,15 @@ public sealed class OrganizacionService : IOrganizacionService
         return affected > 0;
     }
 
-    private async Task<bool> AddWorkPhoneAsync(int entidadId, int personaId, string phone)
+    private async Task<bool> AddWorkPhoneAsync(int entidadId, int? personaId, string phone)
     {
         phone = phone.Trim();
         if (phone.Length is 0 or > 10) return false;
         var ownersExist = await _db.Database.SqlQueryRaw<int>(@"SELECT 1 Value
             WHERE EXISTS (SELECT 1 FROM gaillard.Entidad WHERE ID={0})
-              AND EXISTS (SELECT 1 FROM gaillard.Persona WHERE ID={1})", entidadId, personaId).AnyAsync();
+              AND (@p1 IS NULL OR EXISTS (SELECT 1 FROM gaillard.Persona WHERE ID=@p1))",
+            [new SqlParameter("@p0", SqlDbType.Int) { Value = entidadId },
+             new SqlParameter("@p1", SqlDbType.Int) { Value = (object?)personaId ?? DBNull.Value }]).AnyAsync();
         if (!ownersExist) return false;
         return await _db.Database.ExecuteSqlInterpolatedAsync($@"INSERT INTO gaillard.Telefono(Telefono,PersonaID,EntidadID)
             VALUES({phone},{personaId},{entidadId})") > 0;
@@ -257,10 +278,9 @@ public sealed class OrganizacionService : IOrganizacionService
     private async Task<bool> UpdateWorkPhoneAsync(int entidadId, int id, int? personaId, string phone)
     {
         phone = phone.Trim();
-        if (phone.Length is 0 or > 10 || !personaId.HasValue) return false;
-        var personExists = await _db.Database.SqlQueryRaw<int>("SELECT 1 Value FROM gaillard.Persona WHERE ID={0}", personaId.Value).AnyAsync();
-        if (!personExists) return false;
-        return await _db.Database.ExecuteSqlInterpolatedAsync($@"UPDATE gaillard.Telefono SET Telefono={phone},PersonaID={personaId.Value}
+        if (phone.Length is 0 or > 10) return false;
+        if (personaId.HasValue && !await _db.Database.SqlQueryRaw<int>("SELECT 1 Value FROM gaillard.Persona WHERE ID={0}", personaId.Value).AnyAsync()) return false;
+        return await _db.Database.ExecuteSqlInterpolatedAsync($@"UPDATE gaillard.Telefono SET Telefono={phone},PersonaID={personaId}
             WHERE ID={id} AND EntidadID={entidadId}") > 0;
     }
 
@@ -311,6 +331,8 @@ public sealed class OrganizacionService : IOrganizacionService
         {
             await using var command = connection.CreateCommand();
             command.CommandText = sql;
+            if (_db.Database.CurrentTransaction is { } currentTransaction)
+                command.Transaction = currentTransaction.GetDbTransaction();
             foreach (var (name, value) in values)
             {
                 var parameter = command.CreateParameter();

@@ -25,6 +25,8 @@ public sealed class DireccionForm
     public string? Piso { get; set; }
     public string? Puerta { get; set; }
     [Range(1, int.MaxValue), Display(Name = "Población")] public int PoblacionId { get; set; }
+    [StringLength(30), Display(Name = "Nueva población")]
+    public string? NuevaPoblacion { get; set; }
     [Display(Name = "Código postal")] public string? CodigoPostal { get; set; }
     public string? Pais { get; set; }
     public int? PersonaId { get; set; }

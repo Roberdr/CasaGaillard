@@ -4,6 +4,7 @@
 }
 
 <h1>Editar tarea de mantenimiento</h1>
+@if (TempData["LoginMessage"] is string message) { <div class="alert alert-info">@message</div> }
 <div class="alert alert-info"><strong>Código:</strong> @Model.Codigo<br /><strong>Creada:</strong> @Model.FechaCreacion.ToString("dd/MM/yyyy HH:mm")<br />
     @if (!string.IsNullOrWhiteSpace(Model.CreadoPor)) { <span><strong>Creada por:</strong> @Model.CreadoPor<br /></span> }
     @if (Model.FechaActualizacion.HasValue) { <span><strong>Actualizada:</strong> @Model.FechaActualizacion.Value.ToString("dd/MM/yyyy HH:mm")<br /></span> }
@@ -15,5 +16,44 @@
     <button type="submit" class="btn btn-primary">Guardar cambios</button>
     <a asp-action="Details" asp-route-id="@Model.ID" class="btn btn-link">Cancelar</a>
 </form>
+
+<section class="mt-4">
+    <h2 class="h4">Fotos de la avería</h2>
+    @if (Model.FotosExistentes.Count == 0)
+    {
+        <p class="text-body-secondary">Esta tarea todavía no tiene fotos.</p>
+    }
+    else
+    {
+        <div class="row g-3">
+            @foreach (var foto in Model.FotosExistentes)
+            {
+                <div class="col-sm-6 col-lg-4 col-xl-3">
+                    <div class="card h-100">
+                        <a asp-action="Foto" asp-route-id="@foto.ID" target="_blank">
+                            <img src="@Url.Action("Foto", new { id = foto.ID })" class="card-img-top" alt="@(foto.Observacion ?? foto.NombreOriginal ?? "Foto de la avería")" style="height: 190px; object-fit: cover" />
+                        </a>
+                        <div class="card-body">
+                            <form asp-action="ActualizarPieFoto" method="post">
+                                <input type="hidden" name="id" value="@Model.ID" />
+                                <input type="hidden" name="fotoId" value="@foto.ID" />
+                                <label class="form-label" for="observacion-@foto.ID">Pie de foto</label>
+                                <textarea id="observacion-@foto.ID" name="observacion" maxlength="500" rows="2" class="form-control mb-2">@foto.Observacion</textarea>
+                                <button type="submit" class="btn btn-sm btn-primary">Guardar pie</button>
+                            </form>
+                        </div>
+                        <div class="card-footer bg-transparent">
+                            <form asp-action="EliminarFoto" method="post" onsubmit="return confirm('¿Eliminar esta foto?');">
+                                <input type="hidden" name="id" value="@Model.ID" />
+                                <input type="hidden" name="fotoId" value="@foto.ID" />
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Eliminar foto</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+</section>
 
 @section Scripts { <partial name="~/Pages/Shared/_ValidationScriptsPartial.cshtml" /> }

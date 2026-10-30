@@ -23,6 +23,7 @@ namespace CasaGaillard.Core.Data
         public DbSet<TareaMantenimientoFoto> TareaMantenimientoFotos { get; set; } = null!;
         public DbSet<TareaMantenimientoAccesorio> TareaMantenimientoAccesorios { get; set; } = null!;
         public DbSet<TareaMantenimientoHistorial> TareaMantenimientoHistorial { get; set; } = null!;
+        public DbSet<PlanificadorEstado> PlanificadorEstados { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -160,6 +161,15 @@ namespace CasaGaillard.Core.Data
                 eb.Property(x => x.Accion).HasMaxLength(20).IsRequired();
                 eb.Property(x => x.CambiosJson).HasColumnType("nvarchar(max)").IsRequired();
                 eb.HasIndex(x => new { x.TareaMantenimientoID, x.Fecha });
+            });
+
+            modelBuilder.Entity<PlanificadorEstado>(eb =>
+            {
+                eb.ToTable("PlanificadorEstados", "dbo");
+                eb.HasKey(x => x.Clave);
+                eb.Property(x => x.Clave).HasMaxLength(120);
+                eb.Property(x => x.Json).HasColumnType("nvarchar(max)").IsRequired();
+                eb.Property(x => x.ActualizadoPor).HasMaxLength(256);
             });
         }
 
