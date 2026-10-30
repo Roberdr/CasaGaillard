@@ -1,0 +1,34 @@
+@model InstalacionDocumentoFormViewModel
+@using CasaGaillard.Core.Security
+@{ ViewData["Title"] = "Documentos de instalación"; }
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div><h1>Documentos</h1><p class="text-muted mb-0">@Model.InstalacionCodigo — @Model.InstalacionNombre</p></div>
+    <a asp-area="Mantenimiento" asp-controller="Instalaciones" asp-action="Index" class="btn btn-outline-secondary">Volver a instalaciones</a>
+</div>
+@if (TempData["LoginMessage"] is string message) { <div class="alert alert-success">@message</div> }
+<h2 class="h4">Subir documento</h2>
+<form asp-action="Subir" method="post" enctype="multipart/form-data" class="row g-3 mb-4">
+    <input asp-for="InstalacionId" type="hidden" />
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="col-md-4"><label asp-for="Archivo" class="form-label"></label><input asp-for="Archivo" type="file" class="form-control" accept=".pdf,.png,.jpg,.jpeg,.doc,.docx,.xls,.xlsx,.dwg" /><span asp-validation-for="Archivo" class="text-danger"></span><div class="form-text">Máximo 20 MB. PDF, imágenes, Office o DWG.</div></div>
+    <div class="col-md-3"><label asp-for="TipoDocumento" class="form-label"></label><input asp-for="TipoDocumento" class="form-control" maxlength="100" /></div>
+    <div class="col-md-2"><label asp-for="CodigoPlano" class="form-label"></label><input asp-for="CodigoPlano" class="form-control" maxlength="50" /></div>
+    <div class="col-md-2"><label asp-for="FechaDocumento" class="form-label"></label><input asp-for="FechaDocumento" type="date" class="form-control" /></div>
+    <div class="col-md-1 d-flex align-items-end"><button type="submit" class="btn btn-primary">Subir</button></div>
+</form>
+<h2 class="h4">Documentos guardados</h2>
+<div class="table-responsive"><table class="table table-striped table-bordered align-middle">
+    <thead><tr><th>Nombre</th><th>Tipo</th><th>Código de plano</th><th>Fecha documento</th><th>Fecha alta</th><th></th></tr></thead>
+    <tbody>
+    @foreach (var documento in Model.Documentos)
+    {
+        <tr><td>@documento.Nombre</td><td>@documento.TipoDocumento</td><td>@documento.CodigoPlano</td><td>@documento.FechaDocumento?.ToString("d")</td><td>@documento.FechaAlta.ToString("g")</td>
+            <td class="text-nowrap"><a asp-action="Archivo" asp-route-id="@documento.Id">Descargar</a>
+                @if (User.IsInRole(AppRoles.Administrador) || User.IsInRole(AppRoles.Mantenimiento))
+                {
+                    <form asp-action="Eliminar" method="post" class="d-inline"><input type="hidden" name="id" value="@documento.Id" /><button type="submit" class="btn btn-link text-danger p-0 ms-2" onclick="return confirm('¿Eliminar este documento?')">Eliminar</button></form>
+                }
+            </td></tr>
+    }
+    </tbody>
+</table></div>

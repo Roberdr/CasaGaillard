@@ -1,0 +1,38 @@
+@model UsuarioCreateViewModel
+@{ ViewData["Title"] = "Crear cuenta de usuario"; }
+<h1>Crear cuenta de usuario</h1>
+
+@if (!string.IsNullOrWhiteSpace(Model.ResetUrl))
+{
+    <div class="alert alert-success">La cuenta se creó correctamente. Comparte este enlace con su titular para que establezca una contraseña. El enlace es de un solo uso.</div>
+    <div class="mb-3"><label for="resetUrl" class="form-label">Enlace para establecer contraseña</label><div class="input-group"><input id="resetUrl" class="form-control" value="@Model.ResetUrl" readonly /><button type="button" class="btn btn-outline-secondary" id="copiarResetUrl">Copiar</button></div></div>
+    <p><a asp-action="Index" class="btn btn-primary">Volver a usuarios</a> <a asp-action="Create" class="btn btn-outline-secondary">Crear otra cuenta</a></p>
+    <script>
+        document.getElementById('copiarResetUrl').addEventListener('click', async () => {
+            const input = document.getElementById('resetUrl');
+            try { await navigator.clipboard.writeText(input.value); }
+            catch { input.select(); document.execCommand('copy'); }
+        });
+    </script>
+}
+else
+{
+    <form asp-action="Create" method="post" class="card card-body" style="max-width: 42rem">
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+        <div class="mb-3"><label asp-for="Email" class="form-label"></label><input asp-for="Email" class="form-control" autocomplete="email" /><span asp-validation-for="Email" class="text-danger"></span></div>
+        <fieldset class="mb-3"><legend class="fs-6">Persona vinculada</legend>
+            <p class="form-text">Si ya existe una persona con este correo, se vinculará automáticamente. Si no existe, completa sus datos para crearla.</p>
+            <div class="mb-3"><label asp-for="NombrePersona" class="form-label"></label><input asp-for="NombrePersona" class="form-control" autocomplete="given-name" /><span asp-validation-for="NombrePersona" class="text-danger"></span></div>
+            <div class="mb-3"><label asp-for="Apellido1" class="form-label"></label><input asp-for="Apellido1" class="form-control" autocomplete="family-name" /><span asp-validation-for="Apellido1" class="text-danger"></span></div>
+            <div class="mb-3"><label asp-for="Apellido2" class="form-label"></label><input asp-for="Apellido2" class="form-control" /></div>
+            <div class="mb-3"><label asp-for="Nif" class="form-label"></label><input asp-for="Nif" class="form-control" autocomplete="off" /><span asp-validation-for="Nif" class="text-danger"></span></div>
+        </fieldset>
+        <fieldset class="mb-3"><legend class="fs-6">Roles</legend>
+            <div class="form-check"><input asp-for="IsAdministrador" class="form-check-input" /><label asp-for="IsAdministrador" class="form-check-label"></label></div>
+            <div class="form-check"><input asp-for="IsMantenimiento" class="form-check-input" /><label asp-for="IsMantenimiento" class="form-check-label"></label></div>
+            <div class="form-check"><input asp-for="IsConsulta" class="form-check-input" /><label asp-for="IsConsulta" class="form-check-label"></label></div>
+        </fieldset>
+        <p class="form-text">La cuenta se crea sin contraseña. Al guardar, obtendrás un enlace de un solo uso para que su titular establezca una.</p>
+        <div><button type="submit" class="btn btn-primary">Crear cuenta</button> <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a></div>
+    </form>
+}

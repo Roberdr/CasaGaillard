@@ -1,0 +1,19 @@
+@model IEnumerable<TipoInstalacionCatalogoViewModel>
+@{ ViewData["Title"] = "Tipos de instalación"; }
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Tipos de instalación</h1>
+    <a asp-action="Create" class="btn btn-success">Nuevo tipo</a>
+</div>
+@if (TempData["LoginMessage"] is string message) { <div class="alert alert-success">@message</div> }
+<div class="table-responsive">
+    <table class="table table-striped table-bordered align-middle">
+        <thead><tr><th>Nombre</th><th>Descripción</th><th>Instalaciones asociadas</th><th></th></tr></thead>
+        <tbody>
+        @foreach (var item in Model)
+        {
+            <tr><td>@item.Nombre</td><td>@item.Descripcion</td><td>@item.InstalacionesAsociadas</td>
+                <td class="text-nowrap"><a asp-action="Edit" asp-route-id="@item.Id">Editar</a> | <a asp-action="Delete" asp-route-id="@item.Id">Eliminar</a></td></tr>
+        }
+        </tbody>
+    </table>
+</div>

@@ -1,0 +1,8 @@
+@model GrupoFormViewModel
+@{ ViewData["Title"] = Model.Id==0?"Crear grupo":"Editar grupo";var action=Model.Id==0?"Create":"Edit"; }
+<h1>@ViewData["Title"]</h1><form asp-action="@action" method="post"><div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div><input asp-for="Id" type="hidden" />
+<div class="mb-3"><label asp-for="TipoGrupoId" class="form-label"></label><select asp-for="TipoGrupoId" asp-items="Model.Tipos" class="form-select"><option value="">Selecciona tipo</option></select><span asp-validation-for="TipoGrupoId" class="text-danger"></span></div>
+<div class="mb-3"><label asp-for="CubaId" class="form-label"></label><select asp-for="CubaId" asp-items="Model.Cubas" class="form-select"><option value="">Selecciona cuba</option></select><span asp-validation-for="CubaId" class="text-danger"></span></div>
+<div class="mb-3"><label asp-for="CompartimentoId" class="form-label"></label><select asp-for="CompartimentoId" asp-items="Model.Compartimentos" class="form-select"><option value="">Selecciona compartimento</option></select><span asp-validation-for="CompartimentoId" class="text-danger"></span></div>
+<div class="mb-3"><label asp-for="SituacionId" class="form-label"></label><select asp-for="SituacionId" asp-items="Model.Situaciones" class="form-select"><option value="">Selecciona situación</option></select><span asp-validation-for="SituacionId" class="text-danger"></span></div>
+<button class="btn btn-primary" type="submit">Guardar</button> <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a></form>

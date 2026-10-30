@@ -1,0 +1,12 @@
+@model IReadOnlyList<PlanMantenimientoFilaViewModel>
+@{ ViewData["Title"]="Plan de Mantenimiento"; }
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2 class="mb-0">Plan de Mantenimiento</h2>
+    @if(User.IsInRole("Administrador")||User.IsInRole("Mantenimiento")){<a asp-action="Create" class="btn btn-success">Crear plan</a>}
+</div>
+@if(TempData["LoginMessage"] is string message){<div class="alert alert-info">@message</div>}
+<div class="card border-0 shadow-sm"><div class="card-body p-0"><div class="table-responsive"><table class="table table-sm table-striped table-hover align-middle mb-0">
+    <thead class="table-light"><tr><th>Equipo / accesorio</th><th>Descripción</th><th>Próxima ejecución</th><th></th></tr></thead><tbody>
+    @foreach(var item in Model){<tr><td>@if(!string.IsNullOrWhiteSpace(item.EquipoNombre)){<span>@item.EquipoNombre</span>}@if(!string.IsNullOrWhiteSpace(item.AccesorioNombre)){<span>@item.AccesorioNombre</span>@if(!string.IsNullOrWhiteSpace(item.AccesorioTipo)){<small class="text-body-secondary d-block">@item.AccesorioTipo</small>}}</td><td>@(string.IsNullOrWhiteSpace(item.Descripcion)?"—":item.Descripcion)</td><td>@item.ProximaEjecucion?.ToString("dd/MM/yyyy")</td><td class="text-nowrap">@if(User.IsInRole("Administrador")||User.IsInRole("Mantenimiento")){<a asp-action="Edit" asp-route-id="@item.PlanId">Editar</a><text> | </text>}<a asp-action="Details" asp-route-id="@item.PlanId">Detalles</a>@if(User.IsInRole("Administrador")||User.IsInRole("Mantenimiento")){<text> | </text><a asp-action="Delete" asp-route-id="@item.PlanId">Eliminar</a>}</td></tr>}
+    @if(Model.Count==0){<tr><td colspan="4" class="text-center text-body-secondary">No hay planes de mantenimiento.</td></tr>}
+    </tbody></table></div></div></div>

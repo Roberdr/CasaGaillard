@@ -1,0 +1,35 @@
+@model AccesoriosIndexViewModel
+@{ ViewData["Title"] = "Accesorios"; }
+<div class="d-flex justify-content-between align-items-center mb-3"><h1>Accesorios</h1><div><a asp-area="Mantenimiento" asp-controller="Familias" asp-action="Index" class="btn btn-outline-secondary">Familias y subfamilias</a> @if (User.IsInRole("Administrador") || User.IsInRole("Mantenimiento")) { <a asp-action="Create" class="btn btn-success">Nuevo accesorio</a> }</div></div>
+@if (TempData["LoginMessage"] is string message) { <div class="alert alert-success">@message</div> }
+<form method="get" class="row g-2 mb-4">
+    <div class="col-md-2"><select name="tipoAccesorioId" asp-items="Model.TiposAccesorio" class="form-select"><option value="">Todos los tipos</option></select></div>
+    <div class="col-md-2"><select name="materialId" asp-items="Model.Materiales" class="form-select"><option value="">Todos los materiales</option></select></div>
+    <div class="col-md-2"><select name="familiaId" asp-items="Model.Familias" class="form-select"><option value="">Todas las familias</option></select></div>
+    <div class="col-md-2"><select name="subfamiliaId" asp-items="Model.Subfamilias" class="form-select"><option value="">Todas las subfamilias</option></select></div>
+    <div class="col-md-3"><input name="q" value="@Model.Query" class="form-control" placeholder="Buscar" /></div>
+    <div class="col-md-1 d-grid"><button class="btn btn-primary">Filtrar</button></div>
+</form>
+<div class="row g-3">
+@foreach (var item in Model.Accesorios)
+{
+    <div class="col-sm-6 col-lg-4 col-xl-3"><div class="card h-100">
+        @if (item.FotoId.HasValue) { <img src="@Url.Action("Foto", new { id = item.FotoId })" class="card-img-top" alt="Foto de @item.TipoNombre" style="height:180px;object-fit:cover" /> }
+        else { <div class="bg-body-secondary d-flex align-items-center justify-content-center" style="height:180px"><span class="text-muted">@item.TipoNombre</span></div> }
+        <div class="card-body"><h2 class="h5 card-title">@(string.IsNullOrWhiteSpace(item.Nombre) ? item.TipoNombre : item.Nombre)</h2>
+            <p class="card-text text-muted">@(item.Descripcion ?? "Sin descripción")</p>
+            <p class="small mb-2">@item.MaterialNombre · @(item.SubfamiliaNombre ?? item.FamiliaNombre ?? "Sin familia")</p>
+            <span class="badge @(item.Activo ? "text-bg-success" : "text-bg-secondary")">@(item.Activo ? "Activo" : "Inactivo")</span>
+        </div><div class="card-footer bg-transparent"><a asp-action="Details" asp-route-id="@item.Id" class="btn btn-outline-primary btn-sm">Ver detalle</a></div>
+    </div></div>
+}
+@if (Model.Accesorios.Count == 0) { <div class="col-12"><div class="alert alert-info">No se encontraron accesorios.</div></div> }
+</div>
+@if (Model.TotalPages > 1)
+{
+    <nav class="mt-4" aria-label="Paginación de accesorios"><ul class="pagination justify-content-center">
+        <li class="page-item @(Model.Page <= 1 ? "disabled" : "")"><a class="page-link" asp-route-page="@(Model.Page-1)" asp-route-tipoAccesorioId="@Model.TipoAccesorioId" asp-route-materialId="@Model.MaterialId" asp-route-familiaId="@Model.FamiliaId" asp-route-subfamiliaId="@Model.SubfamiliaId" asp-route-q="@Model.Query">Anterior</a></li>
+        <li class="page-item disabled"><span class="page-link">Página @Model.Page de @Model.TotalPages</span></li>
+        <li class="page-item @(Model.Page >= Model.TotalPages ? "disabled" : "")"><a class="page-link" asp-route-page="@(Model.Page+1)" asp-route-tipoAccesorioId="@Model.TipoAccesorioId" asp-route-materialId="@Model.MaterialId" asp-route-familiaId="@Model.FamiliaId" asp-route-subfamiliaId="@Model.SubfamiliaId" asp-route-q="@Model.Query">Siguiente</a></li>
+    </ul></nav>
+}

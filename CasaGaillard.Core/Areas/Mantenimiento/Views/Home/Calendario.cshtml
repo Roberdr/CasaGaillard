@@ -1,0 +1,10 @@
+@model CalendarioMantenimientoViewModel
+@{ ViewData["Title"] = "Calendario de mantenimiento"; var anterior=Model.Mes.AddMonths(-1); var siguiente=Model.Mes.AddMonths(1); }
+<div class="d-flex flex-wrap align-items-center justify-content-between gap-2 mb-3">
+    <h1 class="h2 mb-0">Calendario de mantenimiento</h1>
+    <div class="btn-group"><a class="btn btn-outline-secondary" asp-action="Calendario" asp-route-anio="@anterior.Year" asp-route-mes="@anterior.Month" aria-label="Mes anterior">‹</a><span class="btn btn-outline-secondary disabled">@Model.Mes.ToString("MMMM yyyy")</span><a class="btn btn-outline-secondary" asp-action="Calendario" asp-route-anio="@siguiente.Year" asp-route-mes="@siguiente.Month" aria-label="Mes siguiente">›</a></div>
+</div>
+<div class="table-responsive"><table class="table table-bordered align-top calendario-mantenimiento"><thead class="table-light"><tr><th>Lunes</th><th>Martes</th><th>Miércoles</th><th>Jueves</th><th>Viernes</th><th>Sábado</th><th>Domingo</th></tr></thead><tbody>
+@for (var semana=0; semana<6; semana++) { <tr>@for (var dia=0;dia<7;dia++) { var celda=Model.Dias[semana*7+dia]; <td class="@(celda.Fecha.Month==Model.Mes.Month?"":"text-body-secondary bg-body-tertiary")"><div class="small fw-bold mb-1">@celda.Fecha.Day</div>@foreach(var tarea in celda.Tareas){<a class="d-block text-truncate small mb-1" title="@tarea.Codigo · @tarea.Titulo · @tarea.AsignadaA" asp-area="Mantenimiento" asp-controller="TareasMantenimiento" asp-action="Details" asp-route-id="@tarea.ID">@tarea.Codigo · @(tarea.Equipo??tarea.Titulo)</a>}</td> }</tr> }
+</tbody></table></div>
+<style>.calendario-mantenimiento{table-layout:fixed;min-width:720px}.calendario-mantenimiento td{height:110px;width:14.285%;vertical-align:top}@@media(max-width:575.98px){.calendario-mantenimiento td{height:82px;padding:.25rem}.calendario-mantenimiento a{font-size:.7rem!important}}</style>

@@ -1,0 +1,7 @@
+@model IReadOnlyList<GrupoFilaViewModel>
+@{ ViewData["Title"] = "Grupos"; }
+<div class="d-flex justify-content-between align-items-center mb-3"><h1>Grupos</h1><a asp-action="Create" class="btn btn-success">Crear grupo</a></div>
+<div class="table-responsive"><table class="table table-striped table-hover"><thead><tr><th>Cuba</th><th>Compartimento</th><th>Tipo de grupo</th><th>Situación</th><th>Accesorios</th><th>Cantidad</th><th></th></tr></thead><tbody>
+@if(Model.Count==0){<tr><td colspan="7" class="text-center text-body-secondary">No hay grupos registrados.</td></tr>}
+@foreach(var row in Model){<tr><td>@row.Cuba</td><td>@row.Compartimento</td><td>@row.Tipo</td><td>@row.Situacion</td><td>@if(row.Accesorios.Count==0){<span class="text-body-secondary">—</span>}else{foreach(var a in row.Accesorios){<div>@a.TipoAccesorio</div>}}</td><td>@foreach(var a in row.Accesorios){<div>@a.Cantidad</div>}</td><td class="text-nowrap"><a asp-action="Details" asp-route-id="@row.Id">Detalles</a> · <a asp-action="Edit" asp-route-id="@row.Id">Editar</a> · <a asp-action="Delete" asp-route-id="@row.Id">Eliminar</a></td></tr>}
+</tbody></table></div>

@@ -1,0 +1,11 @@
+@model UsuarioRolesViewModel
+@{ ViewData["Title"] = "Roles del usuario"; }
+<h1>Roles del usuario</h1><p>@Model.Email (@Model.UserName)</p>
+<form asp-action="Roles" method="post" class="col-lg-6">
+    <input asp-for="UserId" type="hidden" />
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <div class="form-check mb-2"><input asp-for="IsAdministrador" class="form-check-input" /><label asp-for="IsAdministrador" class="form-check-label"></label></div>
+    <div class="form-check mb-2"><input asp-for="IsMantenimiento" class="form-check-input" /><label asp-for="IsMantenimiento" class="form-check-label"></label></div>
+    <div class="form-check mb-3"><input asp-for="IsConsulta" class="form-check-input" /><label asp-for="IsConsulta" class="form-check-label"></label></div>
+    <button type="submit" class="btn btn-primary">Guardar roles</button> <a asp-action="Index" class="btn btn-link">Cancelar</a>
+</form>

@@ -1,0 +1,14 @@
+@model UbicacionCatalogoViewModel
+@{ ViewData["Title"] = "Eliminar ubicación"; }
+<h1>Eliminar ubicación</h1>
+@if (TempData["CatalogoError"] is string error) { <div class="alert alert-warning">@error</div> }
+<div class="alert alert-info">@Model.Codigo — @Model.Nombre<br />Instalaciones asociadas: @Model.InstalacionesAsociadas; accesorios asociados: @Model.AccesoriosAsociados</div>
+@if (Model.InstalacionesAsociadas == 0 && Model.AccesoriosAsociados == 0)
+{
+    <form asp-action="Delete" method="post">
+        <input asp-for="UbicacionId" type="hidden" />
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a asp-action="Index" class="btn btn-link">Cancelar</a>
+    </form>
+}
+else { <a asp-action="Index" class="btn btn-link">Volver</a> }

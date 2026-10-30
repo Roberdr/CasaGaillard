@@ -1,0 +1,5 @@
+@model AccesorioDetailsViewModel
+@{ ViewData["Title"] = "Eliminar accesorio"; }
+<h1>Eliminar accesorio</h1>
+<div class="alert alert-warning">¿Eliminar <strong>@(Model.Accesorio.Nombre ?? Model.Accesorio.TipoNombre)</strong>? También se eliminarán sus detalles técnicos y fotos.</div>
+<form asp-action="Delete" asp-route-id="@Model.Accesorio.Id" method="post"><button type="submit" class="btn btn-danger">Eliminar</button> <a asp-action="Details" asp-route-id="@Model.Accesorio.Id" class="btn btn-link">Cancelar</a></form>

@@ -1,0 +1,3 @@
+@model DireccionForm
+@{ ViewData["Title"] = "Dirección"; }
+<h1>Dirección</h1><dl class="row"><dt class="col-sm-3">Vía</dt><dd class="col-sm-9">@Model.TipoViaNombre @Model.NombreVia @Model.Numero</dd><dt class="col-sm-3">Distrito</dt><dd class="col-sm-9">@Model.Distrito</dd><dt class="col-sm-3">Población</dt><dd class="col-sm-9">@Model.PoblacionNombre</dd><dt class="col-sm-3">Código postal</dt><dd class="col-sm-9">@Model.CodigoPostal</dd><dt class="col-sm-3">País</dt><dd class="col-sm-9">@Model.Pais</dd></dl><a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Editar</a> <a asp-action="Index" class="btn btn-outline-secondary">Volver</a>

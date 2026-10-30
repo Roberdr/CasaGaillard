@@ -1,0 +1,46 @@
+@model EquipoDetailsViewModel
+@using System.Globalization
+@{
+    ViewData["Title"] = $"Equipo {Model.Equipo.Codigo}";
+    var equipo = Model.Equipo;
+}
+
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+    <div><h1 class="mb-1">@equipo.Codigo — @equipo.Nombre</h1><p class="text-body-secondary mb-0">@(string.IsNullOrWhiteSpace(Model.InstalacionNombre) ? $"Vehículo: {Model.VehiculoNombre}" : $"Instalación: {Model.InstalacionNombre}") · @(equipo.Activo ? "Activo" : "Inactivo")</p></div>
+    <div class="d-flex gap-2"><a asp-action="Index" asp-route-instalacionId="@equipo.InstalacionId" asp-route-vehiculoId="@equipo.VehiculoId" class="btn btn-outline-secondary">Volver</a>
+    @if (User.IsInRole("Administrador") || User.IsInRole("Mantenimiento")) { <a asp-action="Edit" asp-route-id="@equipo.Id" class="btn btn-primary">Editar equipo</a> }</div>
+</div>
+
+<div class="row g-3 mb-4">
+    <div class="col-lg-6"><section class="card h-100"><div class="card-header"><strong>Datos del activo</strong></div><div class="card-body"><dl class="row mb-0">
+        <dt class="col-sm-5">Tipo</dt><dd class="col-sm-7">@equipo.TipoElemento</dd>
+        <dt class="col-sm-5">Fabricante / modelo</dt><dd class="col-sm-7">@(equipo.Fabricante ?? "—") / @(equipo.Modelo ?? "—")</dd>
+        <dt class="col-sm-5">Número de serie</dt><dd class="col-sm-7">@(equipo.NumeroSerie ?? "—")</dd>
+        <dt class="col-sm-5">Fecha de instalación</dt><dd class="col-sm-7">@(equipo.FechaInstalacion?.ToString("dd/MM/yyyy") ?? "—")</dd>
+        <dt class="col-sm-5">Descripción</dt><dd class="col-sm-7">@(equipo.Descripcion ?? "—")</dd>
+        <dt class="col-sm-5">Observaciones</dt><dd class="col-sm-7">@(equipo.Observaciones ?? "—")</dd>
+    </dl></div></section></div>
+    <div class="col-lg-6"><section class="card h-100"><div class="card-header"><strong>Planificación preventiva</strong></div><div class="card-body">
+        @if (Model.Planes.Count == 0) { <p class="text-body-secondary mb-0">Este equipo no tiene planes de mantenimiento asociados.</p> }
+        else { <div class="list-group list-group-flush">@foreach (var plan in Model.Planes) { <a class="list-group-item list-group-item-action px-0" asp-area="Mantenimiento" asp-controller="PlanesMantenimiento" asp-action="Details" asp-route-id="@plan.PlanId"><div class="d-flex justify-content-between gap-2"><strong>@plan.Nombre</strong><span class="badge @(plan.Activo ? "text-bg-success" : "text-bg-secondary")">@(plan.Activo ? "Activo" : "Inactivo")</span></div><small class="text-body-secondary">Cada @plan.PeriodicidadDias días · Próxima: @(plan.ProximaEjecucion?.ToString("dd/MM/yyyy") ?? "Sin fecha")</small></a> }</div> }
+    </div></section></div>
+</div>
+
+<section class="card mb-4"><div class="card-header d-flex justify-content-between align-items-center"><strong>Tareas de mantenimiento</strong><span class="badge text-bg-light">@Model.Tareas.Count</span></div>
+    @if (Model.Tareas.Count == 0) { <div class="card-body text-body-secondary">No hay tareas vinculadas directamente a este equipo.</div> }
+    else { <div class="table-responsive"><table class="table table-hover align-middle mb-0"><thead><tr><th>Fecha</th><th>Tarea</th><th>Estado</th><th>Prioridad</th><th>Responsable</th><th>Programada</th></tr></thead><tbody>@foreach (var tarea in Model.Tareas) { <tr><td>@tarea.FechaCreacion.ToString("dd/MM/yyyy")</td><td><a asp-area="Mantenimiento" asp-controller="TareasMantenimiento" asp-action="Details" asp-route-id="@tarea.Id">@tarea.Codigo — @tarea.Titulo</a></td><td>@tarea.Estado</td><td>@tarea.Prioridad</td><td>@tarea.AsignadaA</td><td>@(tarea.FechaProgramada?.ToString("dd/MM/yyyy") ?? "—")</td></tr> }</tbody></table></div> }
+</section>
+
+<section class="card mb-4"><div class="card-header d-flex justify-content-between align-items-center"><strong>Intervenciones y costes</strong><span class="badge text-bg-light">@Model.Intervenciones.Count</span></div>
+    @if (Model.Intervenciones.Count == 0) { <div class="card-body text-body-secondary">Todavía no hay intervenciones registradas para este equipo.</div> }
+    else { <div class="table-responsive"><table class="table table-hover align-middle mb-0"><thead><tr><th>Fecha</th><th>Tarea</th><th>Técnico</th><th>Horas</th><th>Coste</th><th></th></tr></thead><tbody>@foreach (var item in Model.Intervenciones) { <tr><td>@item.FechaInicio.ToString("dd/MM/yyyy")</td><td>@item.TareaCodigo — @item.TareaTitulo</td><td>@item.Tecnico</td><td>@(item.HorasEmpleadas?.ToString("0.##") ?? "—")</td><td>@item.CosteTotal.ToString("C", CultureInfo.CurrentCulture)</td><td><a asp-area="Mantenimiento" asp-controller="Intervenciones" asp-action="Details" asp-route-id="@item.Id">Ver</a></td></tr> }</tbody></table></div> }
+</section>
+
+<div class="row g-3 mb-4">
+    <div class="col-lg-6"><section class="card h-100"><div class="card-header d-flex justify-content-between"><strong>Fotos</strong><a asp-area="Mantenimiento" asp-controller="FotosActivos" asp-action="Index" asp-route-tipo="Equipo" asp-route-id="@equipo.Id">Gestionar fotos</a></div>
+        @if (Model.Fotos.Count == 0) { <div class="card-body text-body-secondary">No hay fotos del equipo.</div> } else { <div class="card-body"><div class="d-flex flex-wrap gap-3">@foreach (var foto in Model.Fotos) { <a asp-area="Mantenimiento" asp-controller="FotosActivos" asp-action="Foto" asp-route-id="@foto.Id" target="_blank" class="text-center"><img src="@Url.Action("Foto", "FotosActivos", new { area = "Mantenimiento", id = foto.Id })" alt="@(foto.Observacion ?? "Foto del equipo")" class="rounded border" style="width:120px;height:100px;object-fit:cover" loading="lazy" />@if (!string.IsNullOrWhiteSpace(foto.Observacion)) { <small class="d-block mt-1">@foto.Observacion</small> }</a> }</div></div> }
+    </section></div>
+    <div class="col-lg-6"><section class="card h-100"><div class="card-header d-flex justify-content-between"><strong>Documentos de la instalación</strong>@if (equipo.InstalacionId.HasValue) { <a asp-area="Mantenimiento" asp-controller="InstalacionDocumentos" asp-action="Index" asp-route-instalacionId="@equipo.InstalacionId">Gestionar documentos</a> }</div>
+        @if (!equipo.InstalacionId.HasValue) { <div class="card-body text-body-secondary">Este equipo está asociado a un vehículo y no tiene documentos de instalación.</div> } else if (Model.Documentos.Count == 0) { <div class="card-body text-body-secondary">No hay documentos registrados para esta instalación.</div> } else { <div class="list-group list-group-flush">@foreach (var documento in Model.Documentos) { <a class="list-group-item list-group-item-action" asp-area="Mantenimiento" asp-controller="InstalacionDocumentos" asp-action="Archivo" asp-route-id="@documento.Id"><strong>@documento.Nombre</strong><small class="d-block text-body-secondary">@(documento.TipoDocumento ?? "Documento") · @(documento.CodigoPlano ?? "Sin código") · @(documento.FechaDocumento?.ToString("dd/MM/yyyy") ?? documento.FechaAlta.ToString("dd/MM/yyyy"))</small></a> }</div> }
+    </section></div>
+</div>

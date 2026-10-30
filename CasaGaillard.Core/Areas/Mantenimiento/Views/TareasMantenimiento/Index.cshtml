@@ -1,0 +1,53 @@
+@model TareasMantenimientoIndexViewModel
+@{
+    ViewData["Title"] = "Tareas de mantenimiento";
+}
+
+<h1>Tareas de mantenimiento</h1>
+<p class="text-body-secondary">Incidencias detectadas en cisternas, grupos, vehículos, instalaciones y equipos.</p>
+<p><a asp-action="Create" class="btn btn-primary">Nueva tarea</a></p>
+
+<form asp-action="Index" method="get" class="row g-2 mb-3 align-items-end">
+    <div class="col-md-4"><label asp-for="Busqueda" class="form-label">Buscar</label><input asp-for="Busqueda" class="form-control" placeholder="Código, asunto, equipo o ubicación" /></div>
+    <div class="col-md-2"><label asp-for="Estado" class="form-label">Estado</label><select asp-for="Estado" class="form-select"><option value="">Todos</option><option>Nueva</option><option>En estudio</option><option>Asignada</option><option>En curso</option><option>Pendiente repuestos</option><option>Cerrada</option></select></div>
+    <div class="col-md-2"><label asp-for="Prioridad" class="form-label">Prioridad</label><select asp-for="Prioridad" class="form-select"><option value="">Todas</option><option>Baja</option><option>Media</option><option>Alta</option><option>Urgente</option></select></div>
+    <div class="col-md-2"><label asp-for="FechaDesde" class="form-label">Prevista desde</label><input asp-for="FechaDesde" type="date" class="form-control" /></div>
+    <div class="col-md-2"><label asp-for="FechaHasta" class="form-label">Prevista hasta</label><input asp-for="FechaHasta" type="date" class="form-control" /></div>
+    <div class="col-md-4"><label asp-for="FiltroEquipo" class="form-label">Equipo</label><input asp-for="FiltroEquipo" class="form-control" /></div>
+    <div class="col-md-4"><label asp-for="Responsable" class="form-label">Responsable</label><input asp-for="Responsable" class="form-control" /></div>
+    <div class="col-md-4"><button type="submit" class="btn btn-primary">Filtrar</button> <a asp-action="Index" class="btn btn-outline-secondary">Limpiar</a> <a asp-action="Exportar" asp-route-busqueda="@Model.Busqueda" asp-route-estado="@Model.Estado" asp-route-prioridad="@Model.Prioridad" asp-route-fechaDesde="@Model.FechaDesde?.ToString("yyyy-MM-dd")" asp-route-fechaHasta="@Model.FechaHasta?.ToString("yyyy-MM-dd")" asp-route-equipo="@Model.FiltroEquipo" asp-route-responsable="@Model.Responsable" class="btn btn-outline-success">Informe Excel</a></div>
+</form>
+<p class="text-body-secondary">@Model.TotalResultados tareas · página @Model.Pagina de @Model.TotalPaginas</p>
+<div class="table-responsive">
+    <table class="table table-striped table-hover">
+        <thead><tr><th>Código</th><th>Título</th><th>Ubicación</th><th>Equipo</th><th>Prioridad</th><th>Estado</th><th>Asignada a</th><th>Fecha prevista</th><th>Creada</th><th></th></tr></thead>
+        <tbody>
+        @if (Model.Tareas.Count == 0)
+        {
+            <tr><td colspan="10" class="text-center text-body-secondary">No hay tareas que coincidan con los filtros.</td></tr>
+        }
+        else
+        {
+            @foreach (var tarea in Model.Tareas)
+            {
+                <tr>
+                    <td>@tarea.Codigo</td><td>@tarea.Titulo</td><td>@tarea.Ubicacion</td><td>@tarea.Equipo</td>
+                    <td>@tarea.Prioridad</td><td>@tarea.Estado</td><td>@tarea.AsignadaA</td>
+                    <td>@tarea.FechaProgramada?.ToString("dd/MM/yyyy")</td><td>@tarea.FechaCreacion.ToString("dd/MM/yyyy HH:mm")</td>
+                    <td><a asp-action="Details" asp-route-id="@tarea.ID">Ver</a></td>
+                </tr>
+            }
+        }
+        </tbody>
+    </table>
+</div>
+@if (Model.TotalPaginas > 1)
+{
+    <nav aria-label="Paginación de tareas">
+        <ul class="pagination">
+            <li class="page-item @(Model.Pagina <= 1 ? "disabled" : "")"><a class="page-link" asp-route-pagina="@(Model.Pagina - 1)" asp-route-busqueda="@Model.Busqueda" asp-route-estado="@Model.Estado" asp-route-prioridad="@Model.Prioridad" asp-route-fechaDesde="@Model.FechaDesde?.ToString("yyyy-MM-dd")" asp-route-fechaHasta="@Model.FechaHasta?.ToString("yyyy-MM-dd")" asp-route-equipo="@Model.FiltroEquipo" asp-route-responsable="@Model.Responsable">Anterior</a></li>
+            <li class="page-item disabled"><span class="page-link">@Model.Pagina / @Model.TotalPaginas</span></li>
+            <li class="page-item @(Model.Pagina >= Model.TotalPaginas ? "disabled" : "")"><a class="page-link" asp-route-pagina="@(Model.Pagina + 1)" asp-route-busqueda="@Model.Busqueda" asp-route-estado="@Model.Estado" asp-route-prioridad="@Model.Prioridad" asp-route-fechaDesde="@Model.FechaDesde?.ToString("yyyy-MM-dd")" asp-route-fechaHasta="@Model.FechaHasta?.ToString("yyyy-MM-dd")" asp-route-equipo="@Model.FiltroEquipo" asp-route-responsable="@Model.Responsable">Siguiente</a></li>
+        </ul>
+    </nav>
+}

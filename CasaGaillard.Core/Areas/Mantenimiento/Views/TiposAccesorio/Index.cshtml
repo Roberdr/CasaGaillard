@@ -1,0 +1,11 @@
+@model IReadOnlyList<TipoAccesorioFilaViewModel>
+@{ ViewData["Title"] = "Tipos de accesorio"; }
+<div class="d-flex justify-content-between align-items-center mb-3"><h1>Tipos de accesorio</h1>@if (User.IsInRole("Administrador") || User.IsInRole("Mantenimiento")) { <a asp-action="Create" class="btn btn-success">Nuevo tipo</a> }</div>
+@if (TempData["LoginMessage"] is string message) { <div class="alert alert-success">@message</div> }
+<div class="table-responsive"><table class="table table-striped table-bordered align-middle">
+    <thead><tr><th>Nombre</th><th>Subfamilia</th><th>Descripción</th><th>Accesorios</th><th>Acciones</th></tr></thead>
+    <tbody>
+    @foreach (var item in Model) { <tr><td>@item.Nombre</td><td>@(item.SubfamiliaNombre ?? "Sin subfamilia")</td><td>@item.Descripcion</td><td>@item.AccesoriosAsociados</td><td>@if (User.IsInRole("Administrador") || User.IsInRole("Mantenimiento")) { <a asp-action="Edit" asp-route-id="@item.Id">Editar</a> }</td></tr> }
+    @if (Model.Count == 0) { <tr><td colspan="5" class="text-muted">No hay tipos de accesorio.</td></tr> }
+    </tbody>
+</table></div>

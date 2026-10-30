@@ -1,0 +1,23 @@
+@model IntervencionFormViewModel
+@{
+    ViewData["Title"] = "Registrar intervención";
+}
+
+<h1>Registrar intervención</h1>
+<p class="text-body-secondary">Tarea @Model.TareaCodigo — @Model.TareaTitulo</p>
+<form asp-action="Create" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <input asp-for="TareaMantenimientoId" type="hidden" />
+    <div class="mb-3"><label asp-for="TecnicoPersonaID" class="form-label">Técnico</label><select asp-for="TecnicoPersonaID" asp-items="Model.Personas" class="form-select"><option value="">Seleccionar persona...</option></select><span asp-validation-for="TecnicoPersonaID" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="FechaInicio" class="form-label"></label><input asp-for="FechaInicio" type="datetime-local" class="form-control" /><span asp-validation-for="FechaInicio" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="FechaFin" class="form-label"></label><input asp-for="FechaFin" type="datetime-local" class="form-control" /><span asp-validation-for="FechaFin" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="Descripcion" class="form-label"></label><textarea asp-for="Descripcion" rows="5" class="form-control"></textarea><span asp-validation-for="Descripcion" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="HorasEmpleadas" class="form-label"></label><input asp-for="HorasEmpleadas" class="form-control" inputmode="decimal" data-val="false" /><span asp-validation-for="HorasEmpleadas" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="CosteManoObra" class="form-label"></label><input asp-for="CosteManoObra" class="form-control" inputmode="decimal" data-val="false" /><span asp-validation-for="CosteManoObra" class="text-danger"></span></div>
+    <button type="submit" class="btn btn-primary">Guardar intervención</button>
+    <a asp-action="Index" asp-route-tareaId="@Model.TareaMantenimientoId" class="btn btn-link">Cancelar</a>
+</form>
+
+@section Scripts {
+    <partial name="~/Pages/Shared/_ValidationScriptsPartial.cshtml" />
+}

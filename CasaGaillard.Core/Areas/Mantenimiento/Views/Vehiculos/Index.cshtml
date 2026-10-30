@@ -1,0 +1,124 @@
+@model CasaGaillard.Core.Models.VehiculosIndexViewModel
+
+@{
+    ViewData["Title"] = "Vehículos";
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="mb-0">Vehículos</h1>
+    <div class="d-flex gap-2">
+        <a asp-area="Mantenimiento" asp-controller="Vehiculos" asp-action="Index"
+           asp-route-matricula="@Model.Matricula" asp-route-marca="@Model.Marca"
+           asp-route-modelo="@Model.Modelo" asp-route-tipo="@Model.Tipo"
+           asp-route-incluirBajas="@(!Model.IncluirBajas)" class="btn btn-outline-secondary">
+            @(Model.IncluirBajas ? "Ocultar bajas" : "Ver bajas")
+        </a>
+        <a asp-area="Mantenimiento" asp-controller="RevisionesVehiculos" asp-action="Index" asp-route-matriculaVehiculo="@Model.Matricula" class="btn btn-outline-primary">Revisiones</a>
+        <a asp-area="Mantenimiento" asp-controller="Vehiculos" asp-action="AddOrEdit" class="btn btn-success">Crear vehículo</a>
+    </div>
+</div>
+
+<form asp-area="Mantenimiento" asp-controller="Vehiculos" asp-action="Index" method="get" class="row g-3 mb-3">
+    <div class="col-md-2">
+        <label for="matricula" class="form-label">Matrícula</label>
+        <input id="matricula" name="matricula" value="@Model.Matricula" class="form-control" />
+    </div>
+    <div class="col-md-2">
+        <label for="marca" class="form-label">Marca</label>
+        <input id="marca" name="marca" value="@Model.Marca" class="form-control" />
+    </div>
+    <div class="col-md-2">
+        <label for="modelo" class="form-label">Modelo</label>
+        <input id="modelo" name="modelo" value="@Model.Modelo" class="form-control" />
+    </div>
+    <div class="col-md-2">
+        <label for="tipo" class="form-label">Tipo</label>
+        <select id="tipo" name="tipo" class="form-select">
+            <option value="">Todos</option>
+            @foreach (var tipo in Model.TiposDisponibles)
+            {
+                <option value="@tipo" selected="@(Model.Tipo == tipo ? "selected" : null)">@tipo</option>
+            }
+        </select>
+    </div>
+    <input type="hidden" name="incluirBajas" value="@Model.IncluirBajas.ToString().ToLowerInvariant()" />
+    <div class="col-md-2 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+    </div>
+</form>
+
+<div class="table-responsive">
+    <table class="table table-sm table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>Tipo</th>
+                <th>Marca</th>
+                <th>Modelo</th>
+                <th>Matrícula</th>
+                <th>PMA</th>
+                <th>TARA</th>
+                @if (Model.IncluirBajas)
+                {
+                    <th>Estado</th>
+                }
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var vehiculo in Model.PagedList)
+            {
+                <tr>
+                    <td>@vehiculo.TipoVehiculo?.Vehiculo</td>
+                    <td>@vehiculo.Marca</td>
+                    <td>@vehiculo.Modelo</td>
+                    <td>@vehiculo.MatriculaVehiculo</td>
+                    <td>@vehiculo.Pma</td>
+                    <td>@vehiculo.Tara</td>
+                    @if (Model.IncluirBajas)
+                    {
+                        <td>@(vehiculo.Baja == true ? "Baja" : "Activo")</td>
+                    }
+                    <td class="text-nowrap">
+                        <a asp-area="Mantenimiento" asp-controller="Vehiculos" asp-action="Details" asp-route-id="@vehiculo.ID">Detalles</a> |
+                        <a asp-area="Mantenimiento" asp-controller="Vehiculos" asp-action="AddOrEdit" asp-route-id="@vehiculo.ID">Editar</a> |
+                        <a asp-area="Mantenimiento" asp-controller="Vehiculos" asp-action="Delete" asp-route-id="@vehiculo.ID">Eliminar</a>
+                    </td>
+                </tr>
+            }
+            @if (!Model.PagedList.Any())
+            {
+                <tr><td colspan="@(Model.IncluirBajas ? 8 : 7)" class="text-center">No se encontraron vehículos.</td></tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@if (Model.PageCount > 1)
+{
+    <nav aria-label="Paginación de vehículos">
+        <ul class="pagination">
+            <li class="page-item @(Model.HasPreviousPage ? "" : "disabled")">
+                <a class="page-link" asp-area="Mantenimiento" asp-controller="Vehiculos" asp-action="Index"
+                   asp-route-page="@(Model.PageNumber - 1)" asp-route-matricula="@Model.Matricula"
+                   asp-route-marca="@Model.Marca" asp-route-modelo="@Model.Modelo" asp-route-tipo="@Model.Tipo"
+                   asp-route-incluirBajas="@Model.IncluirBajas" aria-label="Anterior">&laquo;</a>
+            </li>
+            @for (var pageNumber = 1; pageNumber <= Model.PageCount; pageNumber++)
+            {
+                <li class="page-item @(pageNumber == Model.PageNumber ? "active" : "")">
+                    <a class="page-link" asp-area="Mantenimiento" asp-controller="Vehiculos" asp-action="Index"
+                       asp-route-page="@pageNumber" asp-route-matricula="@Model.Matricula"
+                       asp-route-marca="@Model.Marca" asp-route-modelo="@Model.Modelo" asp-route-tipo="@Model.Tipo"
+                       asp-route-incluirBajas="@Model.IncluirBajas">@pageNumber</a>
+                </li>
+            }
+            <li class="page-item @(Model.HasNextPage ? "" : "disabled")">
+                <a class="page-link" asp-area="Mantenimiento" asp-controller="Vehiculos" asp-action="Index"
+                   asp-route-page="@(Model.PageNumber + 1)" asp-route-matricula="@Model.Matricula"
+                   asp-route-marca="@Model.Marca" asp-route-modelo="@Model.Modelo" asp-route-tipo="@Model.Tipo"
+                   asp-route-incluirBajas="@Model.IncluirBajas" aria-label="Siguiente">&raquo;</a>
+            </li>
+        </ul>
+    </nav>
+    <p class="text-body-secondary">Página @Model.PageNumber de @Model.PageCount (@Model.TotalCount vehículos)</p>
+}

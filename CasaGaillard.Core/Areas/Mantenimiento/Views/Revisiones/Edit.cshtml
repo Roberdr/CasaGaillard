@@ -1,0 +1,5 @@
+@model RevisionFormViewModel
+@{ViewData["Title"]="Editar revisión";}
+<h1>Editar revisión</h1>
+<form asp-action="Edit" method="post" class="col-lg-9"><h2 class="h5 mb-3">Datos de la revisión</h2><partial name="_Form" model="Model"/><button type="submit" class="btn btn-primary">Guardar cambios</button> <a asp-action="Details" asp-route-id="@Model.Id" class="btn btn-outline-secondary">Cancelar</a></form>
+@section Scripts { <partial name="~/Pages/Shared/_ValidationScriptsPartial.cshtml" /> }

@@ -1,0 +1,5 @@
+@model CubaDetalleViewModel
+@{ ViewData["Title"]="Eliminar cuba"; }
+<h1>Eliminar cuba @Model.Matricula</h1>
+@if(TempData["Error"] is string error){<div class="alert alert-danger">@error</div>}
+<p>Esta operación elimina la cuba definitivamente. Solo se permite si no tiene compartimentos, grupos ni revisiones asociados.</p><dl class="row"><dt class="col-sm-3">Matrícula</dt><dd class="col-sm-9">@Model.Matricula</dd><dt class="col-sm-3">Vehículo</dt><dd class="col-sm-9">@Model.Vehiculo</dd></dl><form asp-action="Delete" method="post"><input type="hidden" name="id" value="@Model.Id"/><button class="btn btn-danger" type="submit">Eliminar</button> <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a></form>

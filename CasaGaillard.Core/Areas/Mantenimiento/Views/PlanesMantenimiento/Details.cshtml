@@ -1,0 +1,10 @@
+@model PlanMantenimientoDetalleViewModel
+@{ViewData["Title"]="Detalle plan";}
+<h2>Detalle plan</h2><div><h4>Plan de Mantenimiento</h4><hr />
+<dl class="row"><dt class="col-sm-2">Equipo / activo</dt><dd class="col-sm-10">@(Model.EquipoNombre??Model.AccesorioNombre) @if(!string.IsNullOrWhiteSpace(Model.AccesorioTipo)){<span class="text-body-secondary">(@Model.AccesorioTipo)</span>}</dd>
+<dt class="col-sm-2">Ubicación / grupo</dt><dd class="col-sm-10">@(string.IsNullOrWhiteSpace(Model.AccesorioGrupoTexto)?"Sin grupo asignado":Model.AccesorioGrupoTexto)</dd>
+<dt class="col-sm-2">Periodicidad</dt><dd class="col-sm-10">@Model.PeriodicidadDias días</dd>
+<dt class="col-sm-2">Última ejecución</dt><dd class="col-sm-10">@Model.UltimaEjecucion?.ToString("dd/MM/yyyy")</dd>
+<dt class="col-sm-2">Próxima ejecución</dt><dd class="col-sm-10">@Model.ProximaEjecucion?.ToString("dd/MM/yyyy")</dd></dl></div>
+<div class="alert alert-info">Las tareas preventivas se generan automáticamente cuando la próxima ejecución entra en los siguientes 30 días. Los planes basados en horas de uso requieren un contador de horas y no se generan automáticamente todavía.</div>
+<p>@if(User.IsInRole("Administrador")||User.IsInRole("Mantenimiento")){<a asp-action="Edit" asp-route-id="@Model.PlanId" class="btn btn-primary">Editar</a>} <a asp-action="Index" class="btn btn-outline-secondary">Volver</a></p>

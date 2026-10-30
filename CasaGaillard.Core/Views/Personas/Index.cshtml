@@ -1,0 +1,6 @@
+@model IReadOnlyList<PersonaRow>
+@{ ViewData["Title"] = "Personas"; }
+<div class="d-flex justify-content-between align-items-center mb-3"><h1>Personas</h1>@if (User.IsInRole("Administrador") || User.IsInRole("Mantenimiento")) { <a asp-action="Create" class="btn btn-primary">Nueva persona</a> }</div>
+<div class="table-responsive"><table class="table table-striped align-middle"><thead><tr><th>Nombre</th><th>NIF</th><th>Dirección</th><th></th></tr></thead><tbody>
+@foreach (var row in Model) { <tr><td>@row.Nombre @row.Apellido1 @row.Apellido2</td><td>@row.Nif</td><td>@row.Direccion</td><td class="text-end"><a asp-action="Details" asp-route-id="@row.Id">Ver</a>@if (User.IsInRole("Administrador") || User.IsInRole("Mantenimiento")) { <text> · </text><a asp-action="Edit" asp-route-id="@row.Id">Editar</a><text> · </text><a asp-action="Delete" asp-route-id="@row.Id">Eliminar</a> }</td></tr> }
+</tbody></table></div>

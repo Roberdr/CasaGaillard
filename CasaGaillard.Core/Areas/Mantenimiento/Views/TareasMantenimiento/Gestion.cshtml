@@ -1,0 +1,23 @@
+@model TareaMantenimientoGestionViewModel
+@{
+    ViewData["Title"] = "Gestionar tarea";
+}
+
+<h1>Gestionar tarea de mantenimiento</h1>
+<div class="card mb-3"><div class="card-header"><strong>@Model.Codigo — @Model.Titulo</strong></div><div class="card-body"><p><strong>Ubicación:</strong> @Model.Ubicacion</p><p><strong>Equipo:</strong> @Model.Equipo</p><p style="white-space: pre-wrap">@Model.Descripcion</p></div></div>
+<form asp-action="Gestion" method="post" class="col-lg-8">
+    <input asp-for="ID" type="hidden" />
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <div class="row">
+        <div class="col-md-6 mb-3"><label asp-for="Prioridad" class="form-label"></label><select asp-for="Prioridad" class="form-select"><option>Baja</option><option>Media</option><option>Alta</option><option>Urgente</option></select><span asp-validation-for="Prioridad" class="text-danger"></span></div>
+        <div class="col-md-6 mb-3"><label asp-for="Estado" class="form-label"></label><select asp-for="Estado" class="form-select"><option>Nueva</option><option>En estudio</option><option>Asignada</option><option>En curso</option><option>Pendiente repuestos</option><option>Cerrada</option></select><span asp-validation-for="Estado" class="text-danger"></span></div>
+    </div>
+    <div class="mb-3"><label asp-for="FechaProgramada" class="form-label"></label><input asp-for="FechaProgramada" type="date" class="form-control" /><span asp-validation-for="FechaProgramada" class="text-danger"></span></div>
+    <div class="mb-3"><label asp-for="AsignadaAPersonaID" class="form-label">Asignada a</label><select asp-for="AsignadaAPersonaID" asp-items="Model.Personas" class="form-select"><option value="">Sin asignar</option></select></div>
+    <div class="mb-3"><label asp-for="EmpresaExteriorEntidadID" class="form-label">Empresa exterior</label><select asp-for="EmpresaExteriorEntidadID" asp-items="Model.Entidades" class="form-select"><option value="">Sin empresa</option></select></div>
+    <div class="mb-3"><label asp-for="AccionesARealizar" class="form-label"></label><textarea asp-for="AccionesARealizar" rows="4" class="form-control"></textarea></div>
+    <div class="mb-3"><label asp-for="AccesoriosNecesarios" class="form-label"></label><input asp-for="AccesoriosNecesarios" class="form-control" placeholder="IDs separados por comas" /></div>
+    <div class="mb-3"><label asp-for="Observaciones" class="form-label"></label><textarea asp-for="Observaciones" rows="4" class="form-control"></textarea></div>
+    <button type="submit" class="btn btn-primary">Guardar gestión</button>
+    <a asp-action="Details" asp-route-id="@Model.ID" class="btn btn-link">Volver</a>
+</form>

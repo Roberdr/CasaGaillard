@@ -1,0 +1,52 @@
+@model IntervencionesIndexViewModel
+@{
+    ViewData["Title"] = "Intervenciones";
+}
+
+<h1>@(Model.EsGlobal ? "Intervenciones" : $"Intervenciones de {Model.Tarea!.Codigo}")</h1>
+@if (Model.Tarea is not null)
+{
+    <p class="text-body-secondary">@Model.Tarea.Titulo</p>
+    <a asp-action="Index" class="btn btn-outline-secondary mb-3">Todas las intervenciones</a>
+    @if (User.IsInRole("Administrador") || User.IsInRole("Mantenimiento"))
+    {
+        <a asp-area="Mantenimiento" asp-controller="Intervenciones" asp-action="Create" asp-route-tareaId="@Model.Tarea.Id" class="btn btn-success mb-3">Registrar intervención</a>
+    }
+}
+
+@if (TempData["LoginMessage"] is string message)
+{
+    <div class="alert alert-info">@message</div>
+}
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                @if (Model.EsGlobal) { <th>Tarea</th> }
+                <th>Inicio</th><th>Técnico</th><th>Descripción</th><th>Horas</th><th>Coste mano de obra</th><th></th>
+            </tr>
+        </thead>
+        <tbody>
+        @foreach (var item in Model.Intervenciones)
+        {
+            <tr>
+                @if (Model.EsGlobal)
+                {
+                    <td>@item.TareaCodigo — @item.TareaTitulo</td>
+                }
+                <td>@item.FechaInicio.ToString("dd/MM/yyyy HH:mm")</td>
+                <td>@item.Tecnico</td>
+                <td>@item.Descripcion</td>
+                <td>@(item.HorasEmpleadas?.ToString("0.##") ?? "—")</td>
+                <td>@(item.CosteManoObra?.ToString("C") ?? "—")</td>
+                <td><a asp-action="Details" asp-route-id="@item.Id">Detalle y repuestos</a></td>
+            </tr>
+        }
+        @if (Model.Intervenciones.Count == 0)
+        {
+            <tr><td colspan="@(Model.EsGlobal ? 7 : 6)" class="text-center text-body-secondary">No hay intervenciones registradas.</td></tr>
+        }
+        </tbody>
+    </table>
+</div>

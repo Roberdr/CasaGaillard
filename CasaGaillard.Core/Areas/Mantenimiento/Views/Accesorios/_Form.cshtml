@@ -1,0 +1,146 @@
+@model AccesorioFormViewModel
+<input asp-for="Id" type="hidden" /><input asp-for="IntervencionId" type="hidden" />
+<div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+<div class="row g-3">
+    <div class="col-md-6"><label asp-for="Nombre" class="form-label"></label><input asp-for="Nombre" class="form-control" maxlength="150" /><span asp-validation-for="Nombre" class="text-danger"></span></div>
+    <div class="col-md-6"><label asp-for="TipoAccesorioId" class="form-label"></label><select asp-for="TipoAccesorioId" asp-items="Model.TiposAccesorio" class="form-select"><option value="">Selecciona tipo</option></select><span asp-validation-for="TipoAccesorioId" class="text-danger"></span></div>
+    <div class="col-md-6" data-material-rapido data-url="@Url.Action("Crear", "Materiales", new { area = "Mantenimiento" })"><label asp-for="MaterialId" class="form-label"></label><select asp-for="MaterialId" asp-items="Model.Materiales" class="form-select"><option value="">Selecciona material</option></select><span asp-validation-for="MaterialId" class="text-danger"></span><div class="input-group input-group-sm mt-2"><input data-material-nombre class="form-control" maxlength="150" placeholder="Nuevo material" aria-label="Nombre del nuevo material"/><button type="button" data-material-crear class="btn btn-outline-secondary">Crear y seleccionar</button></div>@Html.AntiForgeryToken()<small data-material-estado class="form-text" role="status"></small></div>
+    <div class="col-md-6"><label asp-for="UbicacionId" class="form-label"></label><select asp-for="UbicacionId" asp-items="Model.Ubicaciones" class="form-select"><option value="">Sin ubicación</option></select><span asp-validation-for="UbicacionId" class="text-danger"></span></div>
+    <div class="col-md-6"><label asp-for="FamiliaId" class="form-label"></label><select asp-for="FamiliaId" asp-items="Model.Familias" class="form-select" id="FamiliaId"><option value="">Sin familia</option></select><span asp-validation-for="FamiliaId" class="text-danger"></span></div>
+    <div class="col-md-6"><label asp-for="SubfamiliaId" class="form-label"></label><select asp-for="SubfamiliaId" asp-items="Model.Subfamilias" class="form-select" id="SubfamiliaId"><option value="">Sin subfamilia</option></select><span asp-validation-for="SubfamiliaId" class="text-danger"></span></div>
+    <div class="col-md-6"><label asp-for="FechaAlta" class="form-label"></label><input asp-for="FechaAlta" type="date" class="form-control" /></div>
+    <div class="col-md-6 form-check align-self-end ms-2"><input asp-for="Activo" class="form-check-input" /><label asp-for="Activo" class="form-check-label"></label></div>
+    <div class="col-12"><label asp-for="Descripcion" class="form-label"></label><textarea asp-for="Descripcion" rows="3" class="form-control" maxlength="500"></textarea><span asp-validation-for="Descripcion" class="text-danger"></span></div>
+    <div class="col-12" data-foto-pies data-campo="ObservacionesFotos"><label asp-for="FotosAdjuntas" class="form-label"></label><input asp-for="FotosAdjuntas" type="file" class="form-control" accept=".jpg,.jpeg,.png,.gif,.webp" multiple /><div data-foto-pies-lista class="mt-2"></div><span asp-validation-for="FotosAdjuntas" class="text-danger"></span><div class="form-text">JPG, PNG, GIF o WEBP. Máximo 10 MB por imagen.</div></div>
+</div>
+@if (Model.FotosExistentes.Count > 0)
+{
+    <h2 class="h5 mt-4">Fotos existentes</h2><div class="row g-2 mb-3">@foreach (var foto in Model.FotosExistentes) { <div class="col-4 col-md-2"><img src="@Url.Action("Foto", new { id = foto.Id })" alt="@(foto.Observacion ?? "Foto")" class="img-fluid rounded" />@if (!string.IsNullOrWhiteSpace(foto.Observacion)) { <span class="d-block mt-1">@foto.Observacion</span> }</div> }</div>
+}
+<h2 class="h5 mt-4">Detalles técnicos</h2>
+<div class="table-responsive"><table class="table table-sm table-bordered align-middle"><thead><tr><th>Característica</th><th>Cantidad</th><th>Medida</th><th>Unidad</th><th>Tipo</th><th>Quitar</th></tr></thead><tbody>
+@for (var i = 0; i < Model.Detalles.Count; i++)
+{
+    <tr>
+        <td><input asp-for="Detalles[i].Id" type="hidden" /><select asp-for="Detalles[i].CaracteristicaId" asp-items="Model.Caracteristicas" class="form-select form-select-sm"><option value="">—</option></select></td>
+        <td><input asp-for="Detalles[i].Cantidad" type="number" min="0" class="form-control form-control-sm" /></td>
+        <td><input asp-for="Detalles[i].Medida" type="number" min="0" step="0.01" class="form-control form-control-sm" /></td>
+        <td><select asp-for="Detalles[i].UnidadId" asp-items="Model.Unidades" class="form-select form-select-sm"><option value="">—</option></select></td>
+        <td><input asp-for="Detalles[i].Tipo" class="form-control form-control-sm" /></td>
+        <td class="text-center"><input asp-for="Detalles[i].Eliminar" class="form-check-input" /></td>
+    </tr>
+}
+</tbody></table></div>
+<button type="button" class="btn btn-outline-secondary btn-sm" id="anadirDetalleAccesorio">Añadir detalle técnico</button>
+<script>
+    (function () {
+        var materialRoot = document.querySelector('[data-material-rapido]');
+        if (materialRoot) {
+            var materialSelect = materialRoot.querySelector('select');
+            var materialInput = materialRoot.querySelector('[data-material-nombre]');
+            var materialButton = materialRoot.querySelector('[data-material-crear]');
+            var materialStatus = materialRoot.querySelector('[data-material-estado]');
+            if (materialButton && materialStatus) {
+                materialButton.addEventListener('click', async function () {
+                    var materialToken = materialRoot.querySelector('input[name="__RequestVerificationToken"]');
+                    if (!materialToken) {
+                        var materialForm = materialRoot.closest('form');
+                        if (materialForm) materialToken = materialForm.querySelector('input[name="__RequestVerificationToken"]');
+                    }
+                    if (!materialSelect || !materialInput || !materialToken || !materialRoot.dataset.url) {
+                        materialStatus.textContent = 'No se pudo inicializar la creación de materiales. Recarga el formulario.';
+                        return;
+                    }
+                    var nombre = materialInput.value.trim();
+                    if (!nombre) {
+                        materialStatus.textContent = 'Escribe el nombre del material.';
+                        materialInput.focus();
+                        return;
+                    }
+
+                    materialButton.disabled = true;
+                    materialStatus.textContent = 'Guardando material…';
+                    try {
+                        var body = new URLSearchParams();
+                        body.set('nombre', nombre);
+                        body.set('__RequestVerificationToken', materialToken.value);
+                        var response = await fetch(materialRoot.dataset.url, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+                            body: body
+                        });
+                        var result = await response.json();
+                        if (!response.ok) throw new Error(result.mensaje || result.message || 'No se pudo crear el material.');
+
+                        var id = result.id !== undefined ? result.id : result.Id;
+                        var nombreCreado = result.nombre || result.Nombre || nombre;
+                        if (id == null) throw new Error('El servidor no devolvió el material creado.');
+                        var option = Array.from(materialSelect.options).find(function (item) { return item.value === String(id); });
+                        if (!option) {
+                            option = new Option(nombreCreado, id);
+                            materialSelect.add(option);
+                        }
+                        materialSelect.value = String(id);
+                        materialInput.value = '';
+                        materialStatus.textContent = 'Material seleccionado.';
+                    } catch (error) {
+                        materialStatus.textContent = error.message || 'No se pudo crear el material.';
+                    } finally {
+                        materialButton.disabled = false;
+                    }
+                });
+            }
+        }
+
+        var familia = document.getElementById('FamiliaId');
+        var subfamilia = document.getElementById('SubfamiliaId');
+        if (familia && subfamilia) {
+            var requestId = 0;
+            familia.addEventListener('change', async function () {
+                var selectedFamily = familia.value;
+                var currentRequest = ++requestId;
+                subfamilia.replaceChildren(new Option('Sin subfamilia', ''));
+                subfamilia.disabled = !selectedFamily;
+                if (!selectedFamily) return;
+
+                var url = new URL('@Url.Action("Subfamilias", "Accesorios", new { area = "Mantenimiento" })', window.location.origin);
+                url.searchParams.set('familiaId', selectedFamily);
+                try {
+                    var response = await fetch(url);
+                    if (!response.ok || currentRequest !== requestId) return;
+                    var options = await response.json();
+                    if (currentRequest !== requestId) return;
+                    for (var option of options) subfamilia.add(new Option(option.text, option.value));
+                    subfamilia.disabled = false;
+                } catch {
+                    subfamilia.disabled = false;
+                }
+            });
+            subfamilia.disabled = !familia.value;
+        }
+
+        var button = document.getElementById('anadirDetalleAccesorio');
+        var tbody = document.querySelector('table.table-bordered tbody');
+        if (!button || !tbody) return;
+
+        button.addEventListener('click', function () {
+            var rows = tbody.querySelectorAll('tr');
+            if (!rows.length) return;
+            var row = rows[rows.length - 1].cloneNode(true);
+            var index = rows.length;
+            row.querySelectorAll('[name], [id]').forEach(function (element) {
+                ['name', 'id'].forEach(function (attribute) {
+                    var value = element.getAttribute(attribute);
+                    if (value) element.setAttribute(attribute, value.replace(/Detalles_\d+__/g, 'Detalles_' + index + '__').replace(/Detalles\[\d+\]/g, 'Detalles[' + index + ']'));
+                });
+            });
+            row.querySelectorAll('input').forEach(function (input) {
+                if (input.type === 'checkbox') input.checked = false;
+                else input.value = '';
+            });
+            row.querySelectorAll('select').forEach(function (select) { select.selectedIndex = 0; });
+            tbody.appendChild(row);
+        });
+    })();
+</script>
+<script src="~/js/foto-pies.js" asp-append-version="true"></script>

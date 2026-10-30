@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.css">
+<title>Planificador de reparto</title>
+  <link rel="stylesheet" href="/repartos/planificador.css">
+</head>
+<body>
+<h2 class="sr-only">Planificador de reparto Mallorca v6 con importación de Excel</h2>
+<div class="header">
+  <div style="display:flex;align-items:center;flex-wrap:wrap;gap:4px;">
+    <i class="ti ti-truck" aria-hidden="true" style="font-size:18px;vertical-align:-2px;margin-right:4px;color:var(--color-text-primary);"></i>
+    <h1>Planificador de reparto</h1>
+    <span class="save-indicator" id="save-indicator"></span>
+    <a href="/Mantenimiento/Home" style="font-size:12px;margin-left:12px;color:#185FA5;text-decoration:none;">← Casa Gaillard</a>
+  </div>
+  <div style="display:flex;gap:6px;flex-wrap:wrap;">
+    <label style="font-size:12px;padding:5px 10px;cursor:pointer;border-radius:var(--border-radius-md);background:#F0EAF8;color:#4A1A8C;border:0.5px solid #C9A8F0;display:flex;align-items:center;gap:5px;">
+      <i class="ti ti-upload" aria-hidden="true" style="font-size:13px;"></i> Importar Excel
+      <input type="file" id="import-input" accept=".xlsx,.xls" style="display:none;" onchange="handleImport(event)">
+    </label>
+    <button onclick="pickExcelFolder()" title="Elige la carpeta donde están Pedidos.xlsx y Movimiento_Cubas_2026_dashboard.xlsx" style="font-size:12px;padding:5px 10px;cursor:pointer;border-radius:var(--border-radius-md);background:#F0EAF8;color:#4A1A8C;border:0.5px solid #C9A8F0;">📂 Carpeta Excel</button>
+    <button id="btn-reload-excel" onclick="runAutoLoadExcels(true)" style="display:none;font-size:12px;padding:5px 10px;cursor:pointer;border-radius:var(--border-radius-md);background:#FAEEDA;color:#633806;border:0.5px solid #E5B96F;">↻ Recargar Excel</button>
+    <button onclick="exportExcel()" style="font-size:12px;padding:5px 10px;cursor:pointer;border-radius:var(--border-radius-md);background:var(--color-background-secondary);color:var(--color-text-primary);border:0.5px solid var(--color-border-tertiary);">⬇ Excel</button>
+    <button onclick="openHistory()" style="font-size:12px;padding:5px 10px;cursor:pointer;border-radius:var(--border-radius-md);background:#FAEEDA;color:#633806;border:0.5px solid #E5B96F;">Historico</button>
+    <button onclick="exportBackup()" style="font-size:12px;padding:5px 10px;cursor:pointer;border-radius:var(--border-radius-md);background:#E6F1FB;color:#0C447C;border:0.5px solid #B5D4F4;">Guardar copia</button>
+    <label style="font-size:12px;padding:5px 10px;cursor:pointer;border-radius:var(--border-radius-md);background:var(--color-background-secondary);color:var(--color-text-primary);border:0.5px solid var(--color-border-tertiary);display:flex;align-items:center;gap:5px;">
+      Restaurar copia
+      <input type="file" accept=".json,application/json" style="display:none;" onchange="handleBackupImport(event)">
+    </label>
+    <input type="text" id="search-pedido" placeholder="Buscar Nº pedido..." style="font-size:12px;padding:5px 8px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);width:130px;" onkeypress="if(event.key==='Enter')searchPedido()">
+    <button onclick="searchPedido()" style="font-size:12px;padding:5px 10px;cursor:pointer;border-radius:var(--border-radius-md);background:var(--color-background-secondary);color:var(--color-text-primary);border:0.5px solid var(--color-border-tertiary);">🔍 Buscar</button>
+    <button onclick="openAdd(null,'cisterna')" style="font-size:12px;padding:5px 10px;cursor:pointer;border-radius:var(--border-radius-md);background:#E6F1FB;color:#0C447C;border:0.5px solid #B5D4F4;">+ Cisterna</button>
+    <button onclick="openAdd(null,'reparto')" style="font-size:12px;padding:5px 10px;cursor:pointer;border-radius:var(--border-radius-md);background:#DCF3EC;color:#0B6E4F;border:0.5px solid #A9E0CB;">+ Reparto</button>
+  </div>
+</div>
+
+<div id="alerts" class="alert-list"></div>
+
+<div class="summary-bar">
+  <div class="stat-card"><div class="stat-label">Cisternas esta semana</div><div class="stat-value" id="stat-cisternas">0</div></div>
+  <div class="stat-card"><div class="stat-label">Repartos esta semana</div><div class="stat-value" id="stat-repartos">0</div></div>
+  <div class="stat-card"><div class="stat-label">Tractoras libres hoy</div><div class="stat-value" id="stat-tractoras">4</div></div>
+  <div class="stat-card"><div class="stat-label">Días con alertas</div><div class="stat-value" id="stat-alerts" style="color:#D55E00;">0</div></div>
+</div>
+
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+  <div class="week-tabs" style="margin-bottom:0;">
+    <button class="week-tab" onclick="setWeek(-2,this)">2 semanas antes</button>
+    <button class="week-tab" onclick="setWeek(-1,this)">Semana anterior</button>
+    <button class="week-tab active" onclick="setWeek(0,this)">Semana actual</button>
+    <button class="week-tab" onclick="setWeek(1,this)">Semana siguiente</button>
+    <button class="week-tab" onclick="setWeek(2,this)">2 semanas después</button>
+  </div>
+  <button onclick="openTimeline()" style="font-size:12px;padding:5px 12px;cursor:pointer;border-radius:var(--border-radius-md);background:#E6F1FB;color:#0C447C;border:0.5px solid #B5D4F4;white-space:nowrap;">📅 Timeline del día</button>
+  <button onclick="openCisternasTable()" style="font-size:12px;padding:5px 12px;cursor:pointer;border-radius:var(--border-radius-md);background:#E6F1FB;color:#0C447C;border:0.5px solid #B5D4F4;white-space:nowrap;">🚛 Cisternas semana</button>
+  <button onclick="openCisternaFleet()" style="font-size:12px;padding:5px 12px;cursor:pointer;border-radius:var(--border-radius-md);background:#dceefb;color:#0C447C;border:0.5px solid #B5D4F4;white-space:nowrap;">🛢 Flota cisternas</button>
+  <button onclick="openRegistroMov()" style="font-size:12px;padding:5px 12px;cursor:pointer;border-radius:var(--border-radius-md);background:#dceefb;color:#0C447C;border:0.5px solid #B5D4F4;white-space:nowrap;">🚚 Registro arrastres</button>
+<button onclick="openProposeRoutes()" style="font-size:12px;padding:5px 12px;cursor:pointer;border-radius:var(--border-radius-md);background:#F0EAF8;color:#4A1A8C;border:0.5px solid #C9A8F0;white-space:nowrap;">🧭 Proponer rutas</button>
+<button onclick="setOrsKey()" title="Clave gratuita de OpenRouteService para rutas reales por carretera" style="font-size:12px;padding:5px 12px;cursor:pointer;border-radius:var(--border-radius-md);background:var(--color-background-secondary);color:var(--color-text-primary);border:0.5px solid var(--color-border-tertiary);white-space:nowrap;">🗺 Clave rutas (ORS)</button>
+<button onclick="openOrdersMap()" title="Ver en un mapa los pedidos pendientes y crear una ruta seleccionándolos" style="font-size:12px;padding:5px 12px;cursor:pointer;border-radius:var(--border-radius-md);background:#DCF3EC;color:#0B6E4F;border:0.5px solid #A9E0CB;white-space:nowrap;">🗺 Mapa de pedidos</button>
+<button onclick="openDayMap()" title="Ver en un mapa las rutas asignadas de un día (repartos, cisternas y arrastres)" style="font-size:12px;padding:5px 12px;cursor:pointer;border-radius:var(--border-radius-md);background:#E6F1FB;color:#0C447C;border:0.5px solid #B5D4F4;white-space:nowrap;">🛣 Rutas del día</button>
+<button onclick="openRefPointPicker()" title="Situar exactamente en el mapa el Puerto de Palma y la Base" style="font-size:12px;padding:5px 12px;cursor:pointer;border-radius:var(--border-radius-md);background:var(--color-background-secondary);color:var(--color-text-primary);border:0.5px solid var(--color-border-tertiary);white-space:nowrap;">⚓ Puerto / Base</button>
+<button onclick="openOrsPlaces()" title="Revisar y corregir las poblaciones localizadas" style="font-size:12px;padding:5px 12px;cursor:pointer;border-radius:var(--border-radius-md);background:var(--color-background-secondary);color:var(--color-text-primary);border:0.5px solid var(--color-border-tertiary);white-space:nowrap;">📍 Poblaciones</button>
+</div>
+
+<div class="weeks-grid" id="calendar"></div>
+
+
+<!-- History modal -->
+<div class="modal-bg" id="history-modal">
+  <div class="modal modal-wide history-modal">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:1rem;">
+      <h3 style="margin-bottom:0;">Historico de repartos</h3>
+      <button class="btn-secondary" onclick="closeHistory()" style="padding:4px 10px;font-size:12px;">Cerrar</button>
+    </div>
+    <div class="history-toolbar">
+      <div class="import-summary" id="history-summary">Cargando historico...</div>
+      <button class="btn-primary" onclick="exportHistoryExcel()">Exportar historico</button>
+    </div>
+    <div class="history-scroll">
+      <table class="history-table">
+        <thead><tr>
+          <th>Guardado</th>
+          <th>Accion</th>
+          <th>Resumen</th>
+          <th>Fecha reparto</th>
+          <th>Pedidos</th>
+        </tr></thead>
+        <tbody id="history-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Import preview modal -->
+<div class="modal-bg" id="import-modal">
+  <div class="modal modal-wide">
+    <h3>Importar pedidos del Excel</h3>
+    <div class="import-summary" id="import-summary"></div>
+    <div class="import-scroll">
+      <table class="import-table">
+        <thead><tr>
+          <th><input type="checkbox" id="check-all" onchange="toggleAll(this)"></th>
+          <th>Nº Pedido</th>
+          <th>Fecha servir</th>
+          <th>Cliente</th>
+          <th>Población entrega</th>
+          <th>Zona detectada</th>
+          <th>Artículos</th>
+        </tr></thead>
+        <tbody id="import-tbody"></tbody>
+      </table>
+    </div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeImportModal()">Cancelar</button>
+      <button class="btn-primary" onclick="confirmImport()">Importar seleccionados</button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit/Add modal -->
+<div class="modal-bg" id="modal">
+  <div class="modal">
+    <h3 id="modal-title">Añadir pedido</h3>
+    <div class="form-row">
+      <label>Nº Pedido <span style="color:var(--color-text-tertiary);font-weight:400;">(opcional)</span></label>
+      <input type="text" id="f-pedido" placeholder="Número de pedido..." onblur="onPedidoBlur()" />
+    </div>
+    <div class="form-row" id="row-productos">
+      <label>Productos</label>
+      <div id="productos-list" style="display:flex;flex-direction:column;gap:4px;margin-bottom:6px;"></div>
+      <button type="button" class="add-btn" onclick="addProductoRow()">+ añadir producto</button>
+    </div>
+    <div class="form-row">
+      <label>Tipo</label>
+      <select id="f-type" onchange="onTypeChange()">
+        <option value="reparto">Reparto (GRG / palets / sacos)</option>
+        <option value="cisterna">Cisterna</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>Día</label>
+      <select id="f-day"></select>
+    </div>
+    <div class="form-row" id="row-muni">
+      <label>Municipio del cliente</label>
+      <div class="muni-wrap">
+        <input type="text" id="f-muni" placeholder="Escribe el municipio..." autocomplete="off" oninput="onMuniInput()" />
+        <div class="muni-suggestions" id="muni-list" style="display:none;"></div>
+      </div>
+    </div>
+    <div id="suggestion-box" class="suggestion-box"></div>
+    <div class="form-row">
+      <label>Conductor</label>
+      <select id="f-driver" onchange="onDriverOrDayChange()"></select>
+    </div>
+    <div class="form-row" id="row-salida">
+      <label>Salida</label>
+      <select id="f-salida" onchange="onSalidaChange()"></select>
+    </div>
+    <div class="form-row" id="row-trayecto-cisterna" style="display:none;">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        <div>
+          <label style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:2px;display:block;">Origen</label>
+          <select id="f-origen-trayecto" onchange="onTrayectoCisternaChange()">
+            <option value="base">Base</option>
+            <option value="puerto">Puerto (Palma)</option>
+          </select>
+        </div>
+        <div>
+          <label style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:2px;display:block;">Destino (retorno)</label>
+          <select id="f-destino-trayecto" onchange="onTrayectoCisternaChange()">
+            <option value="base">Base</option>
+            <option value="puerto">Puerto (Palma)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="form-row" id="row-vehicle-select">
+      <label>Vehículo</label>
+      <select id="f-vehicle"></select>
+    </div>
+    <div class="form-row" id="row-vehicle-locked" style="display:none;">
+      <label>Vehículo <span style="color:var(--color-text-tertiary);font-weight:400;">(fijado por la salida)</span></label>
+      <div class="field-locked" id="f-vehicle-locked"></div>
+    </div>
+    <div class="form-row">
+      <label>Cliente / referencia</label>
+      <input type="text" id="f-client" placeholder="Nombre del cliente o ref." />
+    </div>
+    <div class="form-row">
+      <label>Dirección de entrega <span style="color:var(--color-text-tertiary);font-weight:400;">(opcional)</span></label>
+      <input type="text" id="f-direccion" placeholder="Calle, nº, polígono, nave..." />
+      <div style="display:flex;gap:8px;align-items:center;margin-top:4px;flex-wrap:wrap;">
+        <button type="button" class="btn-secondary" style="padding:3px 8px;font-size:12px;" onclick="openPinPickerFromForm()">📍 Ubicar en mapa</button>
+        <span id="pin-status" style="font-size:11px;color:var(--color-text-tertiary);"></span>
+      </div>
+    </div>
+    <div class="form-row" id="row-descarga">
+      <label>Descarga</label>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;">
+        <div>
+          <label style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:2px;display:block;">Tipo mercancía</label>
+          <select id="f-merch-type" onchange="onMerchTypeChange()">
+            <option value="">— sin especificar —</option>
+            <option value="cisterna">Cisterna (3h fijas)</option>
+            <option value="palet_grg">Palets / GRGs descarga (10 min/ud)</option>
+            <option value="grg_trasvase">GRGs trasvasado (20 min/ud)</option>
+            <option value="manual">Tiempo manual</option>
+          </select>
+        </div>
+        <div id="row-merch-qty">
+          <label style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:2px;display:block;">Cantidad (uds)</label>
+          <input type="number" id="f-merch-qty" min="1" placeholder="0" style="width:100%;" />
+        </div>
+      </div>
+      <div id="row-merch-manual" style="display:none;margin-top:6px;">
+        <label style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:2px;display:block;">Tiempo descarga (minutos)</label>
+        <input type="number" id="f-merch-manual" min="0" placeholder="minutos" style="width:100%;" />
+      </div>
+      <div id="merch-preview" style="font-size:11px;color:var(--color-text-tertiary);margin-top:4px;"></div>
+    </div>
+    <div class="form-row" id="row-cisterna-asig" style="display:none;">
+      <label>Matrícula cisterna <span style="color:var(--color-text-tertiary);font-weight:400;">(cuba física asignada)</span></label>
+      <select id="f-cisterna-cuba" onchange="onCisternaCubaChange()"></select>
+      <div id="cisterna-asig-info" style="font-size:11px;color:var(--color-text-tertiary);margin-top:4px;"></div>
+    </div>
+    <div class="form-row" id="row-hora-salida">
+      <label>Hora de salida prevista</label>
+      <input type="time" id="f-hora-salida" style="width:100%;" />
+      <div class="form-row" id="row-no-entregado" style="display:none;">
+        <div class="checkbox-row">
+          <input type="checkbox" id="f-no-entregado" />
+          <label for="f-no-entregado" style="margin-bottom:0;">No entregado en este intento</label>
+        </div>
+      </div>
+      <div class="form-row" id="row-observaciones" style="display:none;">
+        <label>Observaciones</label>
+        <input type="text" id="f-observaciones" placeholder="Motivo, cliente no disponible, etc." />
+    </div>
+    </div>
+    <div class="form-row" id="row-zones">
+      <label>Zonas <span style="color:var(--color-text-tertiary);font-weight:400;">(una o varias)</span></label>
+      <div class="zones-grid" id="zones-grid"></div>
+    </div>
+    <div class="form-row" id="row-twoperson" style="display:none;">
+      <div class="checkbox-row">
+        <input type="checkbox" id="f-twoperson" />
+        <label for="f-twoperson" style="margin-bottom:0;">Requiere dos personas</label>
+      </div>
+    </div>
+    <div class="form-row" id="row-second" style="display:none;">
+      <label>Segundo conductor</label>
+      <select id="f-driver2"></select>
+    </div>
+    <div class="modal-actions">
+      <button onclick="closeModal()" class="btn-secondary">Cancelar</button>
+      <button class="btn-danger" id="btn-delete" style="display:none;" onclick="deleteService()">Eliminar</button>
+      <button class="btn-primary" onclick="saveService()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Arrastre Base <-> Puerto modal -->
+<div class="modal-bg" id="arrastre-modal">
+  <div class="modal">
+    <h3 id="arrastre-modal-title">Arrastre Base ⇄ Puerto</h3>
+    <div class="form-row">
+      <label>Día</label>
+      <select id="fa-day" onchange="updateArrastreSalidaOptions()"></select>
+    </div>
+    <div class="form-row">
+      <label>Conductor</label>
+      <select id="fa-driver" onchange="updateArrastreSalidaOptions()"></select>
+    </div>
+    <div class="form-row">
+      <label>Salida <span style="color:var(--color-text-tertiary);font-weight:400;">(hueco que ocupa en la secuencia del conductor)</span></label>
+      <select id="fa-salida"></select>
+    </div>
+    <div class="form-row">
+      <label>Vehículo (tractora)</label>
+      <select id="fa-vehicle"></select>
+    </div>
+    <div class="form-row">
+      <label>Trayecto</label>
+      <select id="fa-trayecto" onchange="updateArrastreCubaOptions()">
+        <option value="base_puerto">Base → Puerto (Palma)</option>
+        <option value="puerto_base">Puerto (Palma) → Base</option>
+      </select>
+    </div>
+    <div class="form-row">
+      <label>Cuba / cisterna que se arrastra <span style="color:var(--color-text-tertiary);font-weight:400;">(opcional)</span></label>
+      <select id="fa-cuba"></select>
+    </div>
+    <div class="form-row">
+      <label>Hora de salida</label>
+      <input type="time" id="fa-hora" style="width:100%;" />
+    </div>
+    <div class="form-row">
+      <label>Observaciones</label>
+      <input type="text" id="fa-observaciones" placeholder="Opcional" />
+    </div>
+    <div class="modal-actions">
+      <button onclick="closeArrastreModal()" class="btn-secondary">Cancelar</button>
+      <button class="btn-danger" id="fa-btn-delete" style="display:none;" onclick="deleteArrastre()">Eliminar</button>
+      <button class="btn-primary" onclick="saveArrastre()">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- Cisternas semana modal -->
+<div class="modal-bg" id="cisternas-modal">
+  <div class="modal" style="width:480px;max-width:98vw;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+      <h3 style="margin-bottom:0;">Cisternas de la semana</h3>
+      <div style="display:flex;gap:6px;">
+        <button onclick="printCisternasTable()" class="btn-secondary" style="padding:4px 10px;font-size:12px;">🖨 Imprimir</button>
+        <button onclick="closeCisternasTable()" class="btn-secondary" style="padding:4px 10px;font-size:12px;">✕ Cerrar</button>
+      </div>
+    </div>
+    <div class="week-tabs" id="cisternas-week-tabs" style="margin-bottom:0.75rem;"></div>
+    <div id="cisternas-content"></div>
+  </div>
+</div>
+
+<!-- Timeline modal -->
+<div class="modal-bg" id="timeline-modal">
+  <div class="modal" style="width:700px;max-width:98vw;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;">
+      <h3 id="timeline-title">Timeline del día</h3>
+      <div style="display:flex;gap:6px;">
+        <button onclick="printTimeline()" class="btn-secondary" style="padding:4px 10px;font-size:12px;">🖨 Imprimir listado</button>
+        <button onclick="closeTimeline()" class="btn-secondary" style="padding:4px 10px;font-size:12px;">✕ Cerrar</button>
+      </div>
+    </div>
+    <div id="timeline-content"></div>
+  </div>
+</div>
+  <!-- Registro de arrastres modal -->
+  <div class="modal-bg" id="registro-mov-modal">
+    <div class="modal modal-wide fleet-modal">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:0.75rem;flex-wrap:wrap;">
+        <h3 style="margin-bottom:0;">Registro de arrastres</h3>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button class="btn-secondary" style="padding:4px 10px;font-size:12px;" onclick="exportRegistroMovimientos()">⬇ Exportar</button>
+          <button class="btn-secondary" style="padding:4px 10px;font-size:12px;" onclick="closeRegistroMov()">Cerrar</button>
+        </div>
+      </div>
+      <div class="import-summary" id="registro-mov-summary">Cargando registro...</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:0.75rem;">
+        <select id="registro-mov-chofer" style="font-size:12px;padding:5px 8px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);" onchange="setRegistroMovFilter('chofer',this.value)">
+          <option value="">— todos los chóferes —</option>
+        </select>
+        <input type="date" id="registro-mov-desde" style="font-size:12px;padding:5px 8px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);" onchange="setRegistroMovFilter('desde',this.value)">
+        <input type="date" id="registro-mov-hasta" style="font-size:12px;padding:5px 8px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);" onchange="setRegistroMovFilter('hasta',this.value)">
+      </div>
+      <div class="history-scroll" style="max-height:480px;">
+        <table class="history-table fleet-table">
+          <thead><tr>
+            <th>GA</th><th>Cuba</th><th>Producto</th><th>Trayecto</th><th>Carga → Llegada</th>
+            <th>Arrastre 1</th><th>Arrastre 2</th><th>Retorno</th><th>Descarga</th>
+          </tr></thead>
+          <tbody id="registro-mov-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Flota de cisternas modal -->
+  <div class="modal-bg" id="cisterna-fleet-modal">
+    <div class="modal modal-wide fleet-modal">
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:0.75rem;flex-wrap:wrap;">
+        <h3 style="margin-bottom:0;">Flota de cisternas</h3>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;">
+          <button class="btn-primary" style="padding:4px 10px;font-size:12px;" onclick="runAutoAssignCisternas()">⚡ Auto-asignar pendientes</button>
+          <button class="btn-secondary" style="padding:4px 10px;font-size:12px;" onclick="exportCisternaFleet()">⬇ Exportar</button>
+          <button class="btn-secondary" style="padding:4px 10px;font-size:12px;" onclick="closeCisternaFleet()">Cerrar</button>
+        </div>
+      </div>
+      <div class="import-summary" id="fleet-summary">Cargando flota...</div>
+      <div class="history-scroll" style="margin-bottom:1rem;max-height:320px;">
+        <table class="history-table fleet-table">
+          <thead><tr>
+            <th>Cuba</th><th>Plataforma</th><th>Ubicación</th><th>Estado</th><th>Último movimiento</th>
+            <th>Productos aptos</th><th>ITV caduca</th><th>ADR caduca</th><th>IMDG caduca</th><th></th>
+          </tr></thead>
+          <tbody id="fleet-tbody"></tbody>
+        </table>
+      </div>
+      <h3 style="font-size:13px;margin-bottom:0.5rem;">Puerto de carga fijo por producto</h3>
+      <div class="history-scroll" style="max-height:160px;margin-bottom:0.5rem;">
+        <table class="history-table">
+          <thead><tr><th>Producto</th><th>Puerto</th></tr></thead>
+          <tbody id="port-tbody"></tbody>
+        </table>
+      </div>
+      <div style="display:flex;gap:6px;">
+        <input type="text" id="new-product-port" placeholder="Nombre del producto..." style="flex:1;font-size:12px;padding:5px 8px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);" onkeypress="if(event.key==='Enter')addProductPortRow()">
+        <button class="btn-secondary" style="padding:4px 10px;font-size:12px;" onclick="addProductPortRow()">+ añadir</button>
+      </div>
+    </div>
+  </div>
+
+<div class="modal-bg" id="propose-routes-modal">
+  <div class="modal modal-wide fleet-modal">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:0.5rem;">
+      <h3 style="margin-bottom:0;">Proponer rutas</h3>
+      <button class="btn-secondary" onclick="closeProposeRoutes()" style="padding:4px 10px;font-size:12px;">Cerrar</button>
+    </div>
+    <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:0.5rem;">
+      Agrupa por zona y distancia los pedidos sin asignar dentro del horario 7:00–14:00 (30 min de merienda + 20 min fijos de carga). Ajusta chófer, vehículo y hora antes de confirmar.
+    </div>
+    <div id="propose-routes-content" style="max-height:60vh;overflow-y:auto;"></div>
+    <div class="modal-actions">
+      <button class="btn-secondary" onclick="closeProposeRoutes()">Cerrar</button>
+      <button class="btn-primary" onclick="confirmProposedRoutesUI()">Confirmar propuesta de este día</button>
+    </div>
+  </div>
+</div>
+<script>document.getElementById('propose-routes-modal').addEventListener('click',function(e){if(e.target===this)closeProposeRoutes();});</script>
+
+  
+<div class="modal-bg" id="ors-places-modal">
+  <div class="modal modal-wide fleet-modal">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:0.5rem;">
+      <h3 style="margin-bottom:0;">Poblaciones localizadas</h3>
+      <button class="btn-secondary" onclick="closeOrsPlaces()" style="padding:4px 10px;font-size:12px;">Cerrar</button>
+    </div>
+    <div style="font-size:11px;color:var(--color-text-tertiary);margin-bottom:0.5rem;">
+      Revisa con "ver en mapa" que cada población esté bien situada. Si no, usa "Buscar otra" (elige entre varios resultados) o "Coordenadas" (pega latitud, longitud). La corrección se guarda y recalcula las rutas.
+    </div>
+    <div class="history-scroll" style="max-height:60vh;">
+      <table class="history-table">
+        <thead><tr><th>Población</th><th>Coordenadas</th><th>Origen</th><th>Mapa</th><th></th></tr></thead>
+        <tbody id="ors-places-tbody"></tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<script>document.getElementById('ors-places-modal').addEventListener('click',function(e){if(e.target===this)closeOrsPlaces();});</script>
+  
+<div class="modal-bg" id="pin-modal">
+  <div class="modal modal-wide">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:0.5rem;">
+      <h3 id="pin-title" style="margin-bottom:0;">Ubicar en mapa</h3>
+      <button class="btn-secondary" onclick="closePinPicker()" style="padding:4px 10px;font-size:12px;">Cerrar</button>
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:6px;">
+      <input type="text" id="pin-search" placeholder="Dirección o lugar..." style="flex:1;font-size:13px;padding:5px 8px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-tertiary);" onkeypress="if(event.key==='Enter')pinSearch()">
+      <button class="btn-primary" onclick="pinSearch()">Buscar</button>
+    </div>
+    <div id="pin-results" style="max-height:110px;overflow-y:auto;margin-bottom:6px;font-size:12px;"></div>
+    <div id="pin-map" style="height:380px;border-radius:8px;border:0.5px solid var(--color-border-tertiary);"></div>
+    <div id="pin-info" style="font-size:11px;color:var(--color-text-secondary);margin-top:6px;min-height:14px;"></div>
+    <div class="modal-actions">
+      <button class="btn-secondary" id="pin-btn-remove" style="display:none;" onclick="removePin()">Quitar ubicación</button>
+      <button class="btn-secondary" onclick="closePinPicker()">Cancelar</button>
+      <button class="btn-primary" onclick="savePin()">Guardar ubicación</button>
+    </div>
+  </div>
+</div>
+<script>document.getElementById('pin-modal').addEventListener('click',function(e){if(e.target===this)closePinPicker();});</script>
+
+<div class="modal-bg" id="orders-map-modal">
+  <div class="modal" style="width:1120px;max-width:98vw;">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:0.5rem;">
+      <h3 style="margin-bottom:0;">Mapa de pedidos pendientes</h3>
+      <button class="btn-secondary" onclick="closeOrdersMap()" style="padding:4px 10px;font-size:12px;">Cerrar</button>
+    </div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <div style="flex:1 1 560px;min-width:300px;">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px;font-size:12px;">
+          <select id="om-day" onchange="renderOrdersMap(false)" style="font-size:12px;"></select>
+          <label style="display:flex;gap:4px;align-items:center;"><input type="checkbox" id="om-incl" onchange="renderOrdersMap(false)"> mostrar ya asignados</label>
+          <label style="display:flex;gap:4px;align-items:center;" title="Pide la ruta real a ORS (consume peticiones)"><input type="checkbox" id="om-real" onchange="renderOrdersMap(false)"> ruta real</label>
+          <button class="btn-secondary" id="om-area-btn" style="padding:3px 8px;font-size:12px;" onclick="toggleAreaSelect()">▭ Seleccionar área</button>
+        </div>
+        <div id="orders-map" style="height:540px;border-radius:8px;border:0.5px solid var(--color-border-tertiary);"></div>
+        <div id="om-legend" style="font-size:11px;color:var(--color-text-secondary);margin-top:6px;"></div>
+      </div>
+      <div id="om-panel" style="flex:0 0 330px;max-width:100%;"></div>
+    </div>
+  </div>
+</div>
+<script>document.getElementById('orders-map-modal').addEventListener('click',function(e){if(e.target===this)closeOrdersMap();});</script>
+
+<div class="modal-bg" id="day-map-modal">
+  <div class="modal" style="width:1120px;max-width:98vw;">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:8px;margin-bottom:0.5rem;">
+      <h3 style="margin-bottom:0;">Rutas del día en el mapa</h3>
+      <button class="btn-secondary" onclick="closeDayMap()" style="padding:4px 10px;font-size:12px;">Cerrar</button>
+    </div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;">
+      <div style="flex:1 1 560px;min-width:300px;">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:6px;font-size:12px;">
+          <select id="dm-day" onchange="renderDayMap(true)" style="font-size:12px;"></select>
+          <select id="dm-type" onchange="renderDayMap(true)" style="font-size:12px;">
+            <option value="">Repartos y cisternas</option>
+            <option value="reparto">Solo repartos</option>
+            <option value="cisterna">Solo cisternas</option>
+          </select>
+          <label style="display:flex;gap:4px;align-items:center;" title="Dibuja el recorrido por las carreteras reales (pide el trazado a ORS y lo guarda en caché)"><input type="checkbox" id="dm-road" onchange="renderDayMap(false)"> trazado por carretera</label>
+        </div>
+        <div id="day-map" style="height:560px;border-radius:8px;border:0.5px solid var(--color-border-tertiary);"></div>
+        <div style="font-size:11px;color:var(--color-text-secondary);margin-top:6px;">Cada conductor tiene su color · ● reparto · ■ cisterna · ⛴ arrastre Base⇄Puerto · ✓ servido · línea discontinua = recta entre paradas (activa "trazado por carretera" para el recorrido real) · pulsa una parada para editarla.</div>
+      </div>
+      <div id="dm-panel" style="flex:0 0 330px;max-width:100%;max-height:600px;overflow-y:auto;"></div>
+    </div>
+  </div>
+</div>
+<script>document.getElementById('day-map-modal').addEventListener('click',function(e){if(e.target===this)closeDayMap();});</script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.js"></script>
+  <script src="/repartos/xlsx.full.min.js"></script>
+  <script src="/repartos/storage-bridge.js"></script>
+  <script src="/repartos/planificador.js?v=20261026-server-storage"></script>
+  <script>document.getElementById('cisterna-fleet-modal').addEventListener('click',function(e){if(e.target===this)closeCisternaFleet();});</script>
+  <script>document.getElementById('registro-mov-modal').addEventListener('click',function(e){if(e.target===this)closeRegistroMov();});</script>
+  <script>document.getElementById('arrastre-modal').addEventListener('click',function(e){if(e.target===this)closeArrastreModal();});</script>
+</body>
+</html>
+
+

@@ -1,0 +1,24 @@
+@model UsuarioPersonaViewModel
+@{ ViewData["Title"] = "Vincular persona"; }
+<h1>Vincular persona</h1>
+<p>Cuenta: <strong>@Model.Email</strong></p>
+<form asp-action="VincularPersona" method="post" class="card card-body" style="max-width: 42rem">
+    <input asp-for="UserId" type="hidden" />
+    <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+    <div class="mb-3">
+        <label asp-for="PersonaId" class="form-label"></label>
+        <select asp-for="PersonaId" asp-items="Model.Personas" class="form-select">
+            <option value="">Crear una persona nueva</option>
+        </select>
+        <span asp-validation-for="PersonaId" class="text-danger"></span>
+        <div class="form-text">Solo aparecen personas sin email vinculado o ya vinculadas a esta cuenta.</div>
+    </div>
+    <fieldset class="mb-3">
+        <legend class="fs-6">Datos para una persona nueva</legend>
+        <div class="mb-3"><label asp-for="NombrePersona" class="form-label"></label><input asp-for="NombrePersona" class="form-control" /><span asp-validation-for="NombrePersona" class="text-danger"></span></div>
+        <div class="mb-3"><label asp-for="Apellido1" class="form-label"></label><input asp-for="Apellido1" class="form-control" /><span asp-validation-for="Apellido1" class="text-danger"></span></div>
+        <div class="mb-3"><label asp-for="Apellido2" class="form-label"></label><input asp-for="Apellido2" class="form-control" /><span asp-validation-for="Apellido2" class="text-danger"></span></div>
+        <div class="mb-3"><label asp-for="Nif" class="form-label"></label><input asp-for="Nif" class="form-control" /><span asp-validation-for="Nif" class="text-danger"></span></div>
+    </fieldset>
+    <div><button type="submit" class="btn btn-primary">Vincular</button> <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a></div>
+</form>

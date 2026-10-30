@@ -1,0 +1,9 @@
+@model UbicacionCatalogoViewModel
+@{ ViewData["Title"] = "Editar ubicación"; }
+<h1>Editar ubicación</h1>
+<form asp-action="Edit" method="post" class="col-lg-8">
+    <input asp-for="UbicacionId" type="hidden" />
+    <partial name="_Form" model="Model" />
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a asp-action="Index" class="btn btn-link">Volver</a>
+</form>

@@ -1,0 +1,8 @@
+@model EquipoFormViewModel
+@{ ViewData["Title"] = "Editar equipo"; }
+<h1>Editar equipo</h1>
+<form asp-action="Edit" method="post" class="col-lg-9">
+    <partial name="_Form" model="Model" />
+    <button type="submit" class="btn btn-primary">Guardar</button>
+    <a asp-action="Index" asp-route-instalacionId="@Model.InstalacionId" class="btn btn-link">Volver</a>
+</form>

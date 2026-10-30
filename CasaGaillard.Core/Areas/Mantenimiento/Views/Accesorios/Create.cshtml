@@ -1,0 +1,7 @@
+@model AccesorioFormViewModel
+@{ ViewData["Title"] = "Nuevo accesorio"; }
+<h1>Nuevo accesorio</h1>
+<form asp-action="Create" method="post" enctype="multipart/form-data" class="col-12">
+    <partial name="_Form" model="Model" />
+    <button type="submit" class="btn btn-success">Crear accesorio</button> <a asp-action="Index" class="btn btn-link">Cancelar</a>
+</form>

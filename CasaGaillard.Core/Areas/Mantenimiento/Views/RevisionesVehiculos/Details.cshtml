@@ -1,0 +1,3 @@
+@model RevisionVehiculoFilaViewModel
+@{ ViewData["Title"] = "Detalle de revisión de vehículo"; }
+<h1>Revisión de @Model.Matricula</h1><dl class="row"><dt class="col-sm-3">Tipo</dt><dd class="col-sm-9">@Model.TipoRevision</dd><dt class="col-sm-3">Fecha de revisión</dt><dd class="col-sm-9">@Model.FechaRevision?.ToString("d")</dd><dt class="col-sm-3">Caducidad</dt><dd class="col-sm-9">@Model.Caducidad?.ToString("d")</dd><dt class="col-sm-3">Ejecutor</dt><dd class="col-sm-9">@Model.Ejecutor</dd><dt class="col-sm-3">Detalles</dt><dd class="col-sm-9">@Model.Detalles</dd></dl><a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Editar</a> <a asp-action="Index" class="btn btn-outline-secondary">Volver</a>

@@ -1,0 +1,3 @@
+@model RevisionVehiculoFilaViewModel
+@{ ViewData["Title"] = "Eliminar revisión"; }
+<h1>Eliminar revisión de vehículo</h1><p>¿Quieres eliminar esta revisión?</p><dl class="row"><dt class="col-sm-3">Matrícula</dt><dd class="col-sm-9">@Model.Matricula</dd><dt class="col-sm-3">Tipo</dt><dd class="col-sm-9">@Model.TipoRevision</dd><dt class="col-sm-3">Fecha</dt><dd class="col-sm-9">@Model.FechaRevision?.ToString("d")</dd><dt class="col-sm-3">Detalles</dt><dd class="col-sm-9">@Model.Detalles</dd></dl><form asp-action="Delete" method="post"><input type="hidden" name="id" value="@Model.Id" /><button class="btn btn-danger" type="submit">Eliminar</button> <a asp-action="Index" class="btn btn-outline-secondary">Cancelar</a></form>
